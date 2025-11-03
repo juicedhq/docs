@@ -1,0 +1,11 @@
+/* Custom text selection/highlight color - Tailwind violet-700 */
+::selection {
+  background-color: #7c3aed;
+  color: #ffffff;
+}
+
+/* Firefox */
+::-moz-selection {
+  background-color: #7c3aed;
+  color: #ffffff;
+}
