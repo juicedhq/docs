@@ -71,16 +71,10 @@
     "dark": "/images/juiced-wordmark_dm_sm.png"
   },
   "navbar": {
-    "links": [
-      {
-        "label": "Support",
-        "href": "mailto:hi@mintlify.com"
-      }
-    ],
     "primary": {
       "type": "button",
-      "label": "Dashboard",
-      "href": "https://dashboard.mintlify.com"
+      "label": "Start Squeezing",
+      "href": "https://usejuiced.com/register"
     }
   },
   "contextual": {
