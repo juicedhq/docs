@@ -2,6 +2,11 @@
   "$schema": "https://mintlify.com/docs.json",
   "theme": "almond",
   "name": "Juiced Documentation",
+  "styling": {
+    "icons": {
+      "library": "lucide"
+    }
+  },
   "colors": {
     "primary": "#f59e42",
     "light": "#f59e42",
@@ -25,6 +30,61 @@
           {
             "group": "Features",
             "pages": ["features/index"]
+          },
+          {
+            "group": "Core Concepts",
+            "icon": "boxes",
+            "pages": [
+              "features/leads",
+              "features/lead-types",
+              "features/sources",
+              "features/customers",
+              "features/segments"
+            ]
+          },
+          {
+            "group": "Selling Leads",
+            "icon": "gavel",
+            "pages": [
+              "features/bidding",
+              "features/reverse-auctions",
+              "features/ping-post",
+              "features/distribution"
+            ]
+          },
+          {
+            "group": "Money & Limits",
+            "icon": "wallet",
+            "pages": [
+              "features/budgets-and-caps",
+              "features/transactions",
+              "features/payment-methods"
+            ]
+          },
+          {
+            "group": "Quality & Validation",
+            "icon": "shield-check",
+            "pages": [
+              "features/duplicate-detection",
+              "features/submissions",
+              "features/audits"
+            ]
+          },
+          {
+            "group": "Automation",
+            "icon": "zap",
+            "pages": [
+              "features/workflows",
+              "features/notifications"
+            ]
+          },
+          {
+            "group": "Account Management",
+            "icon": "users",
+            "pages": [
+              "features/users-and-roles",
+              "features/integrations"
+            ]
           }
         ]
       },

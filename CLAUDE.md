@@ -42,8 +42,9 @@ Use this litmus test:
 - Start by making the smallest reasonable changes
 
 ## Frontmatter requirements for pages
-- title: Clear, descriptive page title
-- description: Concise summary for SEO/navigation
+- title: Clear, descriptive page title (renders as the page's H1 heading)
+- description: Concise summary for SEO/navigation (renders as subheading)
+- Do NOT add a duplicate H1 heading in the page content—the frontmatter title handles this
 
 ## Voice and tone
 - Default to conversational and approachable - write like you're helping a colleague
