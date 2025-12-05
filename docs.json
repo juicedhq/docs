@@ -15,7 +15,7 @@
         "groups": [
           {
             "group": "Get Started",
-            "pages": ["hello-world"]
+            "pages": ["get-started/quickstart"]
           }
         ]
       },
