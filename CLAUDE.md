@@ -10,6 +10,29 @@
 - Config: docs.json for navigation, theme, settings
 - Components: Mintlify components
 
+## Documentation structure
+
+### Sections
+- **Get Started**: Onboarding guide that takes users from zero to their first dollar earned. Prominent, standalone, goal-oriented.
+- **Features**: Explains what each part of the system is and how it works. Noun-oriented. Users come here to look something up.
+- **Guides**: Walks users through multi-step processes to achieve specific outcomes. Verb-oriented. Users come here to do something. This is also where we educate users on business models and expand their ideas about what's possible with Juiced.
+- **API Reference**: Technical specification. Exact inputs, outputs, and behaviors for developers.
+- **Changelog**: What's new or changed.
+
+### Deciding where content belongs
+Use this litmus test:
+- If the page title is a **noun or noun phrase** (Lead Routing, Buyer Management, Webhooks) → **Features**
+- If the page title is a **verb phrase or goal** (Setting Up Ping-Post, Implementing Tiered Pricing) → **Guides**
+
+### Section purposes
+| Section | Question it answers |
+|---------|---------------------|
+| Get Started | "How do I get up and running?" |
+| Features | "What is this thing and how does it work?" |
+| Guides | "How do I accomplish X?" |
+| API Reference | "What are the exact inputs/outputs?" |
+| Changelog | "What's new or changed?" |
+
 ## Content strategy
 - Document just enough for user success - not too much, not too little
 - Prioritize accuracy and usability of information
@@ -36,7 +59,7 @@
 - Second-person voice ("you")
 - Prerequisites at start of procedural content
 - Test all code examples before publishing
-- Verify documentation accuracy against the actual codebase in ../juiced-a or ../juiced-b
+- Verify documentation accuracy against the actual codebase in ../juiced-b
 - Match style and formatting of existing pages
 - Include both basic and advanced use cases
 - Language tags on all code blocks
