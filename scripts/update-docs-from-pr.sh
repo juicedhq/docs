@@ -1,16 +1,16 @@
 #!/bin/bash
 set -e
 
-# Usage: ./update-docs-from-pr.sh <repo> <pr_number> <github_token>
-# Example: ./update-docs-from-pr.sh juicedhq/juiced 123 ghp_xxxxx
+# Usage: ./update-docs-from-pr.sh <pr_number> <github_token>
+# Example: ./update-docs-from-pr.sh 123 ghp_xxxxx
 
-REPO="$1"
-PR_NUMBER="$2"
-GITHUB_TOKEN="$3"
+REPO="juicedhq/juiced"
+PR_NUMBER="$1"
+GITHUB_TOKEN="$2"
 DOCS_REPO="juicedhq/docs"
 
-if [ -z "$REPO" ] || [ -z "$PR_NUMBER" ] || [ -z "$GITHUB_TOKEN" ]; then
-    echo "Usage: $0 <repo> <pr_number> <github_token>"
+if [ -z "$PR_NUMBER" ] || [ -z "$GITHUB_TOKEN" ]; then
+    echo "Usage: $0 <pr_number> <github_token>"
     exit 1
 fi
 
