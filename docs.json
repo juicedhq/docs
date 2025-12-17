@@ -35,55 +35,7 @@
             "group": "Core Concepts",
             "icon": "boxes",
             "pages": [
-              "features/leads",
-              "features/lead-types",
-              "features/sources",
-              "features/customers",
-              "features/segments"
-            ]
-          },
-          {
-            "group": "Selling Leads",
-            "icon": "gavel",
-            "pages": [
-              "features/bidding",
-              "features/reverse-auctions",
-              "features/ping-post",
-              "features/distribution"
-            ]
-          },
-          {
-            "group": "Money & Limits",
-            "icon": "wallet",
-            "pages": [
-              "features/budgets-and-caps",
-              "features/transactions",
-              "features/payment-methods"
-            ]
-          },
-          {
-            "group": "Quality & Validation",
-            "icon": "shield-check",
-            "pages": [
-              "features/duplicate-detection",
-              "features/submissions",
-              "features/audits"
-            ]
-          },
-          {
-            "group": "Automation",
-            "icon": "zap",
-            "pages": [
-              "features/workflows",
-              "features/notifications"
-            ]
-          },
-          {
-            "group": "Account Management",
-            "icon": "users",
-            "pages": [
-              "features/users-and-roles",
-              "features/integrations"
+              "features/leads"
             ]
           }
         ]
@@ -94,24 +46,6 @@
           {
             "group": "Guides",
             "pages": ["guides/index"]
-          }
-        ]
-      },
-      {
-        "tab": "API Reference",
-        "groups": [
-          {
-            "group": "API Documentation",
-            "pages": ["api-reference/introduction"]
-          },
-          {
-            "group": "Endpoint Examples",
-            "pages": [
-              "api-reference/endpoint/get",
-              "api-reference/endpoint/create",
-              "api-reference/endpoint/delete",
-              "api-reference/endpoint/webhook"
-            ]
           }
         ]
       },
@@ -142,9 +76,7 @@
   },
   "footer": {
     "socials": {
-      "x": "https://x.com/mintlify",
-      "github": "https://github.com/mintlify",
-      "linkedin": "https://linkedin.com/company/mintlify"
+      "linkedin": "https://www.linkedin.com/company/use-juiced/"
     }
   }
 }
