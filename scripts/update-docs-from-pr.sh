@@ -94,7 +94,7 @@ EOF
 echo "Running Claude Code to analyze and update documentation..."
 
 # Run Claude Code in non-interactive mode
-claude -p "$PROMPT" --allowedTools "Read,Write,Edit,Glob,Grep"
+/home/forge/.local/bin/claude -p "$PROMPT" --allowedTools "Read,Write,Edit,Glob,Grep"
 
 # Check if Claude determined no docs were needed
 if [ -f "/tmp/no-docs-needed.txt" ]; then
