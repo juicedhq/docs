@@ -1,217 +1,534 @@
 {
   "openapi": "3.1.0",
   "info": {
-    "title": "OpenAPI Plant Store",
-    "description": "A sample API that uses a plant store as an example to demonstrate features in the OpenAPI specification",
-    "license": {
-      "name": "MIT"
-    },
+    "title": "Juiced API",
+    "description": "API for submitting and managing leads in Juiced.",
     "version": "1.0.0"
   },
   "servers": [
     {
-      "url": "http://sandbox.mintlify.com"
+      "url": "https://usejuiced.com/api",
+      "description": "Production server"
     }
   ],
   "security": [
     {
-      "bearerAuth": []
+      "Basic Auth": []
+    },
+    {
+      "Bearer Token": []
     }
   ],
   "paths": {
-    "/plants": {
-      "get": {
-        "description": "Returns all plants from the system that the user has access to",
-        "parameters": [
-          {
-            "name": "limit",
-            "in": "query",
-            "description": "The maximum number of results to return",
-            "schema": {
-              "type": "integer",
-              "format": "int32"
+    "/ping": {
+      "post": {
+        "operationId": "createPing",
+        "summary": "Submit a ping",
+        "description": "Submits partial lead data to check for matching bids before sending the full lead. Use this to determine pricing and availability before committing to a full lead submission.\n\nThe response varies based on your source type:\n- **Internal sources** receive a list of matching bids with customer details\n- **Vendor sources** receive a single aggregated price",
+        "tags": ["Ping"],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PingRequest"
+              },
+              "examples": {
+                "minimal": {
+                  "summary": "Minimal ping (zip only)",
+                  "value": {
+                    "zip": "90210"
+                  }
+                },
+                "withState": {
+                  "summary": "Ping with state",
+                  "value": {
+                    "zip": "90210",
+                    "state": "CA"
+                  }
+                },
+                "detailed": {
+                  "summary": "Detailed ping",
+                  "value": {
+                    "zip": "33139",
+                    "state": "FL",
+                    "urgency": "high",
+                    "intent": "purchase"
+                  }
+                }
+              }
             }
           }
-        ],
+        },
         "responses": {
           "200": {
-            "description": "Plant response",
+            "description": "Ping processed successfully",
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/Plant"
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/PingResponseInternal"
+                    },
+                    {
+                      "$ref": "#/components/schemas/PingResponseVendor"
+                    }
+                  ]
+                },
+                "examples": {
+                  "matchFound": {
+                    "summary": "Match found (internal source)",
+                    "value": {
+                      "ping_id": "f47ac10b-58cc-4372-a567-0e02b2c3d479",
+                      "message": "Match found",
+                      "bids": [
+                        {
+                          "id": "7c9e6679-7425-40de-944b-e07fc1f90ae7",
+                          "price": 45.0,
+                          "tcpa_name": "Nectarflix Entertainment",
+                          "customer_id": 123
+                        },
+                        {
+                          "id": "a3bb189e-8bf9-3888-9912-ace4e6543002",
+                          "price": 38.5,
+                          "tcpa_name": "The Mangolorian Security",
+                          "customer_id": 456
+                        }
+                      ]
+                    }
+                  },
+                  "matchFoundVendor": {
+                    "summary": "Match found (vendor source)",
+                    "value": {
+                      "ping_id": "f47ac10b-58cc-4372-a567-0e02b2c3d479",
+                      "message": "Match found",
+                      "price": 45.0
+                    }
+                  },
+                  "noMatch": {
+                    "summary": "No match found",
+                    "value": {
+                      "ping_id": "f47ac10b-58cc-4372-a567-0e02b2c3d479",
+                      "message": "No match found",
+                      "bids": []
+                    }
+                  },
+                  "duplicate": {
+                    "summary": "Duplicate detected",
+                    "value": {
+                      "ping_id": "f47ac10b-58cc-4372-a567-0e02b2c3d479",
+                      "message": "Duplicate",
+                      "bids": []
+                    }
                   }
                 }
               }
             }
           },
-          "400": {
-            "description": "Unexpected error",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Error"
-                }
-              }
-            }
-          }
-        }
-      },
-      "post": {
-        "description": "Creates a new plant in the store",
-        "requestBody": {
-          "description": "Plant to add to the store",
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/NewPlant"
-              }
-            }
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
           },
-          "required": true
-        },
-        "responses": {
-          "200": {
-            "description": "plant response",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Plant"
-                }
-              }
-            }
-          },
-          "400": {
-            "description": "unexpected error",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Error"
-                }
-              }
-            }
+          "422": {
+            "$ref": "#/components/responses/ValidationError"
           }
         }
       }
     },
-    "/plants/{id}": {
-      "delete": {
-        "description": "Deletes a single plant based on the ID supplied",
-        "parameters": [
-          {
-            "name": "id",
-            "in": "path",
-            "description": "ID of plant to delete",
-            "required": true,
-            "schema": {
-              "type": "integer",
-              "format": "int64"
-            }
-          }
-        ],
-        "responses": {
-          "204": {
-            "description": "Plant deleted",
-            "content": {}
-          },
-          "400": {
-            "description": "unexpected error",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Error"
-                }
-              }
-            }
-          }
-        }
-      }
-    }
-  },
-  "webhooks": {
-    "/plant/webhook": {
+    "/leads": {
       "post": {
-        "description": "Information about a new plant added to the store",
+        "operationId": "createLead",
+        "summary": "Submit a lead",
+        "description": "Submits a complete lead for processing and assignment. The lead will be validated, checked for duplicates, matched to a segment, and assigned to a customer (or placed in the marketplace).\n\nIf you previously submitted a ping, include the `ping_id` and optionally a `bid_id` to reference that ping's pricing.",
+        "tags": ["Leads"],
         "requestBody": {
-          "description": "Plant added to the store",
+          "required": true,
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/NewPlant"
+                "$ref": "#/components/schemas/LeadRequest"
+              },
+              "examples": {
+                "basic": {
+                  "summary": "Basic lead submission",
+                  "value": {
+                    "first_name": "Katy",
+                    "last_name": "Berry",
+                    "email": "katy.berry@thirstyleads.com",
+                    "phone": "555-123-4567",
+                    "address_1": "742 Orchard Lane",
+                    "city": "Paradise Bay",
+                    "state": "FL",
+                    "zip": "33139"
+                  }
+                },
+                "withPingId": {
+                  "summary": "Lead with ping reference",
+                  "value": {
+                    "ping_id": "f47ac10b-58cc-4372-a567-0e02b2c3d479",
+                    "bid_id": "7c9e6679-7425-40de-944b-e07fc1f90ae7",
+                    "first_name": "Brad",
+                    "last_name": "Pit",
+                    "email": "brad.pit@juiceboxoffice.com",
+                    "phone": "555-987-6543",
+                    "address_1": "100 Citrus Grove Dr",
+                    "city": "Tropicana",
+                    "state": "CA",
+                    "zip": "90210"
+                  }
+                },
+                "complete": {
+                  "summary": "Complete lead with all fields",
+                  "value": {
+                    "first_name": "John",
+                    "last_name": "Lemon",
+                    "email": "john.lemon@zestforsuccess.com",
+                    "phone": "555-246-8135",
+                    "address_1": "55 Squeeze Street",
+                    "address_2": "Suite 12",
+                    "city": "Pulp City",
+                    "state": "FL",
+                    "zip": "33101",
+                    "county": "Miami-Dade"
+                  }
+                }
               }
             }
           }
         },
         "responses": {
-          "200": {
-            "description": "Return a 200 status to indicate that the data was received successfully"
+          "201": {
+            "description": "Lead created successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/LeadResponse"
+                },
+                "examples": {
+                  "assigned": {
+                    "summary": "Lead assigned to customer",
+                    "value": {
+                      "lead_uuid": "f47ac10b-58cc-4372-a567-0e02b2c3d479",
+                      "status": "assigned",
+                      "price": 45.0
+                    }
+                  },
+                  "duplicate": {
+                    "summary": "Lead is a duplicate",
+                    "value": {
+                      "lead_uuid": "f47ac10b-58cc-4372-a567-0e02b2c3d479",
+                      "status": "duplicate",
+                      "price": 0.0
+                    }
+                  },
+                  "unassigned": {
+                    "summary": "Lead unassigned (no matching buyers)",
+                    "value": {
+                      "lead_uuid": "f47ac10b-58cc-4372-a567-0e02b2c3d479",
+                      "status": "unassigned",
+                      "price": 0.0
+                    }
+                  },
+                  "marketplace": {
+                    "summary": "Lead placed in marketplace",
+                    "value": {
+                      "lead_uuid": "f47ac10b-58cc-4372-a567-0e02b2c3d479",
+                      "status": "marketplace",
+                      "price": 0.0
+                    }
+                  },
+                  "pending": {
+                    "summary": "Lead pending assignment",
+                    "value": {
+                      "lead_uuid": "f47ac10b-58cc-4372-a567-0e02b2c3d479",
+                      "status": "pending",
+                      "price": 0.0
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "422": {
+            "description": "Validation error or ping reference error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/ValidationError"
+                    },
+                    {
+                      "$ref": "#/components/schemas/PingReferenceError"
+                    }
+                  ]
+                },
+                "examples": {
+                  "validationError": {
+                    "summary": "Validation error",
+                    "value": {
+                      "message": "The given data was invalid.",
+                      "errors": {
+                        "email": ["The email field must be a valid email address."],
+                        "zip": ["The postal code is not valid for this account's operating countries."]
+                      }
+                    }
+                  },
+                  "pingNotFound": {
+                    "summary": "Ping not found",
+                    "value": {
+                      "error": "Ping could not be found with the provided ping ID"
+                    }
+                  },
+                  "pingExpired": {
+                    "summary": "Ping expired",
+                    "value": {
+                      "error": "Ping ID has expired"
+                    }
+                  },
+                  "dataMismatch": {
+                    "summary": "Data mismatch",
+                    "value": {
+                      "error": "Lead data does not match ping data"
+                    }
+                  }
+                }
+              }
+            }
           }
         }
       }
     }
   },
   "components": {
+    "securitySchemes": {
+      "Basic Auth": {
+        "type": "http",
+        "scheme": "basic",
+        "description": "Use your source's API key as the username and API secret as the password. Base64 encode the credentials in the format `api_key:api_secret`."
+      },
+      "Bearer Token": {
+        "type": "http",
+        "scheme": "bearer",
+        "description": "Use a bearer token generated for your source."
+      }
+    },
     "schemas": {
-      "Plant": {
-        "required": [
-          "name"
-        ],
+      "PingRequest": {
+        "title": "Ping Request",
         "type": "object",
+        "required": ["zip"],
         "properties": {
-          "name": {
-            "description": "The name of the plant",
-            "type": "string"
+          "zip": {
+            "type": "string",
+            "description": "Postal code. Must be valid for your account's operating countries.",
+            "example": "90210"
+          }
+        },
+        "additionalProperties": {
+          "description": "Additional fields as configured for your source and lead type."
+        }
+      },
+      "PingResponseInternal": {
+        "title": "Internal",
+        "type": "object",
+        "description": "Response for internal source types",
+        "properties": {
+          "ping_id": {
+            "type": "string",
+            "description": "Unique identifier for this ping. Use this when submitting the full lead.",
+            "example": "f47ac10b-58cc-4372-a567-0e02b2c3d479"
           },
-          "tag": {
-            "description": "Tag to specify the type",
-            "type": "string"
+          "message": {
+            "type": "string",
+            "enum": ["Match found", "No match found", "Duplicate", "Rejected"],
+            "description": "Result of the ping request."
+          },
+          "bids": {
+            "type": "array",
+            "description": "Available bids for this lead. Empty if no match or duplicate.",
+            "items": {
+              "$ref": "#/components/schemas/Bid"
+            }
           }
         }
       },
-      "NewPlant": {
-        "allOf": [
-          {
-            "$ref": "#/components/schemas/Plant"
+      "PingResponseVendor": {
+        "title": "Vendor",
+        "type": "object",
+        "description": "Response for vendor source types",
+        "properties": {
+          "ping_id": {
+            "type": "string",
+            "description": "Unique identifier for this ping. Use this when submitting the full lead.",
+            "example": "f47ac10b-58cc-4372-a567-0e02b2c3d479"
           },
-          {
-            "required": [
-              "id"
-            ],
+          "message": {
+            "type": "string",
+            "enum": ["Match found", "No match found", "Duplicate", "Rejected"],
+            "description": "Result of the ping request."
+          },
+          "price": {
+            "type": "number",
+            "format": "float",
+            "description": "Aggregated price offered for this lead.",
+            "example": 45.0
+          }
+        }
+      },
+      "Bid": {
+        "title": "Bid",
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "Unique identifier for this bid. Include as `bid_id` when submitting the lead to select this specific buyer.",
+            "example": "7c9e6679-7425-40de-944b-e07fc1f90ae7"
+          },
+          "price": {
+            "type": "number",
+            "format": "float",
+            "description": "Price offered for this lead.",
+            "example": 45.0
+          },
+          "tcpa_name": {
+            "type": "string",
+            "description": "Customer name for TCPA consent language.",
+            "example": "Juiceversal Pictures"
+          },
+          "customer_id": {
+            "type": "integer",
+            "description": "Internal customer identifier.",
+            "example": 123
+          }
+        }
+      },
+      "LeadRequest": {
+        "title": "Lead Request",
+        "type": "object",
+        "required": ["zip"],
+        "properties": {
+          "ping_id": {
+            "type": "string",
+            "format": "uuid",
+            "description": "Reference to a previous ping request. Include to link this lead to prior pricing.",
+            "example": "f47ac10b-58cc-4372-a567-0e02b2c3d479"
+          },
+          "bid_id": {
+            "type": "string",
+            "format": "uuid",
+            "description": "Specific bid to accept from the ping response. Only applicable for internal sources.",
+            "example": "7c9e6679-7425-40de-944b-e07fc1f90ae7"
+          },
+          "zip": {
+            "type": "string",
+            "description": "Postal code. Must be valid for your account's operating countries.",
+            "example": "33139"
+          }
+        },
+        "additionalProperties": {
+          "description": "Additional fields as configured for your source and lead type."
+        }
+      },
+      "LeadResponse": {
+        "title": "Lead Response",
+        "type": "object",
+        "properties": {
+          "lead_uuid": {
+            "type": "string",
+            "description": "Unique identifier for the created lead.",
+            "example": "f47ac10b-58cc-4372-a567-0e02b2c3d479"
+          },
+          "status": {
+            "type": "string",
+            "enum": ["pending", "assigned", "duplicate", "unassigned", "marketplace"],
+            "description": "Current status of the lead.",
+            "example": "assigned"
+          },
+          "price": {
+            "type": "number",
+            "format": "float",
+            "description": "Price paid for the lead. Zero if not yet assigned.",
+            "example": 45.0
+          }
+        }
+      },
+      "ValidationError": {
+        "title": "Validation Error",
+        "type": "object",
+        "properties": {
+          "message": {
+            "type": "string",
+            "example": "The given data was invalid."
+          },
+          "errors": {
             "type": "object",
-            "properties": {
-              "id": {
-                "description": "Identification number of the plant",
-                "type": "integer",
-                "format": "int64"
+            "additionalProperties": {
+              "type": "array",
+              "items": {
+                "type": "string"
               }
+            },
+            "example": {
+              "email": ["The email field must be a valid email address."]
             }
           }
-        ]
+        }
       },
-      "Error": {
-        "required": [
-          "error",
-          "message"
-        ],
+      "PingReferenceError": {
+        "title": "Ping Reference Error",
         "type": "object",
         "properties": {
           "error": {
-            "type": "integer",
-            "format": "int32"
-          },
+            "type": "string",
+            "enum": ["Ping could not be found with the provided ping ID", "Ping ID has expired", "Lead data does not match ping data"]
+          }
+        }
+      },
+      "UnauthorizedError": {
+        "title": "Unauthorized Error",
+        "type": "object",
+        "properties": {
           "message": {
-            "type": "string"
+            "type": "string",
+            "example": "Unauthorized"
           }
         }
       }
     },
-    "securitySchemes": {
-      "bearerAuth": {
-        "type": "http",
-        "scheme": "bearer"
+    "responses": {
+      "Unauthorized": {
+        "description": "Authentication credentials are missing or invalid.",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/UnauthorizedError"
+            }
+          }
+        }
+      },
+      "ValidationError": {
+        "description": "Request validation failed.",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/ValidationError"
+            }
+          }
+        }
       }
     }
-  }
+  },
+  "tags": [
+    {
+      "name": "Ping",
+      "description": "Check for matching bids before submitting a full lead."
+    },
+    {
+      "name": "Leads",
+      "description": "Submit complete leads for processing and assignment."
+    }
+  ]
 }

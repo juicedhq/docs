@@ -2,6 +2,12 @@
   "$schema": "https://mintlify.com/docs.json",
   "theme": "almond",
   "name": "Juiced Documentation",
+  "openapi": ["api-reference/openapi.json"],
+  "api": {
+    "playground": {
+      "display": "simple"
+    }
+  },
   "styling": {
     "icons": {
       "library": "lucide"
@@ -46,6 +52,22 @@
           {
             "group": "Guides",
             "pages": ["guides/index"]
+          }
+        ]
+      },
+      {
+        "tab": "API Reference",
+        "groups": [
+          {
+            "group": "Overview",
+            "pages": ["api-reference/introduction"]
+          },
+          {
+            "group": "Endpoints",
+            "pages": [
+              "api-reference/endpoint/ping",
+              "api-reference/endpoint/leads"
+            ]
           }
         ]
       },
