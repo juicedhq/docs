@@ -1,33 +1,102 @@
 ---
-title: 'Introduction'
-description: 'Example section for showcasing API endpoints'
+title: Introduction
+description: Integrate with Juiced to submit leads programmatically.
 ---
 
-<Note>
-  If you're not looking to build API reference documentation, you can delete
-  this section by removing the api-reference folder.
-</Note>
+The Juiced API lets you submit leads programmatically, check pricing before committing, and integrate your lead sources directly with the platform.
 
-## Welcome
+## Base URL
 
-There are two ways to build API documentation: [OpenAPI](https://mintlify.com/docs/api-playground/openapi/setup) and [MDX components](https://mintlify.com/docs/api-playground/mdx/configuration). For the starter kit, we are using the following OpenAPI specification.
+All API requests are made to:
 
-<Card
-  title="Plant Store Endpoints"
-  icon="leaf"
-  href="https://github.com/mintlify/starter/blob/main/api-reference/openapi.json"
->
-  View the OpenAPI specification file
-</Card>
+```
+https://usejuiced.com/api
+```
+
+## Headers
+
+All requests must include these headers:
+
+```
+Accept: application/json
+Content-Type: application/json
+```
 
 ## Authentication
 
-All API endpoints are authenticated using Bearer tokens and picked up from the specification file.
+The API supports two authentication methods:
+
+### Basic Authentication
+
+Use your source's API key and secret, Base64-encoded in the format `api_key:api_secret`.
+
+```bash
+curl -X POST https://usejuiced.com/api/leads \
+  -H "Accept: application/json" \
+  -H "Content-Type: application/json" \
+  -H "Authorization: Basic $(echo -n 'your_api_key:your_api_secret' | base64)" \
+  -d '{"first_name": "Katy", "last_name": "Berry", ...}'
+```
+
+### Bearer Token
+
+Use a bearer token generated for your source.
+
+```bash
+curl -X POST https://usejuiced.com/api/leads \
+  -H "Accept: application/json" \
+  -H "Content-Type: application/json" \
+  -H "Authorization: Bearer your_token_here" \
+  -d '{"first_name": "Katy", "last_name": "Berry", ...}'
+```
+
+You can find your API credentials in your source settings within Juiced.
+
+## Endpoints
+
+| Endpoint | Description |
+|----------|-------------|
+| `POST /ping` | Check for pricing before submitting a full lead |
+| `POST /leads` | Submit a complete lead for processing and distribution |
+
+## Ping-post workflow
+
+The typical integration flow uses both endpoints:
+
+1. **Ping** — Send partial lead data (at minimum, a zip code) to check for matching bids and get pricing
+2. **Post** — If the price is acceptable, submit the full lead with the `ping_id` from step 1
+
+This two-step process lets you make informed decisions about which leads to sell and at what price before committing.
+
+You can also skip the ping and instead post the lead directly if you don't need to check pricing first.
+
+## Source-specific fields
+
+The exact fields available—and which ones are required—depend on your source and lead type configuration. The documentation here covers the standard fields, but your source may have additional requirements.
+
+<Note>
+For the exact API spec tailored to your source (including your credentials and all configured fields), visit **Sources → [Your Source] → View API Spec** in your Juiced admin dashboard.
+</Note>
+
+## Error handling
+
+The API returns standard HTTP status codes:
+
+| Code | Description |
+|------|-------------|
+| `200` | Ping processed successfully |
+| `201` | Lead created successfully |
+| `401` | Authentication failed |
+| `422` | Validation error (check the `errors` object for details) |
+
+Validation errors include detailed messages for each field that failed:
 
 ```json
-"security": [
-  {
-    "bearerAuth": []
+{
+  "message": "The given data was invalid.",
+  "errors": {
+    "email": ["The email field must be a valid email address."],
+    "zip": ["The postal code is not valid for this account's operating countries."]
   }
-]
+}
 ```

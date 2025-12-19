@@ -10,23 +10,28 @@ This file tracks the planned structure for Juiced documentation. Pages marked wi
 
 - [x] `features/index.mdx` - Introduction
 
-### Core Concepts
+### Ingesting & Classifying Leads
 
 - [x] `features/leads.mdx` - Leads
 - [ ] `features/lead-types.mdx` - Lead Types
 - [ ] `features/segments.mdx` - Segments
 - [ ] `features/sources.mdx` - Sources
-- [ ] `features/customers.mdx` - Customers
-- [ ] `features/ping-post.mdx` - Ping-Post
 
 ### Selling Leads
 
+- [ ] `features/ping-post.mdx` - Ping-Post
 - [ ] `features/bidding.mdx` - Bidding
 - [ ] `features/reverse-auctions.mdx` - Reverse Auctions
 - [ ] `features/distribution.mdx` - Distribution
 
+### People
+
+- [ ] `features/customers.mdx` - Customers
+- [ ] `features/partners.mdx` - Partners
+
 ### Money & Limits
 
+- [ ] `features/wallets.mdx` - Wallets
 - [ ] `features/budgets-and-caps.mdx` - Budgets & Caps
 - [ ] `features/transactions.mdx` - Transactions
 - [ ] `features/payment-methods.mdx` - Payment Methods
@@ -53,15 +58,22 @@ This file tracks the planned structure for Juiced documentation. Pages marked wi
 
 *No guides written yet. Add guide pages here as they're created.*
 
+## Buyer Portal
+
+- [ ] `buyer-portal/index.mdx` - Introduction
+- [ ] `buyer-portal/getting-started.mdx` - Getting Started
+- [ ] `buyer-portal/purchasing-leads.mdx` - Purchasing Leads
+- [ ] `buyer-portal/managing-your-account.mdx` - Managing Your Account
+
+*Documentation for buyers who purchase leads through the `/app` portal. All other sections are written for tenants who manage their operation through `/manage`.*
+
 ## API Reference
 
-- [ ] `api-reference/introduction.mdx` - Introduction
-- [ ] `api-reference/endpoint/get.mdx` - GET endpoint
-- [ ] `api-reference/endpoint/create.mdx` - CREATE endpoint
-- [ ] `api-reference/endpoint/delete.mdx` - DELETE endpoint
-- [ ] `api-reference/endpoint/webhook.mdx` - Webhook endpoint
+- [x] `api-reference/introduction.mdx` - Introduction
+- [x] `api-reference/endpoint/ping.mdx` - POST /ping
+- [x] `api-reference/endpoint/leads.mdx` - POST /leads
 
-*API reference pages need to be rewritten for Juiced (currently contain Mintlify starter template content).*
+*API documentation is auto-generated from `api-reference/openapi.json`.*
 
 ## Changelog
 
@@ -82,14 +94,15 @@ This file tracks the planned structure for Juiced documentation. Pages marked wi
 | Get Started | "How do I get up and running?" | Goal-oriented |
 | Features | "What is this thing and how does it work?" | Noun phrases |
 | Guides | "How do I accomplish X?" | Verb phrases |
+| Buyer Portal | "How do I use this as a buyer?" | Task-oriented |
 | API Reference | "What are the exact inputs/outputs?" | Endpoint names |
 | Changelog | "What's new or changed?" | Date-based |
 
-## Core Concepts vs Guides
+## Features vs Guides
 
-Core Concepts pages explain the "what and why"—what a feature is and why it exists in the application. These are higher-level explanations that help users understand the mental model.
+Feature pages explain the "what and why"—what something is and why it exists in the application. These are organized by workflow (ingesting leads, selling leads, etc.) to help users understand how pieces fit together.
 
-For some concepts, that's all the documentation needed. For others, a companion page in Guides may be necessary to cover the "how"—step-by-step implementation details and configuration walkthroughs.
+For some features, that's all the documentation needed. For others, a companion page in Guides may be necessary to cover the "how"—step-by-step implementation details and configuration walkthroughs.
 
 Example:
 - `features/ping-post.mdx` — What ping-post is and why you'd use it
