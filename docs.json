@@ -40,8 +40,17 @@
           {
             "group": "Core Concepts",
             "icon": "boxes",
+            "pages": ["features/leads"]
+          },
+          {
+            "group": "Account",
+            "icon": "user",
             "pages": [
-              "features/leads"
+              "features/company-profile",
+              "features/branding",
+              "features/billing",
+              "features/users",
+              "features/roles"
             ]
           }
         ]
@@ -64,10 +73,7 @@
           },
           {
             "group": "Endpoints",
-            "pages": [
-              "api-reference/endpoint/ping",
-              "api-reference/endpoint/leads"
-            ]
+            "pages": ["api-reference/endpoint/ping", "api-reference/endpoint/leads"]
           }
         ]
       },

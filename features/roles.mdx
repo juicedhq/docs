@@ -1,0 +1,126 @@
+---
+title: Roles & Permissions
+description: What each role can access and do in your tenant.
+---
+
+Roles control what users can see and do within your Juiced tenant. Each user is assigned exactly one role, and that role determines their permissions across the platform.
+
+## Role overview
+
+| Role | Best for | Access level |
+|------|----------|--------------|
+| **Admin** | Owners, operators | Full access |
+| **Customer Support** | Support staff | Customer and lead management |
+| **Sales** | Sales team | Read access + invite management |
+| **Data Validation** | QA, data review | Lead viewing and updates only |
+
+## Admin
+
+Admins have unrestricted access to your tenant. They can do everything, including:
+
+- Manage all platform features (leads, customers, bids, sources, segments, etc.)
+- Invite users and manage roles (including changing other admins' roles)
+- Access billing and subscription settings
+- Configure company profile and compliance settings
+- Manage domains and white-labeling
+- View analytics and reports
+- Access marketplace settings
+
+Use this role for business owners and trusted operators who need full control.
+
+## Customer Support
+
+Customer Support users can manage day-to-day customer operations without access to sensitive settings. They can:
+
+<Tabs>
+  <Tab title="Can do">
+    - View and edit customers, leads, bids, and transactions
+    - Create and manage customer contacts
+    - Add and remove customer funds
+    - Manage payment methods
+    - View and revoke invites
+    - Access analytics
+    - View the marketplace
+  </Tab>
+  <Tab title="Cannot do">
+    - Manage tenant users or roles
+    - Access billing or subscription settings
+    - Change company profile or compliance settings
+    - Delete most records permanently
+    - Configure sources, segments, or routing rules
+  </Tab>
+</Tabs>
+
+## Sales
+
+Sales users have read-heavy access designed for prospecting and customer acquisition. They can:
+
+<Tabs>
+  <Tab title="Can do">
+    - View customers, leads, bids, and transactions
+    - View bid history
+    - Send and revoke customer invites
+    - Access analytics
+    - View the marketplace
+  </Tab>
+  <Tab title="Cannot do">
+    - Edit customers, leads, or bids
+    - Manage funds or payment methods
+    - Access any settings
+    - Manage tenant users
+  </Tab>
+</Tabs>
+
+## Data Validation
+
+Data Validation is the most restricted role, focused purely on lead quality review. They can:
+
+<Tabs>
+  <Tab title="Can do">
+    - View leads
+    - Update lead data
+  </Tab>
+  <Tab title="Cannot do">
+    - Access customers, bids, or transactions
+    - View analytics or marketplace
+    - Access any settings
+    - Create or delete anything
+  </Tab>
+</Tabs>
+
+## Permission reference
+
+For a complete breakdown, here's what each role can access:
+
+### Platform features
+
+| Feature | Admin | Customer Support | Sales | Data Validation |
+|---------|:-----:|:----------------:|:-----:|:---------------:|
+| Leads | Full | Full | View | View + Edit |
+| Customers | Full | Full | View | — |
+| Bids | Full | Full | View | — |
+| Transactions | Full | View | View | — |
+| Sources | Full | — | — | — |
+| Segments | Full | — | — | — |
+| Workflows | Full | — | — | — |
+| Integrations | Full | — | — | — |
+
+### Account & settings
+
+| Feature | Admin | Customer Support | Sales | Data Validation |
+|---------|:-----:|:----------------:|:-----:|:---------------:|
+| User management | Full | — | — | — |
+| Company profile | Full | — | — | — |
+| Billing | Full | — | — | — |
+| Domains | Full | — | — | — |
+| Analytics | Full | View | View | — |
+| Marketplace | Full | View | View | — |
+
+### Customer operations
+
+| Action | Admin | Customer Support | Sales | Data Validation |
+|--------|:-----:|:----------------:|:-----:|:---------------:|
+| Add/remove funds | Yes | Yes | — | — |
+| Manage payment methods | Yes | Yes | — | — |
+| Send invites | Yes | Yes | Yes | — |
+| Revoke invites | Yes | Yes | Yes | — |
