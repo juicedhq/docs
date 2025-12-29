@@ -41,7 +41,9 @@
             "group": "Core Concepts",
             "icon": "boxes",
             "pages": [
-              "features/leads"
+              "features/leads",
+              "features/customers",
+              "features/bidding"
             ]
           }
         ]
