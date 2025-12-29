@@ -3,4 +3,176 @@ title: Bidding
 description: How customers bid on leads—scopes, pricing, and bid management.
 ---
 
-Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+Bidding is one of the primary ways leads get assigned to customers. When a lead comes in, Juiced runs a real-time auction—customers with active bids compete, and the highest bidder wins the lead. It's like eBay, except the auctions happen in milliseconds and nobody's bidding on vintage lunch boxes.
+
+## How bidding works
+
+A bid is a customer's standing offer to purchase leads matching specific criteria. When a lead arrives that matches a bid's segment and location, that bid enters the auction. The outcome depends on several factors:
+
+- **Bid amount** — Higher bids win
+- **Customer wallet** — Must have sufficient funds
+- **Customer status** — Must be active (not paused or archived)
+- **Bid status** — Must be active (not paused or archived)
+- **Caps and budgets** — Must not be exhausted
+- **Competition** — How this bid compares to others on the same segment and location
+
+### The segment connection
+
+Every bid is placed on a **segment**. The segment's bidding settings determine:
+
+- **Which scopes are available** — Can customers bid at the county, state, or nationwide level?
+- **Minimum bid** — The floor price to participate
+- **Maximum bid** — The ceiling (if any)
+- **Bid increments** — The step between valid bid amounts
+
+You can't place a bid on a segment that doesn't have bidding enabled.
+
+### Scopes
+
+The scope defines the geographic reach of a bid:
+
+| Scope | What it covers | Example |
+|-------|---------------|---------|
+| **County** | A single county | "Los Angeles County, CA" |
+| **State** | An entire state | "California" |
+| **Nationwide** | The whole country | "United States" |
+
+Broader scopes typically mean more lead volume but also more competition. A nationwide bid competes with every other nationwide bid on that segment, plus all the state and county bids for the lead's specific location.
+
+## Creating a bid
+
+To create a bid, you'll need to specify:
+
+1. **Segment** — Which lead type you want
+2. **Scope** — Geographic level (county, state, or nationwide)
+3. **Location** — The specific area within that scope
+4. **Amount** — How much you're willing to pay per lead
+
+The form will only show scopes that are enabled for the selected segment, and the amount field will enforce the minimum, maximum, and step values from the segment's bidding settings.
+
+### Optional limits
+
+If enabled by the tenant, bids can also have their own caps and budgets:
+
+- **Daily/weekly/monthly lead caps** — Maximum number of leads this bid can win
+- **Daily/weekly/monthly budgets** — Maximum spend for this bid
+
+These are separate from customer-level caps and budgets. A bid might hit its own limit even if the customer still has capacity.
+
+## Managing bids
+
+From a customer's bid list, you can:
+
+- **Add new bids** — Click "Create Bid" to place a new one
+- **Edit existing bids** — Change the amount or limits
+- **Pause/unpause** — Toggle the bid on or off without deleting it
+- **Delete** — Remove the bid entirely (archives it)
+
+The pause toggle is available both in the bid table and on the edit page.
+
+<Note>
+Pausing a bid is different from pausing a customer. A paused bid shows as "Paused" in its own status, but if the *customer* is paused, all their bids are functionally paused even though each bid might still display as "Active."
+</Note>
+
+## Bid statuses
+
+Like customers, bids have multiple underlying statuses that roll up into a single **display status**. The display status is what you'll see most often, but the underlying statuses are available as optional columns in the bid table.
+
+### Underlying statuses
+
+These four statuses each track a specific aspect of the bid's health:
+
+| Status | What it tracks | Possible values |
+|--------|---------------|-----------------|
+| **Operational** | Whether the bid is manually on or off | Active, Paused, Archived |
+| **Funding** | Customer wallet relative to bid amount | Available, Limited, Exhausted |
+| **Cap** | Lead cap consumption | Unlimited, Available, Exhausted |
+| **Budget** | Budget consumption | Unlimited, Available, Limited, Exhausted |
+
+Tenants can toggle these columns on or off in the bid table to show as much or as little detail as needed.
+
+### Display status
+
+The display status combines the underlying statuses into a single, summarized value:
+
+| Display status | What it means |
+|----------------|---------------|
+| **Active** | Everything is working. The bid is on, the customer is on, and all caps/budgets have availability. |
+| **Paused** | The bid itself has been paused. |
+| **Limited** | The customer's wallet or the bid's budget is running low—not enough to cover the full bid amount, but enough to participate at a reduced level. |
+| **Exhausted** | Something has run out. Could be the customer's wallet, a lead cap, or a budget. The bid won't receive leads until the constraint clears. |
+| **Archived** | The bid has been deleted. |
+
+### What "Limited" really means
+
+When a bid shows as "Limited," it can still win leads—but at a reduced amount:
+
+- **Funding limited** — The customer's wallet balance is below the bid amount. The bid competes at whatever the wallet can actually cover.
+- **Budget limited** — The remaining budget is below the bid amount. The bid competes at whatever the budget has left.
+
+### What "Exhausted" really means
+
+When a bid shows as "Exhausted," it's completely out of the auction:
+
+- **Funding exhausted** — The customer's wallet can't cover even the minimum bid for this segment.
+- **Cap exhausted** — A lead cap (daily, weekly, or monthly) has been reached.
+- **Budget exhausted** — A budget has been fully consumed.
+
+The bid automatically returns to "Active" when the constraint resets (new day/week/month) or the customer adds funds.
+
+## Bid positions
+
+Position tells you where your bid stands relative to the competition for the same segment and location. It's your quick answer to "Am I winning?"
+
+| Position | What it means |
+|----------|---------------|
+| **Top** | You have the highest bid. Leads matching this segment and location come to you first. |
+| **Tied** | You're tied for the highest bid with one or more other customers. Leads are distributed round-robin among tied bidders. |
+| **Under** | Someone else is bidding higher. You'll only get leads if higher bidders hit their caps or run out of funds. |
+| **Out** | Your bid isn't being considered at all. This happens when the bid is paused, archived, or the customer's funding is exhausted. |
+
+<Tip>
+If you're "Under," you can still win leads—you're just not first in line. Higher bidders might hit their caps or budgets, at which point leads cascade down to lower bidders.
+</Tip>
+
+## Bidding limits
+
+Bids can have their own caps and budgets, separate from the customer's account-level limits.
+
+### Lead caps
+
+Lead caps limit the **number of leads** a bid can win:
+
+- **Daily cap** — Resets each day
+- **Weekly cap** — Resets each week
+- **Monthly cap** — Resets each month
+
+When a cap is reached, the bid shows as "Exhausted" until the period resets.
+
+Limits reset on the calendar day, week, or month in **UTC timezone**—not your local time.
+
+<Note>
+Lead caps only count leads won through bidding. If a customer purchases leads from the marketplace, those don't count against bid caps. That's why these are called "bidding limits"—they specifically govern the bidding channel.
+</Note>
+
+### Budgets
+
+Budgets limit the **amount spent** through a bid:
+
+- **Daily budget** — Maximum daily spend
+- **Weekly budget** — Maximum weekly spend
+- **Monthly budget** — Maximum monthly spend
+
+When a budget is consumed, the bid transitions from "Limited" (can still participate at reduced capacity) to "Exhausted" (completely out of the auction).
+
+### How limits interact
+
+A bid respects the most restrictive constraint. If you have:
+
+- A daily cap of 10 leads
+- A daily budget of \$500
+- A bid amount of \$40
+
+You'll stop receiving leads when you hit 10 leads *or* \$500 spent—whichever comes first. In this example, 10 leads at \$40 each would cost \$400, so you'd hit the cap before the budget.
+
+The same logic applies at weekly and monthly levels, and also considers customer-level limits. The bid stops when *any* relevant limit is reached.
