@@ -1,0 +1,65 @@
+---
+title: Domains
+description: Configure a custom domain for your buyer portal.
+---
+
+By default, your buyers access your portal through a Juiced subdomain (like `yourcompany.usejuiced.com/app`). With a custom domain, they'll access it through your own domain instead—`leads.yourcompany.com/app`, for example.
+
+Custom domains are a [premium add-on](/features/billing#premium-add-ons) available on any plan.
+
+## What the domain applies to
+
+Your custom domain covers the **buyer portal**—the `/app` interface where your customers log in, view leads, manage their account, and access the marketplace.
+
+Once configured, your buyers will access your platform at:
+
+```
+https://{your-custom-domain}/app
+```
+
+## Setting up a custom domain
+
+<Steps>
+  <Step title="Purchase the add-on">
+    Before you can configure a custom domain, you'll need to purchase the add-on from the [Billing](/features/billing) page in your tenant settings.
+  </Step>
+  <Step title="Enter your domain">
+    Go to **Domains** in the tenant menu and enter your custom domain. Don't include `https://`—just the domain itself (e.g., `leads.yourcompany.com`).
+  </Step>
+  <Step title="Add the DNS record">
+    Juiced will provide you with a CNAME record to add at your domain registrar. This record points your domain to the Juiced infrastructure and is used to verify ownership.
+
+    | Type | Name | Value |
+    |------|------|-------|
+    | CNAME | Your subdomain | Provided by Juiced |
+
+    DNS changes can take anywhere from a few minutes to 48 hours to propagate, though most propagate within an hour.
+  </Step>
+  <Step title="Wait for SSL provisioning">
+    Once your DNS records propagate, Juiced automatically provisions an SSL certificate for your domain. You'll see the status update in the Domains page as this progresses.
+  </Step>
+</Steps>
+
+## Requirements and limitations
+
+**Domain format:**
+- Must be a valid domain without a scheme (`leads.example.com`, not `https://leads.example.com`)
+- Subdomains are supported and recommended (e.g., `app.yourcompany.com`, `leads.yourcompany.com`)
+
+**Reserved subdomains:**
+Certain subdomains are reserved and cannot be used, including: `admin`, `api`, `app`, `cdn`, `dev`, `docs`, `mail`, `portal`, `support`, `test`, and `www`.
+
+**SSL/TLS:**
+- SSL certificates are provisioned automatically—no need to provide your own
+- Minimum TLS version is 1.2
+- Certificates are managed and renewed automatically
+
+## Troubleshooting
+
+**Domain stuck in "Pending Validation"**
+
+DNS records haven't propagated yet, or the CNAME record wasn't added correctly. Double-check the record at your registrar matches exactly what Juiced provided. You can use a tool like [dnschecker.org](https://dnschecker.org) to verify propagation.
+
+**SSL certificate not issuing**
+
+This usually resolves itself once DNS propagates. If it's been more than 48 hours, verify your CNAME record is correct and doesn't have any conflicting records (like an existing A record for the same subdomain).
