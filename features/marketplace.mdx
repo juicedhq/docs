@@ -1,0 +1,98 @@
+---
+title: Marketplace
+description: Sell overflow and aged leads through your own private reverse-auction marketplace.
+---
+
+The marketplace is where leads go when they need a second chance. Maybe no bids came in during initial routing. Maybe you've got aging inventory you'd rather sell at a discount than let expire. Either way, the marketplace lets your customers browse available leads and buy them on demand—or place orders to snag them automatically when the price drops.
+
+Think of it as a clearance rack, but for leads. And instead of prices going up over time like a regular auction, they go *down*. Customers can wait for a better deal or buy now before someone else does.
+
+## Enabling the marketplace
+
+The marketplace is off by default. To turn it on:
+
+1. Go to **Settings > Marketplace**
+2. Toggle **Enable Marketplace** on
+
+While you're there, you'll see an option to **enable a direct post** if a lead doesn't sell by the time its auction ends. This lets you configure a webhook that fires with the lead data when an auction expires without a buyer. Useful if you have a fallback partner who'll take leads at any price—instead of letting unsold leads die on the vine, they'll automatically post out.
+
+## Configuring segments for the marketplace
+
+Enabling the marketplace at the account level is just the first step. You also need to enable it for each segment that should participate.
+
+1. Navigate to a segment's view page
+2. Click the **Marketplace** tab
+3. Toggle the marketplace on for that segment
+
+Once enabled, you'll configure how auctions work for leads in that segment:
+
+| Setting | What it does |
+|---------|--------------|
+| **First price** | Where the auction starts—the highest price customers will see |
+| **Last price** | Where the auction ends—the floor price before the lead expires or posts out |
+| **Increment** | How much the price drops each time |
+| **Interval** | How often the price drops |
+
+As you adjust these settings, you'll see a plain-English explanation of what your auction will look like. For example: *"Leads will start at \$25 and drop by \$2.50 every 15 minutes until they reach \$5."*
+
+## How reverse auctions work
+
+When a lead enters the marketplace, a countdown begins. The lead starts at your **first price** and drops by the **increment** every **interval** until it either sells or hits the **last price**.
+
+This creates urgency without requiring customers to actively bid against each other. They can either:
+
+- **Buy now** at the current price
+- **Wait** and hope the price drops before someone else grabs it
+
+The tension between "get a deal" and "lose the lead" is what makes it work.
+
+## What customers see
+
+The marketplace intentionally shows limited information about each lead—just enough to make a purchasing decision without enabling cherry-picking:
+
+- **County** — Where the lead originated
+- **Lead type** — What kind of lead it is
+- **Time received** — How long ago the lead came in
+- **Time remaining** — When the auction ends
+- **Current price** — What they'd pay if they buy right now
+- **Next price** — What the price will drop to, and when
+- **Floor** — The lowest the price will go
+
+No contact details, no personal information—just location and category. Customers can browse the marketplace, filter by lead type or location, and purchase leads instantly from their wallet balance.
+
+## Buy orders
+
+Sometimes customers don't want to babysit the marketplace waiting for a good price. Buy orders let them set it and forget it.
+
+A buy order says: *"I'll pay up to \$X for this lead. If the price drops to my number, buy it automatically."*
+
+Here's how it works:
+
+1. Customer places a buy order at their target price
+2. The buy order amount is **held from their wallet** immediately
+3. If the auction price reaches their buy order, they win the lead
+4. If someone else buys the lead first, or places a higher buy order, the hold is released
+
+### Competing buy orders
+
+When a customer places a buy order, it effectively raises the floor for that lead. The floor badge color tells you exactly where you stand:
+
+| Floor color | What it means |
+|-------------|---------------|
+| **Gray** | No buy orders on this lead |
+| **Blue** | Someone else has a buy order, but you don't |
+| **Green** | You have the leading buy order |
+| **Red** | You have a buy order, but someone else is winning |
+
+If another customer places a higher buy order, the original customer gets notified (notifications are enabled by default but can be disabled in contact preferences). They then have two choices:
+
+1. **Increase their buy order** to stay competitive
+2. **Cancel** and get their held funds back
+
+Buy orders can be cancelled at any time before the lead sells, and the held amount returns to the customer's wallet immediately.
+
+### Wallet integration
+
+All marketplace purchases—whether instant buys or buy orders—draw from the customer's wallet. No wallet balance, no purchasing. This keeps things simple and ensures customers can only buy what they can actually pay for.
+
+When a buy order is placed, the funds are held (not charged) until the outcome is determined. If the customer wins, the hold converts to a charge. If they lose or cancel, the hold is released.

@@ -43,6 +43,20 @@
             "pages": ["features/leads"]
           },
           {
+            "group": "Selling",
+            "icon": "gavel",
+            "pages": [
+              "features/marketplace"
+            ]
+          },
+          {
+            "group": "Analytics",
+            "icon": "chart-line",
+            "pages": [
+              "features/location-analytics"
+            ]
+          },
+          {
             "group": "Account",
             "icon": "user",
             "pages": [
