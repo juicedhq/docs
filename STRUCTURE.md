@@ -13,44 +13,53 @@ This file tracks the planned structure for Juiced documentation. Pages marked wi
 ### Ingesting & Classifying Leads
 
 - [x] `features/leads.mdx` - Leads
-- [ ] `features/lead-types.mdx` - Lead Types
-- [ ] `features/segments.mdx` - Segments
-- [ ] `features/sources.mdx` - Sources
+- [x] `features/lead-types.mdx` - Lead Types
+- [x] `features/segments.mdx` - Segments
+- [x] `features/sources.mdx` - Sources
 
 ### Selling Leads
 
 - [ ] `features/ping-post.mdx` - Ping-Post
-- [ ] `features/bidding.mdx` - Bidding
+- [x] `features/bidding.mdx` - Bidding
 - [ ] `features/reverse-auctions.mdx` - Reverse Auctions
 - [ ] `features/distribution.mdx` - Distribution
+- [ ] `features/marketplace.mdx` - Marketplace
 
 ### People
 
 - [ ] `features/customers.mdx` - Customers
-- [ ] `features/partners.mdx` - Partners
 
 ### Money & Limits
 
-- [ ] `features/wallets.mdx` - Wallets
 - [ ] `features/budgets-and-caps.mdx` - Budgets & Caps
 - [ ] `features/transactions.mdx` - Transactions
-- [ ] `features/payment-methods.mdx` - Payment Methods
+- [x] `features/payment-methods.mdx` - Payments & Deposits
 
 ### Quality & Validation
 
-- [ ] `features/duplicate-detection.mdx` - Duplicate Detection
+- [x] `features/duplicate-detection.mdx` - Duplicate Detection
 - [ ] `features/submissions.mdx` - Submissions
-- [ ] `features/audits.mdx` - Audits
+- [x] `features/audits.mdx` - Audits
+- [x] `features/returns.mdx` - Returns
 
-### Automation
+### Events & Messaging
 
 - [ ] `features/workflows.mdx` - Workflows
-- [ ] `features/notifications.mdx` - Notifications
+- [x] `features/notifications.mdx` - Notifications
+- [x] `features/webhooks.mdx` - Webhooks
+
+### Observability
+
+- [ ] `features/location-analytics.mdx` - Location Analytics
 
 ### Account Management
 
-- [ ] `features/users-and-roles.mdx` - Users & Roles
-- [ ] `features/integrations.mdx` - Integrations
+- [ ] `features/company-profile.mdx` - Company Profile
+- [x] `features/branding.mdx` - Branding
+- [ ] `features/billing.mdx` - Billing
+- [x] `features/integrations.mdx` - Integrations
+- [ ] `features/users.mdx` - Users
+- [ ] `features/roles.mdx` - Roles
 
 ## Guides
 

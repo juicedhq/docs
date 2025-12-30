@@ -38,37 +38,76 @@
             "pages": ["features/index"]
           },
           {
-            "group": "Core Concepts",
-            "icon": "boxes",
-            "pages": ["features/leads", "features/lead-types", "features/segments", "features/sources", "features/duplicate-detection", "features/audits"]
+            "group": "Ingesting & Classifying Leads",
+            "icon": "filter",
+            "pages": [
+              "features/leads",
+              "features/lead-types",
+              "features/segments",
+              "features/sources"
+            ]
           },
           {
-            "group": "Selling",
+            "group": "Selling Leads",
             "icon": "gavel",
             "pages": [
+              "features/ping-post",
               "features/bidding",
-              "features/returns",
+              "features/reverse-auctions",
+              "features/distribution",
               "features/marketplace"
             ]
           },
           {
-            "group": "Analytics",
+            "group": "People",
+            "icon": "users",
+            "pages": [
+              "features/customers"
+            ]
+          },
+          {
+            "group": "Money & Limits",
+            "icon": "wallet",
+            "pages": [
+              "features/budgets-and-caps",
+              "features/transactions",
+              "features/payment-methods"
+            ]
+          },
+          {
+            "group": "Quality & Validation",
+            "icon": "shield-check",
+            "pages": [
+              "features/duplicate-detection",
+              "features/submissions",
+              "features/audits",
+              "features/returns"
+            ]
+          },
+          {
+            "group": "Events & Messaging",
+            "icon": "bell",
+            "pages": [
+              "features/workflows",
+              "features/notifications",
+              "features/webhooks"
+            ]
+          },
+          {
+            "group": "Observability",
             "icon": "chart-line",
             "pages": [
               "features/location-analytics"
             ]
           },
           {
-            "group": "Account",
+            "group": "Account Management",
             "icon": "user",
             "pages": [
               "features/company-profile",
               "features/branding",
               "features/billing",
-              "features/payment-methods",
               "features/integrations",
-              "features/webhooks",
-              "features/notifications",
               "features/users",
               "features/roles"
             ]
