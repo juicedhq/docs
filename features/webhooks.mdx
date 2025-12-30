@@ -1,0 +1,36 @@
+---
+title: Webhooks
+description: Send real-time event data to external systems.
+---
+
+Webhooks let you send data to external systems whenever specific events occur in Juiced. When an event fires, the system sends a payload to your configured URL.
+
+## Creating a webhook
+
+1. Navigate to the webhooks settings page
+2. Select the event you want to listen for
+3. Click create
+4. Configure the destination URL and payload
+
+## Available events
+
+| Event | Description |
+|-------|-------------|
+| Customer Created | A new customer account is created |
+| Lead Assigned | A single lead is assigned to a customer |
+| Leads Assigned | Multiple leads are assigned at once (e.g., bulk marketplace purchase) |
+| Lead Duplicated | A lead is rejected as a duplicate |
+| Lead Posted | A lead is sent to an external system |
+| Transaction Updated | A transaction is created or updated |
+| County Segment Stats Updated | Segment statistics are updated at the county level |
+| State Segment Stats Updated | Segment statistics are updated at the state level |
+| User Attached to Customer | A user is added to a customer account |
+
+## How it works
+
+When one of your configured events occurs, Juiced sends an HTTP request to your specified URL with the relevant payload. This allows you to:
+
+- Sync data to your CRM
+- Trigger automations in external tools
+- Update dashboards or reporting systems
+- Send notifications through your own channels

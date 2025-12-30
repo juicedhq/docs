@@ -3,4 +3,42 @@ title: Sources
 description: Where your leads come from—API credentials, field mapping, and configuration.
 ---
 
-Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+Sources are how leads get into the system. They represent where leads came from—usually a lead form on a website you control, but sometimes a partner you're buying leads from.
+
+## Authentication
+
+When you create a source, an API key and API secret are automatically generated for basic authentication. You can also use a bearer token if you prefer.
+
+## Source types
+
+Sources can be either **internal** or **vendor**. This setting affects several behaviors:
+
+### Ping responses
+
+- **Internal**: Returns a more detailed response from pings
+- **Vendor**: Returns a simplified response
+
+See the [API Reference](/api-reference/introduction) for specifics, or click the "API spec" button on a source to view its documentation. This generates a link that displays the basic auth credentials for up to one week, after which the credentials are hidden.
+
+### Subscription threshold behavior
+
+When you've reached your subscription threshold:
+
+- **Internal**: Pings are still accepted. Leads are held in a "withheld" status and won't be processed until capacity frees up.
+- **Vendor**: Pings are automatically rejected so you don't purchase leads you can't distribute.
+
+## Payout percentage
+
+If you've negotiated a profit-sharing arrangement with a vendor, use the payout percentage to adjust what's reported to them.
+
+For example, if you split profits 50/50, set the payout percentage to 50%. A \$100 lead will be reported to the vendor as \$50.
+
+## Source-level fields
+
+You can define fields at the source level. These fields are appended to the fields from the lead type associated with the source, allowing you to capture more precise information for specific sources.
+
+If you create a source-level field with the same title as a field on the lead type, the source configuration overrides the lead type configuration.
+
+## Source-level duplicate checks
+
+[Duplicate checks](/features/duplicate-detection) can also be configured at the source level. When set here, the check only applies to leads coming through that source—just like source-level fields only apply to that source.
