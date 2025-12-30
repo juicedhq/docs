@@ -67,14 +67,17 @@ This file tracks the planned structure for Juiced documentation. Pages marked wi
 
 *No guides written yet. Add guide pages here as they're created.*
 
-## Buyer Portal
+## Customer Portal
 
-- [ ] `buyer-portal/index.mdx` - Introduction
-- [ ] `buyer-portal/getting-started.mdx` - Getting Started
-- [ ] `buyer-portal/purchasing-leads.mdx` - Purchasing Leads
-- [ ] `buyer-portal/managing-your-account.mdx` - Managing Your Account
+- [x] `customer-portal/index.mdx` - Introduction
+- [x] `customer-portal/leads.mdx` - Leads
+- [x] `customer-portal/bids.mdx` - Bids
+- [x] `customer-portal/marketplace.mdx` - Marketplace
+- [x] `customer-portal/notifications.mdx` - Notifications
+- [x] `customer-portal/billing.mdx` - Billing
+- [x] `customer-portal/bidding-limits.mdx` - Bidding Limits
 
-*Documentation for buyers who purchase leads through the `/app` portal. All other sections are written for tenants who manage their operation through `/manage`.*
+*Documentation for customers who purchase leads through the `/app` portal. All other sections are written for tenants who manage their operation through `/manage`.*
 
 ## API Reference
 
@@ -103,7 +106,7 @@ This file tracks the planned structure for Juiced documentation. Pages marked wi
 | Get Started | "How do I get up and running?" | Goal-oriented |
 | Features | "What is this thing and how does it work?" | Noun phrases |
 | Guides | "How do I accomplish X?" | Verb phrases |
-| Buyer Portal | "How do I use this as a buyer?" | Task-oriented |
+| Customer Portal | "How do I use this as a customer?" | Task-oriented |
 | API Reference | "What are the exact inputs/outputs?" | Endpoint names |
 | Changelog | "What's new or changed?" | Date-based |
 

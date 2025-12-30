@@ -137,6 +137,23 @@
         ]
       },
       {
+        "tab": "Customer Portal",
+        "groups": [
+          {
+            "group": "Customer Portal",
+            "pages": [
+              "customer-portal/index",
+              "customer-portal/leads",
+              "customer-portal/bids",
+              "customer-portal/marketplace",
+              "customer-portal/notifications",
+              "customer-portal/billing",
+              "customer-portal/bidding-limits"
+            ]
+          }
+        ]
+      },
+      {
         "tab": "Changelog",
         "groups": [
           {

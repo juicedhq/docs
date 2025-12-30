@@ -1,0 +1,38 @@
+---
+title: Notifications
+description: Configure contacts and control how you receive alerts.
+---
+
+The Notifications section lets you manage who receives alerts when events occur—like when you receive a new lead or get outbid on a buy order.
+
+## Adding contacts
+
+Add phone numbers or email addresses to receive notifications. The available contact types depend on what your provider has enabled:
+
+- **Email** — Receive notifications via email
+- **Phone** — Receive notifications via text message (if texting is enabled)
+
+## Managing notifications
+
+Click on any contact to see its notification settings. From there, you can toggle individual notification types on or off for that contact.
+
+This lets you control exactly who gets notified about what—send lead alerts to your sales team's phones while keeping billing notifications in your inbox.
+
+## Webhooks
+
+The Webhooks tab lets you send lead data to external systems whenever a lead is assigned to you.
+
+### Creating a webhook
+
+1. Click **New Webhook**
+2. Enter the URL where lead data should be sent
+3. Choose your HTTP method (POST, PUT, or GET)
+4. Optionally customize the payload template
+
+### Payload format
+
+Webhooks always send JSON. By default, leaving the payload template empty sends the full lead data. If you need to shorten, remap, or restructure the data, use the payload template field to define a custom format.
+
+### Managing webhooks
+
+You can enable or disable a webhook at any time without deleting it. There's also a test option to verify your endpoint is receiving data correctly before going live.
