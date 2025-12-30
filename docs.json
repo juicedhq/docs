@@ -40,65 +40,37 @@
           {
             "group": "Ingesting & Classifying Leads",
             "icon": "filter",
-            "pages": [
-              "features/leads",
-              "features/lead-types",
-              "features/segments",
-              "features/sources"
-            ]
+            "pages": ["features/leads", "features/lead-types", "features/segments", "features/sources"]
           },
           {
             "group": "Selling Leads",
             "icon": "gavel",
-            "pages": [
-              "features/ping-post",
-              "features/bidding",
-              "features/reverse-auctions",
-              "features/distribution",
-              "features/marketplace"
-            ]
+            "pages": ["features/ping-post", "features/bidding", "features/reverse-auctions", "features/distribution", "features/marketplace"]
           },
           {
             "group": "People",
             "icon": "users",
-            "pages": [
-              "features/customers"
-            ]
+            "pages": ["features/customers"]
           },
           {
             "group": "Money & Limits",
             "icon": "wallet",
-            "pages": [
-              "features/budgets-and-caps",
-              "features/transactions",
-              "features/payment-methods"
-            ]
+            "pages": ["features/budgets-and-caps", "features/transactions", "features/payment-methods"]
           },
           {
             "group": "Quality & Validation",
             "icon": "shield-check",
-            "pages": [
-              "features/duplicate-detection",
-              "features/submissions",
-              "features/audits",
-              "features/returns"
-            ]
+            "pages": ["features/duplicate-detection", "features/submissions", "features/audits", "features/returns"]
           },
           {
             "group": "Events & Messaging",
             "icon": "bell",
-            "pages": [
-              "features/workflows",
-              "features/notifications",
-              "features/webhooks"
-            ]
+            "pages": ["features/workflows", "features/notifications", "features/webhooks"]
           },
           {
             "group": "Observability",
             "icon": "chart-line",
-            "pages": [
-              "features/location-analytics"
-            ]
+            "pages": ["features/location-analytics"]
           },
           {
             "group": "Account Management",

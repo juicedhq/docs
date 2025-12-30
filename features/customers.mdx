@@ -3,4 +3,247 @@ title: Customers
 description: The entities that purchase your leads—wallets, contacts, and configuration.
 ---
 
-Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+Customers are the businesses buying leads from you. They're the reason this whole operation exists—they want leads, you have them, and Juiced connects the two while making sure money changes hands appropriately.
+
+## Customers vs. users
+
+Before diving in, let's clear up a common point of confusion: **customers are not users**.
+
+| Concept | What it represents | Example |
+|---------|-------------------|---------|
+| **Customer** | A business entity | "Acme Insurance Co." |
+| **User** | A person who logs in | "Jane Smith, Account Manager" |
+
+A single user can access multiple customers (useful for agencies managing several accounts), and a single customer can have multiple users (the whole team can log in). Users authenticate. Customers purchase leads.
+
+## The customer list
+
+Navigate to **Customers** in your tenant dashboard to see all your lead buyers. From here you can:
+
+- **Search** by customer name, email, or associated user information
+- **Filter** by operational status, funding status, or archived state
+- **Create** new customers manually
+
+### Creating a customer manually
+
+Click **Create Customer** to add a new buyer. This is the same as what happens when a customer registers through your portal—you're just doing it on their behalf.
+
+You'll need to provide:
+
+- **Business name** and **email** (required)
+- **Phone** and **address** (optional, but helpful for records)
+- **Lead caps and budgets** if you want to limit their activity
+- **Access settings** like whether they can place bids
+
+## Customer overview
+
+Click on any customer to see their overview. This is your at-a-glance summary of how this buyer is performing.
+
+### Key metrics
+
+The overview displays four stats at the top:
+
+| Metric | What it shows |
+|--------|---------------|
+| **Revenue** | Total amount charged to this customer for assigned leads |
+| **Wallet** | Current available balance (minus any reserved funds) |
+| **Active Bids** | Number of bids currently running and competing for leads |
+| **Return Rate** | Percentage of leads this customer has returned |
+
+### Status indicators
+
+Customers have several statuses that reflect different aspects of their account health. Understanding these helps you quickly diagnose why a customer might not be receiving leads.
+
+#### Operational status
+
+This is the customer's manual state—controlled by you or them:
+
+| Status | Meaning |
+|--------|---------|
+| **Active** | Business as usual. Ready to receive leads. |
+| **Paused** | Temporarily stopped. No leads will be assigned. |
+| **Archived** | Removed from active operation. Historical data preserved. |
+
+#### Funding status
+
+Reflects wallet balance:
+
+| Status | Meaning |
+|--------|---------|
+| **Available** | Sufficient funds for normal operation |
+| **Limited** | Running low—might not cover all potential purchases |
+| **Exhausted** | Out of funds. No leads will be assigned. |
+
+#### Cap status
+
+Reflects lead volume limits:
+
+| Status | Meaning |
+|--------|---------|
+| **Unlimited** | No caps configured |
+| **Available** | Under all cap limits |
+| **Exhausted** | At least one cap (daily, weekly, or monthly) has been reached |
+
+#### Budget status
+
+Reflects spending limits:
+
+| Status | Meaning |
+|--------|---------|
+| **Unlimited** | No budgets configured |
+| **Available** | Under all budget limits |
+| **Limited** | Approaching a limit |
+| **Exhausted** | At least one budget has been reached |
+
+#### Display status
+
+Rather than showing all four statuses everywhere, Juiced computes a **display status** that summarizes the customer's situation:
+
+| Display status | Shown when |
+|----------------|------------|
+| **Active** | Operational and has available funding |
+| **Paused** | Manually paused |
+| **Inactive** | Funding, caps, or budget exhausted |
+| **Archived** | Account archived |
+
+This is what you'll see in most places throughout the app.
+
+### Account toggles
+
+Several settings control customer behavior:
+
+- **Pause Account** — Temporarily halt all activity without archiving
+- **Onboarded** — Override the onboarding requirement (if your tenant uses onboarding videos)
+- **Can Access Bidding** — Allow or restrict this customer from placing bids
+- **Disable Return Tiers** — Exempt this customer from your return tier system; their raw return rate will display instead
+
+### Auto-recharge
+
+If the customer has a payment method on file, you can configure auto-recharge:
+
+- **Enable auto-recharge** — Turn automatic funding on
+- **Trigger amount** — When the wallet drops below this amount, recharge kicks in
+- **Recharge amount** — How much to add when triggered
+
+This happens immediately if the wallet is already below the trigger when you enable it.
+
+### Stripe integration
+
+If the customer has a Stripe customer ID, you'll see a link to view them directly in your Stripe dashboard.
+
+## Wallet management
+
+Customers have a wallet balance that funds their lead purchases. You can add or remove funds without processing an actual payment—useful for credits, adjustments, or corrections.
+
+### Adding funds
+
+Click **Add Funds** from the customer overview. You'll enter:
+
+- **Amount** — How much to add
+- **Description** — Why you're adding it (visible to the customer)
+- **Receipt URL** (optional) — Link to relevant documentation
+
+### Removing funds
+
+Click **Remove Funds** for the reverse. This is useful for clawing back credits or correcting mistakes.
+
+### Timeline
+
+The **Timeline** action shows a history of all fund adjustments, including who made them and why. This creates an audit trail for financial changes.
+
+### Reserved funds
+
+When a customer's bids are active, funds may be "reserved" to cover potential purchases. The displayed wallet balance accounts for these holds—what you see is what's actually available to spend.
+
+## Return tiers
+
+Return tiers let you incentivize good behavior. Customers with low return rates can earn discounts, while serial returners face penalties.
+
+If a customer is assigned to a return tier, you'll see it displayed on their overview with a colored badge. Tiers can include:
+
+- **Discounts** — Reduced pricing on bids (they compete at full price but pay less)
+- **Penalties** — Surcharges based on their return rate
+
+The **Disable Return Tiers** toggle exempts a customer from this system entirely.
+
+## Managing related data
+
+From the customer detail page, you can navigate to several related sections via the tabs at the top:
+
+### Bids
+
+View and manage all bids this customer has placed. You can:
+
+- Create new bids
+- Pause or resume existing bids
+- Edit bid parameters
+- View bid history
+
+### Leads
+
+See all leads assigned to this customer. Filter by source, date range, or value. Handle returns and disputes from here.
+
+### Transactions
+
+A record of every change to the customer's wallet balance. Each transaction shows:
+
+- **Timestamp** — When the transaction occurred
+- **Amount** — How much was deposited or withdrawn
+- **Event** — What triggered the transaction, with a link to the related record (lead, dispute, etc.)
+- **Transaction ID** — Unique identifier for the transaction
+
+<Note>
+These are wallet transactions, not necessarily real currency movements. Adding credits, adjusting balances, or processing returns all create transactions here even though no money changed hands externally.
+</Note>
+
+### Payment methods
+
+View the customer's saved payment methods, including card details and expiration dates. Tenants can:
+
+- **Set a default** — The default payment method is used for auto-recharges
+- **Delete** — Remove a payment method from the account
+
+Customers add their own payment methods through the buyer portal.
+
+### Contacts
+
+Contacts are phone numbers or email addresses used to send notifications. Each contact can optionally have a name attached for easier identification.
+
+<Note>
+You can only add contact types for integrations you've configured. No email integration means no email contacts. No texting integration means no phone contacts.
+</Note>
+
+From this page you can:
+
+- **Add contacts** — Enter a phone number or email address
+- **Test contacts** — Send a test notification to verify delivery
+- **Edit notification preferences** — Click edit to see a list of available notifications that can be enabled or disabled for that specific contact
+
+Available notification categories include:
+
+- **Lead notifications** — Lead assigned, dispute approved
+- **Bid notifications** — Outbid, bid matched, underfunded bids
+- **Account notifications** — Paused/unpaused, tier updated
+- **Marketplace notifications** — Buy order status changes
+
+Each contact has its own notification settings, so you can route different types of alerts to different people or channels.
+
+### Webhooks
+
+Set up an HTTP endpoint that receives lead data when a lead is assigned to this customer.
+
+Configuration is straightforward:
+
+- **URL** — Where to send the POST request
+- **Payload** — Customize what data is sent using available variables (format is always JSON)
+- **Active state** — Toggle to pause the webhook without deleting it
+
+You can test webhooks before going live. The test generates sample data based on the lead type you select, so you can verify your endpoint handles the payload correctly.
+
+### Users
+
+See all users who can access this customer account. You can detach users if they should no longer have access.
+
+### Invites
+
+Manage pending invitations for users to join this customer account. Resend or revoke invites as needed.

@@ -25,3 +25,67 @@ Every lead has a status that tells you where it is in its journey. Here's what e
 | **Uncategorized** | Doesn't match any segment, and no fallback was configured to catch it. |
 
 A lead is considered "sold" if it's Assigned, Posted, or Returned. Yes, even returned leads count as sold—you delivered them, and the customer chose to return them afterward.
+
+## Viewing leads
+
+Tenants can view leads assigned to any customer. The lead detail page shows:
+
+- **UUID** — The unique identifier for the lead
+- **Basic contact information** — Name, email, phone, etc.
+- **Metadata** — Source, timestamps, assignment info, charged amount
+- **Details** — Custom fields defined by the lead type or source
+
+### Field visibility
+
+Not all fields are visible to everyone:
+
+- **Tenants** see all fields on a lead
+- **Customers** only see fields marked as "deliverable" in the lead type configuration
+
+This lets you collect data for your own purposes (like tracking or analytics) without exposing it to buyers.
+
+### Related records
+
+If the lead was generated through ping-post, you'll see links to view:
+
+- **The ping** — The initial request that triggered the auction
+- **The post** — The follow-up request that delivered the full lead data
+
+These links only appear when the related records exist.
+
+## Lead actions
+
+### Returning leads
+
+Tenants can return leads on behalf of customers. When a lead is returned:
+
+- The customer's wallet is credited with the charged amount
+- The lead no longer counts against bidding limits
+- The customer retains access to the lead data
+- The lead status changes to "Returned"
+
+### Editing leads
+
+Tenants can edit **unassigned** leads to correct data or add missing information. When editing:
+
+- **Lead data** can be changed (contact info, custom fields)
+- **Metadata** cannot be changed (source, timestamps, etc.)
+- **Details** can be added if needed
+
+When you save an edited lead, it gets reclassified into the appropriate lead type and segment based on the updated data.
+
+### Reprocessing leads
+
+After editing, tenants can choose to reprocess the lead. You can select which stage of the distribution plan to start from—useful if you want to skip steps that have already been attempted or start fresh from the beginning.
+
+### Deleting leads
+
+Tenants can delete leads entirely. This removes the lead from the system. Use this for test data or leads that should never have entered the system in the first place.
+
+### Exporting leads
+
+Tenants can export leads from a customer's lead list. This generates a downloadable file of the lead data—useful for reporting, backups, or moving data to external systems.
+
+### Importing leads
+
+Tenants can import leads on behalf of a customer. Imported leads create **reverse auctions** on the marketplace, where sources can bid to fulfill them. This flips the typical flow—instead of leads coming in and customers bidding on them, the customer is saying "I want leads matching these criteria" and sources compete to provide them.
