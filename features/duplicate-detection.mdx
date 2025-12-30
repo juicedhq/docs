@@ -3,4 +3,30 @@ title: Duplicate Detection
 description: Field matching rules to prevent duplicate leads.
 ---
 
-Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+Duplicate checks help you avoid selling the same lead twice. When a lead matches your duplicate criteria, it's marked as a duplicate and rejected.
+
+## Global duplicate checks
+
+Global duplicate checks apply to all leads coming in from any source. You define:
+
+- **Field**: Which field to check (e.g., email, phone)
+- **Days**: The lookback period. A lead is considered a duplicate if a matching value was seen within this many days.
+
+For example, if you set up a duplicate check on email with a 30-day window, any lead with an email that matches a lead from the last 30 days will be marked as a duplicate.
+
+## Source-level duplicate checks
+
+You can also configure duplicate checks at the [source level](/features/sources#source-level-duplicate-checks). These checks only apply to leads coming through that specific source, giving you more granular control.
+
+## Apply to pings
+
+Duplicate checks can also be configured to apply to pings. When enabled, a ping will return a duplicate status, allowing you to reject a lead before it's even posted.
+
+## Matching options
+
+Both global and source-level duplicate checks support additional matching options:
+
+| Option | Description |
+|--------|-------------|
+| Ignore punctuation | Treats values as matches even if punctuation differs (e.g., "john.doe@email.com" matches "johndoe@email.com") |
+| Case sensitive | When enabled, "John@email.com" and "john@email.com" are treated as different values |

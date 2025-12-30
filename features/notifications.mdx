@@ -3,4 +3,86 @@ title: Notifications
 description: Templates and delivery configuration for automated messages.
 ---
 
-Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+Notification templates let you customize the messaging customers receive when events happen in the system. You control the verbiage, formatting, and what details are included in each notification.
+
+## Channels
+
+Each notification can be delivered through three channels:
+
+| Channel | Description | Requirements |
+|---------|-------------|--------------|
+| Email | Sent via SendGrid | [SendGrid integration](/features/integrations#sendgrid) |
+| SMS | Sent via Twilio | [Twilio integration](/features/integrations#twilio) |
+| In-App | Displayed in the customer portal | None |
+
+Each channel has its own template, so you can tailor the message format and length appropriately—detailed HTML emails, concise text messages, and quick in-app alerts.
+
+## Notification events
+
+Templates are available for the following events:
+
+| Event | Description |
+|-------|-------------|
+| Lead Assigned | A single lead is assigned to a customer |
+| Leads Assigned | Multiple leads are assigned at once |
+| Outbid | Customer's bid is outbid by another customer |
+| Bid Matched | Another customer matches the bid amount |
+| Buy Order Exceeded | Customer's buy order is exceeded by another |
+| Buy Order Reinstated | Customer's buy order becomes the highest bid again |
+| Customer Paused | Customer's account is paused |
+| Customer Unpaused | Customer's account is unpaused |
+| Customer Archived | Customer's account is archived |
+| Customer Restored | Customer's account is restored from archive |
+| Dispute Approved | Customer's return request is approved |
+| Dispute Tier Updated | Customer's return tier changes |
+| Payment Failed | A payment transaction fails |
+| Payment Successful | A payment processes successfully |
+| Under Funded Bids | Customer has bids limited by their available balance |
+
+## Template variables
+
+Templates support merge fields using double curly braces: `{{ variable_name }}`. Available variables depend on the notification type.
+
+### Common variables
+
+These are available in all templates:
+
+- `{{ actionLink }}` - URL to the relevant page
+- `{{ defaultActionText }}` - Default text for the action button
+- `{{ supportEmail }}` - Your tenant's support email
+
+### Lead variables
+
+Available for lead-related notifications (Lead Assigned, Outbid, Bid Matched, Dispute Approved):
+
+- `{{ lead.uuid }}`
+- `{{ lead.full_name }}`, `{{ lead.first_name }}`, `{{ lead.last_name }}`
+- `{{ lead.email }}`, `{{ lead.phone }}`
+- `{{ lead.address_1 }}`, `{{ lead.address_2 }}`, `{{ lead.city }}`
+- `{{ lead.segment.name }}`
+- `{{ lead.details.field_name }}` - Any custom field on the lead type
+
+### Customer variables
+
+Available for customer-related notifications:
+
+- `{{ customer.name }}`, `{{ customer.email }}`, `{{ customer.phone }}`
+- `{{ customer.address }}`, `{{ customer.city }}`, `{{ customer.state }}`, `{{ customer.zip }}`
+- `{{ customer.leads_count }}` - For batch notifications
+
+### Other variables
+
+- **Buy order notifications**: `{{ buyOrder.amount }}`, `{{ buyOrder.scope }}`, `{{ buyOrder.status }}`
+- **Dispute tier notifications**: `{{ disputeTier.name }}`, `{{ disputeTier.discount_percentage }}`, `{{ disputeTier.penalty_percentage }}`
+
+## Editing templates
+
+Each notification type has separate templates for each channel. When editing:
+
+- **Email**: Supports rich text formatting (bold, italic, underline, strikethrough)
+- **SMS**: Plain text only—keep it concise
+- **In-App**: Supports basic formatting
+
+Templates are validated when you save to ensure all variables are valid for that notification type. If you reference a variable that doesn't exist, you'll see an error.
+
+You can reset any template to its default at any time.

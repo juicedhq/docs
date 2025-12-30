@@ -170,9 +170,33 @@ When a budget is consumed, the bid transitions from "Limited" (can still partici
 A bid respects the most restrictive constraint. If you have:
 
 - A daily cap of 10 leads
-- A daily budget of \$500
-- A bid amount of \$40
+- A daily budget of &#36;500
+- A bid amount of &#36;40
 
-You'll stop receiving leads when you hit 10 leads *or* \$500 spent—whichever comes first. In this example, 10 leads at \$40 each would cost \$400, so you'd hit the cap before the budget.
+You'll stop receiving leads when you hit 10 leads *or* &#36;500 spent—whichever comes first. In this example, 10 leads at &#36;40 each would cost &#36;400, so you'd hit the cap before the budget.
 
 The same logic applies at weekly and monthly levels, and also considers customer-level limits. The bid stops when *any* relevant limit is reached.
+
+## Bidding settings
+
+Beyond individual bids, there are tenant-level settings that control how bidding works across your operation.
+
+### Global bid lock
+
+The bidding settings page includes a global option to lock bids. When enabled, customers cannot make changes to their bids through the customer portal—only tenants can modify bids.
+
+This allows tenants to create a fully managed pricing system where they control the price of all leads.
+
+### Customer bidding access
+
+You can restrict customers from accessing bidding until they've deposited a minimum amount of funds. Once they reach or surpass the threshold, bidding access is automatically granted.
+
+Tenants control the messaging shown to customers in the modal that blocks their access. This is useful for scenarios like requiring customers to schedule a call with your sales team before they can start bidding.
+
+### Smart pricing
+
+Smart pricing ensures customers only pay what's necessary to win a lead—not their maximum bid. When a customer wins an auction, they pay one increment above the next highest bidder, regardless of how high they bid.
+
+**Example:** If the minimum bid is &#36;10 with &#36;10 increments, and a customer bids &#36;100 while the next closest bidder is at &#36;10, the winner pays &#36;20—not &#36;100.
+
+This encourages customers to bid their true maximum since they won't overpay when competition is low. It also means customers can confidently bid for top position without worrying about the actual price until the lead is won.

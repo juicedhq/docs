@@ -1,0 +1,67 @@
+---
+title: Returns
+description: Return policies and tiered penalties for managing lead quality disputes.
+---
+
+In the pay-per-lead model, many companies allow customers to return leads that don't meet quality standards. However, this can be abused. Return tiers help you manage this by adjusting customer privileges based on their return behavior.
+
+## Enabling returns
+
+The returns system can be enabled or disabled entirely from the returns settings page. You can also add a URL to your lead return policy, which will be displayed in the customer portal.
+
+## Return tiers
+
+Return tiers categorize customers based on their return rate (calculated as a percentage of revenue, not lead count). Each tier can reward good behavior or penalize excessive returns.
+
+### Tier configuration
+
+For each tier, you can configure:
+
+| Setting | Description |
+|---------|-------------|
+| Name | Display name for the tier |
+| Headline | Short summary shown to customers |
+| Brief description | Quick explanation of the tier |
+| Long description | Detailed information about tier benefits or restrictions |
+| Color | Visual indicator in the customer portal |
+| Icon | Visual indicator alongside the color |
+| Lower bound | Minimum return rate percentage for this tier |
+| Upper bound | Maximum return rate percentage for this tier |
+
+### Discounts and penalties
+
+Tiers can apply either a discount or a penalty:
+
+- **Discount**: Rewards customers with low return rates. This could be used to offer better pricing or other benefits.
+- **Penalty**: Reduces the effective bid amount for customers with high return rates.
+
+#### How penalties work
+
+A penalty reduces what the system considers a customer's bid to be, making them less likely to win leads. For example:
+
+- Customer bids &#36;100
+- Customer has a 10% penalty
+- System treats the bid as &#36;90 when determining the winner
+- If the customer still wins, they pay the full &#36;100
+
+This makes high-return customers less competitive without changing their actual costs.
+
+#### Match return rate
+
+You can also configure a penalty to match the customer's return rate. If a customer has a 15% return rate, their penalty will automatically be 15%.
+
+### New customer tier
+
+One tier can be designated for new customers—those who have spent less than &#36;5,000. This tier applies regardless of return rate since new customers don't have enough history to calculate a meaningful rate.
+
+## Recalculating tiers
+
+After modifying existing tiers or adding new ones, use the recalculate option to update all customers. This goes through each customer and assigns them to the appropriate tier based on their current return rate.
+
+## Excluding customers
+
+Individual customers can be excluded from the return tier system entirely. On the customer record, toggle the "ignore dispute tiers" option to remove them from tier calculations and any associated penalties or discounts.
+
+## Customer visibility
+
+Customers can see their current return tier in the customer portal. They can click on it to view all available tiers and the benefits or restrictions associated with each one.

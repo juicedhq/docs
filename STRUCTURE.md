@@ -13,44 +13,53 @@ This file tracks the planned structure for Juiced documentation. Pages marked wi
 ### Ingesting & Classifying Leads
 
 - [x] `features/leads.mdx` - Leads
-- [ ] `features/lead-types.mdx` - Lead Types
-- [ ] `features/segments.mdx` - Segments
-- [ ] `features/sources.mdx` - Sources
+- [x] `features/lead-types.mdx` - Lead Types
+- [x] `features/segments.mdx` - Segments
+- [x] `features/sources.mdx` - Sources
 
 ### Selling Leads
 
 - [ ] `features/ping-post.mdx` - Ping-Post
-- [ ] `features/bidding.mdx` - Bidding
+- [x] `features/bidding.mdx` - Bidding
 - [ ] `features/reverse-auctions.mdx` - Reverse Auctions
 - [ ] `features/distribution.mdx` - Distribution
+- [ ] `features/marketplace.mdx` - Marketplace
 
 ### People
 
 - [ ] `features/customers.mdx` - Customers
-- [ ] `features/partners.mdx` - Partners
 
 ### Money & Limits
 
-- [ ] `features/wallets.mdx` - Wallets
 - [ ] `features/budgets-and-caps.mdx` - Budgets & Caps
 - [ ] `features/transactions.mdx` - Transactions
-- [ ] `features/payment-methods.mdx` - Payment Methods
+- [x] `features/payment-methods.mdx` - Payments & Deposits
 
 ### Quality & Validation
 
-- [ ] `features/duplicate-detection.mdx` - Duplicate Detection
+- [x] `features/duplicate-detection.mdx` - Duplicate Detection
 - [ ] `features/submissions.mdx` - Submissions
-- [ ] `features/audits.mdx` - Audits
+- [x] `features/audits.mdx` - Audits
+- [x] `features/returns.mdx` - Returns
 
-### Automation
+### Events & Messaging
 
 - [ ] `features/workflows.mdx` - Workflows
-- [ ] `features/notifications.mdx` - Notifications
+- [x] `features/notifications.mdx` - Notifications
+- [x] `features/webhooks.mdx` - Webhooks
+
+### Observability
+
+- [ ] `features/location-analytics.mdx` - Location Analytics
 
 ### Account Management
 
-- [ ] `features/users-and-roles.mdx` - Users & Roles
-- [ ] `features/integrations.mdx` - Integrations
+- [ ] `features/company-profile.mdx` - Company Profile
+- [x] `features/branding.mdx` - Branding
+- [ ] `features/billing.mdx` - Billing
+- [x] `features/integrations.mdx` - Integrations
+- [ ] `features/users.mdx` - Users
+- [ ] `features/roles.mdx` - Roles
 
 ## Guides
 
@@ -58,14 +67,17 @@ This file tracks the planned structure for Juiced documentation. Pages marked wi
 
 *No guides written yet. Add guide pages here as they're created.*
 
-## Buyer Portal
+## Customer Portal
 
-- [ ] `buyer-portal/index.mdx` - Introduction
-- [ ] `buyer-portal/getting-started.mdx` - Getting Started
-- [ ] `buyer-portal/purchasing-leads.mdx` - Purchasing Leads
-- [ ] `buyer-portal/managing-your-account.mdx` - Managing Your Account
+- [x] `customer-portal/index.mdx` - Introduction
+- [x] `customer-portal/leads.mdx` - Leads
+- [x] `customer-portal/bids.mdx` - Bids
+- [x] `customer-portal/marketplace.mdx` - Marketplace
+- [x] `customer-portal/notifications.mdx` - Notifications
+- [x] `customer-portal/billing.mdx` - Billing
+- [x] `customer-portal/bidding-limits.mdx` - Bidding Limits
 
-*Documentation for buyers who purchase leads through the `/app` portal. All other sections are written for tenants who manage their operation through `/manage`.*
+*Documentation for customers who purchase leads through the `/app` portal. All other sections are written for tenants who manage their operation through `/manage`.*
 
 ## API Reference
 
@@ -94,7 +106,7 @@ This file tracks the planned structure for Juiced documentation. Pages marked wi
 | Get Started | "How do I get up and running?" | Goal-oriented |
 | Features | "What is this thing and how does it work?" | Noun phrases |
 | Guides | "How do I accomplish X?" | Verb phrases |
-| Buyer Portal | "How do I use this as a buyer?" | Task-oriented |
+| Customer Portal | "How do I use this as a customer?" | Task-oriented |
 | API Reference | "What are the exact inputs/outputs?" | Endpoint names |
 | Changelog | "What's new or changed?" | Date-based |
 

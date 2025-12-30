@@ -38,12 +38,50 @@
             "pages": ["features/index"]
           },
           {
-            "group": "Core Concepts",
-            "icon": "boxes",
+            "group": "Ingesting & Classifying Leads",
+            "icon": "filter",
+            "pages": ["features/leads", "features/lead-types", "features/segments", "features/sources"]
+          },
+          {
+            "group": "Selling Leads",
+            "icon": "gavel",
+            "pages": ["features/ping-post", "features/bidding", "features/reverse-auctions", "features/distribution", "features/marketplace"]
+          },
+          {
+            "group": "People",
+            "icon": "users",
+            "pages": ["features/customers"]
+          },
+          {
+            "group": "Money & Limits",
+            "icon": "wallet",
+            "pages": ["features/budgets-and-caps", "features/transactions", "features/payment-methods"]
+          },
+          {
+            "group": "Quality & Validation",
+            "icon": "shield-check",
+            "pages": ["features/duplicate-detection", "features/submissions", "features/audits", "features/returns"]
+          },
+          {
+            "group": "Events & Messaging",
+            "icon": "bell",
+            "pages": ["features/workflows", "features/notifications", "features/webhooks"]
+          },
+          {
+            "group": "Observability",
+            "icon": "chart-line",
+            "pages": ["features/location-analytics"]
+          },
+          {
+            "group": "Account Management",
+            "icon": "user",
             "pages": [
-              "features/leads",
-              "features/customers",
-              "features/bidding"
+              "features/company-profile",
+              "features/branding",
+              "features/billing",
+              "features/integrations",
+              "features/users",
+              "features/roles"
             ]
           }
         ]
@@ -66,9 +104,23 @@
           },
           {
             "group": "Endpoints",
+            "pages": ["api-reference/endpoint/ping", "api-reference/endpoint/leads"]
+          }
+        ]
+      },
+      {
+        "tab": "Customer Portal",
+        "groups": [
+          {
+            "group": "Customer Portal",
             "pages": [
-              "api-reference/endpoint/ping",
-              "api-reference/endpoint/leads"
+              "customer-portal/index",
+              "customer-portal/leads",
+              "customer-portal/bids",
+              "customer-portal/marketplace",
+              "customer-portal/notifications",
+              "customer-portal/billing",
+              "customer-portal/bidding-limits"
             ]
           }
         ]
