@@ -16,7 +16,7 @@
 - **Get Started**: Onboarding guide that takes users from zero to their first dollar earned. Prominent, standalone, goal-oriented.
 - **Features**: Explains what each part of the system is and how it works. Noun-oriented. Users come here to look something up.
 - **Guides**: Walks users through multi-step processes to achieve specific outcomes. Verb-oriented. Users come here to do something. This is also where we educate users on business models and expand their ideas about what's possible with Juiced.
-- **Buyer Portal**: Documentation for buyers who purchase leads through the `/app` portal. Task-oriented. All other sections are written for tenants who manage their operation through `/manage`.
+- **Customer Portal**: Documentation for customers who purchase leads through the `/app` portal. Task-oriented. All other sections are written for tenants who manage their operation through `/manage`.
 - **API Reference**: Technical specification. Exact inputs, outputs, and behaviors for developers.
 - **Changelog**: What's new or changed.
 
@@ -31,7 +31,7 @@ Use this litmus test:
 | Get Started | "How do I get up and running?" |
 | Features | "What is this thing and how does it work?" |
 | Guides | "How do I accomplish X?" |
-| Buyer Portal | "How do I use this as a buyer?" |
+| Customer Portal | "How do I use this as a customer?" |
 | API Reference | "What are the exact inputs/outputs?" |
 | Changelog | "What's new or changed?" |
 
