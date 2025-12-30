@@ -73,7 +73,6 @@ This file tracks the planned structure for Juiced documentation. Pages marked wi
 - [x] `customer-portal/leads.mdx` - Leads
 - [x] `customer-portal/bids.mdx` - Bids
 - [x] `customer-portal/marketplace.mdx` - Marketplace
-- [x] `customer-portal/counties.mdx` - Counties
 - [x] `customer-portal/notifications.mdx` - Notifications
 - [x] `customer-portal/billing.mdx` - Billing
 - [x] `customer-portal/bidding-limits.mdx` - Bidding Limits

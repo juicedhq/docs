@@ -146,7 +146,6 @@
               "customer-portal/leads",
               "customer-portal/bids",
               "customer-portal/marketplace",
-              "customer-portal/counties",
               "customer-portal/notifications",
               "customer-portal/billing",
               "customer-portal/bidding-limits"
