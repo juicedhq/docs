@@ -3,4 +3,31 @@ title: Audits
 description: Quality review queue and audit conditions.
 ---
 
-Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+Audit conditions work similarly to [duplicate checks](/features/duplicate-detection), but instead of rejecting leads, they hold them for manual review before processing.
+
+## Creating audit conditions
+
+When creating an audit condition, you configure:
+
+| Field | Required | Description |
+|-------|----------|-------------|
+| Name | Yes | A reference name for the condition |
+| Lead type | Yes | Which lead type this condition applies to |
+| Description | No | Optional notes about what this condition catches |
+
+## Conditions
+
+You must add at least one condition for the audit to trigger. Conditions can check against:
+
+- **Metadata**: The segment or source associated with the lead
+- **Lead data**: Any field values on the lead itself
+
+## Working with audited leads
+
+When a lead is held in audit status, you can:
+
+- Review the lead data
+- Edit the lead if corrections are needed
+- Reprocess the lead once you're satisfied
+
+This is the same editing and reprocessing workflow available for other lead statuses.

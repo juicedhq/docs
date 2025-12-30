@@ -3,4 +3,140 @@ title: Lead Types
 description: Schemas that define the structure and required fields for your leads.
 ---
 
-Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+Lead types and [segments](/features/segments) are classification concepts unique to Juiced. Together, they help you categorize leads based on who they are and what they're worth.
+
+- **Lead type** represents who the person is and what they want to do
+- **Segment** refines that information to identify their level of intent and value
+
+Think of lead types as the "what" and segments as the "how much."
+
+## Basic fields
+
+Every lead type comes with a set of basic fields automatically attached when you create it:
+
+- First name
+- Last name
+- Email
+- Phone
+- Address 1
+- Address 2
+- City
+- State
+- ZIP
+- County
+
+You can't remove these fields, but you can configure their properties and add custom fields on top of them.
+
+## Field properties
+
+Each field has three important properties that control how it behaves during the lead lifecycle:
+
+### Required for post
+
+When a field is marked as required for post, it must be present when a lead is submitted to the system. If the field is missing, validation fails and returns a `422` status code. No lead is created.
+
+### Required for ping
+
+When a field is required for ping, it must be included during the ping phase of [ping-post](/features/ping-post). If it's missing, you'll get a validation error.
+
+<Tip>
+Keep required-for-ping fields to a minimum. However, including key fields in pings helps ensure you get accurate pricing since the system needs that information to determine which segment a lead belongs to.
+
+If a field is used in a condition to determine segment but isn't included in the ping, that condition will fail. This can prevent leads from qualifying for more valuable segments.
+</Tip>
+
+### Deliverable
+
+Deliverable fields are visible to customers. They appear in the customer portal and are included when lead data is sent via webhooks.
+
+<Note>
+The entire system is geographically based, so ZIP code is always required. If you're generating leads at a state or national level only, you can pre-fill a valid ZIP code within the target state—or any valid US postal code for national campaigns.
+</Note>
+
+## Creating custom fields
+
+When creating a new field, you'll need to provide:
+
+| Property | Required | Description |
+|----------|----------|-------------|
+| Title | Yes | The field identifier. Must start with a letter or underscore and can only contain letters, numbers, underscores, and dashes. |
+| Type | Yes | The data type and validation format. See [field types](#field-types) below. |
+| Description | No | Optional explanation of what this field captures. |
+| Required for post | No | Whether the field must be present when creating a lead. |
+| Required for ping | No | Whether the field must be present during pings. |
+| Deliverable | No | Whether the field is visible to customers. |
+
+## Field types
+
+Field types determine what kind of data a field accepts and how it's validated. Choose the type that matches your data format—the system will reject values that don't match.
+
+### Text and numeric
+
+| Type | Label | Format | Example |
+|------|-------|--------|---------|
+| `text` | Text | Any string value | `Hello World` |
+| `numeric` | Numeric | Numbers only | `12345` |
+
+### Contact information
+
+| Type | Label | Format | Example |
+|------|-------|--------|---------|
+| `email` | Email | Valid email address | `lead@example.com` |
+| `phone-us` | Phone (US) | US phone number | `218-686-7890` |
+| `phone-us-ca` | Phone (US & CA) | US or Canadian phone | `250-555-0199` |
+| `phone-au` | Phone (AU) | Australian phone | `0412345678` |
+| `phone-international` | Phone (International) | Any valid international number | `+61412345678` |
+
+<Warning>
+Phone fields validate against actual carrier patterns, not just digit counts. A random 10-digit number may fail validation if it doesn't match a valid phone number format.
+</Warning>
+
+### Geographic
+
+| Type | Label | Format | Example |
+|------|-------|--------|---------|
+| `zip` | Postal Codes | 4-5 digit US ZIP code | `90210` |
+| `state` | States | 2-letter US state abbreviation | `CA` |
+
+<Note>
+ZIP and state fields cannot be marked as required for post or required for ping—these are handled at the system level since all routing is geographically based.
+</Note>
+
+### URLs and network
+
+| Type | Label | Format | Example |
+|------|-------|--------|---------|
+| `url-scheme` | URLs with scheme | Full URL including protocol | `https://example.com` |
+| `url-no-scheme` | URLs without scheme | Domain only, no protocol | `example.com` |
+| `ip-address` | IP Address | IPv4 or IPv6 address | `192.168.1.1` |
+
+### Dates
+
+| Type | Label | Format | Example |
+|------|-------|--------|---------|
+| `ymd` | Date (YYYY-MM-DD) | ISO date format | `2024-01-31` |
+| `mdy` | Date (MM/DD/YYYY) | US date format | `01/31/2024` |
+| `dmy` | Date (DD/MM/YYYY) | European date format | `31/01/2024` |
+
+### Date and time
+
+| Type | Label | Format | Example |
+|------|-------|--------|---------|
+| `ymd-his` | DateTime (YYYY-MM-DD HH:MM:SS) | ISO datetime | `2024-01-31 14:30:00` |
+| `mdy-his` | DateTime (MM/DD/YYYY HH:MM:SS) | US datetime | `01/31/2024 14:30:00` |
+| `dmy-his` | DateTime (DD/MM/YYYY HH:MM:SS) | European datetime | `31/01/2024 14:30:00` |
+
+### Identifiers
+
+| Type | Label | Format | Example |
+|------|-------|--------|---------|
+| `uuid` | UUID | Standard UUID v4 | `123e4567-e89b-12d3-a456-426614174000` |
+| `ulid` | ULID | 26-character sortable ID | `01BX5ZZKBKACTAV9WEVGEMMV9V` |
+
+### Constrained values
+
+| Type | Label | Format | Example |
+|------|-------|--------|---------|
+| `list-of-values` | List of Values | One of a predefined set of options | `option_a` |
+
+When using `list-of-values`, you'll define the allowed options as a comma-separated list when creating the field. Any value not in your list will fail validation.

@@ -3,4 +3,88 @@ title: Segments
 description: How leads are categorized and routed using conditions.
 ---
 
-Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+Segments are a refinement of a [lead type](/features/lead-types) that provide additional classification. While lead types define who a person is and what they want, segments help identify their level of intent and value.
+
+## Conditions
+
+Each segment has conditions that determine which leads it matches. Conditions use fields from the parent lead type to evaluate incoming leads.
+
+To create a condition, you:
+
+1. Select a field from the lead type
+2. Choose an operator (options vary based on the field's data type)
+3. Enter a value to check against
+
+You can add as many conditions as needed.
+
+### Condition logic
+
+Conditions are organized into groups with the following logic:
+
+- **Within a group**: Conditions are combined with AND (all must be true)
+- **Between groups**: Groups are combined with OR (any group can match)
+
+<Accordion title="Example: Home insurance leads">
+Say you want to create a segment for high-value home insurance leads. You might set up conditions like:
+
+**Group 1** (homeowners with high property values):
+- `property_type` equals `single_family` AND
+- `estimated_value` greater than `500000`
+
+**Group 2** (new construction):
+- `year_built` greater than `2020` AND
+- `square_footage` greater than `2500`
+
+A lead matches this segment if it satisfies all conditions in Group 1 OR all conditions in Group 2.
+</Accordion>
+
+## Fallback segments
+
+A fallback segment catches any lead that doesn't match other segments within the same lead type. When you create a lead type, a segment is automatically generated and configured as the fallback.
+
+When the fallback option is enabled:
+- Conditions are hidden (since fallback matches everything that didn't match elsewhere)
+- Priority is automatically set to the lowest
+
+To add conditions to a fallback segment, you must first uncheck the fallback option.
+
+## Priority
+
+Priority determines the order in which segments are evaluated when a lead could match multiple segments.
+
+If your segments have non-overlapping conditions, priority doesn't matter—each lead will only ever match one segment. But if a lead could qualify for multiple segments, the one with the highest priority wins.
+
+<Accordion title="Example: Overlapping segments">
+Imagine you have two segments for auto insurance leads:
+
+- **Premium Drivers** (priority 1): `age` greater than `25` AND `violations` equals `0`
+- **Standard Drivers** (priority 2): `age` greater than `25`
+
+A 30-year-old with no violations matches both segments. Because Premium Drivers has a higher priority, they're placed there instead of Standard Drivers.
+</Accordion>
+
+<Note>
+Priority only applies to non-fallback segments. Fallback segments are always evaluated last.
+</Note>
+
+## Bidding scopes
+
+Bidding scopes define how customers can bid on leads within a segment. You create them by configuring:
+
+| Setting | Description |
+|---------|-------------|
+| Geographic level | The level at which bids are placed: county, state, or nationwide |
+| Minimum bid | The lowest bid a customer can place |
+| Maximum bid | The highest bid a customer can place |
+| Increment | The amount by which bids increase |
+| Enabled | Toggle to activate or deactivate the scope |
+
+<Tip>
+Fixed pricing isn't a separate option, but you can achieve it by setting the minimum, maximum, and increment to the same value.
+</Tip>
+
+Until at least one bidding scope is enabled for a segment, customers won't see any bidding options when they try to place a bid.
+
+## Marketplace settings
+
+Segments also control marketplace behavior for leads that go unsold through normal distribution. See [Marketplace](/features/marketplace) for details on configuring these settings.

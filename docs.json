@@ -40,12 +40,14 @@
           {
             "group": "Core Concepts",
             "icon": "boxes",
-            "pages": ["features/leads"]
+            "pages": ["features/leads", "features/lead-types", "features/segments", "features/sources", "features/duplicate-detection", "features/audits"]
           },
           {
             "group": "Selling",
             "icon": "gavel",
             "pages": [
+              "features/bidding",
+              "features/returns",
               "features/marketplace"
             ]
           },
@@ -63,6 +65,10 @@
               "features/company-profile",
               "features/branding",
               "features/billing",
+              "features/payment-methods",
+              "features/integrations",
+              "features/webhooks",
+              "features/notifications",
               "features/users",
               "features/roles"
             ]
