@@ -48,6 +48,18 @@ echo "Changed files: $(echo "$CHANGED_FILES" | wc -l)"
 
 cd "$DOCS_DIR"
 
+# Configure Git to use the token for authentication
+# This sets the remote URL to include credentials for push operations
+ORIGINAL_REMOTE=$(git remote get-url origin)
+git remote set-url origin "https://x-access-token:${GITHUB_TOKEN}@github.com/${DOCS_REPO}.git"
+
+# Ensure we restore the original remote URL on exit (security: don't leave token in git config)
+cleanup() {
+    cd "$DOCS_DIR" 2>/dev/null && git remote set-url origin "$ORIGINAL_REMOTE" 2>/dev/null || true
+    rm -rf "$TEMP_DIR"
+}
+trap cleanup EXIT
+
 # Ensure we're on main and up to date
 git checkout main
 git pull origin main
