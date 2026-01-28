@@ -7,25 +7,25 @@ Bidding is one of the primary ways leads get assigned to customers. When a lead 
 
 ## How bidding works
 
-A bid is a customer's standing offer to purchase leads matching specific criteria. When a lead arrives that matches a bid's segment and location, that bid enters the auction. The outcome depends on several factors:
+A bid is a customer's standing offer to purchase leads matching specific criteria. When a lead arrives that matches a bid's lead type and location, that bid enters the auction. The outcome depends on several factors:
 
 - **Bid amount** — Higher bids win
 - **Customer wallet** — Must have sufficient funds
 - **Customer status** — Must be active (not paused or archived)
 - **Bid status** — Must be active (not paused or archived)
 - **Caps and budgets** — Must not be exhausted
-- **Competition** — How this bid compares to others on the same segment and location
+- **Competition** — How this bid compares to others on the same lead type and location
 
-### The segment connection
+### The lead type connection
 
-Every bid is placed on a **segment**. The segment's bidding settings determine:
+Every bid is placed on a **lead type**. The lead type's bidding settings determine:
 
 - **Which scopes are available** — Can customers bid at the county, state, or nationwide level?
 - **Minimum bid** — The floor price to participate
 - **Maximum bid** — The ceiling (if any)
 - **Bid increments** — The step between valid bid amounts
 
-You can't place a bid on a segment that doesn't have bidding enabled.
+You can't place a bid on a lead type that doesn't have bidding enabled.
 
 ### Scopes
 
@@ -37,18 +37,18 @@ The scope defines the geographic reach of a bid:
 | **State** | An entire state | "California" |
 | **Nationwide** | The whole country | "United States" |
 
-Broader scopes typically mean more lead volume but also more competition. A nationwide bid competes with every other nationwide bid on that segment, plus all the state and county bids for the lead's specific location.
+Broader scopes typically mean more lead volume but also more competition. A nationwide bid competes with every other nationwide bid on that lead type, plus all the state and county bids for the lead's specific location.
 
 ## Creating a bid
 
 To create a bid, you'll need to specify:
 
-1. **Segment** — Which lead type you want
+1. **Lead type** — Which lead type you want
 2. **Scope** — Geographic level (county, state, or nationwide)
 3. **Location** — The specific area within that scope
 4. **Amount** — How much you're willing to pay per lead
 
-The form will only show scopes that are enabled for the selected segment, and the amount field will enforce the minimum, maximum, and step values from the segment's bidding settings.
+The form will only show scopes that are enabled for the selected lead type, and the amount field will enforce the minimum, maximum, and step values from the lead type's bidding settings.
 
 ### Optional limits
 
@@ -114,7 +114,7 @@ When a bid shows as "Limited," it can still win leads—but at a reduced amount:
 
 When a bid shows as "Exhausted," it's completely out of the auction:
 
-- **Funding exhausted** — The customer's wallet can't cover even the minimum bid for this segment.
+- **Funding exhausted** — The customer's wallet can't cover even the minimum bid for this lead type.
 - **Cap exhausted** — A lead cap (daily, weekly, or monthly) has been reached.
 - **Budget exhausted** — A budget has been fully consumed.
 
@@ -122,11 +122,11 @@ The bid automatically returns to "Active" when the constraint resets (new day/we
 
 ## Bid positions
 
-Position tells you where your bid stands relative to the competition for the same segment and location. It's your quick answer to "Am I winning?"
+Position tells you where your bid stands relative to the competition for the same lead type and location. It's your quick answer to "Am I winning?"
 
 | Position | What it means |
 |----------|---------------|
-| **Top** | You have the highest bid. Leads matching this segment and location come to you first. |
+| **Top** | You have the highest bid. Leads matching this lead type and location come to you first. |
 | **Tied** | You're tied for the highest bid with one or more other customers. Leads are distributed round-robin among tied bidders. |
 | **Under** | Someone else is bidding higher. You'll only get leads if higher bidders hit their caps or run out of funds. |
 | **Out** | Your bid isn't being considered at all. This happens when the bid is paused, archived, or the customer's funding is exhausted. |

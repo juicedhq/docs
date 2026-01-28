@@ -138,7 +138,7 @@
       "post": {
         "operationId": "createLead",
         "summary": "Submit a lead",
-        "description": "Submits a complete lead for processing and assignment. The lead will be validated, checked for duplicates, matched to a segment, and assigned to a customer (or placed in the marketplace).\n\nIf you previously submitted a ping, include the `ping_id` and optionally a `bid_id` to reference that ping's pricing.",
+        "description": "Submits a complete lead for processing and assignment. The lead will be validated, checked for duplicates, matched to a lead type, and assigned to a customer (or placed in the marketplace).\n\nIf you previously submitted a ping, include the `ping_id` and optionally a `bid_id` to reference that ping's pricing.",
         "tags": ["Leads"],
         "requestBody": {
           "required": true,
