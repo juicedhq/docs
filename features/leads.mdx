@@ -22,7 +22,7 @@ Every lead has a status that tells you where it is in its journey. Here's what e
 | **Withheld** | On hold because you've hit your threshold. Will process once capacity frees up. |
 | **Marketplace** | Available for customers to claim rather than being pushed to a specific buyer. |
 | **Audit** | Flagged for manual review based on your audit conditions. |
-| **Uncategorized** | Doesn't match any segment, and no fallback was configured to catch it. |
+| **Uncategorized** | Doesn't match any lead type, and no fallback was configured to catch it. |
 
 A lead is considered "sold" if it's Assigned, Posted, or Returned. Yes, even returned leads count as sold—you delivered them, and the customer chose to return them afterward.
 
@@ -33,14 +33,14 @@ Tenants can view leads assigned to any customer. The lead detail page shows:
 - **UUID** — The unique identifier for the lead
 - **Basic contact information** — Name, email, phone, etc.
 - **Metadata** — Source, timestamps, assignment info, charged amount
-- **Details** — Custom fields defined by the lead type or source
+- **Details** — Custom fields defined by the lead category or source
 
 ### Field visibility
 
 Not all fields are visible to everyone:
 
 - **Tenants** see all fields on a lead
-- **Customers** only see fields marked as "deliverable" in the lead type configuration
+- **Customers** only see fields marked as "deliverable" in the lead category configuration
 
 This lets you collect data for your own purposes (like tracking or analytics) without exposing it to buyers.
 
@@ -72,7 +72,7 @@ Tenants can edit **unassigned** leads to correct data or add missing information
 - **Metadata** cannot be changed (source, timestamps, etc.)
 - **Details** can be added if needed
 
-When you save an edited lead, it gets reclassified into the appropriate lead type and segment based on the updated data.
+When you save an edited lead, it gets reclassified into the appropriate lead category and lead type based on the updated data.
 
 ### Reprocessing leads
 

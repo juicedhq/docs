@@ -13,8 +13,8 @@ This file tracks the planned structure for Juiced documentation. Pages marked wi
 ### Ingesting & Classifying Leads
 
 - [x] `features/leads.mdx` - Leads
+- [x] `features/lead-categories.mdx` - Lead Categories
 - [x] `features/lead-types.mdx` - Lead Types
-- [x] `features/segments.mdx` - Segments
 - [x] `features/sources.mdx` - Sources
 
 ### Selling Leads

@@ -40,7 +40,7 @@
           {
             "group": "Ingesting & Classifying Leads",
             "icon": "filter",
-            "pages": ["features/leads", "features/lead-types", "features/segments", "features/sources"]
+            "pages": ["features/leads", "features/lead-categories", "features/lead-types", "features/sources"]
           },
           {
             "group": "Selling Leads",
