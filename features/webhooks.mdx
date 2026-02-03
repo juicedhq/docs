@@ -26,6 +26,14 @@ Webhooks let you send data to external systems whenever specific events occur in
 | State Lead Type Stats Updated | Lead type statistics are updated at the state level |
 | User Attached to Customer | A user is added to a customer account |
 
+## Payload templates
+
+Webhook payloads are JSON. You can customize the payload structure using a template with merge fields in double curly braces: `{{ variable_name }}`.
+
+For lead assignment webhooks, the payload includes a `{{ deliverable_fields }}` variable that dynamically expands to all deliverable fields for the lead category as raw JSON key-value pairs. This means the payload automatically adapts when fields are added or removed from a lead category—no template changes needed.
+
+For more details on customer-facing webhook configuration, see [Customer Portal > Notifications](/customer-portal/notifications#webhooks).
+
 ## How it works
 
 When one of your configured events occurs, Juiced sends an HTTP request to your specified URL with the relevant payload. This allows you to:
