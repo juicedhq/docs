@@ -120,7 +120,8 @@
               "customer-portal/marketplace",
               "customer-portal/notifications",
               "customer-portal/billing",
-              "customer-portal/bidding-limits"
+              "customer-portal/bidding-limits",
+              "customer-portal/company-profile"
             ]
           }
         ]
