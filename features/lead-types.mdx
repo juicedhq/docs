@@ -74,13 +74,14 @@ Bidding scopes define how customers can bid on leads within a lead type. You cre
 | Setting | Description |
 |---------|-------------|
 | Geographic level | The level at which bids are placed: county, state, or nationwide |
-| Minimum bid | The lowest bid a customer can place |
-| Maximum bid | The highest bid a customer can place |
-| Increment | The amount by which bids increase |
+| Fixed Price | When enabled, customers pay a single set price instead of bidding within a range |
+| Minimum bid | The lowest bid a customer can place (or the single price when Fixed Price is enabled) |
+| Maximum bid | The highest bid a customer can place (hidden when Fixed Price is enabled) |
+| Increment | The amount by which bids increase (hidden when Fixed Price is enabled) |
 | Enabled | Toggle to activate or deactivate the scope |
 
 <Tip>
-Fixed pricing isn't a separate option, but you can achieve it by setting the minimum, maximum, and increment to the same value.
+Use **Fixed Price** when you want all customers to pay the same amount for leads—no bidding, no competition on price. This is ideal for flat-rate pricing models.
 </Tip>
 
 Until at least one bidding scope is enabled for a lead type, customers won't see any bidding options when they try to place a bid.
