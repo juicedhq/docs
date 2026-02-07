@@ -31,7 +31,35 @@ The Webhooks tab lets you send lead data to external systems whenever a lead is 
 
 ### Payload format
 
-Webhooks always send JSON. By default, leaving the payload template empty sends the full lead data. If you need to shorten, remap, or restructure the data, use the payload template field to define a custom format.
+Webhooks always send JSON. By default, the payload includes the lead's charged amount, scope, lead type, and all deliverable fields for the lead category. The default template looks like this:
+
+```json
+{
+  "charged_amount": "{{ charged_amount }}",
+  "scope": "{{ scope }}",
+  "lead_type": "{{ lead_type }}",
+  {{ deliverable_fields }}
+}
+```
+
+If you need to remap or restructure the data, use the payload template field to define a custom format.
+
+### Template variables
+
+Payload templates support merge fields using double curly braces: `{{ variable_name }}`.
+
+| Variable | Description |
+|----------|-------------|
+| `{{ charged_amount }}` | The amount charged for the lead |
+| `{{ scope }}` | The geographic scope of the assignment (e.g., county) |
+| `{{ lead_type }}` | The name of the lead type |
+| `{{ deliverable_fields }}` | Expands to all deliverable fields for the lead category as JSON key-value pairs |
+
+<Note>
+  The `{{ deliverable_fields }}` variable is special—it expands to raw JSON key-value pairs rather than a single value. Place it inside your JSON object and it will insert all deliverable fields (like name, email, phone, etc.) directly into the payload.
+</Note>
+
+Standard lead fields like `{{ first_name }}`, `{{ last_name }}`, `{{ email }}`, and `{{ phone }}` are also available as individual variables if you prefer to reference specific fields rather than using `{{ deliverable_fields }}`.
 
 ### Managing webhooks
 

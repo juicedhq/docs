@@ -62,7 +62,7 @@ Use this litmus test:
 - Second-person voice ("you")
 - Prerequisites at start of procedural content
 - Test all code examples before publishing
-- Verify documentation accuracy against the actual codebase in ../juiced-b
+- Verify documentation accuracy against the actual codebase in ../juiced-tickets
 - Match style and formatting of existing pages
 - Include both basic and advanced use cases
 - Language tags on all code blocks

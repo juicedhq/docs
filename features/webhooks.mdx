@@ -20,11 +20,20 @@ Webhooks let you send data to external systems whenever specific events occur in
 | Lead Assigned | A single lead is assigned to a customer |
 | Leads Assigned | Multiple leads are assigned at once (e.g., bulk marketplace purchase) |
 | Lead Duplicated | A lead is rejected as a duplicate |
+| Lead Not Assigned | A lead could not be assigned to any customer |
 | Lead Posted | A lead is sent to an external system |
 | Transaction Updated | A transaction is created or updated |
 | County Lead Type Stats Updated | Lead type statistics are updated at the county level |
 | State Lead Type Stats Updated | Lead type statistics are updated at the state level |
 | User Attached to Customer | A user is added to a customer account |
+
+## Payload templates
+
+Webhook payloads are JSON. You can customize the payload structure using a template with merge fields in double curly braces: `{{ variable_name }}`.
+
+Lead-based events (Lead Assigned, Leads Assigned, Lead Not Assigned, Lead Duplicated, and Lead Posted) all share the same payload structure. This includes a `{{ deliverable_fields }}` variable that dynamically expands to all deliverable fields for the lead category as raw JSON key-value pairs. The payload automatically adapts when fields are added or removed from a lead category—no template changes needed.
+
+For more details on customer-facing webhook configuration, see [Customer Portal > Notifications](/customer-portal/notifications#webhooks).
 
 ## How it works
 
