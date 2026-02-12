@@ -74,9 +74,18 @@ Tenants can edit **unassigned** leads to correct data or add missing information
 
 When you save an edited lead, it gets reclassified into the appropriate lead category and lead type based on the updated data.
 
-### Reprocessing leads
+### Processing leads
 
-After editing, tenants can choose to reprocess the lead. You can select which stage of the distribution plan to start from—useful if you want to skip steps that have already been attempted or start fresh from the beginning.
+Tenants can process leads to move them through the lifecycle. When processing, you choose where in the lifecycle to start:
+
+| Option | What it does |
+|--------|--------------|
+| **Bidding** | Runs the lead through buyer matching and assignment |
+| **Trigger Ping/Post** | Sends the lead through ping-post distribution |
+| **Marketplace** | Makes the lead available for customers to claim |
+| **Trigger Post Marketplace Direct Post** | Sends the lead directly to your configured direct post URL |
+
+This is useful for leads that were held for audit, need to be re-routed, or should skip certain steps in the normal flow.
 
 ### Deleting leads
 
