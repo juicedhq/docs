@@ -23,6 +23,7 @@ Every lead has a status that tells you where it is in its journey. Here's what e
 | **Marketplace** | Available for customers to claim rather than being pushed to a specific buyer. |
 | **Audit** | Flagged for manual review based on your audit conditions. |
 | **Uncategorized** | Doesn't match any lead type, and no fallback was configured to catch it. |
+| **Distribution Error** | Something went wrong during distribution. The lead can be reprocessed once the issue is resolved. |
 
 A lead is considered "sold" if it's Assigned, Posted, or Returned. Yes, even returned leads count as sold—you delivered them, and the customer chose to return them afterward.
 
@@ -76,7 +77,40 @@ When you save an edited lead, it gets reclassified into the appropriate lead cat
 
 ### Reprocessing leads
 
-After editing, tenants can choose to reprocess the lead. You can select which stage of the distribution plan to start from—useful if you want to skip steps that have already been attempted or start fresh from the beginning.
+Tenants can reprocess leads to run them back through the distribution engine. This is useful when:
+
+- A lead failed to assign due to temporary issues (distribution errors, no available bids)
+- Lead data was corrected and needs to be re-evaluated
+- You want to retry distribution from a specific stage
+
+#### Single lead reprocessing
+
+After editing a lead, you can choose to reprocess it immediately. Select which stage of the distribution plan to start from—useful if you want to skip steps that have already been attempted or start fresh from the beginning.
+
+#### Bulk reprocessing
+
+Select multiple leads from the leads table and use the **Process** bulk action to requeue them all at once. You'll see a breakdown of which leads are eligible and which aren't before confirming.
+
+Only leads with certain statuses can be reprocessed:
+
+| Status | Can reprocess? |
+|--------|----------------|
+| **Unassigned** | Yes |
+| **Uncategorized** | Yes |
+| **Pending** | Yes |
+| **Distribution Error** | Yes |
+| All other statuses | No |
+
+When bulk reprocessing, you can choose where to start:
+
+- **Bidding** — Run leads through the full distribution process from the beginning
+- **Trigger Ping/Post** — Start at the ping/post stage
+- **Marketplace** — Send leads directly to the marketplace
+- **Trigger Post Marketplace Direct Post** — Execute direct post delivery
+
+<Note>
+Bulk reprocessing requires the **leads.reprocess** permission. By default, only Admin users have this permission.
+</Note>
 
 ### Deleting leads
 
