@@ -59,7 +59,16 @@ Payload templates support merge fields using double curly braces: `{{ variable_n
   The `{{ deliverable_fields }}` variable is special—it expands to raw JSON key-value pairs rather than a single value. Place it inside your JSON object and it will insert all deliverable fields (like name, email, phone, etc.) directly into the payload.
 </Note>
 
-Standard lead fields like `{{ first_name }}`, `{{ last_name }}`, `{{ email }}`, and `{{ phone }}` are also available as individual variables if you prefer to reference specific fields rather than using `{{ deliverable_fields }}`.
+### Lead fields
+
+Lead fields are available in two formats:
+
+- **Flat**: `{{ first_name }}`, `{{ last_name }}`, `{{ email }}`, `{{ phone }}`
+- **Nested**: `{{ lead.first_name }}`, `{{ lead.last_name }}`, `{{ lead.email }}`, `{{ lead.phone }}`
+
+Both formats work identically. The nested format can be useful when you need to distinguish lead fields from other data in complex templates, or when integrating with systems that expect a specific payload structure.
+
+Custom fields from the lead category are accessible via `{{ lead.details.field_name }}` or directly by name if using `{{ deliverable_fields }}`.
 
 ### Managing webhooks
 
