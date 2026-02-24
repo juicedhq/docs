@@ -86,6 +86,12 @@ Tenants can delete leads entirely. This removes the lead from the system. Use th
 
 Tenants can export leads from a customer's lead list. This generates a downloadable file of the lead data—useful for reporting, backups, or moving data to external systems.
 
+Tenant exports include **all** custom fields from the lead, regardless of whether they're marked as deliverable. This gives you full access to any data you've collected—including internal tracking fields not visible to customers.
+
 ### Importing leads
 
 Tenants can import leads on behalf of a customer. Imported leads create **reverse auctions** on the marketplace, where sources can bid to fulfill them. This flips the typical flow—instead of leads coming in and customers bidding on them, the customer is saying "I want leads matching these criteria" and sources compete to provide them.
+
+When importing, you'll select a lead category. The import form automatically shows all fields from that category—both standard fields (name, email, phone, address) and any custom fields you've configured. Map your CSV columns to the appropriate fields.
+
+Validation rules are pulled from your lead category configuration. Fields marked as required in the lead category will be required during import. This keeps your imported leads consistent with leads that come in through the API.
