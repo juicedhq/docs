@@ -63,4 +63,13 @@ Standard lead fields like `{{ first_name }}`, `{{ last_name }}`, `{{ email }}`, 
 
 ### Managing webhooks
 
-You can enable or disable a webhook at any time without deleting it. There's also a test option to verify your endpoint is receiving data correctly before going live.
+You can enable or disable a webhook at any time without deleting it.
+
+### Testing webhooks
+
+Before going live, test your webhook to verify your endpoint receives data correctly. You have two options:
+
+- **Use an existing lead** — Select a lead from your history to test with real data. Search by lead ID, name, email, or phone to find a specific lead.
+- **Generate sample data** — Create fake data based on a lead type. Useful when you don't have leads yet or want to test without using real information.
+
+Either option sends a test payload to your endpoint so you can confirm it's working before enabling the webhook.
