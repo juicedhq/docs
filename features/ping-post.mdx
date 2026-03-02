@@ -3,4 +3,60 @@ title: Ping-Post
 description: The ping/post workflow for real-time lead validation and delivery.
 ---
 
-Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+Ping-post is a two-step process for selling leads in real time. First, a **ping** sends partial lead data to determine pricing and acceptance. Then, a **post** delivers the full lead data once a buyer is confirmed.
+
+This workflow lets you validate leads and get competitive bids before committing to a sale—maximizing revenue while ensuring leads only go where they're wanted.
+
+## How it works
+
+1. **Ping phase**: Your source sends partial lead data (typically just enough to identify the lead type and location). Juiced auctions this data to your customers, collecting bids in real time.
+
+2. **Post phase**: Once a winning bid is determined, your source sends the complete lead data. The lead is assigned to the winning customer, funds are transferred, and everyone's happy.
+
+The ping contains minimal information to protect the lead's value until a buyer commits. The post delivers everything needed to contact and convert the lead.
+
+## Partner integrations
+
+Partners are external systems that receive your leads. When you configure a partner integration, you set up both ping and post configurations to match their API requirements.
+
+### Request mapping
+
+Each partner has their own field names and payload structure. Request mapping lets you transform Juiced's lead data into whatever format your partner expects.
+
+Use merge fields in double curly braces to insert lead data:
+
+```json
+{
+  "firstName": "{{ first_name }}",
+  "lastName": "{{ last_name }}",
+  "email": "{{ email }}",
+  "phone": "{{ phone }}"
+}
+```
+
+The mapping field picker shows all available fields for the lead category, with sample values to help you identify the right data.
+
+### Using ping response data in posts
+
+Some partners return data in their ping response that must be included in the subsequent post request—things like session IDs, tracking tokens, or campaign identifiers.
+
+When configuring a post request mapping, you can reference fields from the ping response using the `response.` namespace:
+
+```json
+{
+  "ping_id": "{{ response.ping_uuid }}",
+  "campaign": "{{ response.metadata.campaign_id }}",
+  "first_name": "{{ first_name }}",
+  "last_name": "{{ last_name }}"
+}
+```
+
+The mapping field picker displays a **Ping Response** section showing available fields from the partner's most recent ping response. These fields appear with their actual values from the last ping, making it easy to identify what data is available.
+
+<Note>
+Ping response fields are only available when configuring **post** requests. They won't appear in ping request mappings since no response exists yet at that point.
+</Note>
+
+<Tip>
+If you don't see ping response fields in the picker, the partner may not have received any pings yet, or their ping responses may not include any data. Try sending a test ping first.
+</Tip>
