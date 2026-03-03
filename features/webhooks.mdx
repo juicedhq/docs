@@ -43,3 +43,11 @@ When one of your configured events occurs, Juiced sends an HTTP request to your 
 - Trigger automations in external tools
 - Update dashboards or reporting systems
 - Send notifications through your own channels
+
+## Reliability
+
+Juiced includes built-in reliability features to help ensure your webhooks are delivered:
+
+- **Automatic retries** — If your endpoint returns a server error (5xx status code) or the connection fails, the system automatically retries the request up to 3 times with a brief delay between attempts.
+- **Error isolation** — If you have multiple webhooks configured, a failure in one doesn't prevent others from being delivered. Each webhook is processed independently.
+- **Timeouts** — Requests have a configurable timeout to prevent indefinitely hanging connections.
