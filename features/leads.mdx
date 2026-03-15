@@ -21,7 +21,7 @@ Every lead has a status that tells you where it is in its journey. Here's what e
 | **Unassigned** | Couldn't find a buyer. No matching bids, or everyone's out of budget. |
 | **Withheld** | On hold because you've hit your threshold. Will process once capacity frees up. |
 | **Marketplace** | Available for customers to claim rather than being pushed to a specific buyer. |
-| **Audit** | Flagged for manual review based on your audit conditions. |
+| **Audit** | Flagged for manual review based on your audit conditions, or submitted as test data. |
 | **Uncategorized** | Doesn't match any lead type, and no fallback was configured to catch it. |
 
 A lead is considered "sold" if it's Assigned, Posted, or Returned. Yes, even returned leads count as sold—you delivered them, and the customer chose to return them afterward.
@@ -98,3 +98,14 @@ Tenants can export leads from a customer's lead list. This generates a downloada
 ### Importing leads
 
 Tenants can import leads on behalf of a customer. Imported leads create **reverse auctions** on the marketplace, where sources can bid to fulfill them. This flips the typical flow—instead of leads coming in and customers bidding on them, the customer is saying "I want leads matching these criteria" and sources compete to provide them.
+
+## Test leads
+
+Leads submitted through a source with [test mode](/features/sources#test-mode) enabled are marked as test data. These leads:
+
+- Are automatically moved to **Audit** status to prevent distribution
+- Are hidden from lead lists by default
+- Can be viewed using the **Test Mode** filter toggle
+- Display a "Test Mode" badge on the lead detail page
+
+Test leads let vendors verify their integration works correctly without affecting production data or customer billing.
