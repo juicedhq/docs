@@ -32,3 +32,51 @@ Intercom adds customer support and engagement features to the customer portal:
 - **Support bubble**: In-app chat for customers to reach your support team
 - **Product tours**: Guided walkthroughs to onboard new customers
 - **Targeted messaging**: Send announcements and updates to specific customer segments
+
+## Real Estate API
+
+Real Estate API ([realestatapi.com](https://www.realestatapi.com/)) provides property data enrichment for leads. When configured, you can automatically append property details, owner information, and valuations to incoming leads based on their address.
+
+### How enrichment works
+
+When a lead flows through a distribution stage configured with Real Estate API enrichment:
+
+1. The system extracts the lead's address fields (address, city, state, ZIP)
+2. Calls the configured Real Estate API endpoints
+3. Maps the API response to your lead category's custom fields
+4. Stores the enriched data on the lead
+
+Enrichment is **non-blocking**—if the API call fails or returns no data, the lead continues through distribution normally.
+
+### Field mapping
+
+The system uses predefined mappings between API response data and lead field titles. A field is only populated if your lead category has a matching custom field configured. For example, if the API returns estimated property value but your lead category doesn't have a `property_value` field, that data is skipped.
+
+Available endpoints include:
+
+| Endpoint | Data returned |
+|----------|---------------|
+| Property Detail | Property characteristics (beds, baths, square footage, lot size, year built) |
+| SkipTrace | Owner contact information |
+| Property Comps | Comparable property sales |
+| AVM | Automated valuation estimate |
+| Address Verification | Address standardization and validation |
+| MLS | Active listing details |
+
+<Note>
+The raw API response is always stored in the lead's metadata under `enrichment.real_estate_api` for auditability, even when specific fields aren't mapped.
+</Note>
+
+### Overwrite behavior
+
+When configuring enrichment, you can choose how to handle fields that already have values:
+
+- **Always**: Overwrite existing values with API data
+- **Empty only**: Only populate fields that are currently blank
+
+### Setup
+
+1. Create a Real Estate API account at [realestatapi.com](https://www.realestatapi.com/)
+2. Navigate to **Integrations** in your tenant settings
+3. Add your API key
+4. Configure which endpoints to call during distribution stage setup
