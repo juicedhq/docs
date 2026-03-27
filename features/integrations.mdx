@@ -32,3 +32,34 @@ Intercom adds customer support and engagement features to the customer portal:
 - **Support bubble**: In-app chat for customers to reach your support team
 - **Product tours**: Guided walkthroughs to onboard new customers
 - **Targeted messaging**: Send announcements and updates to specific customer segments
+
+## Real Estate API
+
+Real Estate API enriches leads with property and owner data during distribution. When a lead comes in with a property address, Juiced can automatically look up:
+
+**Property Information**
+- Property value (AVM estimate)
+- Property type, bedrooms, bathrooms
+- Square footage and lot size
+- Year built
+- Last sale date and price
+- Assessed value and annual tax
+
+**Owner Information** (via skiptrace)
+- Owner name and contact details
+- Owner-occupied status
+- Mailing address
+
+### How it works
+
+1. Configure your Real Estate API credentials in **Settings > Integrations**
+2. Set up a distribution plan with an ALTER_DATA stage that includes a `real_estate_api` operation
+3. Select which endpoints to use: `property_detail` for property data, `skiptrace` for owner data
+4. Ensure your tenant fields include the corresponding enrichment fields (e.g., `property_value`, `bedrooms`, `owner_name`)
+
+When leads flow through the distribution plan, Juiced calls the Real Estate API and maps the response data to your configured fields. The enriched data appears in two places:
+
+- **Lead detail view**: An "Enriched Data" section shows all enriched property and owner fields
+- **Distribution timeline**: The ALTER_DATA stage entry shows which endpoints succeeded or failed, along with how many fields were enriched
+
+If an endpoint fails (e.g., no data found for the address), the error details appear in the distribution timeline without blocking the rest of the flow.

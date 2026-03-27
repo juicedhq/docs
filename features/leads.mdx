@@ -34,6 +34,16 @@ Tenants can view leads assigned to any customer. The lead detail page shows:
 - **Basic contact information** — Name, email, phone, etc.
 - **Metadata** — Source, timestamps, assignment info, charged amount
 - **Details** — Custom fields defined by the lead category or source
+- **Enriched Data** — Property and owner information from third-party enrichment services (when configured)
+
+### Enriched data
+
+If your distribution plan includes a [Real Estate API](/features/integrations#real-estate-api) enrichment stage, successfully enriched leads display an "Enriched Data" section below the property details. This section shows:
+
+- **Property Information** — Value, type, bedrooms, bathrooms, square footage, lot size, year built, sale history, assessed value, and annual tax
+- **Owner Information** — Name, phone, email, owner-occupied status, age, and mailing address
+
+Only fields with values appear—empty fields are hidden. If no enrichment data exists for a lead (e.g., it was submitted before enrichment was configured, or the API returned no results), the section won't appear at all.
 
 ### Field visibility
 
