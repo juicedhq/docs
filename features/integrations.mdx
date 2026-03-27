@@ -32,3 +32,41 @@ Intercom adds customer support and engagement features to the customer portal:
 - **Support bubble**: In-app chat for customers to reach your support team
 - **Product tours**: Guided walkthroughs to onboard new customers
 - **Targeted messaging**: Send announcements and updates to specific customer segments
+
+## Real Estate API
+
+Real Estate API enriches leads with property and owner data. Once connected, you can enhance leads with information like property values, owner details, and skip-trace data.
+
+This integration is particularly useful for real estate lead generation, where knowing property details can help qualify leads and route them to the right buyers.
+
+### What you can enrich
+
+The integration supports multiple data endpoints:
+
+| Endpoint | What it provides |
+|----------|------------------|
+| **Property Detail** | Estimated value, property type, bedrooms, bathrooms, square footage, year built |
+| **SkipTrace** | Owner contact information and additional owner details |
+
+### How enrichment works
+
+You can enrich leads manually from the lead edit page:
+
+1. Navigate to a lead's edit page
+2. Click the **Enrich with Real Estate API** button in the header
+3. Select which endpoints to query
+4. Choose whether to overwrite existing data or only populate empty fields
+5. Submit to enrich the lead
+
+<Note>
+Leads must have complete address information (street address, city, state, and ZIP code) to be enriched. If any address fields are missing, the enrichment will fail with an error.
+</Note>
+
+### Overwrite behavior
+
+When enriching a lead, you control how new data interacts with existing values:
+
+- **Only populate empty fields** — New data fills in blanks but doesn't touch existing values
+- **Always overwrite existing data** — New data replaces whatever was there before
+
+This lets you choose between preserving manual corrections (empty-only mode) or ensuring you have the freshest data (overwrite mode).

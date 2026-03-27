@@ -98,3 +98,15 @@ Tenants can export leads from a customer's lead list. This generates a downloada
 ### Importing leads
 
 Tenants can import leads on behalf of a customer. Imported leads create **reverse auctions** on the marketplace, where sources can bid to fulfill them. This flips the typical flow—instead of leads coming in and customers bidding on them, the customer is saying "I want leads matching these criteria" and sources compete to provide them.
+
+### Enriching leads
+
+If you have a [Real Estate API integration](/features/integrations#real-estate-api) configured, you can enrich leads with additional property and owner data. The **Enrich with Real Estate API** button appears in the lead edit page header.
+
+When enriching:
+
+1. Select which data endpoints to query (property details, skip-trace, etc.)
+2. Choose whether to only fill empty fields or overwrite existing data
+3. The lead is updated with any new information returned by the API
+
+Enrichment requires the lead to have complete address information—street address, city, state, and ZIP code. If any of these are missing, you'll see an error explaining which fields need to be populated first.
