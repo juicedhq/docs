@@ -39,6 +39,30 @@ You can define fields at the source level. These fields are appended to the fiel
 
 If you create a source-level field with the same title as a field on the lead category, the source configuration overrides the lead category configuration.
 
+## Source pricing
+
+Beyond the payout percentage, you can configure specific pricing for each lead type within a source. This is found in the **Pricing** tab when viewing a source.
+
+The pricing table shows all lead types in the source's lead category. For each lead type, you can set:
+
+| Setting | Description |
+|---------|-------------|
+| **Price** | The dollar amount for this lead type |
+| **Pricing Type** | How the price is used—either Fixed or Fallback |
+
+### Pricing types
+
+- **Fixed**: The source always receives this price, regardless of what customers bid. Useful for guaranteed payouts to vendors.
+- **Fallback**: The source receives the payout percentage of the winning bid when bids are received. If no bids come in, this price is used instead.
+
+<Note>
+A fallback price must be configured for a source/lead type combination to participate in [marketplace](/features/marketplace) distribution. If no fallback is set, leads from that source won't enter the marketplace when bids aren't received.
+</Note>
+
+### Copying pricing from another source
+
+If you have multiple sources with similar pricing structures, you can copy pricing from one source to another. Click **Copy from source** in the pricing table header and select the source to copy from. Only lead types that don't already have a price configured will be copied.
+
 ## Source-level duplicate checks
 
 [Duplicate checks](/features/duplicate-detection) can also be configured at the source level. When set here, the check only applies to leads coming through that source—just like source-level fields only apply to that source.
