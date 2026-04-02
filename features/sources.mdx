@@ -42,3 +42,14 @@ If you create a source-level field with the same title as a field on the lead ca
 ## Source-level duplicate checks
 
 [Duplicate checks](/features/duplicate-detection) can also be configured at the source level. When set here, the check only applies to leads coming through that source—just like source-level fields only apply to that source.
+
+## Deleting sources
+
+When you delete a source, it's soft-deleted rather than permanently removed. This preserves data integrity—leads, submissions, and pings that came through that source still need to reference where they originated.
+
+After deletion:
+
+- The source no longer appears in source selection dropdowns
+- Historical records (leads, submissions, pings) display the source name with "(Deleted)" appended
+- You can still filter by deleted sources when viewing historical data
+- The source's API credentials are deactivated
