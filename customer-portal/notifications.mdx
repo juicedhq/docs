@@ -63,6 +63,8 @@ Payload templates support merge fields using double curly braces: `{{ variable_n
 
 Standard lead fields like `{{ first_name }}`, `{{ last_name }}`, `{{ email }}`, and `{{ phone }}` are also available as individual variables if you prefer to reference specific fields rather than using `{{ deliverable_fields }}`.
 
+You can also use `{{ lead.public_id }}` to include the lead's unique identifier (e.g., `lead_01arz3ndektsv4rrffq69g5fav`) in your webhook payload.
+
 ### Managing webhooks
 
 You can enable or disable a webhook at any time without deleting it.

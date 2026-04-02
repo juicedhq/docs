@@ -33,6 +33,8 @@ Webhook payloads are JSON. You can customize the payload structure using a templ
 
 Lead-based events (Lead Assigned, Leads Assigned, Lead Not Assigned, Lead Duplicated, and Lead Posted) all share the same payload structure. This includes a `{{ deliverable_fields }}` variable that dynamically expands to all deliverable fields for the lead category as raw JSON key-value pairs. The payload automatically adapts when fields are added or removed from a lead category—no template changes needed.
 
+These webhook payloads also include `lead_public_id` as a top-level field, which provides a human-readable identifier for the lead (e.g., `lead_01arz3ndektsv4rrffq69g5fav`).
+
 For more details on customer-facing webhook configuration, see [Customer Portal > Notifications](/customer-portal/notifications#webhooks).
 
 ## How it works
