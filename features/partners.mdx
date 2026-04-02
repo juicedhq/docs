@@ -1,0 +1,77 @@
+---
+title: Partners
+description: Manage lead suppliers—users, invites, and source assignments.
+---
+
+Partners are the businesses supplying leads to you. While [customers](/features/customers) buy your leads, partners are on the supply side—they're vendors, affiliates, or other sources sending leads into your system.
+
+## Partners vs. sources
+
+A quick clarification on the relationship:
+
+| Concept | What it represents | Example |
+|---------|-------------------|---------|
+| **Partner** | A business entity that supplies leads | "Acme Lead Gen Inc." |
+| **Source** | A technical endpoint that receives leads | "Acme - Auto Insurance Form" |
+
+A single partner can have multiple sources (one for each form, campaign, or integration they run), and each source tracks its own API credentials, field mappings, and performance metrics. Partners let you manage the business relationship; sources handle the technical details.
+
+## The partner list
+
+Navigate to **Partners** in your tenant dashboard to see all your lead suppliers. Click any partner to view their details and manage related data.
+
+## Partner overview
+
+Click on a partner to see their overview page. This shows basic information about the partner along with navigation to manage related data:
+
+- **Overview** — Partner details and basic information
+- **Sources** — Which sources are assigned to this partner
+- **Users** — People who can log into this partner account
+- **Invites** — Pending invitations for new users
+
+## Managing sources
+
+The **Sources** tab shows all sources assigned to this partner. From here you can:
+
+- **Assign sources** — Connect existing sources to this partner
+- **Unassign sources** — Remove the association between a source and partner
+
+Assigning sources to partners helps you organize your lead supply by business relationship rather than just technical endpoint.
+
+## Managing users
+
+Partners can have their own users who log in to view their performance and manage their account. The **Users** tab shows everyone with access to this partner.
+
+### Partner roles
+
+Partner users have their own set of roles, separate from your tenant's internal roles:
+
+| Role | Description |
+|------|-------------|
+| **Partner Admin** | Full access to the partner account |
+| **Partner User** | Standard access for day-to-day operations |
+
+### Removing users
+
+If someone should no longer have access to a partner account, click **Remove** to detach them. This is immediate—they'll lose access right away.
+
+## Inviting users
+
+To add someone to a partner account:
+
+1. Go to the partner's **Invites** tab
+2. Click **Invite User**
+3. Enter their email address
+4. Select a partner role
+5. Send the invite
+
+The invitee receives an email with a link to accept the invitation and create their account.
+
+### Pending invites
+
+Invitations that haven't been accepted appear in the **Invites** tab. From here you can:
+
+- **Resend** — Send the invitation email again
+- **Revoke** — Cancel the invitation
+
+Revoked invites become invalid immediately.
