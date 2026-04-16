@@ -44,6 +44,8 @@ Both formats work identically. The nested format is useful when building complex
 
 These webhook payloads also include `lead_public_id` as a top-level field, which provides a human-readable identifier for the lead (e.g., `lead_01arz3ndektsv4rrffq69g5fav`).
 
+Customer and transaction events include `{{ customer_public_id }}`—a stable, prefixed identifier for the customer (e.g., `cus_01arz3ndektsv4rrffq69g5fav`). For lead events, use `{{ buyer.customer_public_id }}` to reference the buyer's public ID. These identifiers are safe to use in external systems and won't change if internal database IDs shift.
+
 For more details on customer-facing webhook configuration, see [Customer Portal > Notifications](/customer-portal/notifications#webhooks).
 
 ## How it works
