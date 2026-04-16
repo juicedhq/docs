@@ -33,6 +33,15 @@ Webhook payloads are JSON. You can customize the payload structure using a templ
 
 Lead-based events (Lead Assigned, Leads Assigned, Lead Not Assigned, Lead Duplicated, and Lead Posted) all share the same payload structure. This includes a `{{ deliverable_fields }}` variable that dynamically expands to all deliverable fields for the lead category as raw JSON key-value pairs. The payload automatically adapts when fields are added or removed from a lead category—no template changes needed.
 
+### Field access
+
+Lead fields are available in two formats:
+
+- **Flat**: `{{ first_name }}`, `{{ last_name }}`, `{{ email }}`, `{{ phone }}`
+- **Nested**: `{{ lead.first_name }}`, `{{ lead.last_name }}`, `{{ lead.email }}`, `{{ lead.phone }}`
+
+Both formats work identically. The nested format is useful when building complex templates or integrating with systems that expect a specific payload structure. Custom fields from the lead category are accessible via `{{ lead.details.field_name }}`.
+
 For more details on customer-facing webhook configuration, see [Customer Portal > Notifications](/customer-portal/notifications#webhooks).
 
 ## How it works
@@ -43,3 +52,11 @@ When one of your configured events occurs, Juiced sends an HTTP request to your 
 - Trigger automations in external tools
 - Update dashboards or reporting systems
 - Send notifications through your own channels
+
+## Reliability
+
+Juiced includes built-in reliability features to help ensure your webhooks are delivered:
+
+- **Automatic retries** — If your endpoint returns a server error (5xx status code) or the connection fails, the system automatically retries the request up to 3 times with a brief delay between attempts.
+- **Error isolation** — If you have multiple webhooks configured, a failure in one doesn't prevent others from being delivered. Each webhook is processed independently.
+- **Timeouts** — Requests have a configurable timeout to prevent indefinitely hanging connections.

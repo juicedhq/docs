@@ -17,6 +17,26 @@ To create a condition, you:
 
 You can add as many conditions as needed.
 
+### Available operators
+
+The operators available depend on the field type you select. Here are some common operators:
+
+| Operator | Available for | Description |
+|----------|---------------|-------------|
+| Equals | All field types | Exact match |
+| Not equals | All field types | Does not match |
+| Contains | Text fields | Value contains the specified text |
+| Not contains | Text fields | Value does not contain the specified text |
+| Less than | Numeric, date fields | Value is less than (or before) |
+| Greater than | Numeric, date fields | Value is greater than (or after) |
+| Between | Numeric, date fields | Value falls within a range |
+| Within the past N days | Date fields | Date is within the specified number of days from today |
+| Older than N days | Date fields | Date is more than the specified number of days ago |
+
+<Tip>
+The relative date operators—**Within the past N days** and **Older than N days**—are useful for time-sensitive routing. For example, you could create a lead type that only matches leads where a quote was requested within the past 7 days.
+</Tip>
+
 ### Condition logic
 
 Conditions are organized into groups with the following logic:
