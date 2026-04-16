@@ -35,41 +35,45 @@ Intercom adds customer support and engagement features to the customer portal:
 
 ## Real Estate API
 
-Real Estate API enriches leads with property and owner data during distribution. When a lead comes in with a property address, Juiced can automatically look up:
+Real Estate API enriches leads with property and owner data. Once connected, you can enhance leads with information like property values, owner details, and skip-trace data.
 
-**Property Information** (via property_detail)
-- Property value (AVM estimate)
-- Property type, bedrooms, bathrooms
-- Square footage and lot size
-- Year built
-- Last sale date and price
-- Assessed value and annual tax
-
-**Owner Information** (via skiptrace)
-- Owner name, phone, and email
-- Owner-occupied status and age
-- Mailing address
+This integration is particularly useful for real estate lead generation, where knowing property details can help qualify leads and route them to the right buyers.
 
 ### Available endpoints
 
-| Endpoint | Data returned |
-|----------|---------------|
-| Property Detail | Comprehensive property information including lot size, bedrooms, bathrooms, year built, and ownership history |
-| SkipTrace | Owner contact information including phone numbers and email addresses |
-| Property Comps | Comparable property sales in the area |
-| AVM | Automated valuation model estimate of property value |
-| Address Verification | Validates and standardizes property addresses |
-| MLS Detail | Active or historical MLS listing information |
-| MLS Search | Search for MLS listings matching specific criteria |
+The integration supports multiple data endpoints:
 
-### How it works
+| Endpoint | What it provides |
+|----------|------------------|
+| **Property Detail** | Estimated value, property type, bedrooms, bathrooms, square footage, and year built |
+| **SkipTrace** | Owner contact information and additional owner details |
+| **Property Comps** | Comparable property sales in the area |
+| **AVM** | Automated valuation model estimate of property value |
+| **Address Verification** | Validates and standardizes property addresses |
+| **MLS Detail** | Active or historical MLS listing information |
+| **MLS Search** | Search for MLS listings matching specific criteria |
 
-1. Configure your Real Estate API credentials in **Settings > Integrations**
-2. Set up a distribution plan with an ALTER_DATA stage that includes a `real_estate_api` operation
-3. Select which endpoints to use and set the overwrite behavior:
-   - **Always overwrite existing data** — Replace existing field values with API data
-   - **Only populate empty fields** — Keep existing values, only fill in blanks
-4. Ensure your tenant fields include the corresponding enrichment fields (e.g., `property_value`, `bedrooms`, `owner_name`)
+### Enriching leads manually
+
+You can enrich leads from the lead edit page:
+
+1. Navigate to a lead's edit page
+2. Click the **Enrich with Real Estate API** button in the header
+3. Select which endpoints to query
+4. Choose whether to overwrite existing data or only populate empty fields
+5. Submit to enrich the lead
+
+<Note>
+Leads must have complete address information (street address, city, state, and ZIP code) to be enriched. If any address fields are missing, the enrichment will fail with an error.
+</Note>
+
+### Enriching leads automatically
+
+You can also enrich leads automatically during distribution:
+
+1. Set up a distribution plan with an ALTER_DATA stage that includes a `real_estate_api` operation
+2. Select which endpoints to use and set the overwrite behavior
+3. Ensure your tenant fields include the corresponding enrichment fields (e.g., `property_value`, `bedrooms`, `owner_name`)
 
 <Note>
 You'll need an active Real Estate API integration before the Real Estate API operation type appears in your distribution stage options.
@@ -81,3 +85,12 @@ When leads flow through the distribution plan, Juiced calls the Real Estate API 
 - **Distribution timeline**: The ALTER_DATA stage entry shows which endpoints succeeded or failed, along with how many fields were enriched
 
 If an endpoint fails (e.g., no data found for the address), the error details appear in the distribution timeline without blocking the rest of the flow.
+
+### Overwrite behavior
+
+When enriching a lead (manually or automatically), you control how new data interacts with existing values:
+
+- **Only populate empty fields** — New data fills in blanks but doesn't touch existing values
+- **Always overwrite existing data** — New data replaces whatever was there before
+
+This lets you choose between preserving manual corrections (empty-only mode) or ensuring you have the freshest data (overwrite mode).

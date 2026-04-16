@@ -157,6 +157,18 @@ When importing, you'll select a [lead category](/features/lead-categories). The 
 
 Validation rules are pulled from your [lead category configuration](/features/lead-categories). Fields marked as required in the lead category will be required during import. This keeps your imported leads consistent with leads that come in through the API.
 
+### Enriching leads
+
+If you have a [Real Estate API integration](/features/integrations#real-estate-api) configured, you can enrich leads with additional property and owner data. The **Enrich with Real Estate API** button appears in the lead edit page header.
+
+When enriching:
+
+1. Select which data endpoints to query (property details, skip-trace, etc.)
+2. Choose whether to only fill empty fields or overwrite existing data
+3. The lead is updated with any new information returned by the API
+
+Enrichment requires the lead to have complete address information—street address, city, state, and ZIP code. If any of these are missing, you'll see an error explaining which fields need to be populated first.
+
 ## Test leads
 
 Leads submitted through a source with [test mode](/features/sources#test-mode) enabled are marked as test data. These leads:
