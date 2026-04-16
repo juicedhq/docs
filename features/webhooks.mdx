@@ -17,7 +17,8 @@ Webhooks let you send data to external systems whenever specific events occur in
 | Event | Description |
 |-------|-------------|
 | Customer Created | A new customer account is created |
-| Lead Assigned | A lead is assigned to a customer |
+| Lead Assigned | A single lead is assigned to a customer |
+| Lead Created | A new lead is created |
 | Lead Not Assigned | A lead fails to be assigned after exhausting all distribution stages |
 | Lead Duplicated | A lead is rejected as a duplicate |
 | Lead Posted | A lead is sent to an external system |
@@ -30,7 +31,7 @@ Webhooks let you send data to external systems whenever specific events occur in
 
 Webhook payloads are JSON. You can customize the payload structure using a template with merge fields in double curly braces: `{{ variable_name }}`.
 
-Lead-based events (Lead Assigned, Lead Not Assigned, Lead Duplicated, and Lead Posted) all share the same payload structure. This includes a `{{ deliverable_fields }}` variable that dynamically expands to all deliverable fields for the lead category as raw JSON key-value pairs. The payload automatically adapts when fields are added or removed from a lead category—no template changes needed.
+Lead-based events (Lead Assigned, Lead Created, Lead Not Assigned, Leads Assigned, Lead Duplicated, and Lead Posted) all share the same payload structure. This includes a `{{ deliverable_fields }}` variable that dynamically expands to all deliverable fields for the lead category as raw JSON key-value pairs. The payload automatically adapts when fields are added or removed from a lead category—no template changes needed.
 
 ### Field access
 
