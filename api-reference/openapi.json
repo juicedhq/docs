@@ -229,6 +229,7 @@
                     "summary": "Lead assigned to customer",
                     "value": {
                       "lead_uuid": "f47ac10b-58cc-4372-a567-0e02b2c3d479",
+                      "lead_public_id": "lead_01arz3ndektsv4rrffq69g5fav",
                       "status": "assigned",
                       "price": 45.0
                     }
@@ -237,6 +238,7 @@
                     "summary": "Lead is a duplicate",
                     "value": {
                       "lead_uuid": "f47ac10b-58cc-4372-a567-0e02b2c3d479",
+                      "lead_public_id": "lead_01arz3ndektsv4rrffq69g5fav",
                       "status": "duplicate",
                       "price": 0.0
                     }
@@ -245,6 +247,7 @@
                     "summary": "Lead unassigned (no matching buyers)",
                     "value": {
                       "lead_uuid": "f47ac10b-58cc-4372-a567-0e02b2c3d479",
+                      "lead_public_id": "lead_01arz3ndektsv4rrffq69g5fav",
                       "status": "unassigned",
                       "price": 0.0
                     }
@@ -253,6 +256,7 @@
                     "summary": "Lead placed in marketplace",
                     "value": {
                       "lead_uuid": "f47ac10b-58cc-4372-a567-0e02b2c3d479",
+                      "lead_public_id": "lead_01arz3ndektsv4rrffq69g5fav",
                       "status": "marketplace",
                       "price": 0.0
                     }
@@ -261,6 +265,7 @@
                     "summary": "Lead pending assignment",
                     "value": {
                       "lead_uuid": "f47ac10b-58cc-4372-a567-0e02b2c3d479",
+                      "lead_public_id": "lead_01arz3ndektsv4rrffq69g5fav",
                       "status": "pending",
                       "price": 0.0
                     }
@@ -479,8 +484,18 @@
         "properties": {
           "lead_uuid": {
             "type": "string",
-            "description": "Unique identifier for the created lead.",
+            "format": "uuid",
+            "description": "Internal UUID for the lead. Prefer `lead_public_id` for external references.",
+            "deprecated": true,
             "example": "f47ac10b-58cc-4372-a567-0e02b2c3d479"
+          },
+          "lead_public_id": {
+            "type": "string",
+            "description": "Public identifier for the lead. Use this for display, URLs, and external references.",
+            "example": "lead_01arz3ndektsv4rrffq69g5fav",
+            "minLength": 31,
+            "maxLength": 31,
+            "pattern": "^lead_[0-9a-z]{26}$"
           },
           "status": {
             "type": "string",

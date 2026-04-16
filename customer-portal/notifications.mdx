@@ -72,6 +72,8 @@ Both formats work identically. The nested format can be useful when you need to 
 
 Custom fields from the lead category are accessible via `{{ lead.details.field_name }}` or directly by name if using `{{ deliverable_fields }}`.
 
+You can also use `{{ lead.public_id }}` to include the lead's unique identifier (e.g., `lead_01arz3ndektsv4rrffq69g5fav`) in your webhook payload.
+
 ### Managing webhooks
 
 You can enable or disable a webhook at any time without deleting it.
