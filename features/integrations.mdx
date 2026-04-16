@@ -35,7 +35,7 @@ Intercom adds customer support and engagement features to the customer portal:
 
 ## Real Estate API
 
-Real Estate API ([realestatapi.com](https://www.realestatapi.com/)) provides property data enrichment for leads. When configured, you can automatically append property details, owner information, and valuations to incoming leads based on their address.
+Real Estate API ([realestateapi.com](https://www.realestateapi.com/)) provides property data enrichment for leads. When configured, you can automatically append property details, owner information, and valuations to incoming leads based on their address.
 
 ### How enrichment works
 
@@ -64,7 +64,7 @@ Available endpoints include:
 | MLS | Active listing details |
 
 <Note>
-The raw API response is always stored in the lead's metadata under `enrichment.real_estate_api` for auditability, even when specific fields aren't mapped.
+The raw API response is always stored in the lead's metadata under `_enrichment.real_estate_api` for auditability, even when specific fields aren't mapped.
 </Note>
 
 ### Overwrite behavior
@@ -76,7 +76,7 @@ When configuring enrichment, you can choose how to handle fields that already ha
 
 ### Setup
 
-1. Create a Real Estate API account at [realestatapi.com](https://www.realestatapi.com/)
+1. Create a Real Estate API account at [realestateapi.com](https://www.realestateapi.com/)
 2. Navigate to **Integrations** in your tenant settings
 3. Add your API key
 4. Configure which endpoints to call during distribution stage setup
