@@ -21,7 +21,7 @@ Every lead has a status that tells you where it is in its journey. Here's what e
 | **Unassigned** | Couldn't find a buyer. No matching bids, or everyone's out of budget. |
 | **Withheld** | On hold because you've hit your [subscription threshold](/features/billing#what-happens-at-100). Will process automatically once capacity frees up. |
 | **Marketplace** | Available for customers to claim rather than being pushed to a specific buyer. |
-| **Audit** | Flagged for manual review based on your audit conditions. |
+| **Audit** | Flagged for manual review based on your audit conditions, or submitted as test data. |
 | **Uncategorized** | Doesn't match any lead type, and no fallback was configured to catch it. |
 | **Distribution Error** | Something went wrong during distribution. The lead can be reprocessed once the issue is resolved. |
 
@@ -138,3 +138,15 @@ Tenants can import leads on behalf of a customer. Imported leads create **revers
 When importing, you'll select a [lead category](/features/lead-categories). The import form automatically shows all fields from that category—both standard fields (name, email, phone, address) and any custom fields you've configured. Map your CSV columns to the appropriate fields.
 
 Validation rules are pulled from your [lead category configuration](/features/lead-categories). Fields marked as required in the lead category will be required during import. This keeps your imported leads consistent with leads that come in through the API.
+
+## Test leads
+
+Leads submitted through a source with [test mode](/features/sources#test-mode) enabled are marked as test data. These leads:
+
+- Are hidden from lead lists by default
+- Can be viewed using the **Test Mode** filter toggle
+- Display a "Test Mode" badge on the lead detail page
+
+[Deterministic test zips](/features/sources#testing-with-zip-codes) produce specific statuses depending on the zip code used. Leads submitted with any other zip code are forced to **Audit** status to prevent distribution.
+
+Test leads let vendors verify their integration works correctly without affecting production data or customer billing.
