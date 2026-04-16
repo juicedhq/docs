@@ -35,7 +35,20 @@ Intercom adds customer support and engagement features to the customer portal:
 
 ## Real Estate API
 
-Real Estate API enriches your leads with property data. Once connected, you can automatically append property details, owner contact information, valuations, and more to leads as they flow through your distribution pipeline.
+Real Estate API enriches leads with property and owner data during distribution. When a lead comes in with a property address, Juiced can automatically look up:
+
+**Property Information** (via property_detail)
+- Property value (AVM estimate)
+- Property type, bedrooms, bathrooms
+- Square footage and lot size
+- Year built
+- Last sale date and price
+- Assessed value and annual tax
+
+**Owner Information** (via skiptrace)
+- Owner name, phone, and email
+- Owner-occupied status and age
+- Mailing address
 
 ### Available endpoints
 
@@ -49,16 +62,22 @@ Real Estate API enriches your leads with property data. Once connected, you can 
 | MLS Detail | Active or historical MLS listing information |
 | MLS Search | Search for MLS listings matching specific criteria |
 
-### Using Real Estate API with distribution stages
+### How it works
 
-After connecting your Real Estate API account, you can use it in distribution stages with the **Alter Data** method. When configuring an Alter Data operation:
-
-1. Select **Real Estate API** as the operation type
-2. Choose which endpoints to query
-3. Set the overwrite behavior:
+1. Configure your Real Estate API credentials in **Settings > Integrations**
+2. Set up a distribution plan with an ALTER_DATA stage that includes a `real_estate_api` operation
+3. Select which endpoints to use and set the overwrite behavior:
    - **Always overwrite existing data** — Replace existing field values with API data
    - **Only populate empty fields** — Keep existing values, only fill in blanks
+4. Ensure your tenant fields include the corresponding enrichment fields (e.g., `property_value`, `bedrooms`, `owner_name`)
 
 <Note>
 You'll need an active Real Estate API integration before the Real Estate API operation type appears in your distribution stage options.
 </Note>
+
+When leads flow through the distribution plan, Juiced calls the Real Estate API and maps the response data to your configured fields. The enriched data appears in two places:
+
+- **Lead detail view**: An "Enriched Data" section shows all enriched property and owner fields
+- **Distribution timeline**: The ALTER_DATA stage entry shows which endpoints succeeded or failed, along with how many fields were enriched
+
+If an endpoint fails (e.g., no data found for the address), the error details appear in the distribution timeline without blocking the rest of the flow.
