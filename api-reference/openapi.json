@@ -55,6 +55,13 @@
                     "urgency": "high",
                     "intent": "purchase"
                   }
+                },
+                "testPing": {
+                  "summary": "Test ping",
+                  "value": {
+                    "is_test": true,
+                    "zip": "00002"
+                  }
                 }
               }
             }
@@ -190,6 +197,20 @@
                     "zip": "33101",
                     "county": "Miami-Dade"
                   }
+                },
+                "testLead": {
+                  "summary": "Test lead submission",
+                  "value": {
+                    "is_test": true,
+                    "first_name": "Test",
+                    "last_name": "User",
+                    "email": "test@example.com",
+                    "phone": "555-000-0000",
+                    "address_1": "123 Test Street",
+                    "city": "Test City",
+                    "state": "FL",
+                    "zip": "00002"
+                  }
                 }
               }
             }
@@ -208,6 +229,7 @@
                     "summary": "Lead assigned to customer",
                     "value": {
                       "lead_uuid": "f47ac10b-58cc-4372-a567-0e02b2c3d479",
+                      "lead_public_id": "lead_01arz3ndektsv4rrffq69g5fav",
                       "status": "assigned",
                       "price": 45.0
                     }
@@ -216,6 +238,7 @@
                     "summary": "Lead is a duplicate",
                     "value": {
                       "lead_uuid": "f47ac10b-58cc-4372-a567-0e02b2c3d479",
+                      "lead_public_id": "lead_01arz3ndektsv4rrffq69g5fav",
                       "status": "duplicate",
                       "price": 0.0
                     }
@@ -224,6 +247,7 @@
                     "summary": "Lead unassigned (no matching buyers)",
                     "value": {
                       "lead_uuid": "f47ac10b-58cc-4372-a567-0e02b2c3d479",
+                      "lead_public_id": "lead_01arz3ndektsv4rrffq69g5fav",
                       "status": "unassigned",
                       "price": 0.0
                     }
@@ -232,6 +256,7 @@
                     "summary": "Lead placed in marketplace",
                     "value": {
                       "lead_uuid": "f47ac10b-58cc-4372-a567-0e02b2c3d479",
+                      "lead_public_id": "lead_01arz3ndektsv4rrffq69g5fav",
                       "status": "marketplace",
                       "price": 0.0
                     }
@@ -240,7 +265,16 @@
                     "summary": "Lead pending assignment",
                     "value": {
                       "lead_uuid": "f47ac10b-58cc-4372-a567-0e02b2c3d479",
+                      "lead_public_id": "lead_01arz3ndektsv4rrffq69g5fav",
                       "status": "pending",
+                      "price": 0.0
+                    }
+                  },
+                  "audit": {
+                    "summary": "Test lead moved to audit",
+                    "value": {
+                      "lead_uuid": "f47ac10b-58cc-4372-a567-0e02b2c3d479",
+                      "status": "audit",
                       "price": 0.0
                     }
                   }
@@ -325,6 +359,12 @@
             "type": "string",
             "description": "Postal code. Must be valid for your account's operating countries.",
             "example": "90210"
+          },
+          "is_test": {
+            "type": "boolean",
+            "description": "Mark this ping as test data. Test pings won't affect production metrics and return deterministic responses based on zip code. Only works when test mode is enabled on the source.",
+            "default": false,
+            "example": true
           }
         },
         "additionalProperties": {
@@ -426,6 +466,12 @@
             "type": "string",
             "description": "Postal code. Must be valid for your account's operating countries.",
             "example": "33139"
+          },
+          "is_test": {
+            "type": "boolean",
+            "description": "Mark this lead as test data. Test leads are automatically moved to Audit status and won't be distributed. Only works when test mode is enabled on the source.",
+            "default": false,
+            "example": true
           }
         },
         "additionalProperties": {
@@ -438,12 +484,22 @@
         "properties": {
           "lead_uuid": {
             "type": "string",
-            "description": "Unique identifier for the created lead.",
+            "format": "uuid",
+            "description": "Internal UUID for the lead. Prefer `lead_public_id` for external references.",
+            "deprecated": true,
             "example": "f47ac10b-58cc-4372-a567-0e02b2c3d479"
+          },
+          "lead_public_id": {
+            "type": "string",
+            "description": "Public identifier for the lead. Use this for display, URLs, and external references.",
+            "example": "lead_01arz3ndektsv4rrffq69g5fav",
+            "minLength": 31,
+            "maxLength": 31,
+            "pattern": "^lead_[0-9a-z]{26}$"
           },
           "status": {
             "type": "string",
-            "enum": ["pending", "assigned", "duplicate", "unassigned", "marketplace"],
+            "enum": ["pending", "assigned", "duplicate", "unassigned", "marketplace", "audit"],
             "description": "Current status of the lead.",
             "example": "assigned"
           },

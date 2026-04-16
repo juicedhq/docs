@@ -19,10 +19,11 @@ Every lead has a status that tells you where it is in its journey. Here's what e
 | **Duplicate** | Matched an existing lead. Rejected to avoid double-selling. |
 | **Returned** | Customer returned it. Maybe the phone number was fake, maybe the lead wasn't what they expected. |
 | **Unassigned** | Couldn't find a buyer. No matching bids, or everyone's out of budget. |
-| **Withheld** | On hold because you've hit your threshold. Will process once capacity frees up. |
+| **Withheld** | On hold because you've hit your [subscription threshold](/features/billing#what-happens-at-100). Will process automatically once capacity frees up. |
 | **Marketplace** | Available for customers to claim rather than being pushed to a specific buyer. |
-| **Audit** | Flagged for manual review based on your audit conditions. |
+| **Audit** | Flagged for manual review based on your audit conditions, or submitted as test data. |
 | **Uncategorized** | Doesn't match any lead type, and no fallback was configured to catch it. |
+| **Distribution Error** | Something went wrong during distribution. The lead can be reprocessed once the issue is resolved. |
 
 A lead is considered "sold" if it's Assigned, Posted, or Returned. Yes, even returned leads count as sold—you delivered them, and the customer chose to return them afterward.
 
@@ -30,10 +31,26 @@ A lead is considered "sold" if it's Assigned, Posted, or Returned. Yes, even ret
 
 Tenants can view leads assigned to any customer. The lead detail page shows:
 
-- **UUID** — The unique identifier for the lead
+- **Public ID** — The unique identifier for the lead (e.g., `lead_01arz3ndektsv4rrffq69g5fav`)
 - **Basic contact information** — Name, email, phone, etc.
 - **Metadata** — Source, timestamps, assignment info, charged amount
 - **Details** — Custom fields defined by the lead category or source
+- **Enriched Data** — Property and owner information from third-party enrichment services (when configured)
+
+### Enriched data
+
+If your distribution plan includes a [Real Estate API](/features/integrations#real-estate-api) enrichment stage, successfully enriched leads display an "Enriched Data" section below the property details. This section shows:
+
+- **Property Information**:
+  - Value, type, bedrooms, bathrooms
+  - Square footage, lot size, year built
+  - Sale history, assessed value, and annual tax
+- **Owner Information**:
+  - Name, phone, and email
+  - Owner-occupied status and age
+  - Mailing address
+
+Only fields with values appear—empty fields are hidden. If no enrichment data exists for a lead (e.g., it was submitted before enrichment was configured, or the API returned no results), the section won't appear at all.
 
 ### Field visibility
 
@@ -74,30 +91,71 @@ Tenants can edit **unassigned** leads to correct data or add missing information
 
 When you save an edited lead, it gets reclassified into the appropriate lead category and lead type based on the updated data.
 
-### Processing leads
+### Reclassifying leads
 
-Tenants can process leads to move them through the lifecycle. When processing, you choose where in the lifecycle to start:
+This is useful when:
 
-| Option | What it does |
-|--------|--------------|
-| **Bidding** | Runs the lead through buyer matching and assignment |
-| **Trigger Ping/Post** | Sends the lead through ping-post distribution |
-| **Marketplace** | Makes the lead available for customers to claim |
-| **Trigger Post Marketplace Direct Post** | Sends the lead directly to your configured direct post URL |
+- A lead type's conditions have changed
+- You're troubleshooting classification rules and want to test against real lead data
 
-This is useful for leads that were held for audit, need to be re-routed, or should skip certain steps in the normal flow.
+To reclassify a lead, open it for editing and select **Reclassify** from the **More Actions** menu. If the lead type changes, you'll see a notification with the old and new classifications. If the lead is already correctly classified, you'll be notified that no change was needed.
+
+### Reprocessing leads
+
+Tenants can reprocess leads to run them back through the distribution engine. This is useful when:
+
+- A lead failed to assign due to temporary issues (distribution errors, no available bids)
+- Lead data was corrected and needs to be re-evaluated
+- You want to retry distribution from a specific stage
+
+#### Single lead reprocessing
+
+After editing a lead, you can choose to reprocess it immediately. Select which stage of the distribution plan to start from—useful if you want to skip steps that have already been attempted or start fresh from the beginning.
+
+#### Bulk reprocessing
+
+Select multiple leads from the leads table and use the **Process** bulk action to requeue them all at once. You'll see a breakdown of which leads are eligible and which aren't before confirming.
+
+Only leads with certain statuses can be reprocessed:
+
+| Status | Can reprocess? |
+|--------|----------------|
+| **Unassigned** | Yes |
+| **Uncategorized** | Yes |
+| **Pending** | Yes |
+| **Distribution Error** | Yes |
+| All other statuses | No |
+
+When bulk reprocessing, you can choose where to start:
+
+- **Bidding** — Run leads through the full distribution process from the beginning
+- **Trigger Ping/Post** — Start at the ping/post stage
+- **Marketplace** — Send leads directly to the marketplace
+- **Trigger Post Marketplace Direct Post** — Execute direct post delivery
+
+<Note>
+Bulk reprocessing requires the **leads.reprocess** permission. By default, only Admin users have this permission.
+</Note>
 
 ### Deleting leads
 
 Tenants can delete leads entirely. This removes the lead from the system. Use this for test data or leads that should never have entered the system in the first place.
 
+When you delete a lead, any associated distribution flows are preserved for historical reference. The distribution flow's timeline will show when the lead was deleted, and the Lead column will display "Deleted" instead of the lead's name.
+
 ### Exporting leads
 
 Tenants can export leads from a customer's lead list. This generates a downloadable file of the lead data—useful for reporting, backups, or moving data to external systems.
 
+Tenant exports include **all** custom fields from the lead, regardless of whether they're marked as deliverable. This gives you full access to any data you've collected—including internal tracking fields not visible to customers.
+
 ### Importing leads
 
 Tenants can import leads on behalf of a customer. Imported leads create **reverse auctions** on the marketplace, where sources can bid to fulfill them. This flips the typical flow—instead of leads coming in and customers bidding on them, the customer is saying "I want leads matching these criteria" and sources compete to provide them.
+
+When importing, you'll select a [lead category](/features/lead-categories). The import form automatically shows all fields from that category—both standard fields (name, email, phone, address) and any custom fields you've configured. Map your CSV columns to the appropriate fields.
+
+Validation rules are pulled from your [lead category configuration](/features/lead-categories). Fields marked as required in the lead category will be required during import. This keeps your imported leads consistent with leads that come in through the API.
 
 ### Enriching leads
 
@@ -110,3 +168,15 @@ When enriching:
 3. The lead is updated with any new information returned by the API
 
 Enrichment requires the lead to have complete address information—street address, city, state, and ZIP code. If any of these are missing, you'll see an error explaining which fields need to be populated first.
+
+## Test leads
+
+Leads submitted through a source with [test mode](/features/sources#test-mode) enabled are marked as test data. These leads:
+
+- Are hidden from lead lists by default
+- Can be viewed using the **Test Mode** filter toggle
+- Display a "Test Mode" badge on the lead detail page
+
+[Deterministic test zips](/features/sources#testing-with-zip-codes) produce specific statuses depending on the zip code used. Leads submitted with any other zip code are forced to **Audit** status to prevent distribution.
+
+Test leads let vendors verify their integration works correctly without affecting production data or customer billing.

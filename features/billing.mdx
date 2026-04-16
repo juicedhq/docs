@@ -7,26 +7,26 @@ Juiced uses volume-based pricing—the more you sell, the more you pay. No per-s
 
 ## Plans
 
-Your plan is determined by your monthly lead sales volume (the total dollar value of leads you sell, not the number of leads). Pick the tier that matches your operation:
+Your plan is determined by your monthly lead sales volume (the total dollar value of leads you sell) and the number of leads you process. Hit either limit and it's time to move up a tier. Pick the tier that matches your operation:
 
-| Plan | Monthly Lead Sales | Price |
-|------|-------------------|-------|
-| Juicy Start | Up to &#36;25,000 | &#36;250/mo |
-| Citrus Splash | Up to &#36;50,000 | &#36;500/mo |
-| Berry Boost | Up to &#36;100,000 | &#36;1,000/mo |
-| Tropical Temptation | Up to &#36;150,000 | &#36;1,500/mo |
-| Orchard Oasis | Up to &#36;250,000 | &#36;2,500/mo |
-| Mango Magic | Up to &#36;500,000 | &#36;3,500/mo |
-| Pineapple Paradise | Up to &#36;750,000 | &#36;5,000/mo |
-| Grapevine Glory | Up to &#36;1,000,000 | &#36;6,500/mo |
-| Pomegranate Power | Up to &#36;1,500,000 | &#36;9,000/mo |
-| Exotic Extracts | Up to &#36;2,000,000 | &#36;12,000/mo |
+| Plan | Monthly Lead Sales | Lead Limit | Price |
+|------|-------------------|------------|-------|
+| Juicy Start | Up to &#36;25,000 | 5,000 | &#36;250/mo |
+| Citrus Splash | Up to &#36;50,000 | 20,000 | &#36;500/mo |
+| Berry Boost | Up to &#36;100,000 | 50,000 | &#36;1,000/mo |
+| Tropical Temptation | Up to &#36;150,000 | 100,000 | &#36;1,500/mo |
+| Orchard Oasis | Up to &#36;250,000 | 250,000 | &#36;2,500/mo |
+| Mango Magic | Up to &#36;500,000 | 1,000,000 | &#36;3,500/mo |
+| Pineapple Paradise | Up to &#36;750,000 | 2,000,000 | &#36;5,000/mo |
+| Grapevine Glory | Up to &#36;1,000,000 | 5,000,000 | &#36;6,500/mo |
+| Pomegranate Power | Up to &#36;1,500,000 | 10,000,000 | &#36;9,000/mo |
+| Exotic Extracts | Up to &#36;2,000,000 | Unlimited | &#36;12,000/mo |
 
 Doing more than &#36;2M/month? Get in touch and we'll squeeze out a custom plan for you.
 
 ## What's included
 
-Every plan includes the full Juiced feature set:
+Every plan includes the core Juiced feature set:
 
 - **Smart lead delivery** — Route leads to the right buyers automatically
 - **Client bidding system** — Let buyers compete for your leads
@@ -34,23 +34,91 @@ Every plan includes the full Juiced feature set:
 - **CRM and multi-channel delivery** — Connect to your buyers however they need
 - **Custom filters and rules** — Fine-tune exactly who gets what
 
-No features are locked behind higher tiers. You're paying for capacity, not capability.
+## Premium features
 
-## Premium add-ons
+Some features are available on higher-tier plans:
 
-Want to make Juiced feel like *your* platform? [Custom domains](/features/domains) let you white-label the buyer portal under your own brand.
+| Feature | Available on |
+|---------|--------------|
+| [Custom domains](/features/domains) | Higher-tier plans |
+| [Remove "Powered by Juiced" branding](/features/branding#removing-juiced-branding) | Higher-tier plans |
+
+Check your plan details in the billing settings to see which features you have access to.
+
+## Lead limits
+
+Each plan includes a monthly lead limit—the maximum number of leads you can process per billing cycle.
+
+When you reach your limit:
+
+1. New incoming leads are **withheld** (held in a queue)
+2. Withheld leads are not distributed to buyers
+3. Once you upgrade your plan, withheld leads are automatically released and processed in the order they were received
+
+This ensures you never lose leads—they just wait until you have capacity.
 
 ## Usage warnings
 
-Juiced keeps an eye on your monthly lead sales and lets you know when you're approaching your plan's limit. You'll see a banner at the top of the screen when you hit certain thresholds:
+Juiced keeps an eye on your usage and lets you know when you're approaching your plan's limits. You'll see a banner at the top of the screen when you hit certain thresholds.
+
+**Revenue threshold warnings:**
 
 | Usage | What happens |
 |-------|--------------|
 | 75% | A heads-up that you're getting close |
 | 90% | A stronger nudge to consider upgrading |
-| 100% | You've hit your limit—time to move up a tier |
+| 100% | You've hit your limit—time to move up a tier (or auto-upgrade kicks in) |
+
+**Lead limit warnings:**
+
+| Usage | What happens |
+|-------|--------------|
+| 75% | A warning that you're approaching your lead limit |
+| 90% | A critical warning to upgrade soon |
+| 100% | You've hit your limit—new leads will be withheld |
 
 These warnings link directly to your billing page so you can upgrade with one click. No surprises, no sudden service interruptions—just a friendly reminder to keep the juice flowing.
+
+### What happens at 100%
+
+When you hit your threshold, Juiced doesn't just cut you off—it handles things gracefully:
+
+- **Internal sources**: Leads are still accepted but held in a "withheld" status. They won't be distributed until capacity frees up.
+- **Vendor sources**: Pings are automatically rejected so you don't pay for leads you can't distribute.
+
+Once you upgrade your plan or your billing cycle resets, withheld leads are automatically reprocessed and distributed. No manual intervention required—they just pick up where they left off.
+
+<Tip>
+If your distribution plan changed while leads were withheld, they'll use your current active plan when reprocessed, not the plan that was active when they originally came in.
+</Tip>
+
+## Auto-upgrade
+
+Don't want to worry about hitting your ceiling mid-month? Enable auto-upgrade and Juiced will automatically bump you to the next plan tier when you reach your current plan's revenue threshold or lead limit.
+
+### How it works
+
+When auto-upgrade is enabled and you hit 100% of your plan limit:
+
+1. Juiced automatically upgrades your subscription to the next tier
+2. You receive an email confirming the upgrade and your new limits
+3. Lead distribution continues uninterrupted
+
+If the auto-upgrade fails (for example, due to a payment issue), you'll receive an email explaining the problem. Leads will be withheld until you manually upgrade or resolve the billing issue.
+
+<Note>
+Auto-upgrade won't trigger if you're already on the highest plan tier (Exotic Extracts). At that point, contact us for a custom plan.
+</Note>
+
+### Enabling auto-upgrade
+
+1. Click your profile in the top-right corner
+2. Select **Edit Profile**
+3. Scroll to the **Subscription** section
+4. Toggle **Auto-upgrade Subscription** on
+5. Save your changes
+
+Once enabled, you can sit back and let your business grow without worrying about service interruptions.
 
 ## Managing your subscription
 

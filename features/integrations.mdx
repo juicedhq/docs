@@ -1,6 +1,6 @@
 ---
 title: Integrations
-description: Third-party service connections—Stripe, Twilio, SendGrid, and more.
+description: Third-party service connections—Stripe, Twilio, SendGrid, Real Estate API, and more.
 ---
 
 Integrations connect Juiced to third-party services that extend your platform's capabilities.
@@ -39,18 +39,23 @@ Real Estate API enriches leads with property and owner data. Once connected, you
 
 This integration is particularly useful for real estate lead generation, where knowing property details can help qualify leads and route them to the right buyers.
 
-### What you can enrich
+### Available endpoints
 
 The integration supports multiple data endpoints:
 
 | Endpoint | What it provides |
 |----------|------------------|
-| **Property Detail** | Estimated value, property type, bedrooms, bathrooms, square footage, year built |
+| **Property Detail** | Estimated value, property type, bedrooms, bathrooms, square footage, and year built |
 | **SkipTrace** | Owner contact information and additional owner details |
+| **Property Comps** | Comparable property sales in the area |
+| **AVM** | Automated valuation model estimate of property value |
+| **Address Verification** | Validates and standardizes property addresses |
+| **MLS Detail** | Active or historical MLS listing information |
+| **MLS Search** | Search for MLS listings matching specific criteria |
 
-### How enrichment works
+### Enriching leads manually
 
-You can enrich leads manually from the lead edit page:
+You can enrich leads from the lead edit page:
 
 1. Navigate to a lead's edit page
 2. Click the **Enrich with Real Estate API** button in the header
@@ -62,9 +67,28 @@ You can enrich leads manually from the lead edit page:
 Leads must have complete address information (street address, city, state, and ZIP code) to be enriched. If any address fields are missing, the enrichment will fail with an error.
 </Note>
 
+### Enriching leads automatically
+
+You can also enrich leads automatically during distribution:
+
+1. Set up a distribution plan with an ALTER_DATA stage that includes a `real_estate_api` operation
+2. Select which endpoints to use and set the overwrite behavior
+3. Ensure your tenant fields include the corresponding enrichment fields (e.g., `property_value`, `bedrooms`, `owner_name`)
+
+<Note>
+You'll need an active Real Estate API integration before the Real Estate API operation type appears in your distribution stage options.
+</Note>
+
+When leads flow through the distribution plan, Juiced calls the Real Estate API and maps the response data to your configured fields. The enriched data appears in two places:
+
+- **Lead detail view**: An "Enriched Data" section shows all enriched property and owner fields
+- **Distribution timeline**: The ALTER_DATA stage entry shows which endpoints succeeded or failed, along with how many fields were enriched
+
+If an endpoint fails (e.g., no data found for the address), the error details appear in the distribution timeline without blocking the rest of the flow.
+
 ### Overwrite behavior
 
-When enriching a lead, you control how new data interacts with existing values:
+When enriching a lead (manually or automatically), you control how new data interacts with existing values:
 
 - **Only populate empty fields** — New data fills in blanks but doesn't touch existing values
 - **Always overwrite existing data** — New data replaces whatever was there before
