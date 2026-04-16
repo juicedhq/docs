@@ -38,9 +38,9 @@ For example, if you split profits 50/50, set the payout percentage to 50%. A &#3
 Vendor sources can have test mode enabled, allowing vendors to test their integration without affecting production data. When test mode is on:
 
 - Pings and leads submitted through the source are marked as test data
-- Test leads are automatically moved to **Audit** status and won't be distributed to customers
 - Test data is hidden from normal views by default—use the "Test Mode" filter to see it
-- Responses are deterministic based on zip code, making it easy to verify different scenarios
+- Five reserved zip codes return deterministic responses, making it easy to verify different scenarios
+- Any other zip code goes through normal routing but the lead is forced to **Audit** status and won't be distributed to customers
 
 ### Testing with zip codes
 
@@ -48,11 +48,14 @@ When test mode is enabled, the system returns predictable responses based on the
 
 | Zip code | Ping response | Lead status |
 |----------|---------------|-------------|
-| `00001` | No match found | Unassigned |
-| `00002` | Match found | Assigned |
-| Any other | Match found | Assigned |
+| `00001` | Match found | Assigned |
+| `00002` | Duplicate | Duplicate |
+| `00003` | Rejected | Audit |
+| `00004` | No match found | Unassigned |
+| `00005` | Match found | Marketplace |
+| Any other | Normal routing | Audit |
 
-This lets vendors test success and failure scenarios without needing real buyer coverage in those areas.
+This lets vendors test every outcome—successful distribution, duplicates, rejections, no-match scenarios, and marketplace routing—without needing real buyer coverage in those areas.
 
 <Note>
 Test mode is only available for **vendor** sources. Internal sources don't need this feature since you control the data flow directly.
