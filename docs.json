@@ -50,7 +50,7 @@
           {
             "group": "People",
             "icon": "users",
-            "pages": ["features/customers"]
+            "pages": ["features/customers", "features/partners"]
           },
           {
             "group": "Money & Limits",
