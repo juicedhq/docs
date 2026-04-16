@@ -125,6 +125,8 @@ Bulk reprocessing requires the **leads.reprocess** permission. By default, only 
 
 Tenants can delete leads entirely. This removes the lead from the system. Use this for test data or leads that should never have entered the system in the first place.
 
+When you delete a lead, any associated distribution flows are preserved for historical reference. The distribution flow's timeline will show when the lead was deleted, and the Lead column will display "Deleted" instead of the lead's name.
+
 ### Exporting leads
 
 Tenants can export leads from a customer's lead list. This generates a downloadable file of the lead data—useful for reporting, backups, or moving data to external systems.
