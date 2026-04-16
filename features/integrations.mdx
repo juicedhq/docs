@@ -1,6 +1,6 @@
 ---
 title: Integrations
-description: Third-party service connections—Stripe, Twilio, SendGrid, and more.
+description: Third-party service connections—Stripe, Twilio, SendGrid, Real Estate API, and more.
 ---
 
 Integrations connect Juiced to third-party services that extend your platform's capabilities.
@@ -35,48 +35,30 @@ Intercom adds customer support and engagement features to the customer portal:
 
 ## Real Estate API
 
-Real Estate API ([realestateapi.com](https://www.realestateapi.com/)) provides property data enrichment for leads. When configured, you can automatically append property details, owner information, and valuations to incoming leads based on their address.
+Real Estate API enriches your leads with property data. Once connected, you can automatically append property details, owner contact information, valuations, and more to leads as they flow through your distribution pipeline.
 
-### How enrichment works
-
-When a lead flows through a distribution stage configured with Real Estate API enrichment:
-
-1. The system extracts the lead's address fields (address, city, state, ZIP)
-2. Calls the configured Real Estate API endpoints
-3. Maps the API response to your lead category's custom fields
-4. Stores the enriched data on the lead
-
-Enrichment is **non-blocking**—if the API call fails or returns no data, the lead continues through distribution normally.
-
-### Field mapping
-
-The system uses predefined mappings between API response data and lead field titles. A field is only populated if your lead category has a matching custom field configured. For example, if the API returns estimated property value but your lead category doesn't have a `property_value` field, that data is skipped.
-
-Available endpoints include:
+### Available endpoints
 
 | Endpoint | Data returned |
 |----------|---------------|
-| Property Detail | Property characteristics (beds, baths, square footage, lot size, year built) |
-| SkipTrace | Owner contact information |
-| Property Comps | Comparable property sales |
-| AVM | Automated valuation estimate |
-| Address Verification | Address standardization and validation |
-| MLS | Active listing details |
+| Property Detail | Comprehensive property information including lot size, bedrooms, bathrooms, year built, and ownership history |
+| SkipTrace | Owner contact information including phone numbers and email addresses |
+| Property Comps | Comparable property sales in the area |
+| AVM | Automated valuation model estimate of property value |
+| Address Verification | Validates and standardizes property addresses |
+| MLS Detail | Active or historical MLS listing information |
+| MLS Search | Search for MLS listings matching specific criteria |
+
+### Using Real Estate API with distribution stages
+
+After connecting your Real Estate API account, you can use it in distribution stages with the **Alter Data** method. When configuring an Alter Data operation:
+
+1. Select **Real Estate API** as the operation type
+2. Choose which endpoints to query
+3. Set the overwrite behavior:
+   - **Always overwrite existing data** — Replace existing field values with API data
+   - **Only populate empty fields** — Keep existing values, only fill in blanks
 
 <Note>
-The raw API response is always stored in the lead's metadata under `_enrichment.real_estate_api` for auditability, even when specific fields aren't mapped.
+You'll need an active Real Estate API integration before the Real Estate API operation type appears in your distribution stage options.
 </Note>
-
-### Overwrite behavior
-
-When configuring enrichment, you can choose how to handle fields that already have values:
-
-- **Always**: Overwrite existing values with API data
-- **Empty only**: Only populate fields that are currently blank
-
-### Setup
-
-1. Create a Real Estate API account at [realestateapi.com](https://www.realestateapi.com/)
-2. Navigate to **Integrations** in your tenant settings
-3. Add your API key
-4. Configure which endpoints to call during distribution stage setup
