@@ -1,6 +1,59 @@
 ---
 title: Ping-Post
-description: The ping/post workflow for real-time lead validation and delivery.
+description: The ping/post workflow for real-time lead validation and delivery to partners.
 ---
 
-Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+Ping-post is the industry-standard handshake between lead generators and lead buyers. Instead of blindly sending leads and hoping someone wants them, ping-post lets you check with potential buyers first—before you commit to a transaction.
+
+Here's the short version: you send a "ping" with partial lead info, buyers respond with offers, you pick a winner, then you "post" the full lead to that buyer. It's like asking "who wants this?" before actually giving it away.
+
+## How it works
+
+The ping-post workflow has two phases:
+
+### Phase 1: The ping
+
+When a lead comes in from a [source](/features/sources), Juiced sends a ping to your configured partners. The ping contains enough information for partners to evaluate the lead—typically location, lead type, and other non-PII details—without revealing the full contact information.
+
+Partners respond with an **offer**: the price they're willing to pay for the lead. This happens in real-time, usually within a few seconds.
+
+### Phase 2: The post
+
+Once you've collected offers, Juiced selects the winning partner based on offer scores (highest score wins) and posts the full lead data to them. The partner then processes the lead and you get paid.
+
+## Partners
+
+Partners are the buyers on the other end of your ping-post workflow. They're external companies or systems that receive your leads via API integration.
+
+To configure a partner, you'll set up their exchange configurations (how to communicate with their API) and optionally adjust settings that affect how their offers are evaluated.
+
+### Offer penalty percentage
+
+Sometimes you want to give certain partners a competitive disadvantage without changing what they actually pay. The **offer penalty percentage** does exactly this—it reduces a partner's offer score without affecting the charged amount.
+
+For example, if a partner submits a $100 offer and has a 25% penalty:
+- Their **offer score** becomes $75 (used for ranking)
+- Their **charged amount** stays $100 (what they actually pay if they win)
+
+This is useful when:
+- A partner has lower lead quality or conversion rates
+- You want to favor other partners without explicitly blocking anyone
+- You're managing partner relationships while maintaining pricing transparency
+
+To set a penalty, enter a percentage (0-100) in the **Offer Penalty (%)** field on the partner form. Leave it empty for no penalty.
+
+<Note>
+The penalty percentage is snapshotted on each offer, so changing a partner's penalty only affects future offers—not ones already in the system.
+</Note>
+
+## Offer scoring
+
+When multiple partners respond to a ping, their offers are ranked by score. The highest score wins. By default, the score equals the offer amount, but penalties can reduce this:
+
+| Partner | Offer Amount | Penalty | Offer Score | Winner? |
+|---------|-------------|---------|-------------|---------|
+| Partner A | $100 | 0% | $100 | Yes |
+| Partner B | $110 | 25% | $82.50 | No |
+| Partner C | $90 | 0% | $90 | No |
+
+In this example, Partner A wins even though Partner B offered more money—because Partner B's penalty brought their score below Partner A's.
