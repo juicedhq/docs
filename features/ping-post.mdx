@@ -1,6 +1,6 @@
 ---
 title: Ping-Post
-description: The ping/post workflow for real-time lead validation and delivery.
+description: The ping/post workflow for real-time lead validation and delivery to partners.
 ---
 
 Ping-post is a two-step process for selling leads in real time. First, a **ping** sends partial lead data to determine pricing and acceptance. Then, a **post** delivers the full lead data once a buyer is confirmed.
@@ -60,3 +60,34 @@ Ping response fields are only available when configuring **post** requests. They
 <Tip>
 If you don't see ping response fields in the picker, the partner may not have received any pings yet, or their ping responses may not include any data. Try sending a test ping first.
 </Tip>
+
+### Offer penalty percentage
+
+Sometimes you want to give certain partners a competitive disadvantage without changing what they actually pay. The **offer penalty percentage** does exactly this—it reduces a partner's offer score without affecting the charged amount.
+
+For example, if a partner submits a $100 offer and has a 25% penalty:
+- Their **offer score** becomes $75 (used for ranking)
+- Their **charged amount** stays $100 (what they actually pay if they win)
+
+This is useful when:
+- A partner has lower lead quality or conversion rates
+- You want to favor other partners without explicitly blocking anyone
+- You're managing partner relationships while maintaining pricing transparency
+
+To set a penalty, enter a percentage (0-100) in the **Offer Penalty (%)** field on the partner form. Leave it empty for no penalty.
+
+<Note>
+The penalty percentage is snapshotted on each offer, so changing a partner's penalty only affects future offers—not ones already in the system.
+</Note>
+
+## Offer scoring
+
+When multiple partners respond to a ping, their offers are ranked by score. The highest score wins. By default, the score equals the offer amount, but penalties can reduce this:
+
+| Partner | Offer Amount | Penalty | Offer Score | Winner? |
+|---------|-------------|---------|-------------|---------|
+| Partner A | $100 | 0% | $100 | Yes |
+| Partner B | $110 | 25% | $82.50 | No |
+| Partner C | $90 | 0% | $90 | No |
+
+In this example, Partner A wins even though Partner B offered more money—because Partner B's penalty brought their score below Partner A's.
