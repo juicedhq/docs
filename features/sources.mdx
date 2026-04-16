@@ -5,6 +5,8 @@ description: Where your leads come from—API credentials, field mapping, and co
 
 Sources are how leads get into the system. They represent where leads came from—usually a lead form on a website you control, but sometimes a partner you're buying leads from.
 
+Sources can be assigned to [partners](/features/partners) to organize them by business relationship. This helps you track which vendor or affiliate is responsible for which lead flows.
+
 ## Authentication
 
 When you create a source, an API key and API secret are automatically generated for basic authentication. You can also use a bearer token if you prefer.
@@ -22,7 +24,7 @@ See the [API Reference](/api-reference/introduction) for specifics, or click the
 
 ### Subscription threshold behavior
 
-When you've reached your subscription threshold:
+When you've reached your [subscription threshold](/features/billing#what-happens-at-100):
 
 - **Internal**: Pings are still accepted. Leads are held in a "withheld" status and won't be processed until capacity frees up.
 - **Vendor**: Pings are automatically rejected so you don't purchase leads you can't distribute.
@@ -34,6 +36,34 @@ To avoid hitting your threshold entirely, consider enabling [auto-upgrade](/feat
 If you've negotiated a profit-sharing arrangement with a vendor, use the payout percentage to adjust what's reported to them.
 
 For example, if you split profits 50/50, set the payout percentage to 50%. A &#36;100 lead will be reported to the vendor as &#36;50.
+
+## Test mode
+
+Vendor sources can have test mode enabled, allowing vendors to test their integration without affecting production data. When test mode is on:
+
+- Pings and leads submitted through the source are marked as test data
+- Test data is hidden from normal views by default—use the "Test Mode" filter to see it
+- Five reserved zip codes return deterministic responses, making it easy to verify different scenarios
+- Any other zip code goes through normal routing but the lead is forced to **Audit** status and won't be distributed to customers
+
+### Testing with zip codes
+
+When test mode is enabled, the system returns predictable responses based on the zip code submitted:
+
+| Zip code | Ping response | Lead status |
+|----------|---------------|-------------|
+| `00001` | Match found | Assigned |
+| `00002` | Duplicate | Duplicate |
+| `00003` | Rejected | Audit |
+| `00004` | No match found | Unassigned |
+| `00005` | Match found | Marketplace |
+| Any other | Normal routing | Audit |
+
+This lets vendors test every outcome—successful distribution, duplicates, rejections, no-match scenarios, and marketplace routing—without needing real buyer coverage in those areas.
+
+<Note>
+Test mode is only available for **vendor** sources. Internal sources don't need this feature since you control the data flow directly.
+</Note>
 
 ## Source-level fields
 

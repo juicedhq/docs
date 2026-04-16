@@ -1,6 +1,6 @@
 ---
 title: Integrations
-description: Third-party service connections—Stripe, Twilio, SendGrid, and more.
+description: Third-party service connections—Stripe, Twilio, SendGrid, Real Estate API, and more.
 ---
 
 Integrations connect Juiced to third-party services that extend your platform's capabilities.
@@ -32,3 +32,33 @@ Intercom adds customer support and engagement features to the customer portal:
 - **Support bubble**: In-app chat for customers to reach your support team
 - **Product tours**: Guided walkthroughs to onboard new customers
 - **Targeted messaging**: Send announcements and updates to specific customer segments
+
+## Real Estate API
+
+Real Estate API enriches your leads with property data. Once connected, you can automatically append property details, owner contact information, valuations, and more to leads as they flow through your distribution pipeline.
+
+### Available endpoints
+
+| Endpoint | Data returned |
+|----------|---------------|
+| Property Detail | Comprehensive property information including lot size, bedrooms, bathrooms, year built, and ownership history |
+| SkipTrace | Owner contact information including phone numbers and email addresses |
+| Property Comps | Comparable property sales in the area |
+| AVM | Automated valuation model estimate of property value |
+| Address Verification | Validates and standardizes property addresses |
+| MLS Detail | Active or historical MLS listing information |
+| MLS Search | Search for MLS listings matching specific criteria |
+
+### Using Real Estate API with distribution stages
+
+After connecting your Real Estate API account, you can use it in distribution stages with the **Alter Data** method. When configuring an Alter Data operation:
+
+1. Select **Real Estate API** as the operation type
+2. Choose which endpoints to query
+3. Set the overwrite behavior:
+   - **Always overwrite existing data** — Replace existing field values with API data
+   - **Only populate empty fields** — Keep existing values, only fill in blanks
+
+<Note>
+You'll need an active Real Estate API integration before the Real Estate API operation type appears in your distribution stage options.
+</Note>
