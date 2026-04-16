@@ -5,6 +5,8 @@ description: Where your leads come from—API credentials, field mapping, and co
 
 Sources are how leads get into the system. They represent where leads came from—usually a lead form on a website you control, but sometimes a partner you're buying leads from.
 
+Sources can be assigned to [partners](/features/partners) to organize them by business relationship. This helps you track which vendor or affiliate is responsible for which lead flows.
+
 ## Authentication
 
 When you create a source, an API key and API secret are automatically generated for basic authentication. You can also use a bearer token if you prefer.
@@ -22,10 +24,12 @@ See the [API Reference](/api-reference/introduction) for specifics, or click the
 
 ### Subscription threshold behavior
 
-When you've reached your subscription threshold:
+When you've reached your [subscription threshold](/features/billing#what-happens-at-100):
 
 - **Internal**: Pings are still accepted. Leads are held in a "withheld" status and won't be processed until capacity frees up.
 - **Vendor**: Pings are automatically rejected so you don't purchase leads you can't distribute.
+
+Withheld leads are automatically reprocessed once you upgrade your plan or your billing cycle resets.
 
 ## Payout percentage
 
