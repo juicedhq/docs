@@ -443,13 +443,18 @@
         "properties": {
           "lead_uuid": {
             "type": "string",
+            "format": "uuid",
             "description": "Internal UUID for the lead. Prefer `lead_public_id` for external references.",
+            "deprecated": true,
             "example": "f47ac10b-58cc-4372-a567-0e02b2c3d479"
           },
           "lead_public_id": {
             "type": "string",
             "description": "Public identifier for the lead. Use this for display, URLs, and external references.",
-            "example": "lead_01arz3ndektsv4rrffq69g5fav"
+            "example": "lead_01arz3ndektsv4rrffq69g5fav",
+            "minLength": 31,
+            "maxLength": 31,
+            "pattern": "^lead_[0-9a-z]{26}$"
           },
           "status": {
             "type": "string",
