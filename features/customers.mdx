@@ -103,10 +103,14 @@ Rather than showing all four statuses everywhere, Juiced computes a **display st
 |----------------|------------|
 | **Active** | Operational and has available funding |
 | **Paused** | Manually paused |
-| **Inactive** | Funding, caps, or budget exhausted |
+| **Inactive** | Wallet funding is exhausted (no bid can cover its minimum) |
 | **Archived** | Account archived |
 
 This is what you'll see in most places throughout the app.
+
+<Note>
+Display status only reflects operational and funding state. Cap and budget exhaustion show up on the customer's individual **bids** (as **Capped** or **Exhausted**) rather than changing the customer's own display status. A customer with every bid capped will still show as **Active** if their wallet is funded—they just won't be receiving leads.
+</Note>
 
 ### Account toggles
 

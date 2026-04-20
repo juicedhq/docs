@@ -7,7 +7,7 @@ Notification templates let you customize the messaging customers receive when ev
 
 ## Channels
 
-Each notification can be delivered through three channels:
+Notifications can be delivered through three channels, but channel availability varies by event:
 
 | Channel | Description | Requirements |
 |---------|-------------|--------------|
@@ -16,6 +16,8 @@ Each notification can be delivered through three channels:
 | In-App | Displayed in the customer portal | None |
 
 Each channel has its own template, so you can tailor the message format and length appropriately—detailed HTML emails, concise text messages, and quick in-app alerts.
+
+Some events are email-only. For example, account archive/restore and payment success/failure notifications do not currently support SMS or in-app delivery.
 
 ## Notification events
 
@@ -28,12 +30,12 @@ Templates are available for the following events:
 | Bid Matched | Another customer matches the bid amount |
 | Buy Order Exceeded | Customer's buy order is exceeded by another |
 | Buy Order Reinstated | Customer's buy order becomes the highest bid again |
-| Customer Paused | Customer's account is paused |
-| Customer Unpaused | Customer's account is unpaused |
-| Customer Archived | Customer's account is archived |
-| Customer Restored | Customer's account is restored from archive |
-| Dispute Approved | Customer's return request is approved |
-| Dispute Tier Updated | Customer's return tier changes |
+| Account Paused | Customer's account is paused |
+| Account Unpaused | Customer's account is unpaused |
+| Account Archived | Customer's account is archived |
+| Account Restored | Customer's account is restored from archive |
+| Return Approved | Customer's return is approved |
+| Return Tier Updated | Customer's return tier changes |
 | Payment Failed | A payment transaction fails |
 | Payment Successful | A payment processes successfully |
 | Under Funded Bids | Customer has bids limited by their available balance |
@@ -52,7 +54,7 @@ These are available in all templates:
 
 ### Lead variables
 
-Available for lead-related notifications (Lead Assigned, Outbid, Bid Matched, Dispute Approved):
+Available for lead-related notifications (Lead Assigned, Outbid, Bid Matched, Return Approved):
 
 - `{{ lead.public_id }}`, `{{ lead.uuid }}`
 - `{{ lead.full_name }}`, `{{ lead.first_name }}`, `{{ lead.last_name }}`
@@ -72,7 +74,7 @@ Available for customer-related notifications:
 ### Other variables
 
 - **Buy order notifications**: `{{ buyOrder.amount }}`, `{{ buyOrder.scope }}`, `{{ buyOrder.status }}`
-- **Dispute tier notifications**: `{{ disputeTier.name }}`, `{{ disputeTier.discount_percentage }}`, `{{ disputeTier.penalty_percentage }}`
+- **Return tier notifications**: `{{ disputeTier.name }}`, `{{ disputeTier.discount_percentage }}`, `{{ disputeTier.penalty_percentage }}`
 
 ## Editing templates
 

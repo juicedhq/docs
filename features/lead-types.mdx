@@ -19,19 +19,24 @@ You can add as many conditions as needed.
 
 ### Available operators
 
-The operators available depend on the field type you select. Here are some common operators:
+The operators available depend on the field type you select. On date fields, some operators display with date-friendly labels—"Before," "After," and "On" instead of "Less than," "Greater than," and "Equals."
 
-| Operator | Available for | Description |
-|----------|---------------|-------------|
-| Equals | All field types | Exact match |
-| Not equals | All field types | Does not match |
-| Contains | Text fields | Value contains the specified text |
-| Not contains | Text fields | Value does not contain the specified text |
-| Less than | Numeric, date fields | Value is less than (or before) |
-| Greater than | Numeric, date fields | Value is greater than (or after) |
-| Between | Numeric, date fields | Value falls within a range |
-| Within the past N days | Date fields | Date is within the specified number of days from today |
-| Older than N days | Date fields | Date is more than the specified number of days ago |
+| Operator | Date-field label | Available for | Description |
+|----------|------------------|---------------|-------------|
+| Equals | On | All field types | Exact match |
+| Does not equal | Not on | All field types | Does not match |
+| Contains | — | Text fields | Value contains the specified text |
+| Does not contain | — | Text fields | Value does not contain the specified text |
+| Less than | Before | Numeric, date fields | Value is less than (or before) |
+| Less than or equal | Before or on | Numeric, date fields | Value is less than or equal to (or on or before) |
+| Greater than | After | Numeric, date fields | Value is greater than (or after) |
+| Greater than or equal | After or on | Numeric, date fields | Value is greater than or equal to (or on or after) |
+| Between | — | Numeric, date fields | Value falls within a range |
+| Within the past N days | — | Date fields | Date is within the specified number of days from today |
+| Older than N days | — | Date fields | Date is more than the specified number of days ago |
+| Any | — | List of Values fields | At least one of the specified values is present |
+| All | — | List of Values fields | All specified values are present |
+| None | — | List of Values fields | None of the specified values are present |
 
 <Tip>
 The relative date operators—**Within the past N days** and **Older than N days**—are useful for time-sensitive routing. For example, you could create a lead type that only matches leads where a quote was requested within the past 7 days.
@@ -93,12 +98,12 @@ Bidding scopes define how customers can bid on leads within a lead type. You cre
 
 | Setting | Description |
 |---------|-------------|
-| Geographic level | The level at which bids are placed: county, state, or nationwide |
-| Fixed Price | When enabled, customers pay a single set price instead of bidding within a range |
-| Minimum bid | The lowest bid a customer can place (or the single price when Fixed Price is enabled) |
-| Maximum bid | The highest bid a customer can place (hidden when Fixed Price is enabled) |
-| Increment | The amount by which bids increase (hidden when Fixed Price is enabled) |
+| Scope | The geographic level at which bids are placed: county, state, or nationwide |
 | Enabled | Toggle to activate or deactivate the scope |
+| Fixed Price | When enabled, customers pay a single set price instead of bidding within a range |
+| Minimum | The lowest bid a customer can place. Relabels to **Price** when Fixed Price is enabled. |
+| Maximum | The highest bid a customer can place (hidden when Fixed Price is enabled) |
+| Step | The amount by which bids increase between minimum and maximum (hidden when Fixed Price is enabled) |
 
 <Tip>
 Use **Fixed Price** when you want all customers to pay the same amount for leads—no bidding, no competition on price. This is ideal for flat-rate pricing models.

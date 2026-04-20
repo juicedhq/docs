@@ -100,26 +100,23 @@ The display status combines the underlying statuses into a single, summarized va
 |----------------|---------------|
 | **Active** | Everything is working. The bid is on, the customer is on, and all caps/budgets have availability. |
 | **Paused** | The bid itself has been paused. |
-| **Limited** | The customer's wallet or the bid's budget is running low—not enough to cover the full bid amount, but enough to participate at a reduced level. |
-| **Exhausted** | Something has run out. Could be the customer's wallet, a lead cap, or a budget. The bid won't receive leads until the constraint clears. |
+| **Limited** | The bid's budget is running low—not enough to cover the full bid amount, but enough to participate at a reduced level. |
+| **Under Funded** | The customer's wallet can cover the minimum bid but not the full bid amount. The bid competes at the reduced amount. |
+| **Not Funded** | The customer's wallet can't cover even the minimum bid for this lead type. |
+| **Capped** | A lead cap (daily, weekly, or monthly) has been reached. |
+| **Exhausted** | A budget has been fully consumed. The bid won't receive leads until the period resets. |
 | **Archived** | The bid has been deleted. |
 
-### What "Limited" really means
+### How statuses resolve to display
 
-When a bid shows as "Limited," it can still win leads—but at a reduced amount:
+The display status is derived from the four underlying statuses. "Under Funded," "Not Funded," "Capped," and "Exhausted" each pinpoint a specific reason the bid isn't fully active, so you can diagnose at a glance:
 
-- **Funding limited** — The customer's wallet balance is below the bid amount. The bid competes at whatever the wallet can actually cover.
-- **Budget limited** — The remaining budget is below the bid amount. The bid competes at whatever the budget has left.
+- **Under Funded / Not Funded** reflect wallet state.
+- **Capped** reflects a lead cap (daily, weekly, or monthly).
+- **Exhausted** reflects budget consumption.
+- **Limited** means the bid is still competing, just at a reduced amount because of budget pressure.
 
-### What "Exhausted" really means
-
-When a bid shows as "Exhausted," it's completely out of the auction:
-
-- **Funding exhausted** — The customer's wallet can't cover even the minimum bid for this lead type.
-- **Cap exhausted** — A lead cap (daily, weekly, or monthly) has been reached.
-- **Budget exhausted** — A budget has been fully consumed.
-
-The bid automatically returns to "Active" when the constraint resets (new day/week/month) or the customer adds funds.
+A bid automatically returns to "Active" when the constraint resets (new day/week/month) or the customer adds funds.
 
 ## Bid positions
 
