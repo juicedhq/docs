@@ -26,6 +26,9 @@
         "summary": "Submit a ping",
         "description": "Submits partial lead data to check for matching bids before sending the full lead. Use this to determine pricing and availability before committing to a full lead submission.\n\nThe response varies based on your source type:\n- **Internal sources** receive a list of matching bids with customer details\n- **Vendor sources** receive a single aggregated price",
         "tags": ["Ping"],
+        "parameters": [
+          { "$ref": "#/components/parameters/PartnerIdHeader" }
+        ],
         "requestBody": {
           "required": true,
           "content": {
@@ -147,6 +150,9 @@
         "summary": "Submit a lead",
         "description": "Submits a complete lead for processing and assignment. The lead will be validated, checked for duplicates, matched to a lead type, and assigned to a customer (or placed in the marketplace).\n\nIf you previously submitted a ping, include the `ping_id` and optionally a `bid_id` to reference that ping's pricing.",
         "tags": ["Leads"],
+        "parameters": [
+          { "$ref": "#/components/parameters/PartnerIdHeader" }
+        ],
         "requestBody": {
           "required": true,
           "content": {
@@ -337,6 +343,18 @@
     }
   },
   "components": {
+    "parameters": {
+      "PartnerIdHeader": {
+        "name": "X-Partner-Id",
+        "in": "header",
+        "required": false,
+        "description": "Public ID of the partner the submission is attributed to. Optional but recommended for any partner-mediated integration.",
+        "schema": {
+          "type": "string",
+          "example": "partner_01arz3ndektsv4rrffq69g5fav"
+        }
+      }
+    },
     "securitySchemes": {
       "Basic Auth": {
         "type": "http",

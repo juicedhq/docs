@@ -9,10 +9,10 @@ Duplicate checks help you avoid selling the same lead twice. When a lead matches
 
 Global duplicate checks apply to all leads coming in from any source. You define:
 
-- **Field**: Which field to check (e.g., email, phone)
+- **Fields**: One or more fields to check together (e.g., email alone, or email + phone for a composite match). A lead is only flagged as a duplicate if *all* the selected fields match a previous lead.
 - **Days**: The lookback period. A lead is considered a duplicate if a matching value was seen within this many days.
 
-For example, if you set up a duplicate check on email with a 30-day window, any lead with an email that matches a lead from the last 30 days will be marked as a duplicate.
+For example, if you set up a duplicate check on email with a 30-day window, any lead with an email that matches a lead from the last 30 days will be marked as a duplicate. If you add phone to the same check, only leads matching *both* the email and the phone will be flagged.
 
 ## Source-level duplicate checks
 

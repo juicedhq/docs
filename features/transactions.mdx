@@ -1,6 +1,44 @@
 ---
 title: Transactions
-description: Financial movements—deposits, charges, and transaction history.
+description: Every wallet movement—deposits, charges, and the events that create them.
 ---
 
-Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+A transaction is any movement of funds in or out of a customer's wallet. Every lead assignment, deposit, refund, buy-order hold, and manual adjustment produces a transaction record. Collectively, a customer's transactions are the ledger behind their current wallet balance.
+
+## Where transactions appear
+
+- **Customer panel → Billing → Transactions** — What customers see for their own account
+- **Tenant panel → Customers → [Customer] → Transactions tab** — Full transaction history for any customer
+- **Webhooks** — The [Transaction Updated](/features/webhooks) webhook event fires whenever a transaction is created or modified
+
+Each transaction shows the timestamp, amount, event type, a description, and (when applicable) a link to the related record—for example, a "Lead Assigned" transaction links to the lead it paid for.
+
+## Event types
+
+Every transaction carries an event type describing why it was created:
+
+| Event | Direction | What it means |
+|-------|-----------|---------------|
+| **Funds Added** | Deposit | The customer added funds through the portal (credit card or other payment method). |
+| **Funds Added By Tenant** | Deposit | You added funds manually on behalf of the customer (credits, adjustments, reconciliation). |
+| **Funds Subtracted By Tenant** | Withdrawal | You removed funds manually. |
+| **Auto Recharge** | Deposit | The customer's wallet dropped below their auto-recharge threshold and was automatically topped up from their default payment method. |
+| **Lead Assigned** | Charge | The customer won a lead and was charged for it. |
+| **Lead Returned** | Credit | A previously assigned lead was returned, and the charge was refunded to the wallet. |
+| **Placed Buy Order** | Hold | A marketplace buy order reserved funds from the wallet. (Not a real charge—the money is held pending the auction outcome.) |
+| **Canceled Buy Order** | Release | The customer canceled an active buy order; held funds are released back to the wallet. |
+| **Released Buy Order** | Release | A buy order expired or was superseded (e.g., someone else won the lead first); held funds are released. |
+
+## Holds vs. charges
+
+Buy orders are a special case. When a customer places a buy order, funds are **held** rather than charged. Held funds still appear as transactions in the ledger—that's how the wallet balance reflects reserved amounts correctly—but no money has actually moved to you until the buy order executes. If it never executes (the lead sells to someone else, the customer cancels, the auction expires), a matching Canceled or Released Buy Order transaction reverses the hold.
+
+<Note>
+Because holds use the same wallet mechanism as charges, a customer with $500 available and a $50 buy order in place will show a $450 spendable balance even though the hold hasn't become a charge yet. The transaction list makes the distinction visible.
+</Note>
+
+## Adjustments and reconciliation
+
+**Funds Added By Tenant** and **Funds Subtracted By Tenant** exist for the moments when real life and the system get out of sync—issuing a credit to a customer for a quality complaint, correcting a mistake, or reconciling with an external billing system. Both accept a description so your team can record the *why* alongside the *what*; descriptions are visible to the customer in their portal.
+
+These adjustments don't charge a payment method—they only move virtual wallet funds.

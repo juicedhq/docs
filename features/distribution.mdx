@@ -1,6 +1,90 @@
 ---
 title: Distribution
-description: How leads move from intake to delivery.
+description: How leads move from intake to delivery—stages, attempts, and the flow timeline.
 ---
 
-Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+Distribution is the pipeline a lead travels through after it arrives. Ping-post, bidding, and the marketplace are individual pieces of machinery; distribution is how they're strung together. You define the order of operations, and Juiced runs every lead through that sequence until it sells, expires, or hits a configured terminus.
+
+<Note>
+Distribution is part of the Distribution Stages feature set. If the **Distribution Stages** resource and the **Logs** entry don't appear in your tenant navigation, the feature hasn't been enabled for your account yet. Reach out and we'll turn it on.
+</Note>
+
+## Distribution stages
+
+A stage is a single step in your pipeline. Each stage has a **method** that determines what it does, plus settings that control how it behaves. Stages are ordered, and leads move from the first enabled stage to the next until one accepts the lead or the sequence ends.
+
+### Stage methods
+
+| Method | What it does | Terminal? |
+|--------|--------------|-----------|
+| **Highest Price** | Collects offers from your customers' bids and from eligible partners, then assigns the lead to the highest-scoring offer. | Yes |
+| **Round Robin** | Distributes to partners in rotation rather than price order. | Yes |
+| **Marketplace** | Creates a reverse auction on your marketplace so customers can claim the lead. | Yes |
+| **Alter Data** | Mutates lead data mid-pipeline (e.g., normalize a field) before the next stage runs. | No |
+| **Real Estate API** | Enriches the lead with property or owner data from your [Real Estate API integration](/features/integrations#real-estate-api) before continuing. | No |
+
+"Terminal" stages can accept the lead and end the flow. "Non-terminal" stages always pass through to the next stage.
+
+### Stage settings
+
+Each stage can be configured with:
+
+- **Bids enabled** — Whether customer bids participate at this stage (applies to Highest Price).
+- **Partners enabled** — Whether partner offers participate. When enabled, you can filter the partner pool with an include-list or exclude-list.
+- **Minimum price** — A floor for partner offers. Offers below this amount are skipped.
+- **Conditions** — Rules that determine whether a given lead qualifies for this stage. A stage with conditions only runs when the lead matches.
+- **Paused** — Temporarily skip a stage without deleting it. Useful when you're troubleshooting or rolling out changes gradually.
+
+### Ordering
+
+Stages run top-to-bottom. Drag to reorder. The usual pattern is to start with the highest-value method (Highest Price with ping-post and top-tier partners), fall back to less profitable methods (Round Robin, secondary partners), and end with Marketplace as a catch-all for unsold leads.
+
+## Distribution attempts
+
+Every time a lead enters a stage, Juiced records a **distribution attempt**. Each attempt has a status:
+
+| Status | Meaning |
+|--------|---------|
+| **Processing** | The attempt is in flight. |
+| **Success** | The stage accepted the lead and distributed it. |
+| **Failed** | The stage ran but produced no winner (no eligible offers, no match). The flow continues to the next stage. |
+| **Skipped** | The stage was bypassed—either paused or the lead didn't match its conditions. |
+| **Error** | The stage encountered an unexpected problem (network failure, bad config). Details are recorded on the attempt. |
+| **Continue** | The stage finished without finalizing the lead (typical for non-terminal stages like Alter Data) and the flow moves on. |
+
+Attempts are stored per flow, so a single lead can have many attempts across multiple stages.
+
+## Distribution flows and the log
+
+A **distribution flow** is the record of a lead's full journey—every stage it visited, every attempt, and the outcome. Flows are visible in the tenant panel under **Entries → Logs**.
+
+Each log entry opens into a timeline showing events in chronological order:
+
+| Event | When it fires |
+|-------|---------------|
+| **Initiated** | The flow starts. |
+| **Ping** | A ping was sent to a partner. |
+| **Ping Responded** | The partner replied to the ping. |
+| **Ping Honored** | The ping winner was honored on the subsequent post. |
+| **Submission Accepted** | The raw [submission](/features/submissions) passed validation and became a lead. |
+| **Submission Rejected** | Validation failed; no lead was created. |
+| **Lead** | A lead record now exists for this flow. |
+| **Attempt Failed / Skipped / Succeeded / Error / Accepted / Continued** | An individual stage attempt completed with the noted status. |
+| **On Marketplace** | The lead was placed on the marketplace. |
+| **Sold on Marketplace** | A customer purchased the lead from the marketplace. |
+| **Marketplace Unsold** | The marketplace auction ended without a sale. |
+| **Reprocessed** | The lead was [reprocessed](/features/leads#reprocessing-leads) and re-entered the pipeline. |
+| **Withheld** | The lead hit the tenant's [subscription threshold](/features/billing#what-happens-at-100) and is waiting for capacity. |
+| **Lead Deleted** | The underlying lead was deleted; the flow is preserved for historical reference. |
+
+Use the log to diagnose why a particular lead didn't sell, or to audit the decisions made across a day's volume.
+
+## Typical patterns
+
+A few common pipeline shapes:
+
+- **Ping-post first, marketplace fallback** — Highest Price (with partner ping-post enabled) → Marketplace. Unsold leads cascade automatically.
+- **Enrich then sell** — Real Estate API → Highest Price → Marketplace. Property data is attached before the auction so conditions and pricing can use it.
+- **Tiered partners** — Highest Price (Tier 1 partners only) → Highest Price (Tier 2 partners only) → Marketplace. Each stage can have its own include-list.
+
+Stages are cheap to add and reorder, so iterate on your pipeline as you learn what sells.

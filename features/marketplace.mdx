@@ -66,6 +66,26 @@ This creates urgency without requiring customers to actively bid against each ot
 
 The tension between "get a deal" and "lose the lead" is what makes it work.
 
+### How the floor moves with buy orders
+
+The floor is the lowest price the auction will reach—but it isn't fixed. If nobody has placed a buy order, the floor equals your configured **last price**. As soon as a customer places a buy order, their bid becomes the effective floor (assuming it's higher than the last price), and the auction will stop dropping once it reaches that amount. A higher buy order raises the floor further.
+
+This also affects when the auction *ends*. The visible countdown reflects the number of price drops remaining before the current floor is reached—not the full schedule down to the last price. Place a buy order high in the range and the auction wraps up sooner; cancel it and the auction resumes dropping until it either sells or hits another floor.
+
+### Auction lifecycle
+
+A reverse auction is in one of three states at any given time:
+
+- **Active** — Still counting down and accepting purchases
+- **Sold** — A buy now, buy order, or floor-triggered sale completed
+- **Unsold** — The auction reached its floor without selling
+
+Unsold auctions optionally trigger the direct-post webhook described above. Sold and unsold auctions are kept for 90 days and then pruned from the database automatically.
+
+### Reverse auctions outside the marketplace
+
+Most reverse auctions are lead-backed: a real lead failed distribution and landed on the marketplace. A smaller category is created when tenants [import lead requests on behalf of customers](/features/leads#importing-leads)—these auctions represent a *demand* for leads rather than a lead itself, and sources bid to fulfill them. The mechanics (price decay, buy orders, floors) are identical.
+
 ## What customers see
 
 The marketplace intentionally shows limited information about each lead—just enough to make a purchasing decision without enabling cherry-picking:

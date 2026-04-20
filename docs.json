@@ -45,7 +45,7 @@
           {
             "group": "Selling Leads",
             "icon": "gavel",
-            "pages": ["features/ping-post", "features/bidding", "features/reverse-auctions", "features/distribution", "features/marketplace"]
+            "pages": ["features/ping-post", "features/bidding", "features/distribution", "features/marketplace"]
           },
           {
             "group": "People",
@@ -55,7 +55,7 @@
           {
             "group": "Money & Limits",
             "icon": "wallet",
-            "pages": ["features/budgets-and-caps", "features/transactions", "features/payment-methods"]
+            "pages": ["features/budgets-and-caps", "features/transactions", "features/payments-and-deposits"]
           },
           {
             "group": "Quality & Validation",
@@ -65,7 +65,7 @@
           {
             "group": "Events & Messaging",
             "icon": "bell",
-            "pages": ["features/workflows", "features/notifications", "features/webhooks"]
+            "pages": ["features/notifications", "features/webhooks"]
           },
           {
             "group": "Observability",
@@ -79,6 +79,7 @@
               "features/company-profile",
               "features/branding",
               "features/billing",
+              "features/domains",
               "features/integrations",
               "features/users",
               "features/roles"
@@ -92,6 +93,16 @@
           {
             "group": "Guides",
             "pages": ["guides/index"]
+          },
+          {
+            "group": "Lead Categories",
+            "icon": "list",
+            "pages": ["guides/adding-fields-to-a-lead-category"]
+          },
+          {
+            "group": "Sources",
+            "icon": "plug",
+            "pages": ["guides/setting-up-a-source-and-its-attributes"]
           }
         ]
       },

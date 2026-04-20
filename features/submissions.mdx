@@ -1,6 +1,46 @@
 ---
 title: Submissions
-description: Lead validation before final posting.
+description: The raw payload a source sent to the API, stored for audit and troubleshooting.
 ---
 
-Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+A submission is the exact payload a source sent to your ingest API—either `POST /ping` or `POST /leads`—captured verbatim before any processing happens. Every API call creates a submission, whether it succeeds or not. This gives you a reliable audit trail for what was sent, separate from the lead record that may or may not have been created from it.
+
+## Why submissions exist
+
+Leads are the cleaned, validated, categorized result of an ingest call. Submissions are the original data. They're useful when:
+
+- A source is reporting that a lead wasn't created, and you need to see what they actually sent.
+- Validation is rejecting leads and you need the original payload plus the exact validation errors.
+- You're building an integration and want to inspect what Juiced received versus what you thought you sent.
+
+Every accepted lead has exactly one submission behind it. Rejected submissions never become leads.
+
+## What a submission stores
+
+- **Source** — Which source submitted the data (useful when multiple sources feed the same lead category).
+- **Data** — The raw request body as received. Preserved as-is, even for fields that didn't map to anything on your lead category.
+- **Status** — Pending, Accepted, or Rejected (see below).
+- **Validation errors** — If the submission was rejected, the field-by-field error messages returned to the caller.
+- **Test flag** — Whether the submission came through a [test-mode source](/features/sources#test-mode).
+
+## Submission statuses
+
+| Status | Meaning |
+|--------|---------|
+| **Pending** | The submission is still being processed (rare—this is a transient state). |
+| **Accepted** | The submission passed validation and produced a lead. |
+| **Rejected** | The submission failed validation; no lead was created. |
+
+## Where to find submissions
+
+Submissions are listed under **Entries → Posts** in the tenant panel. (The navigation label is "Posts" because each submission represents a post to your ingest API.) You can also get to a lead's submission directly from the lead detail page—every accepted lead links back to the submission that produced it.
+
+<Note>
+"Post" in the nav refers to the HTTP POST that created the submission. It's a different concept from the **post** step in [ping-post](/features/ping-post), where "post" means the follow-up request that delivers the full lead after a successful ping.
+</Note>
+
+From the list you can:
+
+- Filter by status, source, or date range
+- Inspect the full data payload and any validation errors
+- Toggle the test-mode filter to see submissions from sources in test mode

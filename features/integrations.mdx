@@ -15,7 +15,7 @@ Stripe handles all payment processing—customer deposits, lead purchases, and p
 
 ## Twilio
 
-Twilio enables SMS notifications. Once connected, you can send text message alerts to customers for events like new lead assignments, low balance warnings, or custom triggers configured through [workflows](/features/workflows).
+Twilio enables SMS notifications. Once connected, you can send text message alerts to customers for events like new lead assignments, low balance warnings, or other delivery events configured through [webhooks](/features/webhooks).
 
 ## SendGrid
 
@@ -71,7 +71,7 @@ Leads must have complete address information (street address, city, state, and Z
 
 You can also enrich leads automatically during distribution:
 
-1. Set up a distribution plan with an ALTER_DATA stage that includes a `real_estate_api` operation
+1. Set up a distribution plan with a **Real Estate API** stage
 2. Select which endpoints to use and set the overwrite behavior
 3. Ensure your tenant fields include the corresponding enrichment fields (e.g., `property_value`, `bedrooms`, `owner_name`)
 
@@ -82,7 +82,7 @@ You'll need an active Real Estate API integration before the Real Estate API ope
 When leads flow through the distribution plan, Juiced calls the Real Estate API and maps the response data to your configured fields. The enriched data appears in two places:
 
 - **Lead detail view**: An "Enriched Data" section shows all enriched property and owner fields
-- **Distribution timeline**: The ALTER_DATA stage entry shows which endpoints succeeded or failed, along with how many fields were enriched
+- **Distribution timeline**: The Real Estate API stage entry shows which endpoints succeeded or failed, along with how many fields were enriched
 
 If an endpoint fails (e.g., no data found for the address), the error details appear in the distribution timeline without blocking the rest of the flow.
 

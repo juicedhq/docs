@@ -22,6 +22,16 @@ Accept: application/json
 Content-Type: application/json
 ```
 
+### Partner attribution
+
+If you're integrating on behalf of a partner, include their public ID in the `X-Partner-Id` header. This attributes the submission to that partner even if the request uses different credentials:
+
+```
+X-Partner-Id: partner_01arz3ndektsv4rrffq69g5fav
+```
+
+The header is optional—requests without it still succeed—but including it is strongly recommended for any partner-mediated integration.
+
 ## Authentication
 
 The API supports two authentication methods:
