@@ -1,0 +1,173 @@
+---
+title: Publishing a Banner
+description: Broadcast an announcement across the customer portal — write headlines, pick a style, target with conditions, schedule a window, and preview it live before publishing.
+---
+
+Banners are the in-portal megaphone — a slim, styled strip at the top of the customer portal that broadcasts announcements, maintenance windows, promotions, or gentle warnings. They support conditional targeting (only show to customers who match a rule), scheduled windows (auto-appear and auto-disappear), and live preview while editing. This guide walks through publishing one end-to-end.
+
+## Prerequisites
+
+- Tenant admin access with the **Manage Banners** permission.
+- Your announcement copy — one version for desktop, one shorter version for mobile.
+- (Optional) A CTA link — either a full URL or a Juiced placeholder like `::billing_url::`.
+- (Optional) Targeting criteria — e.g., only paused customers, only customers with a specific role, only customers with an active bid on a specific lead type.
+
+## Step 1: Open the Banners list
+
+Click **Settings** in the left sidebar, then **Banners** (`/manage/<tenant>/banners`). The page lists every banner you've created with columns for:
+
+| Column | What it tells you |
+|--------|-------------------|
+| **Headline** | The desktop headline, with the mobile headline shown underneath as a description. |
+| **Style** | Colored badge: Primary, Warning, Alert, or Info. |
+| **Active** | Whether the banner is currently eligible to display (the kill switch). |
+| **Publish At** | Scheduled publish timestamp — banner won't show before this. |
+| **Display Until** | Scheduled end timestamp — banner auto-retires after this. Blank = indefinite. |
+
+The list is orderable by priority — drag rows up and down to control stacking order (Step 3 covers why that matters).
+
+## Step 2: Create the banner
+
+Click **Create** in the top-right. You land on the create form, which has three main sections:
+
+- **Banner Content** — headlines, CTA, style.
+- **Status & Visibility** — schedule, active/inactive, stackable/dismissable.
+- **Conditions** — targeting rules.
+
+At the top of the page is a **Show Live Preview** button. Click it *first* so you can watch your edits render in the customer portal as you type.
+
+### Content fields
+
+| Field | What it does |
+|-------|--------------|
+| **Desktop Headline** | Required. The full headline shown on wide screens. Max 255 chars. |
+| **Mobile Headline** | Required. A shorter version for narrow screens. Max 255 chars. Use this to trim a long desktop message down to something that fits in a mobile viewport. |
+| **Call to Action** | Optional. The button text (e.g., "Fund wallet", "Learn more"). Leave blank for a text-only banner. |
+| **Link** | Optional but required if CTA is set. Either a full URL (`https://example.com`) or a Juiced placeholder — `::billing_url::` resolves to the customer's billing page, `::account_url::` to their account settings. |
+| **Style** | Dropdown: **Primary** (brand accent), **Warning** (amber), **Alert** (red), **Info** (neutral blue). Pick based on urgency: Info for announcements, Warning for "please act soon", Alert for "you must act now", Primary for marketing. |
+
+### Status & Visibility
+
+| Field | What it does |
+|-------|-------------|
+| **Is Active** | Master toggle. When off, the banner is never shown regardless of schedule or conditions. Leave on for normal operation; flip off to quickly retire a live banner without deleting it. |
+| **Stackable** | Toggle. If off (default), this banner occupies the banner slot alone — if other banners match, only the highest-priority one shows. If on, this banner stacks alongside others. |
+| **Dismissable** | Toggle. If on (default), customers see an `x` to dismiss the banner and it stays dismissed for them. If off, customers can't close it — use sparingly for genuine must-see alerts. |
+| **Publish At** | Required. Datetime the banner becomes eligible to show. Defaults to "now". Set a future date to schedule. |
+| **Display Until** | Optional. Datetime the banner auto-retires. Leave blank for indefinite display. |
+
+<Warning>
+Non-dismissable banners are sticky by design — customers can't hide them until you do. Reserve this for Alert-style banners ("Service disruption in progress") that genuinely block workflow. For everything else, keep dismissable on out of basic respect for customer attention.
+</Warning>
+
+## Step 3: Set targeting conditions (optional)
+
+Scroll to the **Conditions** section. If you leave it empty, the banner shows to every customer who's eligible by schedule and Active state. To target a subset, build a condition tree.
+
+The structure:
+
+- **Condition groups** are OR-ed together.
+- **Conditions within a group** are AND-ed.
+
+So `(A AND B) OR (C)` means "shows when A and B are both true, OR when C is true on its own."
+
+Click **Add "OR" Group** to start. Inside it, each condition has three fields:
+
+| Field | What it does |
+|-------|-------------|
+| **Property** | Dropdown of customer attributes — Role, Funding Status, Is Paused, Is Archived, and so on (driven by system attributes). Filtered to exclude lead-usage and subscription-usage percentages. |
+| **Operator** | Depends on the property type. `Equals`, `Does Not Equal` for most; numeric properties get `Greater Than`, `Less Than`, etc.; booleans auto-fill to `Equals`. |
+| **Value** | The comparison value. For enum properties (like Role), renders as a dropdown; for text properties, a text input; for dates, a date picker. |
+
+Click **Add "AND" Condition** to AND more conditions into the same group. Click **Add "OR" Group** to OR another independent group.
+
+### Practical targeting examples
+
+- **Only show to paused customers**: Property: `Is Paused`, Operator: `Equals`, Value: `Yes`.
+- **Only show to Partner Admins**: Property: `User Role`, Operator: `Equals`, Value: `Partner Admin`.
+- **Only show to customers below $100 in their wallet**: Property: `Wallet Balance`, Operator: `Less Than`, Value: `100`.
+
+<Note>
+Conditions evaluate per-customer at portal render time, not at banner publish time. A customer who doesn't match today but matches next week will start seeing the banner then — without any editing from you.
+</Note>
+
+## Step 4: Live-preview the banner
+
+Click **Show Live Preview** at the top of the form (if you haven't already). A preview bar appears in your customer portal view rendering exactly what customers will see — headline, CTA, style color, dismiss button.
+
+As you type into the form, the preview updates on blur. Try changing the **Style** dropdown to see the color shift. Click the dismiss `x` to confirm the dismissable behavior looks right.
+
+<Tip>
+The preview is pinned to your admin session — it doesn't affect what real customers see. Toggle it back off when you're done so you don't accidentally misread targeting rules later.
+</Tip>
+
+## Step 5: Save and publish
+
+Click **Create** at the bottom of the page. The banner record is saved. If **Is Active** is on and **Publish At** is in the past/now, the banner starts showing to matching customers immediately on their next portal request.
+
+## Step 6: Reorder banners (stacking and priority)
+
+If you've got more than one active banner, go back to the Banners list. Drag rows up and down — this sets the **priority** column. When multiple non-stackable banners would match the same customer, only the top-priority one shows. Stackable banners ignore this and display together.
+
+A common pattern:
+
+1. **Alert** banner at top priority ("Maintenance in 2 hours") — non-stackable, non-dismissable.
+2. **Warning** banner mid-priority ("Your wallet is low") — stackable, dismissable, conditional on low balance.
+3. **Info** banner low priority ("New marketplace feature launched") — stackable, dismissable, no conditions.
+
+## Step 7: Edit, archive, or delete
+
+**Edit**: Click a banner row. The edit form is identical to create. Save to commit.
+
+**Archive temporarily**: Flip **Is Active** off on the edit page. Banner stays in the list but stops showing.
+
+**Schedule out**: Set **Display Until** to a past time — same effect as archiving, without flipping Active.
+
+**Delete**: Banners are soft-deleted. From the list, use the row action **Delete** or the bulk action. The banner is hidden and scheduled for eventual pruning. Use the **Trashed** filter in the list to find deleted banners and **Restore** them if needed. **Force Delete** (requires higher permissions) removes permanently.
+
+## Step 8: Verify from a customer's viewport
+
+Log in as a test customer (or impersonate one if your tenant supports that). Pull up the portal at `/app`. The banner should appear at the top, correctly styled, with the right copy.
+
+If the banner doesn't show:
+
+- **Is Active** is off? Turn it on.
+- **Publish At** is in the future? The customer won't see it yet.
+- **Display Until** has passed? It's auto-retired.
+- **Conditions** don't match this customer? Recheck the rules.
+- **Not stackable + another higher-priority banner is showing?** Reorder or flip stackable on.
+- **The customer dismissed it**? Dismissable banners track per-customer dismissal. Clear the customer's local storage or use a different test customer.
+
+## Realistic banner examples
+
+**Maintenance warning** — Alert style, non-dismissable, no conditions, 24-hour window:
+
+- Desktop: "Scheduled maintenance Saturday 3–5 AM ET. Portal will be read-only during this window."
+- Mobile: "Maintenance Sat 3–5 AM ET."
+- CTA: none.
+- Publish At: Friday noon. Display Until: Saturday 5 AM.
+
+**Low-balance nudge** — Warning style, dismissable, conditional, indefinite:
+
+- Desktop: "Your wallet balance is below $50. Fund now to keep your bids active."
+- Mobile: "Low balance. Fund wallet."
+- CTA: "Fund now". Link: `::billing_url::`.
+- Conditions: Wallet Balance < 50.
+
+**New feature announcement** — Info style, dismissable, no conditions, 2-week window:
+
+- Desktop: "New: Buy Orders let you set a target marketplace price and auto-win when the auction hits it."
+- Mobile: "New: Buy Orders available."
+- CTA: "Learn more". Link: `https://docs.yourcompany.com/buy-orders`.
+- Publish At: today. Display Until: 14 days from now.
+
+## What happens next
+
+With banners live:
+
+- **Customer portal** — every customer request checks for matching banners and renders them at the top of the viewport. See [Banners](/customer-portal/index#banners) in the customer portal reference (if your tenant's docs include it).
+- **Sticky alerts** — for genuine emergencies (outage, security issue), combine Alert style + non-dismissable + high priority. Switch back to Warning/Info once the situation eases.
+- **Seasonal promotions** — schedule banners ahead with Publish At / Display Until so they auto-turn-on and auto-turn-off without you logging in at 3 AM.
+- **Customer-specific announcements** — lean on conditions. A banner targeted to `Customer Tier = Platinum` reaches exactly the intended audience.
+
+Banners are low-cost, high-signal: a few well-timed ones replace a pile of emails. Don't overdo it — three simultaneous banners is the practical ceiling before customers start ignoring all of them.

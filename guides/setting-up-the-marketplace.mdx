@@ -1,0 +1,115 @@
+---
+title: Setting Up the Marketplace
+description: Turn on the marketplace, configure reverse-auction pricing per lead type, and optionally post unsold leads to a fallback URL.
+---
+
+The marketplace is a reverse auction where unsold leads (and any lead your distribution pipeline decides to list) drop in price over time until a customer buys them. Turning it on takes three passes: one global switch, one per-lead-type configuration, and one per-source fallback price. This guide walks all three.
+
+For the conceptual model — how the floor moves with buy orders, what customers see, the full auction lifecycle — see the [Marketplace feature page](/features/marketplace). For the customer-side buying experience, see the [Marketplace page](/customer-portal/marketplace) in the customer portal reference.
+
+## Prerequisites
+
+- Tenant admin access with the **Manage Marketplace Settings** permission.
+- At least one [lead type](/features/lead-types) with active inventory.
+- At least one [source](/features/sources) generating leads for that lead type.
+- A pricing plan — what price should leads start at, where should they floor, and how fast should they drop?
+
+## Step 1: Enable the marketplace globally
+
+Click **Settings** in the left sidebar, then **Marketplace** (`/manage/<tenant>/marketplace-settings`). The **Marketplace Settings** section has two toggles you'll care about day-one:
+
+| Toggle | What it does |
+|--------|--------------|
+| **Enable marketplace** | The master switch. Off by default. When off, the marketplace UI is hidden from customers and no leads enter reverse auction regardless of distribution stage configuration. |
+| **Enable public marketplace** | Exposes a read-only marketplace at `/marketplace` (no login required). Visitors see the same lead tiles customers see, but **Buy Now** is replaced with **Sign up to purchase** linking to registration. Only available when **Enable marketplace** is on. |
+
+Click **Update marketplace settings** to save. A new **Marketplace** entry appears in the customer portal sidebar immediately.
+
+<Tip>
+Turn on public marketplace when you want the marketplace to double as a live shop window for sales — it's usually easier to close prospects who can already see your inventory and pricing.
+</Tip>
+
+## Step 2: Enable the marketplace per lead type
+
+The global switch makes the marketplace *available*. Individual lead types still need to be opted in.
+
+Navigate to **Lead Types** in the sidebar, click a lead type, then click the **Marketplace** tab (`/manage/<tenant>/lead-types/<lead-type>/marketplace-settings`). If you don't see the Marketplace tab at all, **Enable marketplace** at the tenant level is still off — go back to Step 1.
+
+Flip the **Enable marketplace** toggle on. Four pricing fields appear, all required:
+
+| Field | What it does |
+|-------|--------------|
+| **First Price** | Where the auction opens. Customers see this as the initial price the moment a lead enters the marketplace. |
+| **Last Price** | Where the auction floors. Once the price drops to this, it stops dropping. If no customer has bought by then, the auction expires as **Unsold**. |
+| **Increment** | How much the price drops each tick. E.g., `$2.50` means every interval the price drops $2.50. |
+| **Interval** | How long between ticks, in minutes. E.g., `15` means a price drop every 15 minutes. |
+
+As you type, a plain-English **explanation** line below the fields re-renders — "Leads will start at $25 and drop by $2.50 every 15 minutes until they reach $5." That's the sanity check that your numbers feel right.
+
+Click **Save changes**. Leads in this lead type are now eligible to enter the marketplace.
+
+<Note>
+Each lead type has its own auction curve. A fresh real-estate lead can start at $75 with a steep decline, while an aged insurance lead can start at $15 and floor at $3 — tune each independently.
+</Note>
+
+## Step 3: Set fallback prices on sources
+
+A lead doesn't enter the marketplace just because the lead type allows it — it has to be *routed* there. For the default distribution path (no Distribution Stages pipeline), that's governed by the source's **fallback price**.
+
+Navigate to **Sources** → pick a source → **Pricing** tab. Each lead type the source supports gets a row with a **Fallback price** column. Set the fallback to the price you'd accept on marketplace (often your **First Price** from Step 2, or sometimes lower if you want faster sales).
+
+Leaves blank and the source doesn't enter the marketplace at all — see the Note in [Marketplace → Configuring lead types](/features/marketplace#configuring-lead-types-for-the-marketplace) for the exact wiring.
+
+If you're running [Distribution Stages](/features/distribution) instead, add a **Marketplace** stage in your pipeline — that stage uses the source's fallback price the same way, but with full control over ordering.
+
+## Step 4: Configure the post-marketplace direct post (optional)
+
+Scroll back to the Marketplace settings page (`/manage/<tenant>/marketplace-settings`). The **Post Marketplace Direct Post** section handles unsold leads — the ones that floored without a buyer.
+
+| Field | What it does |
+|-------|--------------|
+| **Enable post marketplace direct post** | Toggle. When on, unsold leads are POSTed to the URL below. |
+| **Post URL** | Required when the toggle is on. The HTTPS endpoint that receives the unsold lead. |
+| **Additional fields** | Key-value pairs sent alongside the lead data (auth tokens, routing IDs, vendor flags). |
+
+Click **Update direct post settings** to save. This is the "don't let unsold leads die" hatch — useful when you have a bulk buyer who takes everything at a fixed rate below your marketplace floor.
+
+<Warning>
+The direct post fires *only* when the auction reaches the floor without selling. Leads that sell on the marketplace, or never enter the marketplace in the first place, don't trigger it. Don't use it as a general-purpose lead webhook — use [tenant webhooks](/features/webhooks) for that.
+</Warning>
+
+## Step 5: Verify by seeding a test lead
+
+The fastest way to confirm everything's wired up correctly is to submit a test lead that's guaranteed to hit the marketplace.
+
+1. Navigate to the source from Step 3 and ensure it's in **test mode** (toggle on the edit page).
+2. Submit a lead using a zip that won't match any bids (see [Sending leads to Juiced](/guides/sending-leads-to-juiced) for the API spec).
+3. Wait for the distribution to complete — the response body should show `status: "marketplace"`.
+4. Log in as a test customer with a funded wallet and open **Marketplace** in the customer portal. The test lead should appear at the First Price, with a countdown showing the next price drop.
+
+If the lead shows, marketplace wiring is correct. If it doesn't:
+
+- Check the customer has marketplace access (**Enable marketplace** is on globally, the customer's account isn't paused).
+- Check the lead type's Marketplace tab is enabled.
+- Check the source's fallback price is set for that lead type.
+- Check the customer's wallet has a balance (marketplace is wallet-only — no wallet, no visibility to buy).
+
+## Step 6: Read the marketplace activity (optional)
+
+Once real leads are flowing:
+
+- **Customers buy leads** via **Buy Now** (instant) or **Buy Orders** (set a target price, funds get held, sale fires when the auction price reaches their target). See [the customer marketplace page](/customer-portal/marketplace) for the full buyer walkthrough.
+- **Sold leads** show up under **Entries → Leads** with `assigned_via: marketplace` in the lead metadata.
+- **Unsold leads** either direct-post (if Step 4 is configured) or expire cleanly. Auctions are kept for 90 days for auditing, then pruned.
+- **Wallet transactions** — each buy creates a `LEAD_ASSIGNED` transaction; each buy order creates a `PLACED_BUY_ORDER` hold that converts to `LEAD_ASSIGNED` on win or `RELEASED_BUY_ORDER` on loss/cancel.
+
+## What happens next
+
+With the marketplace running, the natural follow-ups are:
+
+- **Tune pricing** — Watch which lead types sell fast vs. floor unsold. Drop the First Price on the stale ones, raise the Last Price on the ones selling instantly.
+- **Set up buy order notifications** — Customers with outbid buy orders want to know. The default notification template usually works; customize it under **Notifications** if you want tenant-specific copy.
+- **Layer in Distribution Stages** — If you want the marketplace to run twice (fresh, then aged), use an **Alter Data** stage between two **Marketplace** stages. See [Configuring distribution stages](/guides/configuring-distribution-stages).
+- **Promote the public marketplace** — Link your marketing site to `/marketplace` so prospects see live inventory. Pair it with your Signup CTA.
+
+The marketplace is the workhorse of lead sell-through — once tuned, it quietly absorbs overflow without babysitting.

@@ -1,0 +1,124 @@
+---
+title: Customizing the Customer Portal
+description: Apply your brand — logos, colors, favicon — plus support links, consent links, and footer controls so the portal feels like your product, not ours.
+---
+
+The customer portal comes with Juiced defaults, but almost every surface is re-brandable. This guide walks through the tenant-side switches that let you replace the Juiced wordmark with yours, theme the UI in your colors, swap the favicon, set support contact points, and (on eligible plans) strip the "Powered by Juiced" footer. Together these turn the portal into something that looks and reads like your own product.
+
+For the feature-level rundown, see the [Branding](/features/branding) and [Company Profile](/features/company-profile) feature pages.
+
+## Prerequisites
+
+- Tenant admin access with the **Manage Company Profile** permission.
+- Logo assets ready to upload — a horizontal wordmark for the nav (light + dark versions), and a square icon for the favicon/avatar. PNG or SVG, under 4 MB each.
+- Your brand color hex codes.
+- Support contact: either a support email address or a helpdesk URL.
+
+## Step 1: Open Branding settings
+
+Click **Settings** in the left sidebar, then **Branding** (`/manage/<tenant>/branding`). The page is a single tall form grouped into **Branding → Rail Color → Logos → Icons → Footer**, all with a single **Update branding** button at the bottom.
+
+## Step 2: Set brand colors
+
+The top two fields are color pickers:
+
+| Field | What it does |
+|-------|--------------|
+| **Brand Color** | The primary accent used for buttons, links, and highlights across the customer portal. Since this color renders as text on both light and dark backgrounds, pick something saturated — pastel colors wash out. |
+| **Accent Color** | Secondary accent for smaller UI flourishes. Optional — leave blank and the Brand Color is used for both. |
+
+Colors take effect in the customer portal immediately after you save — refresh the customer's tab to see it live.
+
+## Step 3: Configure the rail gradient (optional)
+
+The **Rail Color** section themes the narrow vertical bar on the far left of the customer portal. Two fields:
+
+| Field | What it does |
+|-------|--------------|
+| **Style** | Dropdown: **None** (default), **Primary** (solid brand color), **Accent** (solid accent color), **Primary to Accent** (gradient between the two). |
+| **Reverse direction** | Only visible when Style is `Primary to Accent`. Flips which color is at the top vs. bottom. |
+
+Small detail, but it's the cheapest way to make the portal look like more than a default Filament install.
+
+## Step 4: Upload logos
+
+Scroll to **Logos**. Two file inputs, both with image editors built in:
+
+| Field | What it does |
+|-------|--------------|
+| **Primary Logo** | Shown in the navigation header and authentication pages (sign in, sign up, password reset). Horizontal wordmark works best — tall square logos get cropped or shrunk. Max 4 MB. |
+| **Dark Mode Logo** | Shown when a customer switches to dark mode in their portal. Usually an inverted version of your primary. Max 4 MB. |
+
+Click to upload or drag-drop. Filament's image editor lets you crop/rotate before saving.
+
+<Tip>
+If you only have a single logo, upload it to both slots. The Dark Mode field doesn't fall back to the Primary — without a dark mode asset, dark-mode users see a blank space.
+</Tip>
+
+## Step 5: Upload icons
+
+Scroll to **Icons**. Two more file inputs, this time for square artwork:
+
+| Field | What it does |
+|-------|--------------|
+| **Favicon** | The tab icon in the customer's browser. Auto-cropped to 1:1 and resized to 64×64. Most tenants upload a square version of their mark. |
+| **Avatar** | The company avatar shown in notifications and anywhere the portal displays your brand identity alongside a customer action. |
+
+Most tenants use the same image for both — upload once, duplicate the upload for the other slot.
+
+## Step 6: Hide the "Powered by Juiced" footer (if eligible)
+
+At the bottom of the Branding form is a **Hide "Powered by Juiced" Footer** toggle. The footer is on by default across all plans.
+
+- If your plan includes the feature, the toggle is enabled — flip it on to hide the footer from the customer portal.
+- If your plan doesn't include it, the toggle is disabled with a helper text pointing to the upgrade path. See [Billing](/features/billing#premium-features) for the plans that unlock footer removal.
+
+## Step 7: Save branding
+
+Click **Update branding** at the bottom of the page. All changes commit together. Refresh the customer portal to verify — nav header, rail, favicon, and any open auth pages should reflect the new look.
+
+## Step 8: Set the customer-facing support link
+
+Branding is only half the portal story — customers also need to know how to reach *you* for help. That setting lives on a different page.
+
+Navigate to **Settings** → **Company Profile** (`/manage/<tenant>/company-profile`). Scroll to the **Support** fieldset:
+
+| Field | What it does |
+|-------|--------------|
+| **Primary Contact Method** | Dropdown: **Email** or **URL**. Decides whether the portal surfaces a mailto: link or a URL link when customers click "Contact Support". |
+| **Support email** | Required when Contact Method is Email. The address customers are prompted to email. |
+| **Support Portal URL** | Required when Contact Method is URL. Your helpdesk/Intercom/Zendesk URL. |
+
+Customers see this contact method anywhere the portal offers a "Need help?" or "Contact support" action — account menus, error modals, empty states.
+
+Click **Save** to commit.
+
+## Step 9: Set the default TCPA name (optional)
+
+Still on the Company Profile page, the **1:1 Default Consent** fieldset has a single field:
+
+- **Default Name** — The legal name used for TCPA consent language when a lead is generated under 1:1 consent rules. Usually your legal entity name, not your trade name.
+
+If you're not running TCPA-compliant flows, leave it blank.
+
+## Step 10: Configure consent links on registration (cross-reference)
+
+Registration-page branding (headline, banner text, consent checkboxes) lives on its own page and is covered in depth in [Onboarding customers → Customize the registration experience](/guides/onboarding-customers#step-2-customize-the-registration-experience). Short version:
+
+- Go to **Settings** → **Registration Page**.
+- Set the **Account Creation Headline** and **Campaign Banner Text** to match your brand voice.
+- Add **Consent Links** for Terms of Service, Privacy Policy, DPAs — one link per row, all required at signup.
+- Optionally require consent re-acceptance on login when you update your terms.
+
+Branding and registration work together — you can't brand the portal and then drop users into a legal checkbox list that says "Juiced Terms of Service."
+
+## What happens next
+
+With the portal fully branded:
+
+- **Customer-facing emails** inherit your avatar, logo, and brand color. Next step is customizing the notification templates themselves — see [Notification templates](/features/notifications).
+- **Custom domain** takes the branding further by letting you host the portal at `portal.yourcompany.com` instead of `your-subdomain.juiced.com`. See [Adding a custom domain](/guides/adding-a-custom-domain).
+- **Public marketplace** — if you've enabled it (see [Setting up the marketplace](/guides/setting-up-the-marketplace#step-1-enable-the-marketplace-globally)), the public `/marketplace` page also inherits these brand assets.
+- **Partner portals** — partner-facing screens pick up the same branding rail gradient and logos, so your partner-side UI matches your customer-side UI without extra configuration.
+
+Branding is a "set once, forget" setting — you'll come back to it when you rebrand, change logos, or update your plan. Until then, this is the one page that makes the biggest first impression for new customers.

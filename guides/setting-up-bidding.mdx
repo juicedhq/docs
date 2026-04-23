@@ -1,0 +1,129 @@
+---
+title: Setting Up Bidding
+description: Turn on bidding for your tenant, configure scope/pricing per lead type, and gate customer access — the tenant-side switches that make customer bids work.
+---
+
+Before a customer can place a bid, you — the tenant admin — need to turn bidding on at the tenant level, enable specific scopes and pricing rules on each lead type, and decide which cap/budget controls customers should see. This guide walks through those switches end-to-end.
+
+For how bidding actually resolves auctions (smart pricing, positions, status rollups), see the [Bidding feature page](/features/bidding). For the customer-side UI, see the [Bids page](/customer-portal/bids) in the customer portal reference.
+
+## Prerequisites
+
+- Tenant admin access with the **Manage Customer Bidding** and **Manage Customer Bidding Limits** permissions.
+- At least one [lead type](/features/lead-types) configured. Bidding rules are per-lead-type, so you can't open auctions without one.
+- A sense of pricing — what's the minimum you'd accept for a lead? The maximum? What's a reasonable step increment?
+
+## Step 1: Open the Bidding settings page
+
+Click **Settings** in the left sidebar (gear icon near the bottom), then **Bidding**. The page lives at `/manage/<tenant>/bid-settings` and groups four sections down the page: **Global Bid Settings**, **Customer Bidding Access**, **Lead Cap Settings**, and **Budget Settings**. Each section has its own Update button — saving one doesn't commit the others.
+
+## Step 2: Configure global bid settings
+
+The first section — **Global Bid Settings** — controls whether customers can bid at all:
+
+| Field | What it does |
+|-------|--------------|
+| **Disable all customer bidding** | Kill switch. When enabled, no customer can create or edit bids via the customer portal. Only tenant admins can modify bids (from the customer detail page → **Bids** tab). |
+
+Leave it off for normal operation. Flip it on when you're migrating platforms, pausing operations, or running a fully tenant-managed pricing model.
+
+Click **Update bid settings** to save.
+
+## Step 3: Configure customer bidding access
+
+The **Customer Bidding Access** section decides who can even see the bidding UI:
+
+| Field | What it does |
+|-------|--------------|
+| **Minimum deposit for auto-access** | The deposit threshold. Once a customer's lifetime deposits hit this amount, they automatically get bidding access. Leave blank to require you to grant access manually. |
+| **Modal Subject** | Heading on the access-restricted modal a customer sees before they've earned access. Defaults to a generic message if left blank. |
+| **Modal Body** | Longer explanation on the same modal. Good place to say "Schedule an onboarding call first" or link to your requirements. |
+| **Button Text** | Label on the call-to-action button in the modal. |
+| **Button Link URL** | URL the button opens. Common patterns: a Calendly link, your sales form, or your Terms page. |
+
+<Tip>
+If you don't want bidding gated at all, uncheck **Can access bidding** on individual customers as needed, and leave this section's defaults alone. The threshold plus modal is the right tool when you have a consistent policy (e.g., "must deposit $500 before bidding").
+</Tip>
+
+Click **Update bidding access settings** to save.
+
+## Step 4: Decide which lead caps are available
+
+Scroll to **Lead Cap Settings**. Each toggle here controls whether that cap type is *available to customers as a form field*. Turning one off hides it from the customer bid form and the customer's account settings — existing caps aren't enforced, but new ones can't be set.
+
+| Toggle | Scope |
+|--------|-------|
+| **Bid Daily / Weekly / Monthly Lead Caps** | Per-bid caps on number of leads won (resets each period). |
+| **Account Daily / Weekly / Monthly Lead Caps** | Customer-level caps applied across all bids. |
+
+The usual pattern is to enable monthly and daily (weekly rarely matters), but this is a product decision — enable whatever your customers will actually use.
+
+Click **Update lead cap settings** to save.
+
+## Step 5: Decide which budgets are available
+
+**Budget Settings** mirrors the cap section, but for dollar amounts instead of lead counts:
+
+| Toggle | Scope |
+|--------|-------|
+| **Bid Daily / Weekly / Monthly Budgets** | Per-bid dollar caps (resets each period). |
+| **Account Daily / Weekly / Monthly Budgets** | Customer-level dollar caps across all bids. |
+
+Budgets and caps are independent — a bid stops on whichever hits first. See [Budgets and caps](/features/budgets-and-caps) for the full interaction model.
+
+Click **Update budget settings** to save.
+
+## Step 6: Enable scopes on each lead type
+
+Tenant settings are done; now move to the per-lead-type bidding configuration. Navigate to **Lead Types** in the sidebar, click a lead type, then click the **Bidding** tab (`/manage/<tenant>/lead-types/<lead-type>/bidding-settings`).
+
+The tab shows a table of **bidding scopes** that currently exist on this lead type. By default, a new lead type has none — which means customers can't bid on it yet. Click **New bidding scope** in the top-right.
+
+The modal has five fields:
+
+| Field | Notes |
+|-------|-------|
+| **Scope** | Required. Pick **County**, **State**, or **Nationwide**. Each scope is a separate row, so a lead type can support all three by creating three entries. |
+| **Enabled** | Toggle. Leave on unless you want to prep a scope but not open it yet. |
+| **Fixed Price** | Toggle. If on, customers pay a set price (no competing) — the form collapses to just one **Price** field. If off (the default), it's a range-based auction with minimum, maximum, and step. |
+| **Minimum** / **Price** | Required. The floor bid (or the only price if fixed). Validation enforces that it's less than or equal to **Maximum**. |
+| **Maximum** | Required for range pricing. The ceiling bid. Hidden when Fixed Price is on. |
+| **Step** | Required for range pricing. The increment between valid bid amounts — e.g., step `5.00` means customers can bid `$10, $15, $20…` but not `$12`. Hidden when Fixed Price is on. |
+
+Click **Create**. The scope appears in the table. Repeat for each scope you want to open (county, state, nationwide).
+
+<Note>
+A scope row's existence is what makes that scope available to customers. If your lead type only has a **County** row, customers can only place county-level bids — the state and nationwide options are hidden from the bid form entirely.
+</Note>
+
+## Step 7: Set per-customer bidding limits (optional)
+
+If a specific customer needs a tighter cap or budget than the default, set it on the customer rather than the tenant. Navigate to **Customers** → pick a customer → **Bids** tab (`/manage/<tenant>/customers/<customer>/bids`).
+
+The top-right has a **Bidding Limits** action that opens a form with the enabled caps/budgets from Step 4 and 5 — per-bid limits are attached to individual bids, and account-level limits apply across all of that customer's bids.
+
+This is also where you'll see the customer's existing bids and can create, edit, pause, or delete bids on their behalf (useful when **Disable all customer bidding** is on, or for hands-on account management).
+
+## Step 8: Verify a customer can bid
+
+Log in as a test customer (or use an impersonation flow if your tenant has one). The customer's left sidebar should show **Bids**. Clicking it opens the bid table; clicking **Create Bid** opens the bid form.
+
+If the bid form shows:
+
+- The lead types you expect
+- The scopes you expect for each lead type
+- The price ranges you configured
+- Cap/budget fields matching what you enabled
+
+…you're good. If something's missing, double-check the lead type's Bidding tab — 90% of "I can't see my lead type" issues trace back to a missing scope row there.
+
+## What happens next
+
+Once bidding is open:
+
+- **Customers place bids** through the customer portal. They pick a location, a lead type, and an amount within your min/max/step rules. See the [Bids page](/customer-portal/bids) for the full customer walkthrough.
+- **Auctions resolve in real-time** when matching leads arrive. The highest eligible bid wins, with smart pricing applied so the winner only pays one increment above the runner-up.
+- **Statuses cascade** — bids reflect their own health (Active / Paused / Limited / Exhausted / Under Funded / Capped), so customers can debug why they're not winning by reading the status column.
+- **Distribution Stages** control *how* bids compete with other distribution methods. If you've enabled [Distribution Stages](/features/distribution), make sure your **Highest Price** stage has **Enable Bids** turned on, otherwise your carefully-configured bids never enter the auction.
+
+The full pipeline is: tenant enables bidding → you configure scopes and pricing → customer funds their wallet ([Managing customer finances](/guides/managing-customer-finances)) → customer places bids → leads flow in and auctions resolve. From here, natural next steps are [Adding a partner rotation](/features/partners) for non-auction fallbacks, or [Configuring distribution stages](/guides/configuring-distribution-stages) if you want a multi-stage pipeline.

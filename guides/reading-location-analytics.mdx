@@ -1,0 +1,158 @@
+---
+title: Reading Location Analytics
+description: Spot geographic supply-and-demand gaps by comparing bid volume, customer interest, and lead delivery across countries, states, and counties — then act on what you find.
+---
+
+Location analytics is the map of your marketplace. It tells you where customers *want* leads (active bids, top prices, interested buyers) and where they're actually *getting* them (received, assigned, and charged amounts). When the two sides don't match — heavy demand in Miami but barely any leads flowing — that's a supply gap you can close with more sourcing, better ad targeting, or price adjustments. This guide walks through using the analytics views to find those gaps and act on them.
+
+For the metric definitions themselves, see the [Location analytics feature page](/features/location-analytics).
+
+## Prerequisites
+
+- A user role with the **analytics.view** permission. Without it, the Analytics navigation group is hidden.
+- At least a few weeks of lead and bid history — the metrics need volume to be meaningful. Fresh tenants will see mostly zeros.
+- (Optional) A specific question you're trying to answer: "Where are we underpriced?", "Which states have unmet demand?", "Do any counties have bids but no leads?"
+
+## Step 1: Open the Analytics views
+
+In the tenant panel left sidebar, find the **Analytics** group. Three map-pin icons sit under it:
+
+| View | What it lists | Best for |
+|------|---------------|----------|
+| **Counties** | Every county (or LGA/parish depending on your country) across your operating countries. | Hyper-local analysis — "where exactly is demand concentrated?" |
+| **States** | Every state or territory. | Mid-level territory planning — "which states are underserved?" |
+| **Countries** | Every country your tenant operates in. | Multi-country tenants rolling up national demand. |
+
+Single-country tenants see country-appropriate labels automatically — a US-only tenant sees "States" and "Counties", a UK tenant sees "Regions", an AU tenant sees "States / Territories" and "LGAs". Multi-country tenants see generic labels.
+
+Click **Counties** (or whichever level fits your question). The table loads with one row per location.
+
+## Step 2: Read the two sides of the table
+
+Every location list is organized into three column groups:
+
+### Location (left)
+
+The name and — for counties — an optional **Postal Codes** column (toggled off by default; turn it on from the column toggle menu if you want to search by zip). Click the column header to sort alphabetically.
+
+### Bids — the demand side
+
+| Column | What it tells you |
+|--------|-------------------|
+| **Active** | Count of fully-operating bids in this location — customers who are *ready to buy right now*. Paused, capped-out, or out-of-budget bids aren't counted. |
+| **Top Bid** | Highest bid amount in the location (across all lead types, or filtered — see Step 3). Tells you the ceiling someone is willing to pay. |
+
+### Leads — the supply side
+
+| Column | What it tells you |
+|--------|-------------------|
+| **Received** | Total leads that actually came in for this location. |
+| **Min Value** | Lowest price any received lead sold for. |
+| **Max Value** | Highest price any received lead sold for. |
+| **Avg Value** | Average sale price across received leads. |
+
+The gap between "Bids → Active" and "Leads → Received" is the headline signal. Many active bids but few received leads = unmet demand, which usually means ad spend or source partnerships belong here. Few bids but many leads = oversupply, which usually means you should recruit more buyers or lower prices.
+
+<Tip>
+Sort by **Bids → Active** descending to find your hottest territories. Then scan the **Leads → Received** column next to each: if it drops off sharply, you've found a supply gap.
+</Tip>
+
+## Step 3: Filter by lead type
+
+At the top of the table, use the **Lead Types** filter to narrow the view. Pick one or more lead types (Auto Insurance, Home Insurance, Solar, etc.). All six Bids/Leads columns recompute against just that slice.
+
+This is where the analysis gets actionable:
+
+- **Unfiltered view** gives you the aggregate picture — useful for territory strategy.
+- **Filtered to one lead type** surfaces product-specific gaps — "we have 40 bids on Auto Insurance in Texas but only 12 leads landed last month."
+
+Filters persist in your session, so leave them set while you drill into individual rows.
+
+The Counties view adds two extra filters — **Country** (only visible for multi-country tenants) and **State** — for narrowing to a region before exploring counties.
+
+## Step 4: Drill into a specific location
+
+Click any row to open the detail view. You land on the location page with three stacked sections:
+
+### Overview stats (top)
+
+Three tiles from the Location Overview widget:
+
+- **Active Bids** — same metric as the list, but just for this location.
+- **Interested Customers** — distinct customers with *any* bid on this location, including paused, archived, or underfunded ones. The delta between Active Bids and Interested Customers is latent demand: customers who've expressed interest but aren't currently buying. When you re-activate them (fund wallets, lift caps), that demand becomes real.
+- **Top Bid** — highest current bid amount.
+
+### Trend stats (right below)
+
+Four more tiles comparing the last 30 days to the prior 30 days:
+
+- **Leads assigned** — with a sparkline and % change vs. the prior period.
+- **Minimum / Maximum / Average Value** — each with arrow-direction indicators.
+
+Rising trend arrows mean the market is heating up here; falling arrows mean it's cooling. Combine with the Active Bids count: rising trend + high bids = double down; falling trend + low bids = reconsider investment.
+
+### Attached bids
+
+A relation-manager table below the stats lists every bid on this location with customer, lead type, scope, amount, and status. Sort by amount to see who's actually at the top. Click through to a customer to see their full bid portfolio.
+
+### Child locations
+
+In the infolist section, the location's children are listed inline:
+
+| When viewing | Children shown |
+|--------------|----------------|
+| **Country** | States / Territories (links to each state's detail page) |
+| **State** | Counties |
+| **County** | Postal codes (read-only) |
+
+Click any child name to drill deeper.
+
+## Step 5: Export counties to CSV (optional)
+
+The Counties list has an **Export** action in the top-right (the other views don't — counties are the most granular, so exports are almost always done at that level).
+
+Click **Export**. The current lead-type filter is respected — if you've filtered to Auto Insurance, the export only includes Auto Insurance data. Confirm, and Filament queues a background job that emails you the CSV when ready.
+
+Use the CSV for:
+
+- Ad-spend allocation models — pull it into a spreadsheet, overlay cost data, compute cost-per-assigned-lead by county.
+- Source-partnership pitches — show a partner the specific counties where you have demand but no supply.
+- Territory reviews in quarterly business reviews.
+
+<Note>
+States and Countries don't have an Export button. If you need a state-level roll-up, export counties and pivot by state in your spreadsheet — it's faster than any aggregation the UI would offer.
+</Note>
+
+## Step 6: Act on the patterns you find
+
+The analytics views are only useful if they change what you do. A few common patterns and the actions they imply:
+
+**Pattern: Many active bids, few leads received**
+- High demand, low supply — close the gap.
+- Actions: recruit new sources for that region, increase ad spend on geo-targeted campaigns, or onboard a partner with supply there ([Adding a partner](/guides/adding-a-partner)).
+
+**Pattern: Few active bids, many leads received**
+- Oversupply — not enough buyers, or prices are wrong.
+- Actions: recruit more customers in that region, run a marketing campaign targeting those customers, or revisit pricing (see [Bidding](/features/bidding)).
+
+**Pattern: High Top Bid, low Avg Value**
+- Customers are willing to pay a lot, but auctions are clearing low — likely thin competition.
+- Actions: tell existing customers about the territory (notifications, banners — see [Publishing a banner](/guides/publishing-a-banner)), or set minimum floors in distribution stages.
+
+**Pattern: High Interested Customers, low Active Bids**
+- Lots of paused or underfunded bids. The demand is latent.
+- Actions: nudge customers to re-fund wallets (auto-recharge, [Managing customer finances](/guides/managing-customer-finances)), or diagnose why they paused — caps hit, too expensive, churned.
+
+**Pattern: Trend arrows all down over 30 days**
+- The market is cooling here. Budget attention elsewhere.
+
+## What happens next
+
+With a regular rhythm of reading location analytics:
+
+- **Weekly scan** — sort Counties by Active bids, scan the Received column, flag any wide gaps for the supply team.
+- **Monthly CSV exports** — feed into a P&L-by-geography dashboard so finance and ops share the same map.
+- **Quarterly territory review** — compare this quarter's top-demand counties to last quarter's. Customer behavior shifts; your sourcing should track it.
+- **Ad-hoc checks** — whenever a customer asks "why am I not getting leads in X?", open X's location page to see exactly how many bids compete there and what top-bid you're up against.
+
+Location analytics is a reference surface, not a dashboard you stare at all day. Build the habit of opening it with a specific question, and it'll pay for itself every time you spot a gap before the customer does.

@@ -1,0 +1,127 @@
+---
+title: Onboarding Customers
+description: The three ways customers land in your tenant — self-serve registration, email invite, and admin-created accounts — plus how to customize each path.
+---
+
+Customers (the buyers of your leads) can get into your tenant three ways: they register themselves via a public signup URL, an existing admin invites them by email, or you create the account manually as a tenant admin. This guide walks through each path and how to customize the experience.
+
+For the customer-side behavior and data model, see the [Customers feature page](/features/customers).
+
+## Prerequisites
+
+- Tenant admin access with the **Manage Customers** and **Manage Registration Settings** permissions.
+- A sense of how you want customers to come in. Self-serve is the default for marketing-driven acquisition; invites and manual creation are for hand-built accounts.
+
+## Path 1: Self-serve registration
+
+Every tenant has a public registration URL that lets anyone create an account without being invited. You just need to share it.
+
+### Step 1: Find your registration URL
+
+Registration lives at `https://<your-subdomain>.juiced.com/app/register` (or `/app/register` under your custom domain if you've set one up). For a tenant with subdomain `fresh-squeeze`, the URL is `https://fresh-squeeze.juiced.com/app/register`.
+
+<Tip>
+Add UTM parameters to track which campaigns are driving signups (e.g., `?utm_source=google&utm_campaign=spring-launch`). The full URL — including query params — is captured on the customer record as **Registration URL**, which you can see on the customer's overview page.
+</Tip>
+
+### Step 2: Customize the registration experience
+
+Navigate to **Settings** → **Registration Page** in the left sidebar (`/manage/<tenant>/customer-registration-settings`). Four fields control what signups see:
+
+| Field | What it does |
+|-------|--------------|
+| **Campaign Banner Text** | Small text above the main headline. Good for aligning the page with a specific ad campaign ("Spring Lead Bonus — Sign Up Today"). |
+| **Account Creation Headline** | The main call-to-action on the form. Defaults to "Create your user account." |
+| **Consent Links** | A list of links (name + URL) that must be accepted via checkbox before signup completes. Use for Terms of Service, Privacy Policy, DPAs, etc. |
+| **Require consent links on login** | When enabled, the same consent links also appear on the login page and must be re-accepted before existing users can sign in. |
+
+Click **Update registration settings** to save.
+
+### Step 3: Understand the signup flow
+
+When a customer hits the URL, they see a two-step flow:
+
+1. **Create an account** — name, email, password. They become a user in the system but don't have a business yet.
+2. **Set up your business** — business name, billing email, phone, address, country (US, Canada, or Australia), state/province, and postal code. Plus any consent checkboxes you've configured.
+
+On submit, a new `Customer` record is created, the user is auto-joined with **Customer Admin** role, and they land on the customer dashboard with **Active** status but **Exhausted** funding (they need to add payment/deposit before they can bid or buy).
+
+<Note>
+Self-serve registration is always on — there's no toggle to disable it. If you need invite-only access, don't publish the registration URL. The page is technically still reachable, but customers can't find it without the link.
+</Note>
+
+## Path 2: Invite a user to an existing customer account
+
+Use invites when you want to add a new teammate to a customer account that already exists — for example, the billing contact signed up and now wants to add their ops manager.
+
+### Step 1: Open the customer's Invites tab
+
+Click **Customers** in the left sidebar, click the customer you want to add a user to, then click the **Invites** tab at the top of the detail page. The URL is `/manage/<tenant>/customers/<customer>/invites`.
+
+You'll see a table of pending invites (email + invited date), or **No invites** if there aren't any yet.
+
+### Step 2: Create the invite
+
+Click **New invite** in the top-right. A modal opens asking for a single field:
+
+- **Email** — required. Where the invite link is sent.
+
+Click **Submit**. Juiced generates a signed invite URL (format: `/app/invite/customer/<invite-uuid>`) and emails it to the address you entered. The invite appears in the table with the invited date.
+
+### Step 3: What the invitee sees
+
+The recipient clicks the link in the email and lands on the invite acceptance page:
+
+- **New user** (email not yet registered) — prompted to set a name and password. On submit, they're created as a user and auto-joined to the customer with **Customer User** role (not admin).
+- **Existing user** (already has an account with that email) — auto-joins the customer immediately, no password step needed.
+
+Either way, they land on the customer's dashboard once they finish.
+
+### Step 4: Manage pending invites
+
+Back on the Invites tab, each row has actions to **resend** the email or **revoke** the invite. Revoking immediately invalidates the signed URL — if the recipient clicks it after that, they see an expired-invite error.
+
+<Tip>
+Invited users are always created as **Customer User**, not **Customer Admin**. If you need an additional admin on the account, ask an existing admin of that customer to promote them from the customer panel's Users page after they accept the invite.
+</Tip>
+
+## Path 3: Create a customer manually as an admin
+
+Use manual creation when you're setting up an account on behalf of someone — onboarding a hand-sold customer, migrating from a previous system, or creating test accounts.
+
+### Step 1: Open the create form
+
+Click **Customers** in the left sidebar, then **New customer** in the top-right (`/manage/<tenant>/customers/create`).
+
+### Step 2: Fill in the customer details
+
+The form has four sections:
+
+- **Basic Info** — Name, Business Email, Phone (optional).
+- **Contact Info** — Street address, Apt/Suite, City, Country (US/CA/AU), State, ZIP code. Used for billing and location-based filters.
+- **Status** — **Pause Account** toggle (paused customers can't bid or receive leads) and **Can access bidding** toggle (gates whether they see the bidding UI at all).
+- **Auto Recharge Settings** — Optional auto-recharge rules for account balance, configured at creation or later. See [Customer finances](/guides/managing-customer-finances) for the full walkthrough.
+- **Bidding Limits** — Optional per-category caps (covered in [Setting up bidding](/features/bidding)).
+
+### Step 3: Save the customer
+
+Click **Create**. The customer lands with **Active** status and **Exhausted** funding — same as a self-serve registration, they'll need a deposit before they can buy.
+
+### Step 4: Invite users to the new account
+
+Manually-created customers don't have any users attached. Open the customer's **Invites** tab (Path 2 above) and send an invite to the person who should access the account.
+
+<Warning>
+Creating a customer in the tenant panel does **not** automatically send the new customer any kind of welcome email — it just creates the Customer record. Nobody can log into the account until you send them an invite.
+</Warning>
+
+## What happens next
+
+Regardless of how a customer was created:
+
+- **Funding** — They land with **Exhausted** funding status. The next step is for them (or you) to add a deposit so they can start bidding. See [Managing customer finances](/guides/managing-customer-finances).
+- **Bidding** — Once funded, they can set up bids under **Bids** in the customer panel. See [Setting up bidding](/features/bidding).
+- **Notifications** — Customer admins can add notification contacts under **Account** → **Contacts** in the customer panel — useful because by default only the registering user gets notifications.
+- **Tracking** — For self-serve signups, check the customer's overview page for the **Registration URL** field to see which campaign they came from.
+
+If you're running paid acquisition, the self-serve path plus UTM tracking gives you end-to-end attribution from ad click to first lead purchase.

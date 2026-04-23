@@ -95,14 +95,62 @@
             "pages": ["guides/index"]
           },
           {
-            "group": "Lead Categories",
-            "icon": "list",
-            "pages": ["guides/adding-fields-to-a-lead-category"]
+            "group": "Ingesting & Classifying Leads",
+            "icon": "filter",
+            "pages": [
+              "guides/adding-fields-to-a-lead-category",
+              "guides/defining-lead-types",
+              "guides/setting-up-a-source-and-its-attributes",
+              "guides/sending-leads-to-juiced"
+            ]
           },
           {
-            "group": "Sources",
-            "icon": "plug",
-            "pages": ["guides/setting-up-a-source-and-its-attributes"]
+            "group": "Selling Leads",
+            "icon": "gavel",
+            "pages": [
+              "guides/configuring-distribution-stages",
+              "guides/setting-up-bidding",
+              "guides/setting-up-the-marketplace"
+            ]
+          },
+          {
+            "group": "People",
+            "icon": "users",
+            "pages": [
+              "guides/onboarding-customers",
+              "guides/managing-customer-finances",
+              "guides/adding-a-partner"
+            ]
+          },
+          {
+            "group": "Quality & Validation",
+            "icon": "shield-check",
+            "pages": ["guides/configuring-return-tiers"]
+          },
+          {
+            "group": "Events & Messaging",
+            "icon": "bell",
+            "pages": [
+              "guides/customizing-notification-templates",
+              "guides/sending-events-to-your-webhook",
+              "guides/publishing-a-banner"
+            ]
+          },
+          {
+            "group": "Observability",
+            "icon": "chart-line",
+            "pages": [
+              "guides/reading-location-analytics",
+              "guides/reading-distribution-logs"
+            ]
+          },
+          {
+            "group": "Account Management",
+            "icon": "user",
+            "pages": [
+              "guides/customizing-the-portal",
+              "guides/adding-a-custom-domain"
+            ]
           }
         ]
       },
