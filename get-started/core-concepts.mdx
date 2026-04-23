@@ -1,0 +1,59 @@
+---
+title: Core concepts
+description: The vocabulary you'll see across Juiced, explained in one place.
+---
+
+Juiced has a handful of core nouns that show up everywhere. Once these click, the rest of the documentation reads a lot faster.
+
+## The supply side
+
+<CardGroup cols={2}>
+  <Card title="Sources" icon="plug" href="/features/sources">
+    The API endpoints where leads arrive. Each source belongs to a lead category and has its own credentials.
+  </Card>
+  <Card title="Leads" icon="user-plus" href="/features/leads">
+    An individual prospect submitted to your platform. A lead is evaluated, priced, and routed to a buyer.
+  </Card>
+  <Card title="Lead categories" icon="folder" href="/features/lead-categories">
+    The schema for a kind of lead you sell—e.g. Auto Insurance, Solar, Home Services. Defines the fields every lead in that category carries.
+  </Card>
+  <Card title="Lead types" icon="split" href="/features/lead-types">
+    Pricing tiers within a category. Conditions decide which leads qualify for which type; a fallback type catches everything else.
+  </Card>
+</CardGroup>
+
+## The selling side
+
+<CardGroup cols={2}>
+  <Card title="Distribution" icon="route" href="/features/distribution">
+    The pipeline a lead flows through after it arrives. Composed of stages—most tenants use Bidding and Marketplace.
+  </Card>
+  <Card title="Bidding" icon="gavel" href="/features/bidding">
+    Real-time auctions where customers compete on price for matching leads. Each lead type has its own bidding rules.
+  </Card>
+  <Card title="Marketplace" icon="store" href="/features/marketplace">
+    A fallback stage where unsold leads are offered at a fixed price to any eligible customer.
+  </Card>
+  <Card title="Ping-post" icon="arrow-left-right" href="/features/ping-post">
+    An alternate distribution pattern where partners respond to a "ping" with a bid before receiving the full lead.
+  </Card>
+</CardGroup>
+
+## The people
+
+<CardGroup cols={2}>
+  <Card title="Customers" icon="users" href="/features/customers">
+    The buyers who purchase leads from you. They fund a wallet, place bids, and receive leads.
+  </Card>
+  <Card title="Partners" icon="handshake" href="/features/partners">
+    External ping-post buyers you distribute to. Different from customers—partners sit outside the wallet model.
+  </Card>
+</CardGroup>
+
+## How it fits together
+
+A lead arrives at a **source** → gets classified against the source's **lead category** and matched to a **lead type** → enters **distribution** → runs through stages like **bidding** and the **marketplace** → the winning **customer** or **partner** receives it, and the wallet or invoice is settled.
+
+That's the whole loop. Everything else in Juiced—budgets and caps, duplicate detection, returns, notifications, webhooks—exists to make that loop run cleanly at scale.
+
+Ready to build one? Head to the [Quickstart](/get-started/quickstart).

@@ -26,7 +26,13 @@
         "groups": [
           {
             "group": "Get Started",
-            "pages": ["get-started/quickstart"]
+            "pages": [
+              "index",
+              "get-started/introduction",
+              "get-started/core-concepts",
+              "get-started/quickstart",
+              "get-started/next-steps"
+            ]
           }
         ]
       },
