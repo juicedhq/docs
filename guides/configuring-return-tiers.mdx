@@ -9,7 +9,7 @@ For the conceptual model — how returns interact with wallets and bids, how pen
 
 ## Prerequisites
 
-- Tenant admin access with the **Manage Return Tiers** permission.
+- Admin role access to your tenant.
 - A decision on your return policy: what return rates are acceptable, which brackets you want, and whether to reward low-returners with discounts or just penalize high-returners.
 - A URL to your written return policy (optional but recommended) — a page customers can open from the portal to understand the rules.
 
@@ -32,7 +32,7 @@ In **Return Settings**, flip **Enable dispute tiers** on. This is what makes Jui
 Click **Update return settings**. The setting commits, but no customer is assigned a tier until you've defined at least one and triggered a recalculation (Step 5).
 
 <Note>
-If you don't see this toggle at all, your account doesn't have the **Manage Return Tiers Feature Toggle** permission — the feature flag is role-gated. You'll still see the tier table if you have view permission, just not the on/off switch.
+The enable toggle is Admin-only. Non-Admin roles may see the tier table in read-only form without the on/off switch.
 </Note>
 
 ## Step 3: Create your first tier
@@ -105,7 +105,7 @@ In the **Return Tiers** table, drag rows up or down to reorder. The order here d
 Typically you order from most-favorable (top) to least-favorable (bottom) so customers see the aspirational tier first.
 
 <Note>
-Only users with the **Reorder Return Tiers** permission can drag rows. If reordering doesn't work for you, that's why.
+Reordering is Admin-only. If rows don't drag for you, that's why.
 </Note>
 
 ## Step 6: Recalculate every customer

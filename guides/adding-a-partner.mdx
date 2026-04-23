@@ -9,7 +9,7 @@ For the conceptual model — how partners differ from sources, what the partner 
 
 ## Prerequisites
 
-- Tenant admin access with the **Manage Partners** permission.
+- Admin role access to your tenant.
 - The Distribution Stages feature flag enabled on your tenant. The Partners menu item is hidden otherwise — contact Juiced support if you need it turned on.
 - At least one [source](/features/sources) already created (you'll attach it to the partner in Step 3).
 - The partner's business name, the email addresses of the people who'll log in, and a sense of which leads you want them eligible for.
@@ -98,7 +98,7 @@ Click the **Users** tab (`/manage/<tenant>/partners/<partner>/users`) to see eve
 From here you can:
 
 - View each user's email, role, and when they joined.
-- Change a user's role (Partner Admin ↔ Partner User) if your permissions allow.
+- Change a user's role (Partner Admin ↔ Partner User).
 - **Remove** a user — detaches them from the partner immediately. Their login stops working for this partner on next request.
 
 Removing a user doesn't delete their account globally (users can belong to multiple partners) — it only detaches them from this one.
@@ -124,7 +124,7 @@ A typical flow: your normal distribution runs (bids, marketplace), any leftover 
 
 Go back to **Partners** → click the partner → **Edit** in the top-right. You can change the name, adjust the offer penalty, flip the two toggles. To change eligibility, sources, users, or invites, use their dedicated sub-tabs (Steps 2–6).
 
-To archive or delete a partner entirely, bulk-select it in the main Partners list and use the **Delete** bulk action. Deletion is soft — the record is hidden but historical leads remain associated for reporting. Only users with **Delete Any Partners** permission see the bulk action.
+To archive or delete a partner entirely, bulk-select it in the main Partners list and use the **Delete** bulk action. Deletion is soft — the record is hidden but historical leads remain associated for reporting. The bulk action is Admin-only.
 
 ## What happens next
 

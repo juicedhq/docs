@@ -9,7 +9,7 @@ For the conceptual model — which events are available, reliability behavior, m
 
 ## Prerequisites
 
-- Tenant admin access with the **Manage Webhooks** permission.
+- Admin role access to your tenant.
 - A destination URL that can accept HTTPS POSTs. If you don't have a real one yet, [webhook.site](https://webhook.site) gives you a throwaway URL to test against.
 - Any authentication credentials your receiver requires (Basic Auth username/password, Bearer token, or custom headers).
 
@@ -179,7 +179,7 @@ Juiced's webhook delivery has built-in resilience:
 
 **Edit the payload** — just open the webhook, change the Request Mapping, save. New payload applies to the next fire.
 
-**Delete a webhook** — from the list page, bulk-select and use the Delete bulk action (requires **Delete Any Webhooks** permission). Or from the edit page, use the **Delete** header action.
+**Delete a webhook** — from the list page, bulk-select and use the Delete bulk action. Or from the edit page, use the **Delete** header action.
 
 **Multiple webhooks for the same event** — fine. Create as many as you need — each fires independently. Useful when different downstream systems need different payload shapes.
 
