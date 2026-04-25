@@ -1,0 +1,195 @@
+---
+title: Sending Events to Your Webhook
+description: Register a tenant webhook, wire it to an event, shape the JSON payload with merge fields, and test the delivery end-to-end.
+---
+
+Tenant webhooks push real-time events from Juiced into the rest of your stack — CRMs, data warehouses, Slack bots, internal dashboards. When a lead is created, a transaction posts, or a customer signs up, Juiced fires an HTTP request to the URL you specify with the payload you shaped. This guide walks through creating one end-to-end.
+
+For the conceptual model — which events are available, reliability behavior, merge-field syntax — see the [Webhooks feature page](/features/webhooks). For customer-facing webhook delivery (leads to a buyer), see [Sources](/features/sources) and the customer portal's [Notifications](/customer-portal/notifications#webhooks) page.
+
+## Prerequisites
+
+- Admin role access to your tenant.
+- A destination URL that can accept HTTPS POSTs. If you don't have a real one yet, [webhook.site](https://webhook.site) gives you a throwaway URL to test against.
+- Any authentication credentials your receiver requires (Basic Auth username/password, Bearer token, or custom headers).
+
+## Step 1: Open the Webhooks page
+
+Click **Settings** in the left sidebar, then **Webhooks** (`/manage/<tenant>/webhooks`). The page lists every webhook you've created with three columns:
+
+| Column | What it tells you |
+|--------|-------------------|
+| **Event** | The event that triggers the webhook (e.g., "Lead Created", "Transaction Updated"). |
+| **URL** | The destination URL. Shows "Not configured" if you haven't completed the Direct Post setup yet. |
+| **Active** | Whether the webhook will actually fire. Paused webhooks stay in the list but don't send. |
+
+## Step 2: Create the webhook record
+
+Click **Create** in the top-right. A short form appears with one field:
+
+| Field | What it does |
+|-------|--------------|
+| **Event** | Dropdown of every supported event. Pick one — you can only attach one event per webhook. |
+
+Available events:
+
+- **Lead Created** — fires when any lead lands (before distribution runs).
+- **Lead Assigned** — fires when distribution successfully assigns a lead to a customer.
+- **Lead Not Assigned** — fires when a lead finishes distribution without being assigned (nobody won, floored unsold, etc.).
+- **Lead Duplicated** — fires when a lead is rejected as a duplicate at ingestion.
+- **Lead Posted** — fires when a lead is posted out to an external system (e.g., a customer's delivery endpoint).
+- **Customer Created** — fires when a new customer record is created.
+- **Transaction Updated** — fires for every wallet movement (deposits, lead assignments, returns, auto-recharge, buy orders).
+- **User Attached to Customer** — fires when a user joins an existing customer.
+- **State Lead Type Stats Updated** — fires on an interval when aggregated state-level stats change (supports a custom interval; see Step 4).
+
+Click **Create**. You land on the webhook edit page — but the webhook *has no URL yet*. An empty **Direct Post** relation manager appears at the bottom of the page with the warning: *"Direct posts will not be sent. Configure the exchange to start receiving direct posts."*
+
+## Step 3: Click Setup to open the Direct Post configuration
+
+In the **Direct Post** section, click **Setup** in the top-right. A large three-tab modal opens:
+
+- **Configuration** — endpoint URL, method, auth, headers, timeout.
+- **Request Mapping** — the JSON payload template.
+- **Testing** — send a test fire and inspect the response.
+
+## Step 4: Configure the endpoint
+
+On the **Configuration** tab, fill out:
+
+| Field | What it does |
+|-------|--------------|
+| **Method** | HTTP verb. Almost always `POST`. `PUT` and `GET` are available if your receiver requires them. |
+| **URL** | Required. The full HTTPS URL — e.g., `https://api.yourcompany.com/webhooks/juiced`. Validated as a URL and must be external (not a Juiced subdomain). |
+
+For **State Lead Type Stats Updated** webhooks, an extra **Interval** dropdown appears — pick how often stats should aggregate and fire (5 minutes to 24 hours). Default is 16 hours.
+
+### Authentication
+
+Expand the **Authentication** section on the right:
+
+| Type | Fields |
+|------|--------|
+| **None** | No extra fields. Use when your receiver doesn't require auth (or validates via headers). |
+| **Basic Auth** | `Username` + `Password` (password is masked, revealable with the eye icon). |
+| **Bearer Token** | `Token` (masked, revealable). Sent as `Authorization: Bearer <token>`. |
+
+### Advanced
+
+Expand the **Advanced** section:
+
+| Field | What it does |
+|-------|--------------|
+| **Active / Paused** | Toggle. Defaults to Active. Flip to Paused to keep the config around without firing — useful for incident response or during migrations. |
+| **Format** | JSON only (locked). |
+| **Headers** | Key-value pairs added to every request. Use for custom signing headers, tenant IDs, or API keys your receiver expects. |
+| **Timeout (Seconds)** | How long Juiced waits for a response before giving up. Default 10. Lower is faster to fail; higher tolerates slow receivers. |
+
+<Warning>
+If your receiver validates request signatures (HMAC), compute and add the signing header here. Juiced doesn't auto-sign — custom headers are the plug-in point.
+</Warning>
+
+## Step 5: Shape the payload on the Request Mapping tab
+
+Click the **Request Mapping** tab. This is where you define the JSON body Juiced sends.
+
+Two quick-start buttons at the top-right:
+
+- **Load default mapping** — drops in a template with every available variable for this event. Great starting point.
+- **Paste JSON mapping** — paste a sample JSON payload (say, from your receiver's docs) and Juiced parses it into the builder with `{{ variable_name }}` placeholders where it can match.
+
+Below those, the **Request Mapping** builder lets you add rows one at a time. Each row is a JSON key-value pair where:
+
+- **Key** is the field name your receiver expects (e.g., `lead_id`, `email`, `amount`).
+- **Value** is a literal string or a merge field in `{{ variable_name }}` syntax.
+
+### Available merge fields
+
+Depend on the event. For lead events (Lead Created, Lead Assigned, Lead Not Assigned, Lead Duplicated, Lead Posted):
+
+- `{{ lead_public_id }}` — human-readable prefixed lead ID (e.g., `lead_01arz3n…`).
+- Flat lead fields: `{{ first_name }}`, `{{ last_name }}`, `{{ email }}`, `{{ phone }}`.
+- Nested: `{{ lead.first_name }}`, `{{ lead.email }}`, `{{ lead.leadType.name }}`.
+- `{{ lead.details.custom_field_name }}` for any custom field on the lead category.
+- `{{ deliverable_fields }}` — magic variable that expands to every deliverable field on the lead category as raw JSON key-value pairs (auto-adapts when fields change).
+- For assigned leads: `{{ buyer.customer_public_id }}` for the winning buyer.
+
+For customer events (Customer Created, User Attached):
+
+- `{{ customer_public_id }}` — prefixed customer ID (e.g., `cus_01arz3n…`).
+- `{{ customer.name }}`, `{{ customer.email }}`, `{{ customer.phone }}`, `{{ customer.address }}`.
+
+For transaction events:
+
+- `{{ customer_public_id }}`, `{{ amount }}`, `{{ event }}` (transaction event type), `{{ created_at }}`.
+
+<Tip>
+When in doubt, click **Load default mapping** first. You get every supported variable for the event as a ready-made template, then delete what you don't need.
+</Tip>
+
+<Note>
+If you leave the Request Mapping completely empty, Juiced sends the full default payload. The mapping is only there to *reshape* — it doesn't gate what's included.
+</Note>
+
+## Step 6: Test the delivery
+
+Click the **Testing** tab. Juiced runs a test fire against your configured endpoint using sample data, then shows:
+
+- **Request** — the exact HTTP method, URL, headers, and body it sent.
+- **Response** — the status code, headers, and body your receiver returned.
+
+If you see a 2xx response, you're wired. If you see a 4xx, check auth and URL. If you see a 5xx, the receiver errored — check logs on their side. If you see a timeout, bump the **Timeout** in Advanced.
+
+<Warning>
+Test fires hit your real endpoint with real sample data. Make sure your receiver is idempotent, or points at a staging environment during testing.
+</Warning>
+
+## Step 7: Save and close
+
+Click **Create** (or **Save** if editing) at the bottom of the modal. The webhook config commits, the modal closes, and the **Direct Post** row in the relation manager now shows your URL and an **Active** checkmark.
+
+The webhook is live. Every matching event going forward will fire an HTTP request to your URL.
+
+## Step 8: Verify with a real event
+
+Trigger an event that should fire the webhook and watch your receiver's logs. Examples:
+
+- **Lead Created** webhook → submit a test lead via [Sending leads to Juiced](/guides/sending-leads-to-juiced).
+- **Customer Created** webhook → create a new customer in the tenant panel.
+- **Transaction Updated** webhook → add funds to a customer wallet (see [Managing customer finances](/guides/managing-customer-finances)).
+
+If nothing arrives, the most common causes are:
+
+- Webhook toggled to **Paused** in Advanced (Step 4).
+- URL points at an internal network the Juiced job queue can't reach (must be publicly resolvable HTTPS).
+- Receiver returns a 4xx — Juiced doesn't retry 4xxs, only 5xxs and network failures.
+
+## Reliability behavior
+
+Juiced's webhook delivery has built-in resilience:
+
+- **Automatic retries** — if the receiver returns a 5xx or the connection fails, Juiced retries up to 3 times with backoff.
+- **No retry on 4xx** — client errors are considered permanent (auth issue, bad URL). Fix them and re-trigger.
+- **Error isolation** — a failing webhook doesn't block other webhooks. Each is processed on its own queued job.
+- **Timeouts** — respected per-request. Slow receivers don't hang the queue indefinitely.
+
+## Managing webhooks over time
+
+**Pause a webhook** — edit it, flip Active → Paused on the Advanced tab. Config stays, fires stop.
+
+**Edit the payload** — just open the webhook, change the Request Mapping, save. New payload applies to the next fire.
+
+**Delete a webhook** — from the list page, bulk-select and use the Delete bulk action. Or from the edit page, use the **Delete** header action.
+
+**Multiple webhooks for the same event** — fine. Create as many as you need — each fires independently. Useful when different downstream systems need different payload shapes.
+
+## What happens next
+
+With webhooks flowing:
+
+- **CRM sync** — Lead Created webhooks are the standard path to pipe new leads into Salesforce, HubSpot, or your own CRM.
+- **Transaction ledger** — Transaction Updated webhooks let you mirror wallet activity into QuickBooks, a data warehouse, or a finance dashboard.
+- **Slack / Teams notifications** — wire a Lead Not Assigned webhook to a Slack bot to ping your ops channel when auctions are coming up empty.
+- **Customer portal webhooks** — a separate, customer-side flow lets individual buyers configure webhooks on their *own* leads. Those live in the customer portal, not here. See [Customer portal → Notifications → Webhooks](/customer-portal/notifications#webhooks).
+
+Tenant webhooks are the "one-way mirror" of your platform — every event that matters, reflected back into the tools you actually use.

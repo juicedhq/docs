@@ -1,0 +1,142 @@
+---
+title: Customizing Notification Templates
+description: Rewrite the email, SMS, and in-app messages Juiced sends customers — subjects, bodies, merge variables, visibility defaults, per-channel toggles.
+---
+
+Every event in Juiced — a lead assigned, a bid outbid, a return approved — fires a notification to the affected customer across one or more channels (email, SMS, in-app). The defaults are serviceable, but sound like Juiced sent them. This guide walks through replacing them with copy that sounds like *you*.
+
+For the conceptual model — channels, available events, variable system — see the [Notifications feature page](/features/notifications). For delivery plumbing (SendGrid, Twilio), see [Integrations](/features/integrations).
+
+## Prerequisites
+
+- Admin role access to your tenant.
+- To customize email templates, a configured [SendGrid integration](/features/integrations#sendgrid). Without it, email toggles are hidden and you'll only see the In-App column.
+- To customize SMS templates, a configured [Twilio integration](/features/integrations#twilio). Without it, SMS toggles are hidden.
+- A rough idea of your message voice — friendly, terse, formal, whatever matches the rest of your customer communication.
+
+## Step 1: Open the Notification Templates list
+
+Click **Settings** in the left sidebar, then **Notification Templates** (`/manage/<tenant>/notification-templates`). You land on a table with one row per notification type — 14 types total, from **Lead Assigned** at the top to **Under Funded Bids** at the bottom.
+
+Each row shows the type **name**, a one-line description of when it fires, and column groups for the delivery channels your tenant has configured. Inside each channel group are two icon columns:
+
+| Column | What it means |
+|--------|--------------|
+| **Visible** | Whether customers can see this notification in their preferences. If off, customers can't toggle it — it's effectively forced on (or off, depending on Default). |
+| **Default** | Whether the notification is enabled by default when a new customer contact is created. Customers can still change it themselves if **Visible** is on. |
+
+A dash (`-`) in any column means that notification type doesn't support that channel at all — e.g., **Payment Failed** is email-only, so it shows `-` for SMS and In-App.
+
+## Step 2: Open a template to edit
+
+Click any row in the table. You land on the **Edit &lt;Notification Type&gt; Template** page (`/manage/<tenant>/notification-templates/<type>/manage`). The page has one collapsible section per channel — Email, SMS, and In-App — stacked down the page.
+
+The order matters: the first supported channel is expanded by default, the rest are collapsed. Click a channel header to expand/collapse.
+
+<Note>
+If the notification only supports some channels (e.g., Payment Failed is email-only), only those sections are rendered. Don't go looking for the SMS section on Payment Failed — it doesn't exist.
+</Note>
+
+## Step 3: Edit the template fields
+
+Inside each channel section, the form has four fields:
+
+| Field | What it does |
+|-------|--------------|
+| **Visible to customers** | Toggle. Matches the **Visible** column from the list. |
+| **Enabled by default** | Toggle. Matches the **Default** column from the list. |
+| **Subject** | The email subject line or in-app notification title. Required for email. Hidden for SMS entirely (SMS has no subject concept). |
+| **Body** | The message content. Rich text editor for email (bold/italic/underline/strike), plain text for SMS, basic formatting for In-App. |
+
+<Tip>
+SMS has no subject line and a character budget that fills up fast. Keep the body short, put the most important detail first, and rely on the action link (see Step 4) to carry the rest.
+</Tip>
+
+## Step 4: Use template variables
+
+Both Subject and Body support merge variables in `{{ variable_name }}` syntax. The system validates on save — reference a variable that doesn't exist for this notification type and you get an inline error before the template is saved.
+
+**Always-available variables** (every notification type):
+
+- `{{ actionLink }}` — URL to the most relevant page (lead detail, bid detail, account settings, etc.).
+- `{{ defaultActionText }}` — Default button label for the action button (e.g., "View lead →").
+- `{{ supportEmail }}` — Your tenant's support email from Company Profile.
+
+**Notification-specific variables** depend on the record the notification is attached to:
+
+- **Lead-related** (Lead Assigned, Outbid, Bid Matched, Return Approved): `{{ lead.full_name }}`, `{{ lead.first_name }}`, `{{ lead.email }}`, `{{ lead.phone }}`, `{{ lead.city }}`, `{{ lead.leadType.name }}`, plus `{{ lead.details.field_name }}` for any custom field on the lead category.
+- **Bid-related** (Outbid, Bid Matched): `{{ bid.amount }}`, `{{ bid.scope }}`, `{{ bid.status }}`.
+- **Buy order** (Buy Order Exceeded, Buy Order Reinstated): `{{ buyOrder.amount }}`, `{{ buyOrder.scope }}`, `{{ buyOrder.status }}`.
+- **Customer-related** (all): `{{ customer.name }}`, `{{ customer.email }}`, `{{ customer.phone }}`.
+- **Batch notifications** (Under Funded Bids): `{{ customer.leads_count }}`, `{{ leads_count }}`.
+
+<Warning>
+Referencing `{{ lead.email }}` in a Customer Paused template will fail validation on save — the Customer Paused notification has no `lead` context. Stick to variables that fit the notification type. The full list is in the [Notifications feature page](/features/notifications#template-variables).
+</Warning>
+
+## Step 5: Embed the action link
+
+For most notifications, the call-to-action matters more than the body copy. Two ways to wire up the button:
+
+**Auto button (default):** leave the body alone with no `{{ actionLink }}` reference. The renderer automatically appends a button at the bottom of the email with the default action text (`View lead →`, `View bid →`, etc.).
+
+**Inline/custom button:** embed `{{ actionLink | defaultActionText }}` or your own link text where you want the button to appear. The renderer intercepts this and builds a proper action button in email and a URL append in SMS.
+
+<Tip>
+In SMS, buttons render as trailing URLs — e.g., "Your bid was outbid. https://portal.yourcompany.com/app/bids/123". Keep the sentence short because the URL eats a lot of the 160-character budget.
+</Tip>
+
+## Step 6: Save (per channel or all at once)
+
+Each channel section has its own **Save** button that commits just that channel. The page header has a **Save All** button that commits every channel in one click.
+
+If your template has a variable validation error, Save fails and shows the error inline on the field. Fix the typo, save again.
+
+<Note>
+If you're editing email only but haven't touched SMS or In-App yet, use the per-channel Save. **Save All** triggers validation on every form, and an unrelated SMS typo will block your email save.
+</Note>
+
+## Step 7: Reset a template to default
+
+At the bottom of each channel section, next to Save, is a **Reset to Default** button. It clears your customizations for *that one channel* and restores the out-of-the-box template. Requires confirmation in a modal before the reset runs.
+
+At the top of the page, the header **Reset All to Default** button wipes every channel for this notification type and restores all defaults in one click. Useful when you've hacked up a template badly and want to start over.
+
+<Warning>
+Reset overwrites your customizations immediately. If you've been tweaking a template for an hour, consider copying the body to a scratch doc before resetting — there's no undo.
+</Warning>
+
+## Step 8: Walk through a realistic edit
+
+A worked example — customizing **Lead Assigned** for a customer named Acme Mortgage:
+
+1. Open **Notification Templates** → click **Lead Assigned**.
+2. In the **Email Template** section:
+   - **Subject**: `New lead for {{ lead.leadType.name }} — {{ lead.city }}`
+   - **Body**: `<p>Hi {{ customer.name }},</p><p>You just won a new {{ lead.leadType.name }} lead: <strong>{{ lead.full_name }}</strong> in {{ lead.city }}. Phone: {{ lead.phone }}.</p><p>{{ actionLink | View lead → }}</p>`
+3. Click **Save** on the Email section.
+4. Expand **SMS Template** and set **Body** to: `New lead: {{ lead.full_name }} ({{ lead.city }}). {{ actionLink }}`
+5. Click **Save** on the SMS section.
+6. Leave **In-App Template** as-is or lightly edit the subject — it'll inherit a decent default.
+
+Now go to **Customers** → pick a test customer → **Actions** → **Send test notification** (or trigger one for real by posting a test lead through [Sending leads to Juiced](/guides/sending-leads-to-juiced)) and watch the new copy land in your test inbox.
+
+## Step 9: Adjust visibility and default enrollment
+
+Back on the edit page, the two toggles at the top of each channel control the customer's preference experience:
+
+- **Visible to customers** off = the customer can't toggle this channel off in their preferences. Use this for must-send notifications like Payment Failed.
+- **Enabled by default** off = new customers won't have this channel enabled unless they opt in. Use this for optional/noisy notifications like Bid Matched.
+
+The two toggles are independent — you can make something invisible but default-on (forced-on), or visible but default-off (opt-in).
+
+## What happens next
+
+With templates tuned:
+
+- **Customers receive branded messages** that look and sound like your company. The [Customizing the portal](/guides/customizing-the-portal) branding flows through — avatars and logos appear in emails without extra configuration.
+- **Customer notification preferences** — customers can still toggle visible channels on/off from their portal's **Account** → **Notifications** page. See [Notifications](/customer-portal/notifications) for the buyer-side view.
+- **Webhooks are separate** — if you want notifications hitting your own webhook endpoint (CRM, Slack, etc.), configure that in [Tenant webhooks](/features/webhooks), not here. This page only covers customer-facing messages.
+- **Adding a new notification type** requires app-side code changes — the 14 types are fixed. If you need one that isn't in the list, it's a product request, not a configuration change.
+
+Once tuned, notification templates are "touch rarely, benefit constantly" — your customers get consistent, branded, well-voiced messages every time an event fires.

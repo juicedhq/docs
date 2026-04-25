@@ -1,0 +1,156 @@
+---
+title: Defining Lead Types
+description: How to create a lead type, set its conditions, and configure bidding and marketplace behavior so leads are routed exactly where you want them.
+---
+
+[Lead types](/features/lead-types) are a refinement of a [lead category](/features/lead-categories)—they classify leads by intent, value, or any other axis you care about. A single "Home Insurance" lead category might route into three lead types: *High-Value Homeowners*, *Renters*, and a fallback for everything else.
+
+This guide walks you through creating a lead type from scratch, writing the conditions that match it, setting priority, and configuring the bidding and marketplace settings that decide how customers compete for its leads.
+
+## Prerequisites
+
+- You need an existing **lead category** with the fields you plan to match on. If you haven't added custom fields yet, see [Adding Fields to a Lead Category](/guides/adding-fields-to-a-lead-category) first.
+- Admin role access to your tenant.
+
+## Step 1: Create the lead type
+
+Navigate to **Lead Types** in the left sidebar (under the **Ingest** group) and click **New lead type** in the top-right corner.
+
+The creation form has these settings:
+
+### Name
+
+Give the lead type a descriptive name. It must be unique within the lead category, and it's how the type appears in tables, bidding dropdowns, and customer-facing bid pages. Something like "High-Value Homeowners" or "Renters Under 30" works well.
+
+### Description
+
+Optional free-text description for your team's reference. Max 1024 characters.
+
+### Lead category
+
+Select which lead category this type refines. Once set, the condition builder below populates with the category's fields.
+
+<Note>
+You can't change a lead type's category after it's been created without archiving and recreating it. Pick carefully.
+</Note>
+
+### Fallback Lead Type
+
+Toggle this on to make the type a catch-all. Fallback types automatically match any lead that doesn't match any other non-fallback lead type in the same category. When enabled:
+
+- The **Priority** field is hidden—fallback types are always evaluated last.
+- The **Conditions** section is hidden—fallbacks match by definition, not by rule.
+
+Only one fallback is allowed per lead category. If one already exists and you try to create another, you'll see a red error notification.
+
+### Priority
+
+A numeric value that decides which lead type wins when a lead matches multiple non-fallback types. **Lower values mean higher priority**—a type with priority `1` beats a type with priority `2`.
+
+If you leave this blank or at `0`, the system assigns the next available priority for the category automatically, so you don't have to think about it unless two types overlap.
+
+<Tip>
+Priority only matters when your conditions overlap. If every lead type has mutually exclusive conditions, each lead matches exactly one type and priority is irrelevant.
+</Tip>
+
+## Step 2: Define conditions
+
+The **Conditions** section is where you write the rules that decide whether an incoming lead matches this type. It's hidden when **Fallback Lead Type** is on.
+
+Click **Add filters** to add your first condition row. Each row has three parts:
+
+| Part | What to set |
+|------|-------------|
+| **Property** | The field or metadata attribute to evaluate. Fields from the lead category appear under **Fields**; submission metadata appears under **Metadata** (currently just **Source**). |
+| **Operator** | How to compare the property to the value. The options available depend on the property's type—see [Available operators](/features/lead-types#available-operators) for the full list. |
+| **Value** | What to compare against. The input adapts to the field type: date fields get a date picker, list-of-values fields get a dropdown, numeric fields get a number input, and so on. |
+
+### Combining conditions
+
+- **Conditions within a group** are combined with **AND**—every condition in the group must be true for the group to match.
+- **Groups are combined with OR**—a lead matches the lead type if any group matches.
+
+To add another AND condition to the current group, click **Add "AND" Condition** at the bottom of the group. To add a new OR group, click **Add "OR" Group** at the bottom of the section.
+
+<Accordion title="Example: Qualified auto insurance leads">
+You want a lead type that catches drivers who are either experienced with a clean record, or young with a premium vehicle.
+
+**Group 1**
+- `age` greater than `25` AND
+- `violations` equals `0`
+
+**Group 2**
+- `age` less than or equal to `25` AND
+- `vehicle_class` any `luxury, sport`
+
+A lead matches this type if it satisfies all of Group 1's conditions *or* all of Group 2's.
+</Accordion>
+
+<Warning>
+Toggling **Fallback Lead Type** on clears all existing conditions. If you turn it back off, you'll need to click **Add filters** to rebuild them from scratch.
+</Warning>
+
+## Step 3: Save the lead type
+
+Click **Create** to save and return to the edit page. A green **Created** notification confirms success.
+
+If you plan to add several lead types back-to-back, click **Create & create another** instead—the form resets and stays open.
+
+After creation, the page refreshes with a sub-navigation showing three tabs: **Edit**, **Bidding**, and **Marketplace** (the last only if marketplace is enabled for your tenant). An **Archive** button appears in the top right.
+
+## Step 4: Add at least one bidding scope
+
+By default a new lead type has no bidding scopes, which means customers can't bid on it yet. Click the **Bidding** tab to fix that.
+
+Click **New bidding scope** in the top-right corner. The form has these fields:
+
+| Field | What it controls |
+|-------|-----------------|
+| **Scope** | The geographic level customers bid at: **County**, **State**, or **Nationwide**. Each scope can only be configured once per lead type. |
+| **Enabled** | Whether this scope is active. Disabled scopes don't appear to customers. Defaults to on. |
+| **Fixed Price** | When on, customers pay a single set price instead of bidding within a range. Relabels **Minimum** to **Price** and hides **Maximum** and **Step**. |
+| **Minimum** | The lowest bid a customer can place. When Fixed Price is on, this becomes the single price. |
+| **Maximum** | The highest bid a customer can place. Must be greater than or equal to Minimum. Hidden when Fixed Price is on. |
+| **Step** | The increment between allowed bid values. Hidden when Fixed Price is on. |
+
+<Tip>
+**Fixed Price** is the right choice for flat-rate pricing where you don't want price competition—every customer pays the same. Use the range (Minimum/Maximum/Step) when you want customers competing on price.
+</Tip>
+
+Click **Create** to save. The new scope appears in the Bidding table with columns for Scope, Fixed, Minimum, Maximum, and Step. You can **Edit** or **Delete** any scope from the table actions.
+
+<Note>
+Until at least one bidding scope is enabled, customers won't see any bidding options for this lead type in the customer portal.
+</Note>
+
+## Step 5: Configure marketplace settings (optional)
+
+If your tenant has [marketplace](/features/marketplace) enabled, a **Marketplace** tab is available in the sub-navigation. This is where leftover leads—ones that went unsold through normal distribution—go to find a buyer via a reverse auction.
+
+Toggle **Enable Marketplace** on to expose the reverse-auction settings:
+
+| Setting | What it means |
+|---------|---------------|
+| **First Price** | The price the lead starts at when it enters the marketplace. |
+| **Last Price** | The floor price. The auction stops dropping once it reaches this value. |
+| **Increment** | How much the price drops at the end of each interval. |
+| **Interval** | The number of minutes between price drops. |
+
+As you fill in these four values, the **Explanation** placeholder below the form generates a plain-English summary of how the auction will behave for a lead—useful for sanity-checking your numbers before saving.
+
+<Warning>
+If **Increment** is `0`, or any of the four values are missing, the explanation shows "Define …" instead of a summary—you won't know what the auction looks like until all four values are valid.
+</Warning>
+
+The **Advanced** section is collapsed by default and currently shows "Coming soon…"—no action needed there today.
+
+## What happens next
+
+Once your lead type is created and configured:
+
+- **Incoming leads** start being evaluated against its conditions. Matches are classified as this lead type.
+- **Priority** resolves conflicts—if a lead matches multiple types, the one with the lowest priority value wins.
+- **Bidding scopes** show up in the customer portal under this lead type, and customers can place bids that compete for its leads.
+- **Marketplace behavior** kicks in for leads that go unsold—the reverse auction starts at **First Price** and drops by **Increment** every **Interval** minutes until a buyer takes it or it hits **Last Price**.
+
+To change any of this later, come back to **Lead Types**, click the type's row to edit it, and use the sub-navigation tabs to jump between Edit, Bidding, and Marketplace settings. To remove a lead type, click **Archive**—this soft-deletes the type and archives all bids associated with it.

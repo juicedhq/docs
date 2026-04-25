@@ -1,0 +1,147 @@
+---
+title: Adding a Custom Domain
+description: Swap the default `your-subdomain.juiced.com` for `portal.yourcompany.com` — the tenant-side setup, DNS records, and validation walk-through.
+---
+
+By default, your customers access the portal at `your-subdomain.juiced.com/app`. A custom domain lets you host it at something like `portal.yourcompany.com/app` instead — the last mile of making the portal feel like your product. This guide walks through entering your domain, adding the DNS records Juiced provides, and watching validation complete.
+
+For the feature-level context — what a custom domain covers, reserved subdomains, SSL behavior — see the [Domains](/features/domains) feature page. Pair this guide with [Customizing the portal](/guides/customizing-the-portal) to finish branding top-to-bottom.
+
+## Prerequisites
+
+- Admin role access to your tenant.
+- A plan that includes custom domain support. Custom domains are a premium feature — see [Billing](/features/billing#premium-features) for the plans that unlock them.
+- A domain you control at a registrar (Cloudflare, Route 53, Namecheap, GoDaddy, etc.) where you can add CNAME records.
+- A decision on the subdomain you want to use — typically `portal`, `leads`, `app`, or `members`.
+
+<Note>
+Custom domain setup is gated at the plan level. If your plan doesn't include it, the **Domains** page is hidden from navigation and the menu item won't render at all. Upgrade first, then come back here.
+</Note>
+
+## Step 1: Open the Domains page
+
+Click the tenant menu in the top-right → **Domains**. The page lives at `/manage/<tenant>/domain-settings` and has one main section: **Custom Domain**.
+
+If the menu item isn't there, your plan doesn't include custom domain access — head to **Billing** and upgrade before continuing.
+
+## Step 2: Enter your subdomain and domain
+
+The **Custom Domain** form has two text fields side-by-side:
+
+| Field | What it does |
+|-------|--------------|
+| **Subdomain** | The first segment of your URL. Prefixed with `https://` visually, so you only enter the label — e.g., `portal`. |
+| **Domain** | The rest of the domain, including the TLD — e.g., `yourcompany.com`. |
+
+As you type, a live helper below the form renders your full customer URL in bold — e.g., "Your customers will access your platform through **portal.yourcompany.com/app**." That's your sanity check.
+
+<Warning>
+Certain subdomains are reserved and will be rejected: `admin`, `api`, `app`, `cdn`, `dev`, `docs`, `mail`, `portal`, `support`, `test`, `www`. If you get a validation error after typing, it's most likely because you picked one of these. Try something else like `leads`, `members`, or `buyers`.
+</Warning>
+
+<Tip>
+Don't include `https://` in either field. The `https://` prefix on the Subdomain input is decorative — the form stores only the labels. Pasting a full URL confuses validation.
+</Tip>
+
+Click **Update custom domain**. Juiced creates the domain record, begins the SSL issuance process behind the scenes, and reveals the **Domain Validation** section below.
+
+## Step 3: Add the DNS records your registrar needs
+
+A new **Domain Validation** section appears with a table of CNAME records. You'll typically see two rows — one for the customer-facing domain itself, one for the validation record Juiced uses to prove ownership and issue an SSL certificate.
+
+Each row shows:
+
+| Column | What it tells you |
+|--------|-------------------|
+| **Type** | Always `CNAME`. |
+| **TTL** | Set to `60 seconds` in the UI — use that or the lowest TTL your DNS provider allows. Lower TTLs make validation finish faster. |
+| **Name** | The hostname portion of the record — click the copy icon, paste it into your registrar. |
+| **Value** | The target the CNAME points to — also copyable. |
+
+While the records are still being provisioned, the **Name** and **Value** columns show a spinning placeholder (`-`). Wait 10–30 seconds and refresh — they should populate.
+
+<Note>
+The **Name** field format varies by registrar. Some want the fully-qualified name (`portal.yourcompany.com`); some want just the subdomain (`portal`). If your registrar auto-appends the root domain, paste just the subdomain portion. If you're unsure, paste the full name — most registrars strip the duplicate.
+</Note>
+
+## Step 4: Save the records at your registrar
+
+Over in your DNS provider's dashboard:
+
+1. Open your domain's DNS settings.
+2. Create a new CNAME record for each row shown in the Domain Validation table.
+3. Set the TTL to 60 seconds (or the lowest your provider allows).
+4. Save.
+
+Check for conflicting records before saving. If you already have an `A` or `CNAME` record for the same subdomain (e.g., an old landing page at `portal.yourcompany.com`), delete or point it elsewhere — conflicting records will block validation.
+
+<Warning>
+Do NOT proxy the CNAME through Cloudflare's orange cloud (or any similar CDN proxy). Proxying rewrites the records in a way that breaks SSL validation and TLS handshakes to the Juiced edge. Set the record to **DNS only** / gray cloud.
+</Warning>
+
+## Step 5: Watch validation complete
+
+Refresh the Domains page. Each row shows a **Validation Status** badge:
+
+| Status | What it means |
+|--------|--------------|
+| **Pending** (spinning) | Juiced is checking DNS. Come back in a few minutes. |
+| **Validated** (green) | DNS propagated, SSL issued, domain is live. |
+| **Failed** (red) | A DNS record is wrong or missing. Double-check the Name and Value columns match exactly, then wait another 5 minutes. |
+| **Incomplete** (red) | The CNAME resolves but not to the expected value. Re-check for typos. |
+
+DNS propagation typically takes 5–30 minutes. In rare cases it can take up to 48 hours, but most registrars are much faster. If validation hasn't completed after an hour, use [dnschecker.org](https://dnschecker.org) to verify your CNAME is visible globally — a "not found" result means the records haven't propagated yet, not that Juiced has failed.
+
+Once both rows show **Validated**, the validation description at the top updates to a congratulations message with a clickable link to your live custom URL.
+
+## Step 6: Verify the portal loads at the new URL
+
+Open `https://portal.yourcompany.com/app` (or whatever your custom URL is) in a fresh browser tab. You should see the Juiced portal login with your branding — same wordmark, same colors, same rail gradient you configured in [Customizing the portal](/guides/customizing-the-portal). Any existing customer can now log in at this URL.
+
+<Tip>
+Your original `your-subdomain.juiced.com/app` URL still works indefinitely — the custom domain is additive, not a replacement. Keep using the Juiced subdomain for internal testing and use the custom domain for customer-facing links in emails and marketing.
+</Tip>
+
+## Step 7: Update links that point to the portal
+
+Now that the custom domain is live, update every place your company links out to the portal:
+
+- Email templates and outbound marketing pointing at the Juiced subdomain.
+- Your marketing site's "Login" or "Customer Portal" button.
+- Any documentation or help center links.
+- The Support Portal URL in **Settings** → **Company Profile** if it was pointing at your Juiced subdomain (see [Customizing the portal → Step 8](/guides/customizing-the-portal#step-8-set-the-customer-facing-support-link)).
+
+## Editing or changing the domain later
+
+To prevent misconfiguration, the domain form has a one-hour cooldown between updates. If you try to edit the domain within an hour of the last update, the **Update custom domain** button is replaced with a disabled timer button ("⏱️ You can update again in N minute(s)"). Wait it out, then save.
+
+Once SSL has been issued, the domain fields lock entirely — you can't edit the Subdomain or Domain values anymore. To change the domain after SSL issuance, contact Juiced support.
+
+## Troubleshooting
+
+**Validation stuck in "Pending" for more than an hour**
+
+The CNAME records almost certainly didn't propagate, or they were entered wrong. Check with a third-party lookup tool like [dnschecker.org](https://dnschecker.org) using the exact **Name** value Juiced shows. If the lookup returns nothing, the record isn't public yet — give it more time or verify you actually saved at the registrar.
+
+**Validation says "Failed"**
+
+The CNAME resolves but to the wrong value, or there's a conflicting `A` record. Open your registrar, delete any old records on the same subdomain, re-paste the Name and Value from the Domain Validation table, and wait.
+
+**Portal loads but shows a certificate warning**
+
+SSL provisioning hasn't completed. This takes a few minutes *after* DNS validates. Wait 10 minutes — if the warning persists, the validation itself likely failed. Re-check the table.
+
+**Cloudflare-proxied CNAME**
+
+Turn the orange cloud off — set the record to **DNS only**. Juiced needs direct DNS resolution to issue the SSL certificate.
+
+## What happens next
+
+With the custom domain live:
+
+- **Email notifications** automatically link customers back to the custom domain (not the Juiced subdomain) once validation completes. See [Notifications](/features/notifications).
+- **Public marketplace** — if you've [enabled the public marketplace](/guides/setting-up-the-marketplace#step-1-enable-the-marketplace-globally), it's now also reachable at `portal.yourcompany.com/marketplace`.
+- **API endpoints** remain on the `usejuiced.com` subdomain — the custom domain only applies to the `/app` buyer portal. Integrations posting leads keep pointing at your source's Juiced URL. See [Sending leads to Juiced](/guides/sending-leads-to-juiced).
+- **Further branding** is already inherited — logos, colors, favicon set in [Customizing the portal](/guides/customizing-the-portal) all follow the custom domain without extra configuration.
+
+Custom domains are a "set once, forget" setting. Once SSL issues, there's nothing to babysit — Juiced auto-renews certificates for you.

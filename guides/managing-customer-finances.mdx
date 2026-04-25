@@ -1,0 +1,126 @@
+---
+title: Managing Customer Finances
+description: Fund a customer's wallet, remove funds, track every transaction, and set up auto-recharge so the tap never runs dry.
+---
+
+Every customer in Juiced has a wallet that funds lead purchases. Deposits go in, lead assignments take money out, and returns credit it back. This guide walks through the tenant-side controls for moving money on a customer's behalf, plus the customer-side auto-recharge flow that keeps funded accounts running without manual intervention.
+
+For the conceptual model — funding statuses, transaction events, how the wallet relates to bids and caps — see the [Transactions feature page](/features/transactions) and [Payments and deposits](/features/payments-and-deposits).
+
+## Prerequisites
+
+- Admin or Customer Support role access to your tenant.
+- At least one customer already created. If you don't have one yet, see [Onboarding customers](/guides/onboarding-customers).
+- For auto-recharge walkthroughs: a customer account with a saved payment method (Stripe).
+
+## Funding statuses at a glance
+
+Every customer carries a **Funding status** badge on their overview page and in the customer list. Three values:
+
+| Status | What it means |
+|--------|--------------|
+| **Available** | The wallet has enough for normal operation — bids can clear, marketplace pings can match. |
+| **Limited** | The wallet is below the warning threshold. Bids may still clear but you should top up soon. |
+| **Exhausted** | The wallet is out of funds. The customer can't bid or buy until a deposit lands. Newly-created customers start here. |
+
+Status is derived automatically from wallet balance and thresholds — you don't set it directly. To change it, move money.
+
+## Step 1: Open a customer's overview
+
+Click **Customers** in the left sidebar and pick the customer you want to manage. The header of the detail page (`/manage/<tenant>/customers/<customer>`) shows four metric tiles — **Revenue**, **Wallet**, **Active Bids**, **Return Rate** — and five status badges including **Funding status**.
+
+The top-right corner has four action buttons: **Add funds**, **Remove funds**, **History**, and **Edit**. The first two are how you move money; the third is how you see what's happened before.
+
+## Step 2: Add funds
+
+Click **Add funds**. A modal opens with three fields:
+
+| Field | Notes |
+|-------|-------|
+| **Amount** | Required. Enter a dollar amount (minimum $1). |
+| **Description** | Required. Free-text reason — e.g., "Initial credit for onboarding bonus" or "Wire transfer received 4/15". Shown in the timeline and on the transaction record. |
+| **Receipt url** | Optional. Paste a link to the receipt, invoice, or wire confirmation. The History panel exposes a **View receipt** action for anyone auditing the deposit later. |
+
+Click **Submit**. The wallet balance updates immediately, a `FUNDS_ADDED_BY_TENANT` transaction is recorded, and if the deposit lifts the balance above the warning threshold the **Funding status** badge flips back to **Available**.
+
+<Tip>
+The receipt URL is the audit trail for tenant-initiated deposits. Paste something — a Stripe payout link, a bank confirmation screenshot in Drive, a QBO invoice. Future-you will thank present-you.
+</Tip>
+
+## Step 3: Remove funds
+
+Click **Remove funds** when you need to claw money back — chargebacks, mistaken credits, or refunds for off-platform resolutions. The modal has two fields:
+
+| Field | Notes |
+|-------|-------|
+| **Amount** | Required. Capped at the current wallet balance — you can't pull a negative balance through this UI. |
+| **Description** | Required. **This description is visible to the customer**, so write it accordingly ("Refund for duplicate deposit on 4/21", not "my bad"). |
+
+Click **Submit**. The balance drops, a `FUNDS_SUBTRACTED_BY_TENANT` transaction is recorded, and if the new balance crosses into warning territory the **Funding status** flips to **Limited** or **Exhausted**.
+
+<Warning>
+Remove funds is not a soft operation — it moves real money out of the customer's wallet and is not reversed by deleting the customer. If you pull too much, add it back via **Add funds** with a corrective description.
+</Warning>
+
+## Step 4: Review the Transactions tab
+
+Click **Transactions** at the top of the customer page (`/manage/<tenant>/customers/<customer>/transactions`). Every wallet movement appears in reverse chronological order with four columns:
+
+| Column | What it tells you |
+|--------|-------------------|
+| **Date** | Timestamp (UTC) the transaction was recorded. |
+| **Amount** | Signed amount — green for credits (deposits, returns), red for debits (lead assignments, withdrawals). |
+| **Event** | The `TransactionEvent` type — `Lead Assigned`, `Lead Returned`, `Funds Added`, `Funds Added By Tenant`, `Funds Subtracted By Tenant`, `Auto Recharge`, and a few buy-order variants (`Placed`, `Canceled`, `Released`). Below the event is a short identifier — typically the related lead UUID. |
+| **Transaction ID** | The unique transaction record ID. Handy when reconciling against your own books or matching a support ticket to the exact row. |
+
+The search bar above the table filters by transaction ID or related entity. Sort by **Date** or **Amount** by clicking the column header.
+
+## Step 5: Audit the History panel
+
+Click **History** in the top-right of the customer page. A right-side panel slides open with an activity feed of **every** change to the customer — fund additions, fund subtractions, edits to bidding caps, budget spent counters, dispute tier adjustments, and so on. Each entry shows who made the change, what specifically changed (old → new), and how long ago it happened.
+
+For deposits recorded with a receipt URL, hover the row and click **View receipt** to open the original document in a new tab.
+
+<Note>
+History is the audit log. Transactions is the money log. They overlap on deposits and withdrawals but diverge elsewhere — History tracks things like cap changes and status flips, while Transactions only tracks wallet movements.
+</Note>
+
+## Step 6: Configure auto-recharge (customer-side)
+
+Auto-recharge keeps the wallet topped up without manual intervention. It's configured by the customer from their portal, not by you as a tenant admin.
+
+Direct the customer admin to:
+
+1. Log into the customer panel at `https://<subdomain>.juiced.com/app`.
+2. Click **Account** → **Billing** in the left sidebar (or the gear icon, depending on your portal layout).
+3. Scroll to **Auto Recharge** and flip the toggle on. The section expands with two fields:
+
+| Field | What it does |
+|-------|-------------|
+| **When my wallet falls below** | The trigger. When the wallet drops below this amount (minimum $1), the recharge fires. |
+| **Add the following funds** | The top-up amount. Must meet the tenant-level auto-recharge minimum if your tenant has one set in **Settings** → **Fees**. |
+
+4. Click **Save**. The settings persist and — if the wallet is already under the trigger — auto-recharge runs immediately using the customer's default payment method.
+
+<Warning>
+Auto-recharge requires an active payment method on the customer. Without one, the toggle is disabled. Direct new customers to **Payment Methods** in their portal to add a card before enabling auto-recharge.
+</Warning>
+
+Auto-recharge runs create `AUTO_RECHARGE` transactions that show up in both the Transactions tab and the History panel, so you can always tell manual top-ups from automated ones.
+
+## Step 7: Read the payment methods (optional)
+
+As a tenant admin, you can view — but not add or remove — a customer's saved payment methods. Click **Payment Methods** at the top of the customer detail page (`/manage/<tenant>/customers/<customer>/payment-methods`). The table shows each card on file with its **Name**, **Status**, and **Expiration**.
+
+If a customer's card is about to expire, nudge them via the customer portal — you can't update a card on their behalf. This is deliberate: Juiced never handles card data outside the Stripe-hosted flow the customer controls.
+
+## What happens next
+
+Once the customer has funds and (optionally) auto-recharge configured:
+
+- **Bidding** unlocks — the customer can create bids and compete in auctions. See [Setting up bidding](/features/bidding).
+- **Marketplace** pings will match — any lead the customer accepts debits the wallet at the accepted price.
+- **Returns** credit back automatically — when a lead is returned inside the dispute window, a `LEAD_RETURNED` transaction credits the wallet. See [Returns](/features/returns).
+- **Budgets and caps** stay independent — funding the wallet doesn't lift a cap. If the customer has a weekly cap of 50 leads, they can still only buy 50, no matter how flush the wallet is. See [Budgets and caps](/features/budgets-and-caps).
+
+If a customer complains they can't buy, check the wallet first (Transactions), then the caps (Overview), then the bids themselves — in that order. Nine times out of ten, it's the wallet.

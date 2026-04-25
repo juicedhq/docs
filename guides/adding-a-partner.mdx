@@ -1,0 +1,138 @@
+---
+title: Adding a Partner
+description: Create a partner record, attach their sources, define which leads they're eligible to take, and invite their team to the partner portal.
+---
+
+Partners are the supply side of your lead business — the vendors, affiliates, and resellers who *send* you leads or *receive* distribution-stage overflow from you. Creating a partner in Juiced links an external business to a set of sources and/or distribution stages, gives their team portal access, and gates which leads they're eligible for. This guide walks through the full onboarding flow.
+
+For the conceptual model — how partners differ from sources, what the partner portal looks like — see the [Partners feature page](/features/partners). For the distribution-side setup, see [Configuring distribution stages](/guides/configuring-distribution-stages).
+
+## Prerequisites
+
+- Admin role access to your tenant.
+- The Distribution Stages feature flag enabled on your tenant. The Partners menu item is hidden otherwise — contact Juiced support if you need it turned on.
+- At least one [source](/features/sources) already created (you'll attach it to the partner in Step 3).
+- The partner's business name, the email addresses of the people who'll log in, and a sense of which leads you want them eligible for.
+
+## Step 1: Create the partner
+
+Click **Partners** in the left sidebar (handshake icon). The list page shows every partner you've created, with **Leads**, **Ping**, and **Post** columns summarizing their configuration status.
+
+Click **Create** in the top-right. The form has four fields:
+
+| Field | What it does |
+|-------|--------------|
+| **Name** | Required. The partner's business name as it appears in the partner list and their own portal — e.g., "Acme Lead Gen Inc." |
+| **Offer Penalty (%)** | Optional. When this partner competes for leads in distribution, their offer score is reduced by this percentage (but they pay full price if they win). Use sparingly to deprioritize a partner without changing commercial terms. Leave blank for no penalty. |
+| **Show returned status in portal** | Toggle. When on, the partner can see when a lead they supplied was later returned by the customer. Default on — turn off if you don't want to expose that feedback loop. |
+| **Exclude returned leads from payout** | Toggle. When on, returned leads don't count toward the payout total displayed in the partner's portal. Default off. Turn on when your contract says "we don't pay for returned leads". |
+
+Click **Create**. You land on the partner overview (`/manage/<tenant>/partners/<partner>`), which has a tab strip at the top: **Overview**, **Lead Eligibility**, **Sources**, **Users**, **Invites**.
+
+## Step 2: Assign sources to the partner
+
+Click the **Sources** tab in the partner sub-nav (`/manage/<tenant>/partners/<partner>/sources`).
+
+If this partner supplies leads *into* Juiced (typical supply-side partner), you'll attach their existing source(s) here so the partner portal scopes its lead views to their sources.
+
+Click **Assign Source** in the top-right. A modal opens with a multi-select of every unattached source in your tenant. Pick one or more and click **Confirm assignment**.
+
+<Warning>
+Assignment is retroactive. The confirmation modal warns: *"The partner will be able to view all leads from the selected source(s), including leads created before the source was attached."* If you don't want historical leads exposed, create a brand-new source for this partner and attach only that.
+</Warning>
+
+Sources already attached to another partner are filtered out of the dropdown — a source can only belong to one partner at a time. To move a source, unassign it from the current partner first (row action **Unassign** on the source row).
+
+## Step 3: Define lead eligibility (optional)
+
+If this partner is on the *distribution* side — i.e., they *receive* leads via a distribution stage — you'll want to gate which leads they're eligible for. Click the **Lead Eligibility** tab (`/manage/<tenant>/partners/<partner>/eligibility`).
+
+The page is one big conditions repeater. Each condition group is a set of AND-ed rules, and groups are OR-ed together. Within a group, you can filter by:
+
+| Filter | Example |
+|--------|---------|
+| **Lead Category** | Only leads in the "Auto Insurance" category |
+| **Lead Type** | Only leads of type "Full Coverage" |
+| **Source** | Only leads that came from a specific source |
+
+If you leave the repeater empty, the partner is eligible for **all** leads — no gate. If you add conditions, only leads matching any group pass through to this partner during distribution.
+
+<Note>
+Eligibility is a *global* gate — it applies across every distribution stage this partner is referenced in. It's not a replacement for stage-level filtering, which controls the routing logic. Use eligibility for "this partner only handles category X"; use stage conditions for "this stage runs when Y".
+</Note>
+
+Click **Save** (or the form's submit action) to commit.
+
+## Step 4: Invite the partner's team
+
+Click the **Invites** tab (`/manage/<tenant>/partners/<partner>/invites`). The table shows any invite you've sent — email, role, and date sent.
+
+Click **Invite User** in the top-right. The modal has two fields:
+
+| Field | What it does |
+|-------|--------------|
+| **Email** | Required. The invitee's email address. They'll receive a signup link that puts them into this partner on account creation. |
+| **Role** | Required. Two options: **Partner Admin** (full access to the partner account — can invite others, edit settings, see all sources) or **Partner User** (day-to-day access — view leads, see payouts, but no user management). Defaults to Partner User. |
+
+Click **Send invite**. The invite is recorded and an email is queued via `SendInvite`. The row appears in the Invites table.
+
+<Tip>
+Always invite at least one **Partner Admin** per partner. Without an admin, the partner team can't add their own users later — you'll be their only route to user management.
+</Tip>
+
+If the email already belongs to a user in this partner, or already has a pending invite, Juiced warns you instead of creating a duplicate.
+
+## Step 5: Manage invites (resend, revoke)
+
+On the Invites table, each row has two actions:
+
+- **Resend** — Re-queues the invite email. Use when the recipient says they didn't get it (spam, deleted, etc.).
+- **Revoke** — Deletes the invite. The signup link becomes invalid immediately. Use when you invited the wrong email or the person changed roles.
+
+Invites that have been accepted disappear from the Invites tab and the new user shows up in the **Users** tab.
+
+## Step 6: Manage active users
+
+Click the **Users** tab (`/manage/<tenant>/partners/<partner>/users`) to see everyone who has accepted their invite and has login access to this partner.
+
+From here you can:
+
+- View each user's email, role, and when they joined.
+- Change a user's role (Partner Admin ↔ Partner User).
+- **Remove** a user — detaches them from the partner immediately. Their login stops working for this partner on next request.
+
+Removing a user doesn't delete their account globally (users can belong to multiple partners) — it only detaches them from this one.
+
+## Step 7: Verify the partner portal
+
+Ask one of the invited Partner Admins to accept their invite and log in. They should land at `https://<your-subdomain>.juiced.com/partner` (or your [custom domain](/guides/adding-a-custom-domain) equivalent) with a portal that shows:
+
+- **Dashboard** with lead counts and payouts scoped to their assigned sources.
+- **Leads** — every lead from their assigned sources (respecting the eligibility rules in Step 3).
+- **Reports** — their revenue share, honoring the "Exclude returned" setting you chose in Step 1.
+- **Account** — their users, invites, and profile (Partner Admins only).
+
+If something's missing, the most common causes are: no sources assigned (Step 2), too-restrictive eligibility conditions (Step 3), or the user has the wrong role (Step 4 — Partner User doesn't see account/user management).
+
+## Step 8: Point distribution stages at the partner (optional)
+
+If you want Juiced to route leads *to* this partner through your distribution pipeline, add a **Partners** distribution stage referencing them. See [Configuring distribution stages → Partners stages](/guides/configuring-distribution-stages) for the full walkthrough.
+
+A typical flow: your normal distribution runs (bids, marketplace), any leftover leads fall into a **Partners** stage that post-exchanges them to partners based on their eligibility rules and any per-partner offer penalty.
+
+## Editing the partner later
+
+Go back to **Partners** → click the partner → **Edit** in the top-right. You can change the name, adjust the offer penalty, flip the two toggles. To change eligibility, sources, users, or invites, use their dedicated sub-tabs (Steps 2–6).
+
+To archive or delete a partner entirely, bulk-select it in the main Partners list and use the **Delete** bulk action. Deletion is soft — the record is hidden but historical leads remain associated for reporting. The bulk action is Admin-only.
+
+## What happens next
+
+With the partner set up:
+
+- **Supply-side partners** — their sources start flowing leads into your normal pipeline. The partner admins see their leads and payouts in the portal. See [Sending leads to Juiced](/guides/sending-leads-to-juiced) for the source-side API.
+- **Distribution-side partners** — layer them into [Distribution Stages](/features/distribution) with a Partners stage, and they'll start receiving eligible leads according to your stage order and any offer penalty.
+- **Exchange configuration** (advanced) — partners can run a post-exchange where they reply with their bid price in real-time. Configure under the partner's **Exchange Configuration** relation manager. Details in the [Partners feature page](/features/partners).
+- **Return reconciliation** — the **Show returned status** and **Exclude returned from payout** toggles from Step 1 drive how returns reconcile against partner payouts. Revisit them after a month of operation to see if the defaults match your commercial model.
+
+Partners are a "create, connect, forget" setting — once sources and eligibility are wired, the system runs itself. You'll come back to the page mostly to invite new users or review payouts.

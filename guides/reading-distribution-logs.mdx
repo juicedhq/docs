@@ -1,0 +1,148 @@
+---
+title: Reading Distribution Logs
+description: Trace a single lead end-to-end through pings, posts, offers, and distribution attempts — use the Logs view to answer "what happened to this lead?"
+---
+
+Every time a source sends traffic to Juiced, the platform runs a small pipeline: match against pings, accept or reject the post, run distribution, broadcast to bids, fall through to marketplace, decide who won. **Logs** are the persistent record of that pipeline for a single entry — one per ping, post, or lead. When something surprising happens (a lead didn't distribute, a bid was skipped, a ping was rejected), the Log is where you figure out why.
+
+This guide walks through the Logs view and how to use it to answer the most common support questions.
+
+## Prerequisites
+
+- Admin role access to your tenant.
+- The **Distribution Stages** feature flag enabled on your tenant. The Logs menu item is hidden otherwise — contact Juiced support to turn it on.
+- A question in mind. Logs are most useful when you open them with one: "Why didn't customer X win this lead?", "Why was this lead unsold?", "Did the ping go out?"
+
+## Step 1: Open the Logs page
+
+In the tenant panel left sidebar, expand **Entries** and click **Logs** (flow-arrow icon). The URL is `/manage/<tenant>/distribution-flows`.
+
+The page lists every distribution flow — one row per pipeline run — sorted by most recent first. You'll see a flow for every ping that came in, every post, and every lead, whether or not they ended up assigned.
+
+## Step 2: Read the columns
+
+The table has three column groups. Many columns are toggleable — use the **Columns** menu top-right to show ones that are hidden by default.
+
+### Source + timestamp (default)
+
+The leftmost column shows the **Source name** bold, with the flow's initiation timestamp underneath. A small warning icon next to the source name means the flow hit a **Distribution Error** — worth opening first.
+
+### Records group
+
+| Column | What it means |
+|--------|---------------|
+| **Ping** | Badge: `Matched` (ping offer accepted), `No Match` (no bid wanted it), `Pending` (still processing), `Rejected` (ping validation failed). Blank means no ping came in — a direct post. |
+| **Post** | Submission status badge — what happened when the source posted the full lead payload. |
+| **Lead** | The lead's display name (or UUID if name isn't available). `Deleted` in red = the lead record was later removed. |
+
+### Assignment group
+
+| Column | What it means |
+|--------|---------------|
+| **Honored** | Green check if the pre-accepted ping offer actually won the lead without running full distribution. `-` otherwise. High honor rate = ping-post discipline is working. |
+| **Offers** | Count of bidders that made an offer during distribution. Toggleable. |
+| **Recipient** | The customer or partner who won. Blank means nobody won (marketplace unsold, or no eligible bidders). |
+| **Channel Type** | Whether the recipient won via `Bid`, `Customer` (direct assignment), or `Ping/Post` (external exchange). Toggleable. |
+| **Sold For** | The charged amount on the assigned lead. Blank if unassigned. |
+
+<Tip>
+Sort by **Created At** descending (the default) and filter by **Source** when you're hunting a specific lead. Most investigations start with "a customer asked about a lead that came in 20 minutes ago" — find it at the top of the list, open the log, done.
+</Tip>
+
+## Step 3: Filter to narrow the search
+
+The filter drawer (top-right) has a dozen filters. The ones you'll actually use:
+
+- **Created At (from/until)** — scope to a specific window. Always the first filter to set for incident response.
+- **Source** — investigate a single source's health. Deleted sources are still listed, tagged "(Deleted)".
+- **Ping** — `Matched`, `No Match`, `Pending`, `Error`. Investigating "my ping integration isn't matching" starts here.
+- **Ping Honored** (ternary Yes/No) — true when ping-honored bids actually got the lead. False is interesting: shows flows where the ping-winner was later undercut by full distribution.
+- **Has Ping / Has Post / Has Lead / Assigned** — presence filters. "Show me flows that had a ping but never became a lead" = Has Ping: Yes, Has Lead: No.
+- **Customer / Partner** — scope to one recipient. Useful for answering "what did we send to this customer today?"
+- **Test Mode** — toggle on to include test flows in the view (hidden by default). Test flows are flows created in test mode by sources, surfaced only when you explicitly ask.
+
+Filters persist in your session so they stay applied while you click through individual rows.
+
+## Step 4: Open a single log
+
+Click any row to open the log detail page. It has three stacked sections.
+
+### Details (top-left)
+
+Three fields: **Initiated** (timestamp the flow started), **Last Updated** (last timestamp any sub-step changed status), **Distribution Plan** (a clickable chip showing which version of the plan ran — click to see the full plan in a modal, useful when you've changed your distribution plan and want to know which leads ran on the old version).
+
+### Records (top-right)
+
+Four fields summarizing the sub-records:
+
+- **Ping** status badge (same mapping as the list column).
+- **Post** status badge — linked to the underlying submission record.
+- **Total Offers** — how many bids actually made offers during distribution.
+- **Lead Status** — the current lifecycle state of the lead.
+
+If any of these are blank, that sub-step didn't happen. No Ping badge = direct post. No Post badge = ping matched but full data never arrived. No Lead = the flow stopped before a lead record was created (usually Post was rejected).
+
+### Timeline (bottom, full width)
+
+The heart of the log. A vertical list of every event that happened during the flow, timestamped and color-coded:
+
+| Event | Meaning |
+|-------|---------|
+| **Initiated** | Flow started. |
+| **Ping / Ping Responded / Ping Honored** | Ping came in, matched a bid's filters, was honored by that bid. |
+| **Submission Accepted / Rejected** | Full post arrived; validation passed or failed. |
+| **Lead** | Lead record created from the submission. |
+| **Attempt Accepted / Succeeded / Failed / Skipped / Error / Continued** | Each distribution attempt against a bid. `Skipped` = bid didn't want the lead; `Failed` = bid couldn't afford it; `Error` = technical problem; `Succeeded` = bid won. |
+| **On Marketplace / Sold on Marketplace / Marketplace Unsold** | Lead fell through to marketplace and either sold, is still waiting, or was never sold. |
+| **Withheld** | Lead was held back from distribution (rare; usually a deliberate stop). |
+| **Reprocessed / Continued** | Flow was re-run (support tooling or retry logic). |
+| **Lead Deleted** | Lead was later removed. |
+
+Read top-to-bottom to follow the lead through the pipeline. Red icons = something failed; green = something succeeded; gray = step ran but produced no match.
+
+## Step 5: Jump to a Log from a specific Lead
+
+If you already know the lead UUID or have it open, there's a shortcut. From **Entries → Leads**, open any lead and click **View Log** in the header (flow-arrow icon). You'll land directly on that lead's distribution flow with the timeline already open.
+
+This is the fastest path when a customer support question names a specific lead.
+
+## Step 6: Common debugging patterns
+
+A few representative questions and where to look in a log:
+
+### "Customer X didn't get this lead — why?"
+
+Open the lead's log. Look in the timeline for a row labeled `Attempt Skipped` or `Attempt Failed` with the customer's bid. The event's description usually names the reason — filter didn't match, cap was hit, wallet underfunded, location outside bid scope. If the customer's bid doesn't appear at all, they were filtered out before distribution started — check their bid's operating status.
+
+### "Why was this lead unsold?"
+
+Open the log. Look for `Marketplace Unsold`. Scroll up to the distribution attempts — every bid will be Skipped/Failed. The reasons in those descriptions tell you which criteria filtered everyone out. If marketplace has no floor, unsold simply means no bid fit the lead — the lead went to marketplace, sat, and the timeout expired.
+
+### "Why did the ping match but the post not assign?"
+
+Open the log. Look for `Ping Honored` (should be present) followed by `Submission Rejected` (post failed validation — check which required field was missing) or a chain of `Attempt Failed` attempts (ping-winner couldn't afford the lead by the time the real bid ran).
+
+### "Did this source's ping integration even fire?"
+
+Filter the list to Source = X, Ping = Pending or Error, over the last hour. If there are zero rows, no pings came in — the source's integration didn't call us. If there are Error rows, the ping payload is malformed; open one and check the Timeline for a `Submission Rejected` description.
+
+### "Show me everything that went to customer Y today"
+
+Filter list to Customer = Y, Created At = today. The `Sold For` column gives you the per-lead charged amount; sum it for their daily spend.
+
+## Step 7: Use the Distribution Plan chip for plan-change investigations
+
+When you publish a new version of your distribution plan, older flows may still show behavior from the prior version. In the Details fieldset, the **Distribution Plan** field displays the version number that ran for this flow (e.g., "Version 7"). Click it to open a modal with the full plan tree as it existed at that time.
+
+Comparing a recent flow (on Version 8) with an older one (on Version 7) is the fastest way to confirm whether a routing change actually took effect, or whether the problem you're looking at was already present in the prior version.
+
+## What happens next
+
+Logs are a reactive tool — you open them when something needs explaining. A few habits that pay off:
+
+- **Bookmark the Logs URL** with a pre-set filter (e.g., `?tableFilters[assigned][value]=false` for unsold flows). Makes reviewing "what didn't sell today" a one-click operation.
+- **Combine with [Audits](/features/audits)** for quality investigations. Audits check *whether a lead met standards*; logs check *how the lead moved through distribution*. Both together give you a full post-mortem.
+- **Triage Distribution Error rows first** when you do a morning health check. They're flagged with a red warning icon on the Source column and indicate something crashed during flow execution.
+- **Correlate with [Location analytics](/guides/reading-location-analytics)** — a county showing zero leads assigned despite active bids is worth checking against the log: are flows happening there and failing, or are there no pings/posts at all?
+
+Logs are the receipt drawer of your platform. Most days you won't open them. The days you do, they save hours.
