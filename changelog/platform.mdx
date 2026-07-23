@@ -26,59 +26,59 @@ Looking for changes to the buyer experience? Those live in [Customer portal upda
 <Update label="July 10, 2026" description="v3.38–v3.43" tags={["New", "Fixes", "Breaking changes"]}>
   ## Bidding, notifications, and billing
 
-  - [#973](https://github.com/juicedhq/juiced/pull/973) Add tenant-only below-minimum bid options.
-  - [#962](https://github.com/juicedhq/juiced/pull/962) Add buyer contacts to the Lead Assigned workflow webhook, including mapping support in the webhook UI.
-  - [#997](https://github.com/juicedhq/juiced/pull/997) Include assignment scope and partner public ID in Lead Assigned webhook payloads.
-  - [#963](https://github.com/juicedhq/juiced/pull/963) Add another safeguard against duplicate auto-recharges during rapid lead assignment.
-  - [#1004](https://github.com/juicedhq/juiced/pull/1004) Expand tenant registration to a configuration-driven billing-country allow-list.
+  - Add tenant-only below-minimum bid options.
+  - Add buyer contacts to the Lead Assigned workflow webhook, including mapping support in the webhook UI.
+  - Include assignment scope and partner public ID in Lead Assigned webhook payloads.
+  - Add another safeguard against duplicate auto-recharges during rapid lead assignment.
+  - Expand tenant registration to a configuration-driven billing-country allow-list.
 
   ## API and portal changes
 
-  - [#996](https://github.com/juicedhq/juiced/pull/996) **Breaking:** remove the deprecated `POST /api/marketplace` endpoint.
-  - [#995](https://github.com/juicedhq/juiced/pull/995) Fix partner-dashboard queries that could cause portal timeouts.
-  - [#1001](https://github.com/juicedhq/juiced/pull/1001) Fix tenant branding uploads on custom domains and subdomains.
-  - [#1002](https://github.com/juicedhq/juiced/pull/1002) Gracefully redirect Livewire requests that reach a missing page.
-  - [#994](https://github.com/juicedhq/juiced/pull/994) Complete prefixed-public-ID cleanup.
+  - **Breaking:** remove the deprecated `POST /api/marketplace` endpoint.
+  - Fix partner-dashboard queries that could cause portal timeouts.
+  - Fix tenant branding uploads on custom domains and subdomains.
+  - Gracefully redirect Livewire requests that reach a missing page.
+  - Complete prefixed-public-ID cleanup.
 </Update>
 
 <Update label="June 26, 2026" description="v3.33–v3.37" tags={["Improvements", "Fixes"]}>
   ## Customer and partner experience
 
-  - [#939](https://github.com/juicedhq/juiced/pull/939) Correct funding status for newly created customers.
-  - [#947](https://github.com/juicedhq/juiced/pull/947) Fix customer login when a user's first customer account is archived.
-  - [#946](https://github.com/juicedhq/juiced/pull/946) Use postcodes rather than LGAs for Australian county-tier handling.
-  - [#931](https://github.com/juicedhq/juiced/pull/931) Limit partner-portal leads to accepted leads.
-  - [#943](https://github.com/juicedhq/juiced/pull/943) Add a per-tenant setting for the unauthenticated customer-panel landing experience.
-  - [#965](https://github.com/juicedhq/juiced/pull/965) Update Domains & Links labels and customer-panel entry behavior.
+  - Correct funding status for newly created customers.
+  - Fix customer login when a user's first customer account is archived.
+  - Use postcodes rather than LGAs for Australian county-tier handling.
+  - Limit partner-portal leads to accepted leads.
+  - Add a per-tenant setting for the unauthenticated customer-panel landing experience.
+  - Update Domains & Links labels and customer-panel entry behavior.
 
   ## Data, exports, and observability
 
-  - [#953](https://github.com/juicedhq/juiced/pull/953) Restore custom lead-detail columns in exports.
-  - [#956](https://github.com/juicedhq/juiced/pull/956) Speed up Incoming Logs.
-  - [#938](https://github.com/juicedhq/juiced/pull/938) Fix webhook configuration test results and authentication headers.
-  - [#941](https://github.com/juicedhq/juiced/pull/941) Prevent stale distribution offers from routing leads to paused customers.
-  - [#942](https://github.com/juicedhq/juiced/pull/942) Guard against duplicate auto-recharges during rapid activity.
+  - Restore custom lead-detail columns in exports.
+  - Speed up Incoming Logs.
+  - Fix webhook configuration test results and authentication headers.
+  - Prevent stale distribution offers from routing leads to paused customers.
+  - Guard against duplicate auto-recharges during rapid activity.
 </Update>
 
 <Update label="June 4, 2026" description="v3.28–v3.32" tags={["New", "Improvements", "Fixes"]}>
   ## Delivery and partner reliability
 
-  - [#924](https://github.com/juicedhq/juiced/pull/924) Track duplicate partner-post responses and preserve explicit price and message paths.
-  - [#926](https://github.com/juicedhq/juiced/pull/926) Continue distribution to other eligible offers when a partner post fails.
-  - [#928](https://github.com/juicedhq/juiced/pull/928) Apply source-based lead-type conditions to ping requests.
-  - [#940](https://github.com/juicedhq/juiced/pull/940) Correct partner eligibility when state and postal-code filters are used.
-  - [#933](https://github.com/juicedhq/juiced/pull/933) Recover stuck reverse auctions and unprocessed buy orders.
+  - Track duplicate partner-post responses and preserve explicit price and message paths.
+  - Continue distribution to other eligible offers when a partner post fails.
+  - Apply source-based lead-type conditions to ping requests.
+  - Correct partner eligibility when state and postal-code filters are used.
+  - Recover stuck reverse auctions and unprocessed buy orders.
 
   ## Operations and onboarding
 
-  - [#915](https://github.com/juicedhq/juiced/pull/915) Add form-urlencoded partner ping/post support for Leadspedia integrations.
-  - [#929](https://github.com/juicedhq/juiced/pull/929) Add custom date ranges.
-  - [#932](https://github.com/juicedhq/juiced/pull/932) Replace the admin Filament panel with the React admin experience.
-  - [#913](https://github.com/juicedhq/juiced/pull/913) Improve subscription auto-upgrade behavior.
-  - [#922](https://github.com/juicedhq/juiced/pull/922) Unlock default lead-category fields for configuration.
+  - Add form-urlencoded partner ping/post support for Leadspedia integrations.
+  - Add custom date ranges.
+  - Replace the admin Filament panel with the React admin experience.
+  - Improve subscription auto-upgrade behavior.
+  - Unlock default lead-category fields for configuration.
 </Update>
 
 <Update label="May 12, 2026" description="v3.27.1" tags={["Improvements"]}>
-  - [#920](https://github.com/juicedhq/juiced/pull/920) JUI-1034: treat county and country as first-class location field types
-  - [#916](https://github.com/juicedhq/juiced/pull/916) [JUI-1047] Cleaning up some random stuff
+  - Treat county and country as first-class location field types.
+  - General cleanup and maintenance.
 </Update>
