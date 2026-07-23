@@ -196,7 +196,7 @@
         "groups": [
           {
             "group": "Changelog",
-            "pages": ["changelog/index"]
+            "pages": ["changelog/index", "changelog/v3.44.4", "changelog/v3.27.1"]
           }
         ]
       }
