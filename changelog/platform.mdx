@@ -1,0 +1,80 @@
+---
+title: Platform updates
+description: New features, improvements, and fixes for managing your operation in /manage.
+rss: true
+---
+
+Everything that changed on the tenant side of Juiced—lead routing, distribution, customers, billing, and the rest of the machinery. Newest first. Use the RSS feed on this page to get updates delivered fresh-squeezed.
+
+Looking for changes to the buyer experience? Those live in [Customer portal updates](/changelog/customer-portal).
+
+<Update label="July 23, 2026" description="v3.44.0–v3.44.4" tags={["Improvements", "Fixes"]}>
+  ## Customer management improvements
+
+  - Sort [customers](/features/customers) by wallet balance and filter the customer list by a minimum or maximum balance.
+
+  ## Fixes
+
+  - Improved handling of duplicate [custom-domain](/features/domains) updates.
+  - Prevented duplicate [workflow webhooks](/features/webhooks) for the same lead event.
+</Update>
+
+<Update label="July 10, 2026" description="v3.38–v3.43" tags={["New", "Fixes", "Breaking changes"]}>
+  ## Bidding, notifications, and billing
+
+  - Add tenant-only below-minimum [bid](/features/bidding) options.
+  - Add buyer contacts to the Lead Assigned [workflow webhook](/features/webhooks), including mapping support in the webhook UI.
+  - Include assignment scope and partner public ID in Lead Assigned webhook payloads.
+  - Add another safeguard against duplicate [auto-recharges](/features/payments-and-deposits) during rapid lead assignment.
+  - Expand tenant registration to a configuration-driven billing-country allow-list.
+
+  ## API and portal changes
+
+  - **Breaking:** remove the deprecated `POST /api/marketplace` endpoint. See the [API reference](/api-reference/introduction) for current endpoints.
+  - Fix [partner](/features/partners)-dashboard queries that could cause portal timeouts.
+  - Fix tenant [branding](/features/branding) uploads on custom domains and subdomains.
+  - Gracefully redirect Livewire requests that reach a missing page.
+  - Complete prefixed-public-ID cleanup.
+</Update>
+
+<Update label="June 26, 2026" description="v3.33–v3.37" tags={["Improvements", "Fixes"]}>
+  ## Customer and partner experience
+
+  - Correct funding status for newly created [customers](/features/customers).
+  - Fix customer login when a user's first customer account is archived.
+  - Use postcodes rather than LGAs for Australian county-tier handling.
+  - Limit [partner](/features/partners)-portal leads to accepted leads.
+  - Add a per-tenant setting for the unauthenticated [customer-panel landing experience](/guides/customizing-the-portal).
+  - Update [Domains & Links](/features/domains) labels and customer-panel entry behavior.
+
+  ## Data, exports, and observability
+
+  - Restore custom [lead](/features/leads)-detail columns in exports.
+  - Speed up Incoming Logs.
+  - Fix [webhook](/features/webhooks) configuration test results and authentication headers.
+  - Prevent stale [distribution](/features/distribution) offers from routing leads to paused customers.
+  - Guard against duplicate [auto-recharges](/features/payments-and-deposits) during rapid activity.
+</Update>
+
+<Update label="June 4, 2026" description="v3.28–v3.32" tags={["New", "Improvements", "Fixes"]}>
+  ## Delivery and partner reliability
+
+  - Track duplicate [partner-post](/features/ping-post) responses and preserve explicit price and message paths.
+  - Continue [distribution](/features/distribution) to other eligible offers when a partner post fails.
+  - Apply [source](/features/sources)-based [lead-type](/features/lead-types) conditions to ping requests.
+  - Correct [partner](/features/partners) eligibility when state and postal-code filters are used.
+  - Recover stuck [reverse auctions](/features/bidding) and unprocessed [buy orders](/features/marketplace).
+
+  ## Operations and onboarding
+
+  - Add form-urlencoded partner [ping/post](/features/ping-post) support for Leadspedia integrations.
+  - Add custom date ranges.
+  - Replace the admin Filament panel with the React admin experience.
+  - Improve subscription auto-upgrade behavior. See [Billing](/features/billing).
+  - Unlock default [lead-category fields](/features/lead-categories) for configuration.
+</Update>
+
+<Update label="May 12, 2026" description="v3.27.1" tags={["Improvements"]}>
+  - Treat county and country as first-class [location field types](/features/lead-categories).
+  - General cleanup and maintenance.
+</Update>

@@ -196,7 +196,10 @@
         "groups": [
           {
             "group": "Changelog",
-            "pages": ["changelog/index"]
+            "pages": [
+              "changelog/platform",
+              "changelog/customer-portal"
+            ]
           }
         ]
       }
@@ -206,6 +209,32 @@
     "light": "/images/juiced-wordmark_lm_sm.png",
     "dark": "/images/juiced-wordmark_dm_sm.png"
   },
+  "redirects": [
+    {
+      "source": "/changelog",
+      "destination": "/changelog/platform"
+    },
+    {
+      "source": "/changelog/v3.44.4",
+      "destination": "/changelog/platform"
+    },
+    {
+      "source": "/changelog/v3.38-v3.43",
+      "destination": "/changelog/platform"
+    },
+    {
+      "source": "/changelog/v3.33-v3.37",
+      "destination": "/changelog/platform"
+    },
+    {
+      "source": "/changelog/v3.28-v3.32",
+      "destination": "/changelog/platform"
+    },
+    {
+      "source": "/changelog/v3.27.1",
+      "destination": "/changelog/platform"
+    }
+  ],
   "navbar": {
     "primary": {
       "type": "button",

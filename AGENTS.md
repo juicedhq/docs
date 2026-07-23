@@ -18,6 +18,9 @@ Write docs in MDX with YAML frontmatter. Every page should include `title` and `
 
 Match nearby pages before introducing a new pattern. The preferred tone is conversational, approachable, and occasionally Juiced-themed; keep critical warnings, security guidance, and technical explanations straightforward.
 
+## Changelog Entries
+The changelog is split by audience: `changelog/platform.mdx` for tenants (`/manage`) and `changelog/customer-portal.mdx` for customers (`/app`). Each release is an `<Update>` block, newest first, with `label` = release date, `description` = version range, and `tags` from the fixed set `New`, `Improvements`, `Fixes`, `Breaking changes`. Sort changes by the audience that sees them; a release may appear on both pages with only the relevant slice. Write the portal page in buyer voice and link it only to `/customer-portal/*` pages. Link feature and guide mentions to their docs pages. Never include GitHub PR links or internal ticket IDs — plain prose only. Prefix breaking changes with `**Breaking:**`. See `CLAUDE.md` for the full rules.
+
 ## Testing Guidelines
 There is no dedicated automated test suite in this repo today. Validate changes with `mint dev` by checking affected pages, navigation, links, code blocks, images, and API rendering from `api-reference/openapi.json`. Test code examples before publishing, and verify product accuracy against `../juiced-tickets` when behavior or terminology is in doubt.
 

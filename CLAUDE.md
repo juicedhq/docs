@@ -18,7 +18,7 @@
 - **Guides**: Walks users through multi-step processes to achieve specific outcomes. Verb-oriented. Users come here to do something. This is also where we educate users on business models and expand their ideas about what's possible with Juiced.
 - **Customer Portal**: Documentation for customers who purchase leads through the `/app` portal. Task-oriented. All other sections are written for tenants who manage their operation through `/manage`.
 - **API Reference**: Technical specification. Exact inputs, outputs, and behaviors for developers.
-- **Changelog**: What's new or changed.
+- **Changelog**: What's new or changed. Split by audience into two pages (see "Changelog entries" below).
 
 ### Deciding where content belongs
 Use this litmus test:
@@ -34,6 +34,21 @@ Use this litmus test:
 | Customer Portal | "How do I use this as a customer?" |
 | API Reference | "What are the exact inputs/outputs?" |
 | Changelog | "What's new or changed?" |
+
+## Changelog entries
+The changelog is split by audience into two pages, both listed in the Changelog tab:
+- `changelog/platform.mdx` — changes tenants see in `/manage`
+- `changelog/customer-portal.mdx` — changes customers see in `/app`
+
+Rules for adding entries:
+- Each release is an `<Update>` block, newest first. `label` is the release date ("July 23, 2026"), `description` is the version or range ("v3.38–v3.43"), and `tags` come from the fixed set: `New`, `Improvements`, `Fixes`, `Breaking changes`. Only apply tags that match the entry's content.
+- Sort every change by the audience that sees it. A release may appear on both pages with only the relevant slice on each; tenant-only changes never appear on the portal page.
+- Write the portal page in buyer voice ("your purchased leads") and link only to `/customer-portal/*` pages. Platform entries link to `/features/*`, `/guides/*`, and `/api-reference/*` pages.
+- Link the first natural mention of any feature, guide, or concept that has its own docs page (root-relative paths).
+- Never include GitHub PR links or internal ticket IDs (JUI-xxx). Write plain, reader-facing prose.
+- Prefix breaking changes with `**Breaking:**` and tag the update `Breaking changes`.
+- Group changes inside an update under `##` headings by product area when there are more than a few bullets.
+- Keep `rss: true` in both pages' frontmatter; adding an `<Update>` or editing headings inside one publishes to that page's RSS feed.
 
 ## Content strategy
 - Document just enough for user success - not too much, not too little

@@ -25,9 +25,12 @@ The Webhooks tab lets you send lead data to external systems whenever a lead is 
 ### Creating a webhook
 
 1. Click **New Webhook**
-2. Enter the URL where lead data should be sent
-3. Choose your HTTP method (GET, POST, or PUT)
-4. Optionally customize the payload template
+2. Give it a recognizable name and enter the URL where lead data should be sent
+3. Choose the HTTP method, request format, timeout, and any headers your endpoint requires
+4. Choose authentication if needed: none, Basic Auth, or bearer token
+5. Optionally customize the payload template
+
+New webhooks start paused. Send a test first, confirm that your endpoint accepts the payload, then enable the webhook to receive real lead deliveries.
 
 ### Payload format
 
@@ -77,7 +80,7 @@ You can also use `{{ lead.public_id }}` to include the lead's unique identifier 
 
 ### Managing webhooks
 
-You can enable or disable a webhook at any time without deleting it.
+You can enable or disable a webhook at any time without deleting it. The webhook detail page also keeps a delivery history with each attempt's result, response status, duration, request payload, and response body. Use it to diagnose an integration before asking your engineering team to summon a larger hammer.
 
 ### Testing webhooks
 
@@ -87,3 +90,5 @@ Before going live, test your webhook to verify your endpoint receives data corre
 - **Generate sample data** — Create fake data based on a lead type. Useful when you don't have leads yet or want to test without using real information.
 
 Either option sends a test payload to your endpoint so you can confirm it's working before enabling the webhook.
+
+If a real delivery needs another attempt, open it from the delivery history and re-send it. Juiced uses the webhook's current URL, authentication, headers, and payload template for the re-send.
