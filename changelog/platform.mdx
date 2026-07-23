@@ -11,7 +11,7 @@ Looking for changes to the buyer experience? Those live in [Customer portal upda
 <Update label="July 23, 2026" description="v3.44.0–v3.44.4" tags={["Improvements", "Fixes"]}>
   ## Customer management improvements
 
-  - Sort customers by wallet balance and filter the customer list by a minimum or maximum balance.
+  - Sort [customers](/features/customers) by wallet balance and filter the customer list by a minimum or maximum balance.
 
   ## Customer portal refresh
 
@@ -19,24 +19,24 @@ Looking for changes to the buyer experience? Those live in [Customer portal upda
 
   ## Fixes
 
-  - Improved handling of duplicate custom-domain updates.
-  - Prevented duplicate workflow webhooks for the same lead event.
+  - Improved handling of duplicate [custom-domain](/features/domains) updates.
+  - Prevented duplicate [workflow webhooks](/features/webhooks) for the same lead event.
 </Update>
 
 <Update label="July 10, 2026" description="v3.38–v3.43" tags={["New", "Fixes", "Breaking changes"]}>
   ## Bidding, notifications, and billing
 
-  - Add tenant-only below-minimum bid options.
-  - Add buyer contacts to the Lead Assigned workflow webhook, including mapping support in the webhook UI.
+  - Add tenant-only below-minimum [bid](/features/bidding) options.
+  - Add buyer contacts to the Lead Assigned [workflow webhook](/features/webhooks), including mapping support in the webhook UI.
   - Include assignment scope and partner public ID in Lead Assigned webhook payloads.
-  - Add another safeguard against duplicate auto-recharges during rapid lead assignment.
+  - Add another safeguard against duplicate [auto-recharges](/features/payments-and-deposits) during rapid lead assignment.
   - Expand tenant registration to a configuration-driven billing-country allow-list.
 
   ## API and portal changes
 
-  - **Breaking:** remove the deprecated `POST /api/marketplace` endpoint.
-  - Fix partner-dashboard queries that could cause portal timeouts.
-  - Fix tenant branding uploads on custom domains and subdomains.
+  - **Breaking:** remove the deprecated `POST /api/marketplace` endpoint. See the [API reference](/api-reference/introduction) for current endpoints.
+  - Fix [partner](/features/partners)-dashboard queries that could cause portal timeouts.
+  - Fix tenant [branding](/features/branding) uploads on custom domains and subdomains.
   - Gracefully redirect Livewire requests that reach a missing page.
   - Complete prefixed-public-ID cleanup.
 </Update>
@@ -44,41 +44,41 @@ Looking for changes to the buyer experience? Those live in [Customer portal upda
 <Update label="June 26, 2026" description="v3.33–v3.37" tags={["Improvements", "Fixes"]}>
   ## Customer and partner experience
 
-  - Correct funding status for newly created customers.
+  - Correct funding status for newly created [customers](/features/customers).
   - Fix customer login when a user's first customer account is archived.
   - Use postcodes rather than LGAs for Australian county-tier handling.
-  - Limit partner-portal leads to accepted leads.
-  - Add a per-tenant setting for the unauthenticated customer-panel landing experience.
-  - Update Domains & Links labels and customer-panel entry behavior.
+  - Limit [partner](/features/partners)-portal leads to accepted leads.
+  - Add a per-tenant setting for the unauthenticated [customer-panel landing experience](/guides/customizing-the-portal).
+  - Update [Domains & Links](/features/domains) labels and customer-panel entry behavior.
 
   ## Data, exports, and observability
 
-  - Restore custom lead-detail columns in exports.
+  - Restore custom [lead](/features/leads)-detail columns in exports.
   - Speed up Incoming Logs.
-  - Fix webhook configuration test results and authentication headers.
-  - Prevent stale distribution offers from routing leads to paused customers.
-  - Guard against duplicate auto-recharges during rapid activity.
+  - Fix [webhook](/features/webhooks) configuration test results and authentication headers.
+  - Prevent stale [distribution](/features/distribution) offers from routing leads to paused customers.
+  - Guard against duplicate [auto-recharges](/features/payments-and-deposits) during rapid activity.
 </Update>
 
 <Update label="June 4, 2026" description="v3.28–v3.32" tags={["New", "Improvements", "Fixes"]}>
   ## Delivery and partner reliability
 
-  - Track duplicate partner-post responses and preserve explicit price and message paths.
-  - Continue distribution to other eligible offers when a partner post fails.
-  - Apply source-based lead-type conditions to ping requests.
-  - Correct partner eligibility when state and postal-code filters are used.
-  - Recover stuck reverse auctions and unprocessed buy orders.
+  - Track duplicate [partner-post](/features/ping-post) responses and preserve explicit price and message paths.
+  - Continue [distribution](/features/distribution) to other eligible offers when a partner post fails.
+  - Apply [source](/features/sources)-based [lead-type](/features/lead-types) conditions to ping requests.
+  - Correct [partner](/features/partners) eligibility when state and postal-code filters are used.
+  - Recover stuck [reverse auctions](/features/bidding) and unprocessed [buy orders](/features/marketplace).
 
   ## Operations and onboarding
 
-  - Add form-urlencoded partner ping/post support for Leadspedia integrations.
+  - Add form-urlencoded partner [ping/post](/features/ping-post) support for Leadspedia integrations.
   - Add custom date ranges.
   - Replace the admin Filament panel with the React admin experience.
-  - Improve subscription auto-upgrade behavior.
-  - Unlock default lead-category fields for configuration.
+  - Improve subscription auto-upgrade behavior. See [Billing](/features/billing).
+  - Unlock default [lead-category fields](/features/lead-categories) for configuration.
 </Update>
 
 <Update label="May 12, 2026" description="v3.27.1" tags={["Improvements"]}>
-  - Treat county and country as first-class location field types.
+  - Treat county and country as first-class [location field types](/features/lead-categories).
   - General cleanup and maintenance.
 </Update>
