@@ -51,7 +51,7 @@
           {
             "group": "Selling Leads",
             "icon": "gavel",
-            "pages": ["features/ping-post", "features/bidding", "features/distribution", "features/marketplace"]
+            "pages": ["features/ping-post", "features/bidding", "features/distribution", "features/marketplace", "features/club"]
           },
           {
             "group": "People",
@@ -183,6 +183,7 @@
               "customer-portal/leads",
               "customer-portal/bids",
               "customer-portal/marketplace",
+              "customer-portal/club",
               "customer-portal/notifications",
               "customer-portal/billing",
               "customer-portal/bidding-limits",
