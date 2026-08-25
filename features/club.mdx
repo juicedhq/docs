@@ -1,0 +1,67 @@
+---
+title: Club
+description: Offer a subscription-gated pool of claimable leads to your customers.
+---
+
+Club is a customer-facing pool of leads that eligible customers can claim for free. It gives you a flexible fallback for leads that are not a fit for your usual auction, round-robin, or marketplace path—without turning your distribution plan into a fruit salad.
+
+A Club lead can be claimed by more than one customer up to the claim cap you set. A customer can only claim a given source lead once.
+
+## Before you start
+
+To offer a Club subscription, you need:
+
+- Club enabled in **Subscription Products**.
+- A fully onboarded connected Stripe account.
+- A subscription product with at least one active tier that grants Club access.
+
+You can also grant Club access manually to a customer when you need to make an exception or are setting up the feature.
+
+## Set up your Club
+
+Open **Subscription Products** in your tenant dashboard. The page has two related areas:
+
+1. **Subscription Product and Tiers** — Create the product customers subscribe to, then add one or more monthly tiers. Each tier can grant Club access. The product and prices are created in your connected Stripe account; changing a tier's price creates a new price for new subscribers while existing subscribers keep their current price.
+2. **Club** — Enable Club, choose its customer-facing URL, and write the heading and description customers see before they subscribe.
+
+<Note>
+When Club is disabled, customers cannot access it and tiers that only grant Club access are not offered. The default `/club` address continues to work if you later change the custom Club URL, but changing the custom URL can break bookmarks and shared links.
+</Note>
+
+## Add leads to Club
+
+You can place leads into Club in two ways:
+
+- Add a **Club** stage to a [distribution flow](/features/distribution). Configure the default number of customers who may claim each lead routed through that stage.
+- Use the tenant bulk-upload flow to place leads directly into Club and set the claim cap for that upload.
+
+A lead remains available until its claim cap is reached. A lead with no cap can stay available indefinitely. Club leads and their claimed copies do not count toward your tenant plan usage.
+
+## What happens when a customer claims a lead
+
+When an eligible customer claims a Club lead:
+
+- The claim does not deduct from the customer's wallet.
+- The lead is delivered to the customer's normal lead list.
+- Juiced uses the usual CRM, webhook, and workflow delivery path.
+- The available claim count decreases when a cap is set.
+- The source lead disappears from that customer's Club table, so they cannot claim it twice.
+
+Club claims are not exclusive purchases. If you set a claim cap above one, other eligible customers can claim the same source lead until the cap is reached.
+
+## Customer access and subscriptions
+
+Customers with access can browse available Club leads and claim them. Customers without access see the Club pitch and a subscription option when your tenant offers one.
+
+Subscriptions are billed monthly to the customer's saved card through your connected Stripe account. A customer retains Club access through the current paid period after canceling. If a payment fails, access can remain during a short grace period before it is revoked.
+
+## Related pages
+
+<CardGroup cols={2}>
+  <Card title="Distribution" icon="route" href="/features/distribution">
+    Learn how Club fits into a lead-routing flow.
+  </Card>
+  <Card title="Customer portal: Club" icon="ticket" href="/customer-portal/club">
+    Share the buyer-facing guide with your customers.
+  </Card>
+</CardGroup>
