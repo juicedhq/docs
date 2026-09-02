@@ -26,7 +26,10 @@ In **Return Settings**, flip **Enable dispute tiers** on. This is what makes Jui
 
 | Field | What it does |
 |-------|--------------|
-| **Enable dispute tiers** | Toggle. When on, every customer is placed into a tier automatically based on their return rate; tier effects (discounts/penalties) apply to subsequent auctions. Off = returns still work as an accounting flow, but no tiers are assigned. |
+| **Enable return tiers** | Toggle. When on, every customer is placed into a tier automatically based on their return rate; tier effects (discounts/penalties) apply to subsequent auctions. Off = returns still work as an accounting flow, but no tiers are assigned. |
+| **Hide return tiers from customers** | Available while return tiers are enabled. Customers see their return percentage instead of the return badge and tier details; internal tier penalties still apply. You cannot hide tiers that apply a customer discount, because customers must be able to see price adjustments. |
+| **Lead volume lookback** | The assigned lead volume used to calculate return rates and to decide when the new-customer tier stops applying. This defaults to $5,000. |
+| **Return rate message** | The message shown when return tiers are disabled. Use `:rate` for the customer's current rate and `:lookback` for the lead volume used to calculate it. |
 | **Lead Returns URL** | The URL customers see in their portal when they click "View return policy". Typically a Notion/help-center/marketing-site page explaining what's returnable and what's not. |
 
 Click **Update return settings**. The setting commits, but no customer is assigned a tier until you've defined at least one and triggered a recalculation (Step 5).
@@ -142,7 +145,7 @@ This is most commonly used for:
 
 With tiers configured:
 
-- **Customer portal** — each customer sees their current tier as a colored badge. Clicking it opens the list of all tiers with benefits/restrictions laid out. See [Return tiers](/features/returns#customer-visibility) on the feature page.
+- **Customer portal** — unless you hide tiers, each customer sees their current tier as a colored badge. Clicking it opens the list of all tiers with benefits/restrictions laid out. When tiers are disabled, you can instead show a custom return-rate message or hide return-rate information entirely. See [Return tiers](/features/returns#customer-visibility) on the feature page.
 - **Auctions** respect penalties — a 20% penalty customer is treated as an 80%-value bidder when distribution runs. See [Bidding](/features/bidding) for how this interacts with smart pricing.
 - **Returns** credit back as usual — a return moves the customer's rate up, which may shift their tier on the next recalc. See [Managing customer finances](/guides/managing-customer-finances).
 - **Notifications** fire on tier changes — customize the **Return Tier Updated** template under [Customizing notification templates](/guides/customizing-notification-templates).

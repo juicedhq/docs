@@ -71,6 +71,12 @@ You can define fields at the source level. These fields are appended to the fiel
 
 If you create a source-level field with the same title as a field on the lead category, the source configuration overrides the lead category configuration.
 
+## Lead quotas
+
+Use **Lead Quotas** on a source to stop accepting new pings and posts after the source reaches a limit. You can set daily, weekly, or monthly limits for both lead count and payout value; leave any field empty for no limit.
+
+Source payout quotas use accepted, nonduplicate lead payout reporting. When a source reaches any configured quota, pings return the existing rejected response and posts fail validation without creating a lead. Review these limits with the source before enabling them so an expected pause does not arrive as a citrus-flavored surprise.
+
 ## Source pricing
 
 Beyond the payout percentage, you can configure specific pricing for each lead type within a source. This is found in the **Pricing** tab when viewing a source.
