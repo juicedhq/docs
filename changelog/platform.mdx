@@ -8,6 +8,23 @@ Everything that changed on the tenant side of Juiced—lead routing, distributio
 
 Looking for changes to the buyer experience? Those live in [Customer portal updates](/changelog/customer-portal).
 
+<Update label="October 12, 2026" description="v3.64.0" tags={["New", "Improvements", "Fixes"]}>
+  ## Better buyer controls and source visibility
+
+  - Set [lead eligibility conditions](/features/customers#lead-eligibility) for each customer, using source, lead type, lead category, and lead-field rules. Juiced applies them during bid selection and round-robin delivery; Marketplace purchases and Club claims are not affected.
+  - See [return rate](/features/sources#source-performance) by source in the source list and source overview, so you can identify traffic that is producing returns.
+  - Include a customer's registration URL and selected tracking parameters in [webhook](/features/webhooks) payload mappings for customer and subscription events.
+
+  ## Cleaner duplicate-check settings
+
+  - Find global, customer, and partner-default duplicate-check settings together under **Ingest → Duplicate Checks**. Existing Lead Delivery links redirect to the customer duplicate-check tab.
+
+  ## Fixes
+
+  - Process an individual duplicate lead from the React panel, matching the classic panel behavior. Bulk processing remains unchanged.
+  - Retry top-bid refreshes safely after database lock contention, reducing the chance of stale top-bid data during busy periods.
+</Update>
+
 <Update label="September 2, 2026" description="v3.53.0" tags={["New", "Improvements", "Fixes"]}>
   ## Return settings and lead quotas
 

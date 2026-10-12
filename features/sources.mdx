@@ -71,6 +71,12 @@ You can define fields at the source level. These fields are appended to the fiel
 
 If you create a source-level field with the same title as a field on the lead category, the source configuration overrides the lead category configuration.
 
+## Source performance
+
+The source list includes a **Return Rate (30d)** column, and each source overview includes a **Return Rate** stat for the selected date range. This helps you spot traffic that is being returned without manually comparing assigned and returned lead lists.
+
+Return rate is the share of customer deliveries from the source that are currently returned. Each customer delivery counts separately, so a lead delivered to two customers counts as two deliveries. Test leads, partner deliveries, and pending reservations are not included. You need analytics-view permission to see return-rate reporting.
+
 ## Lead quotas
 
 Use **Lead Quotas** on a source to stop accepting new pings and posts after the source reaches a limit. You can set daily, weekly, or monthly limits for both lead count and payout value; leave any field empty for no limit.
