@@ -118,6 +118,10 @@ For customer events (Customer Created, User Attached):
 
 - `{{ customer_public_id }}` — prefixed customer ID (e.g., `cus_01arz3n…`).
 - `{{ customer.name }}`, `{{ customer.email }}`, `{{ customer.phone }}`, `{{ customer.address }}`.
+- `{{ customer.registration_url }}` — the full self-serve signup URL recorded for the customer, including any tracking query parameters.
+- `{{ customer.registration_parameters.utm_source }}` — an individual parameter captured from that signup URL. The field picker offers standard `utm_*` parameters and parameters it finds in recent registration URLs for your tenant.
+
+Registration URL and parameter fields are available for customer and subscription events that include a customer block. They are `null` when the customer does not have a registration URL or usable parameters.
 
 For transaction events:
 
