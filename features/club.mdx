@@ -28,6 +28,16 @@ Open **Subscription Products** in your tenant dashboard. The page has two relate
 When Club is disabled, customers cannot access it and tiers that only grant Club access are not offered. The default `/club` address continues to work if you later change the custom Club URL, but changing the custom URL can break bookmarks and shared links.
 </Note>
 
+### Manage tiers and subscribers
+
+The tiers table shows whether each tier is offered to new subscribers and how many customers are currently billed on it. When you need to stop selling a tier without disrupting current members, hide it. Hidden tiers are unavailable for new signups, while existing subscribers keep their price and allowance. You can offer a hidden tier again later, or archive it when you will not offer it again.
+
+To move subscribers to a different offered tier, choose the source tier and preview the move first. You can move one customer, selected customers, or all eligible customers. Juiced schedules approved moves for each customer's next renewal without proration; the existing card and compatible discount continue. Customers who are incomplete, past due, canceling, ended, paused, or have an incompatible discount are shown as ineligible and are not moved.
+
+<Note>
+Scheduling a tier move does not notify the customer automatically. The move is not an immediate price change and cannot be scheduled for an arbitrary future date.
+</Note>
+
 ## Add leads to Club
 
 You can place leads into Club in two ways:
@@ -54,6 +64,8 @@ Club claims are not exclusive purchases. If you set a claim cap above one, other
 Customers with access can browse available Club leads and claim them. Customers without access see the Club pitch and a subscription option when your tenant offers one.
 
 Subscriptions are billed monthly to the customer's saved card through your connected Stripe account. A customer retains Club access through the current paid period after canceling. If a payment fails, access can remain during a short grace period before it is revoked.
+
+When you view a customer in the tenant dashboard, the Club section shows their access source, subscription tier, billing status, renewal or end date, claim allowance, and any pending tier move. Manual access remains separate from subscription access.
 
 ## Related pages
 
