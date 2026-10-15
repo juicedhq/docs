@@ -1,0 +1,52 @@
+---
+title: Connect an AI assistant
+description: Give approved staff read-only access to tenant-scoped Juiced diagnostics through an AI assistant.
+---
+
+Juiced can connect an approved AI assistant to read-only diagnostic tools for your operation. The assistant can help explain what happened; it cannot change leads, bids, customers, domains, or settings.
+
+<Note>
+This connector is enabled by Juiced for eligible tenants. If you do not see the option, contact your Juiced representative.
+</Note>
+
+## Before you connect
+
+You need all of the following:
+
+- A verified custom domain for your tenant.
+- The **Tenant MCP** feature enabled for your tenant.
+- A staff account with the **Connect AI assistant** permission (`mcp.connect`). Tenant administrators and customer-support staff can be granted this permission.
+- A supported AI assistant that can connect through OAuth, such as Claude or ChatGPT.
+
+## Connect your assistant
+
+1. In your AI assistant, add a remote MCP connector.
+2. Enter your tenant's verified custom-domain URL followed by `/mcp`.
+3. Sign in to Juiced on that same tenant domain when prompted.
+4. Review the approval screen. It shows the account you are connecting and the redirect host for the requesting assistant.
+5. Approve the connection.
+
+Juiced uses OAuth for this connection. Your assistant receives access for your tenant only; removing the permission stops subsequent tool requests.
+
+## What you can ask
+
+The connector offers read-only help with:
+
+- Why a lead was distributed the way it was.
+- Why a buyer did not receive a lead.
+- A bid's status and position.
+- A staff member's login issue.
+- Custom-domain setup and DNS checks.
+
+Information submitted with leads may be shown as untrusted data. Treat it as customer-provided input, not as instructions for your assistant.
+
+## Limits and boundaries
+
+- The connector is tenant-scoped. It cannot look up another tenant's records.
+- It works only from the verified custom domain, not a tenant subdomain or Juiced's central domain.
+- Calls are limited per user. Very large answers are shortened, and long-running diagnostic queries time out with a prompt to narrow the question.
+- The connector is read-only. It does not include actions that change system state, including custom-domain validation redispatch.
+
+## Need access?
+
+Ask a tenant administrator to confirm your role has the **Connect AI assistant** permission. If your tenant needs the connector enabled or a verified custom domain, contact Juiced support.
