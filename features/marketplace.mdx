@@ -7,53 +7,64 @@ The marketplace is where leads go when they need a second chance. Maybe no bids 
 
 Think of it as a clearance rack, but for leads. And instead of prices going up over time like a regular auction, they go *down*. Customers can wait for a better deal or buy now before someone else does.
 
-## Enabling the marketplace
+## Turning on the marketplace
 
-The marketplace is off by default. To turn it on:
+There's no account-wide switch. A lead lands on the marketplace when two things are true:
 
-1. Go to **Settings > Marketplace**
-2. Toggle **Enable Marketplace** on
+1. **Its lead type has the marketplace enabled**, with auction pricing configured (see below).
+2. **It reaches a Marketplace stage** in your [distribution stages](/features/distribution). Add one from **Distribution Stages** in the sidebar if you don't have one yet; you can move or pause it like any other stage.
 
-While you're there, you'll see an option to **enable a direct post** if a lead doesn't sell by the time its auction ends. This lets you configure a webhook that fires with the lead data when an auction expires without a buyer. Useful if you have a fallback partner who'll take leads at any price—instead of letting unsold leads die on the vine, they'll automatically post out.
+If the lead type doesn't have the marketplace enabled, the Marketplace stage passes and the lead moves on to the next stage.
+
+To see which leads are on the marketplace right now, open **Leads** and pick the **Marketplace** status tab.
+
+<Frame>
+  <img className="block dark:hidden" src="/images/tenant/leads/leads-list-marketplace-light.webp" alt="Leads list showing only leads with the Marketplace status" />
+  <img className="hidden dark:block" src="/images/tenant/leads/leads-list-marketplace-dark.webp" alt="Leads list showing only leads with the Marketplace status" />
+</Frame>
 
 ### Public marketplace
 
-Want to let potential customers browse your marketplace before they sign up? Enable the **Public Marketplace** toggle to create a publicly accessible version of your marketplace.
+Want to let potential customers browse your marketplace before they sign up? Turn on **Enable public marketplace** under **Settings → Account → Domains & Links** (in the **Public Marketplace** section). It creates a publicly accessible version of your marketplace at `/marketplace`.
 
 When enabled:
 
 - Visitors can view available leads without logging in
-- Lead information is displayed the same as the regular marketplace (county, lead type, pricing, etc.)
-- Purchase buttons are replaced with a "Sign up to purchase" prompt that directs visitors to registration
+- Lead information is displayed the same as the regular marketplace (location, lead type, pricing, and so on)
+- Purchase buttons are replaced with a **Sign up to purchase** prompt that directs visitors to registration
 
-This is useful for showcasing your inventory to prospective customers. They can see what's available and how your reverse auction pricing works before committing to an account.
+<Frame>
+  <img className="block dark:hidden" src="/images/portal/marketplace/public-marketplace-light.webp" alt="Public marketplace with live auctions, a Create Free Account banner, and Sign up to purchase buttons in place of buy buttons" />
+  <img className="hidden dark:block" src="/images/portal/marketplace/public-marketplace-dark.webp" alt="Public marketplace with live auctions, a Create Free Account banner, and Sign up to purchase buttons in place of buy buttons" />
+</Frame>
 
-<Note>
-Public marketplace visitors are tracked, so you can see how much interest your marketplace generates.
-</Note>
+This is useful for showcasing your inventory to prospective customers. They can see what's available and how your reverse auction pricing works before committing to an account. The same settings page also lets you choose what unauthenticated visitors see when they follow a customer-facing link: the public marketplace or the sign-in page. See [Domains](/features/domains).
 
 ## Configuring lead types for the marketplace
 
-Enabling the marketplace at the account level is just the first step. You also need to enable it for each lead type that should participate.
+Each lead type that should sell on the marketplace needs its own auction settings.
 
-1. Navigate to a lead type's view page
+1. Open **Lead Types** under **Ingest** in the sidebar and click a lead type
 2. Click the **Marketplace** tab
-3. Toggle the marketplace on for that lead type
+3. Turn on **Enable marketplace** and fill in the pricing
 
-Once enabled, you'll configure how auctions work for leads in that lead type:
-
-<Note>
-For leads to enter the marketplace, the source they came from must have a fallback price configured for that lead type. Configure this in **Sources → [Source] → Pricing**. See [Source pricing](/features/sources#source-pricing) for details.
-</Note>
+<Frame>
+  <img className="block dark:hidden" src="/images/tenant/ingest/lead-type-marketplace-light.webp" alt="Lead type Marketplace tab with Enable marketplace on, First Price, Last Price, Increment, and Interval fields, and a sentence summarizing the auction" />
+  <img className="hidden dark:block" src="/images/tenant/ingest/lead-type-marketplace-dark.webp" alt="Lead type Marketplace tab with Enable marketplace on, First Price, Last Price, Increment, and Interval fields, and a sentence summarizing the auction" />
+</Frame>
 
 | Setting | What it does |
 |---------|--------------|
-| **First price** | Where the auction starts—the highest price customers will see |
-| **Last price** | Where the auction ends—the floor price before the lead expires or posts out |
+| **First Price** | Where the auction starts—the highest price customers will see |
+| **Last Price** | Where the auction ends—the floor price before the auction closes unsold |
 | **Increment** | How much the price drops each time |
-| **Interval** | How often the price drops |
+| **Interval** | How often the price drops, in minutes |
 
-As you adjust these settings, you'll see a plain-English explanation of what your auction will look like. For example: *"Leads will start at &#36;25 and drop by &#36;2.50 every 15 minutes until they reach &#36;5."*
+As you adjust these settings, a plain-English summary shows what your auction will look like. For example: *"Your auction will start at &#36;75.00 and end at &#36;15.00. The price will drop by &#36;5.00 every 120 minutes. The auction will last for a total of 1560 minutes."*
+
+<Note>
+For [ping-post](/features/ping-post) traffic, a Marketplace stage only accepts a ping when the source has a **fallback price** for that lead type. Set it on the source's **Pricing** tab. See [Source pricing](/features/sources#source-pricing) for details.
+</Note>
 
 ## How reverse auctions work
 
@@ -80,25 +91,21 @@ A reverse auction is in one of three states at any given time:
 - **Sold** — A buy now, buy order, or floor-triggered sale completed
 - **Unsold** — The auction reached its floor without selling
 
-Unsold auctions optionally trigger the direct-post webhook described above. Sold and unsold auctions are kept for 90 days and then pruned from the database automatically.
-
-### Reverse auctions outside the marketplace
-
-Most reverse auctions are lead-backed: a real lead failed distribution and landed on the marketplace. A smaller category is created when tenants [import lead requests on behalf of customers](/features/leads#importing-leads)—these auctions represent a *demand* for leads rather than a lead itself, and sources bid to fulfill them. The mechanics (price decay, buy orders, floors) are identical.
+When an auction ends unsold, the lead picks up where it left off in your distribution stages, so a later stage (a [Club](/features/club) stage or a partner, for example) still gets a crack at it. Sold and unsold auctions are kept for 90 days and then pruned automatically.
 
 ## What customers see
 
 The marketplace intentionally shows limited information about each lead—just enough to make a purchasing decision without enabling cherry-picking:
 
-- **County** — Where the lead originated
+- **Location** — The county and state where the lead originated
 - **Lead type** — What kind of lead it is
-- **Time received** — How long ago the lead came in
-- **Time remaining** — When the auction ends
+- **Received** — When the lead came in
+- **Ends in** — When the auction ends
 - **Current price** — What they'd pay if they buy right now
-- **Next price** — What the price will drop to, and when
+- **Next drop** — When the price drops next, and to what
 - **Floor** — The lowest the price will go
 
-No contact details, no personal information—just location and lead type. Customers can browse the marketplace, filter by lead type or location, and purchase leads instantly from their wallet balance.
+No contact details, no personal information—just location and lead type. Customers can filter by location and lead type, buy one lead or several at once, and pay from their wallet balance. See the customer-side walkthrough in [Marketplace](/customer-portal/marketplace).
 
 ## Buy orders
 
@@ -109,13 +116,13 @@ A buy order says: *"I'll pay up to &#36;X for this lead. If the price drops to m
 Here's how it works:
 
 1. Customer places a buy order at their target price
-2. The buy order amount is **held from their wallet** immediately
-3. If the auction price reaches their buy order, they win the lead
-4. If someone else buys the lead first, or places a higher buy order, the hold is released
+2. The buy order amount is **withdrawn from their wallet** immediately
+3. If the auction price reaches their buy order and theirs is the leading order, they win the lead
+4. If they don't win, the amount is refunded to their wallet when the auction ends, or as soon as they cancel
 
 ### Competing buy orders
 
-When a customer places a buy order, it effectively raises the floor for that lead. The floor badge color tells you exactly where you stand:
+When a customer places a buy order, it effectively raises the floor for that lead. A new buy order has to be higher than the current leading one. The floor badge color tells customers exactly where they stand:
 
 | Floor color | What it means |
 |-------------|---------------|
@@ -127,18 +134,18 @@ When a customer places a buy order, it effectively raises the floor for that lea
 If another customer places a higher buy order, the original customer gets notified (notifications are enabled by default but can be disabled in contact preferences). They then have two choices:
 
 1. **Increase their buy order** to stay competitive
-2. **Cancel** and get their held funds back
+2. **Cancel** and get their funds back right away
 
-Buy orders can be cancelled at any time before the lead sells, and the held amount returns to the customer's wallet immediately.
+Buy orders can be cancelled at any time before the lead sells, and the amount returns to the customer's wallet immediately.
 
 ### Wallet integration
 
 All marketplace purchases—whether instant buys or buy orders—draw from the customer's wallet. No wallet balance, no purchasing. This keeps things simple and ensures customers can only buy what they can actually pay for.
 
-When a buy order is placed, the funds are held (not charged) until the outcome is determined. If the customer wins, the hold converts to a charge. If they lose or cancel, the hold is released.
+A buy order's amount leaves the wallet the moment the order is placed, so it can't be spent twice. It shows in the customer's [transactions](/features/transactions) as **Placed Buy Order**. Later, the amount comes back as either **Canceled Buy Order** (the customer cancelled) or **Released Buy Order** (the auction ended, or the order won). When an order wins, the lead's purchase is then recorded as a regular lead charge at the buy order price.
 
 ## Related guides
 
 <Card title="Setting up the marketplace" icon="store" href="/guides/setting-up-the-marketplace" horizontal>
-  Enable the marketplace, configure reverse-auction pricing, and set fallback prices.
+  Configure reverse-auction pricing, add a Marketplace stage, and set fallback prices.
 </Card>

@@ -1,0 +1,105 @@
+---
+title: Dashboard
+description: Your morning glass of juice—revenue, traffic, and top performers at a glance, plus search, timeframes, and notifications.
+---
+
+The **Dashboard** is the first thing you see when you sign in to your workspace. It greets you by name and pours your key numbers into one view: what you earned, how much traffic came in, how much of it sold, and who's driving it.
+
+Click **Dashboard** at the top of the sidebar to get back to it from anywhere.
+
+<Frame>
+  <img className="block dark:hidden" src="/images/tenant/overview/dashboard-light.webp" alt="Dashboard with revenue stats and a Daily Revenue chart, Pings, Posts, and Assigned counts with sparklines, and Top customers and Top sources tables" />
+  <img className="hidden dark:block" src="/images/tenant/overview/dashboard-dark.webp" alt="Dashboard with revenue stats and a Daily Revenue chart, Pings, Posts, and Assigned counts with sparklines, and Top customers and Top sources tables" />
+</Frame>
+
+## What's on the dashboard
+
+### Revenue
+
+Four headline numbers for the selected timeframe:
+
+- **Revenue** — What you earned from leads.
+- **Revenue per Lead** — Your average revenue for each lead.
+- **Returned Lead Revenue** — Revenue from leads that were later returned.
+- **Leads Returned** — The share of leads that were returned.
+
+Each number shows the change from the previous period of the same length, so "+$1.02" next to Revenue per Lead means you're earning a little more per lead than last time. Hover the info icon next to a label for its exact definition. Below them, the **Daily Revenue** chart shows how revenue moved day by day.
+
+### Traffic funnel
+
+**Pings**, **Posts**, and **Assigned** show how much traffic came in and how much of it sold, each with a sparkline and the change from the previous period:
+
+- **Pings** — Price and eligibility checks your sources sent before submitting a lead.
+- **Posts** — Full leads your sources submitted.
+- **Assigned** — Leads delivered to a customer or partner.
+
+A big drop between Posts and Assigned is your cue to check your [distribution stages](/features/distribution) and [incoming logs](/features/logs).
+
+### Leaderboards
+
+- **Top customers** — Your biggest buyers by revenue, with how many leads they bought and their dispute rate.
+- **Top sources** — Your best sources by revenue, with the payout you owe them, your margin, and their lead count.
+
+Click a name to open that customer or source.
+
+<Note>
+Revenue, the funnel, and the leaderboards are only shown to users whose role can view analytics. Everyone else sees the greeting and the setup cards.
+</Note>
+
+### Getting started
+
+Until your workspace is set up, the bottom of the dashboard shows three **Getting started** cards: **Define a Lead** (create a [lead category](/features/lead-categories)), **Create a Source** (add a [source](/features/sources)), and **Find Customers** (add a [customer](/features/customers)). Each card checks itself off as you finish it, and **Review setup →** takes you back to the setup walkthrough. Once all three are done, the cards disappear.
+
+New workspaces may also see a **Get set up with our team** banner with a **Book a time** link for an onboarding call. Dismiss it with the **×**; that hides it for everyone in your workspace.
+
+## Choosing a timeframe
+
+Use the timeframe picker in the top-right to change the period the numbers cover. The options are **Billing period**, **Today**, **7D**, **4W**, **3M**, **12M**, **MTD** (month to date), **Last month**, **YTD** (year to date), **All**, and **Custom**, which lets you pick a start and end date.
+
+<Frame>
+  <img className="block dark:hidden" src="/images/tenant/overview/timeframe-picker-light.webp" alt="Timeframe picker open, listing Billing period, Today, 7D, 4W, 3M, 12M, MTD, Last month, YTD, All, and Custom" />
+  <img className="hidden dark:block" src="/images/tenant/overview/timeframe-picker-dark.webp" alt="Timeframe picker open, listing Billing period, Today, 7D, 4W, 3M, 12M, MTD, Last month, YTD, All, and Custom" />
+</Frame>
+
+Juiced remembers your choice, and it carries over between the Dashboard and the [Locations](/features/location-analytics) pages. Other pages with stats, such as a customer, partner, lead type, or source, have the same picker in their header.
+
+## Searching with the command palette
+
+Press **⌘K** (Mac) or **Ctrl+K** (Windows), or click **Search tenant…** at the top of the sidebar, to open the command palette. Start typing to:
+
+- **Jump to a page** — Dashboard, Customers, Leads, Incoming logs, Outgoing logs, Counties, States, Countries, Lead Categories, Lead Types, Sources, Distribution Stages, Webhooks, Usage, and settings pages like Bidding Settings, Payments & Deposits, Domains & Links, and Users.
+- **Find a record** — Search results are grouped into **Customers**, **Leads**, **Sources**, **Lead Categories**, **Lead Types**, and locations.
+- **Log out** — Yes, it's in there too.
+
+<Frame>
+  <img className="block dark:hidden" src="/images/tenant/overview/command-palette-light.webp" alt="Command palette open over the dashboard with a search box and navigation shortcuts" />
+  <img className="hidden dark:block" src="/images/tenant/overview/command-palette-dark.webp" alt="Command palette open over the dashboard with a search box and navigation shortcuts" />
+</Frame>
+
+You'll only see pages and records your role can access.
+
+## Notifications
+
+The bell in the rail on the far left is where Juiced drops things that finished in the background. Exports are the big one: when a [lead export](/features/leads#exporting-leads) or [location export](/features/location-analytics#exporting) is ready, a notification appears here with a link to download the file. A red badge shows how many notifications you haven't read.
+
+<Frame>
+  <img className="block dark:hidden" src="/images/tenant/overview/notifications-light.webp" alt="Notifications panel open from the bell, listing recent notifications with a Mark all as read button" />
+  <img className="hidden dark:block" src="/images/tenant/overview/notifications-dark.webp" alt="Notifications panel open from the bell, listing recent notifications with a Mark all as read button" />
+</Frame>
+
+Click a notification to open it and mark it read, or use **Mark all as read** to clear the badge.
+
+## Getting around the panel
+
+A quick map of everything else around the dashboard:
+
+- **Sidebar** — Your main navigation: **Dashboard**, **Customers**, **Partners**, and **Distribution Stages** at the top, then the **Locations**, **Entries** (Leads and logs), **Ingest** (lead categories, lead types, sources, and duplicate checks), and **Integrations** groups. Collapse a group you don't use often; Juiced remembers it.
+- **Rail** — The narrow strip on the far left holds the **Settings** gear, the notification bell, and a link to these docs.
+- **User menu** — At the bottom of the sidebar: your profile, theme (light or dark), and log out.
+- **More actions** — On record pages, secondary actions live in the **⋯** menu in the page header.
+
+## Related pages
+
+- [Leads](/features/leads)
+- [Logs](/features/logs)
+- [Location analytics](/features/location-analytics)

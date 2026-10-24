@@ -5,6 +5,13 @@ description: Templates and delivery configuration for automated messages.
 
 Notification templates let you customize the messaging customers receive when events happen in the system. You control the verbiage, formatting, and what details are included in each notification.
 
+Find them under **Settings → Application → Notification Templates**. Each row is a notification type, with columns for each channel showing whether it's **Visible** to customers and turned on by **Default** for new contacts.
+
+<Frame>
+  <img className="block dark:hidden" src="/images/tenant/settings/notification-templates-light.webp" alt="Notification Templates list with one row per notification type and Visible and Default columns for the Email, SMS, and In-App channels" />
+  <img className="hidden dark:block" src="/images/tenant/settings/notification-templates-dark.webp" alt="Notification Templates list with one row per notification type and Visible and Default columns for the Email, SMS, and In-App channels" />
+</Frame>
+
 ## Channels
 
 Notifications can be delivered through three channels, but channel availability varies by event:
@@ -13,11 +20,11 @@ Notifications can be delivered through three channels, but channel availability 
 |---------|-------------|--------------|
 | Email | Sent via SendGrid | [SendGrid integration](/features/integrations#sendgrid) |
 | SMS | Sent via Twilio | [Twilio integration](/features/integrations#twilio) |
-| In-App | Displayed in the customer portal | None |
+| In-App | Shown in the notifications bell of every user on the customer's account | None |
 
-Each channel has its own template, so you can tailor the message format and length appropriately—detailed HTML emails, concise text messages, and quick in-app alerts.
+Each channel has its own template, so you can tailor the message format and length appropriately: detailed HTML emails, concise text messages, and quick in-app alerts. The Email channel only appears once SendGrid is configured, and SMS only once Twilio is.
 
-Some events are email-only. For example, account archive/restore and payment success/failure notifications do not currently support SMS or in-app delivery.
+Some events don't support every channel. Account Archived, Account Restored, Payment Failed, Payment Successful, and the two checkout emails are email-only, and Subscription Payment Failed goes out by email and in-app.
 
 ## Notification events
 
@@ -38,7 +45,12 @@ Templates are available for the following events:
 | Return Tier Updated | Customer's return tier changes |
 | Payment Failed | A payment transaction fails |
 | Payment Successful | A payment processes successfully |
+| Subscription Payment Failed | A recurring [subscription](/features/subscription-products) payment fails or needs authentication |
 | Under Funded Bids | Customer has bids limited by their available balance |
+| Checkout Welcome | A new buyer purchased from a [checkout page](/features/checkout-pages); includes a link to set up their login |
+| Checkout Purchase Confirmation | An existing customer purchased from a checkout page |
+
+The two checkout emails only appear when checkout pages are enabled for your account.
 
 ## Template variables
 
@@ -78,15 +90,27 @@ Available for customer-related notifications:
 
 ## Editing templates
 
-Each notification type has separate templates for each channel. When editing:
+Click a notification type to open its editor. The top of the page lists the **Available variables** for that type; copy any of them into your templates.
 
-- **Email**: Supports rich text formatting (bold, italic, underline, strikethrough)
-- **SMS**: Plain text only—keep it concise
-- **In-App**: Supports basic formatting
+<Frame>
+  <img className="block dark:hidden" src="/images/tenant/settings/notification-template-manage-light.webp" alt="Edit Lead Assigned Template page listing available variables such as lead.full_name and customer.name, followed by the Email Template card with Visible to customers and Enabled by default switches" />
+  <img className="hidden dark:block" src="/images/tenant/settings/notification-template-manage-dark.webp" alt="Edit Lead Assigned Template page listing available variables such as lead.full_name and customer.name, followed by the Email Template card with Visible to customers and Enabled by default switches" />
+</Frame>
 
-Templates are validated when you save to ensure all variables are valid for that notification type. If you reference a variable that doesn't exist, you'll see an error.
+Below that is one card per channel (**Email Template**, **SMS Template**, **In-App Template**), each with:
 
-You can reset any template to its default at any time.
+- **Visible to customers**: when off, this notification type is hidden from customers' notification preferences.
+- **Enabled by default**: the initial preference when a new contact is created.
+- **Subject**: the email subject or the in-app notification's title. Required for email; SMS has no subject.
+- **Body**: use `{{ variable }}` placeholders. Emails keep basic formatting (bold, italic, underline, strikethrough) and put each line in its own paragraph; lines written as `Label: value` are laid out as a tidy details list. Keep SMS bodies short.
+
+Emails get a button to the relevant page automatically, labeled with the type's default action text, so you don't need to add the link yourself.
+
+Changes to every channel are saved together with **Save all** in the floating save bar. Templates are validated when you save, so referencing a variable that doesn't exist for that notification type shows an error.
+
+Each card has **Reset to Default** to restore that channel's template, and **Reset All to Default** at the top restores every channel for the type.
+
+To check how a message lands, add yourself as a [contact](/features/customers#contacts) on a test customer and use the contact's **Test** action.
 
 ## Related guides
 

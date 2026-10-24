@@ -1,91 +1,128 @@
 ---
 title: Bids
-description: Create and manage your bidding profiles to compete for leads.
+description: Create and manage the bids that win you leads by location and lead type.
 ---
 
-The Bids page is where you create and manage your bidding profiles. Each bid targets a specific location and lead type combination, and competes against other customers for leads in that area.
+A bid tells your provider: "Send me this type of lead from this place, and here's what I'll pay." Each bid covers one lead type in one location (a county, a state, or a whole country) and competes with other buyers' bids for leads that come in there. The Bids page is where you create, adjust, pause, and remove them.
 
-## Bids table
+<Frame>
+  <img className="block dark:hidden" src="/images/portal/bids/bids-list-light.webp" alt="Bids table with All, Active, Limited, and Inactive tabs and columns for bid, my bid, top bid, position, lead type, and status" />
+  <img className="hidden dark:block" src="/images/portal/bids/bids-list-dark.webp" alt="Bids table with All, Active, Limited, and Inactive tabs and columns for bid, my bid, top bid, position, lead type, and status" />
+</Frame>
 
-The table shows all your bids with tabs to filter by status:
+## The bids table
 
-- **All** — Every bid you've created
-- **Active** — Bids that are currently competing for leads
-- **Limited** — Bids that are restricted due to caps, budgets, or wallet balance
-- **Inactive** — Bids that are paused or not competing
+Tabs across the top sort your bids by whether they can win leads, with a count on each:
 
-### Table columns
+- **All**: every bid you have.
+- **Active**: bids that can win leads right now.
+- **Limited**: bids that are still competing but are being held back by your wallet balance or a budget.
+- **Inactive**: bids that can't win leads right now, because they're paused, out of funds, or have hit a cap or budget (on the bid or on your whole account).
 
-| Column | Description |
-|--------|-------------|
-| **Location** | The geographic area the bid targets |
-| **Status** | Whether the bid is active, limited, or inactive |
-| **Your bid** | The amount you're bidding |
-| **Top bid** | The highest bid for that lead type and location |
-| **Position** | Your rank among competing bidders |
-| **Lead type** | The lead type this bid applies to |
-| **Caps/Budgets** | Any limits set on this bid |
+Use **Search bids** and the **Filters** menu (**Lead type** and **Scope**) to narrow the list.
 
-You can pause or unpause bids directly from the table without opening the edit modal.
+| Column | What it shows |
+|--------|---------------|
+| **Bid** | The location, with its state (or "Statewide" / "Nationwide") underneath |
+| **My Bid** | Your bid amount. If your provider gives your return tier a discount, the discounted price shows in green next to your struck-through bid; hover it for the details. |
+| **Top** | The highest bid for that lead type and location |
+| **Position** | Where your bid stands. See [Bid position](#bid-position). |
+| **Lead Type** | The lead type. Hover it for a description, if your provider wrote one. |
+| **Status** | Whether the bid can win leads. See [Bid statuses](#bid-statuses). |
 
-## Bid statuses
+Use the **Columns** menu to show extra columns: **County**, **State**, and **Country** (handy for sorting), plus **Caps** and **Budgets** when your provider lets you set limits on individual bids.
 
-| Status | Meaning |
-|--------|---------|
-| **Active** | Your bid is competing for leads normally |
-| **Limited** | Your bid is restricted—check your wallet balance, caps, or budgets |
-| **Inactive** | Your bid is paused and not competing |
+Each row has three actions at the end:
+
+- **Pause bid** / **Resume bid** stops or restarts that one bid without deleting it.
+- **Edit bid** opens the bid editor for that location.
+- **Delete bid** removes the bid after you confirm. You stop receiving leads for it immediately, and it can't be undone.
+
+<Note>
+If your provider has locked bidding, the pause and resume buttons are disabled. Contact your provider if you need a bid paused.
+</Note>
 
 ## Bid position
 
-Your position shows where you rank among all bidders for a given lead type and location. Position 1 means you're the top bidder and will win leads in that area (assuming you have sufficient funds and haven't hit any limits).
+| Position | What it means |
+|----------|---------------|
+| **Top** | You're the highest bidder for that lead type and location |
+| **Tied** | You're tied with one or more bidders at the top amount. Leads are shared among the tied bidders. |
+| **Under** | Someone is bidding more than you |
+| **Out** | Your bid isn't competing right now, usually because it's paused or out of funds |
 
-If multiple customers bid the same amount, they share the same position and leads are distributed among them.
+Being on top only wins you the lead if your bid can actually take it, so keep an eye on your status too.
+
+## Bid statuses
+
+| Status | What it means |
+|--------|---------------|
+| **Active** | Competing for leads normally |
+| **Limited** | Still competing, but your wallet balance or a remaining budget is lower than the bid amount, so the bid competes at that lower amount. Add funds or raise the budget to get back to full strength. |
+| **Exhausted** | Out of service until something changes: your wallet can't cover the minimum, or a cap or budget has been used up for the period |
+| **Paused** | Paused by you or your provider |
+| **Archived** | No longer in use |
+
+The [wallet chip](/customer-portal/getting-around#wallet) in the sidebar gives you the same funding signal at a glance.
 
 ## Creating a new bid
 
-1. **Search for a location** — Type a county, state, or country name. Matching options appear as you type.
-2. **Refine your search** — Check or uncheck scopes to filter the results (e.g., show only counties, only states).
-3. **Select a location** — Click on a location to see available lead types.
+Click **New bid** at the top of the page.
 
-### Setting your bid price
+<Frame>
+  <img className="block dark:hidden" src="/images/portal/bids/bid-modal-new-light.webp" alt="New bid dialog with a Location search box, Scopes checkboxes, and a prompt to select a location to get started" />
+  <img className="hidden dark:block" src="/images/portal/bids/bid-modal-new-dark.webp" alt="New bid dialog with a Location search box, Scopes checkboxes, and a prompt to select a location to get started" />
+</Frame>
 
-Once you've selected a location, you'll see a list of lead types you can bid on. For each lead type:
+### 1. Find a location
 
-- The **bid price** is displayed
-- Click the button on the right to set your price
-- Use the **arrows** to bump the price up or down in increments
-- Click on the **bid price** to see a dropdown of all possible amounts
-- The display shows whether your price will be **top**, **tied**, or **under** the current leader
+Start typing in the **Location** box (a county, state, or country). Matching places appear as you type. Use the **Scopes** checkboxes to show only counties, states, or countries.
 
-Some lead types use **fixed pricing**—a single set price with no range. When fixed pricing is enabled, you'll see just one price option instead of a slider or dropdown.
+<Frame>
+  <img className="block dark:hidden" src="/images/portal/bids/bid-modal-search-light.webp" alt="Location search results for Los Angeles in the New bid dialog" />
+  <img className="hidden dark:block" src="/images/portal/bids/bid-modal-search-dark.webp" alt="Location search results for Los Angeles in the New bid dialog" />
+</Frame>
 
-To the right of the price, you'll find buttons to:
-- **Clear** the bid
-- **Set limits** (caps or budgets enabled by your provider)
+Click a result to choose it. Prefer to browse? The [Locations](/customer-portal/locations) pages let you compare top bids across areas and start a bid from there.
 
-You can add as many bids as you like. When you're done, click **Save Bids** to return to the table.
+### 2. Set your price
 
-## Editing an existing bid
+Once you've picked a location, you'll see every lead type you can bid on there.
 
-Click **Edit** on any bid to open the modal. You'll see all available lead types for that location and can adjust prices, add new lead types, or remove existing bids. Click **Save Bids** when finished.
+<Frame>
+  <img className="block dark:hidden" src="/images/portal/bids/bid-modal-location-light.webp" alt="New bid dialog with a location selected, listing lead types with minimum and top bids and a button to bid the minimum" />
+  <img className="hidden dark:block" src="/images/portal/bids/bid-modal-location-dark.webp" alt="New bid dialog with a location selected, listing lead types with minimum and top bids and a button to bid the minimum" />
+</Frame>
+
+Each lead type shows its **Min** (the lowest allowed bid) and **Top** (the current highest bid, with the number of bids tied there). To bid:
+
+1. Click **Bid $X** to start at the minimum.
+2. Use the left and right arrows to step your bid down or up, or click the amount to pick from a list of every allowed amount.
+3. Watch the badge next to the amount: **TOP**, **TIED**, or **UNDER** tells you where that amount would land you before you commit.
+
+Some lead types have a single fixed price, so there's only one amount to choose.
+
+Next to the amount you'll find:
+
+- **Limits** (when your provider allows them): set a daily, weekly, or monthly lead cap or budget for just this bid. The bid pauses itself once a limit is reached. Leave a field blank for no limit.
+- **Clear bid** (the **×**): remove that lead type from what you're about to save.
+
+You can bid on as many lead types at the location as you like. If you already have a bid for a lead type there, you'll see "You already have a bid for this lead type and location" instead; use **Edit bid** to change it.
+
+### 3. Save
+
+Click **Save bid** (or **Save N bids** if you set several). You're back on the bids table, and your new bids start competing right away.
+
+## Editing a bid
+
+Click **Edit bid** on any row. The **Edit bids** dialog opens on that bid's location (which can't be changed while editing) with all its lead types listed. Adjust prices or limits, add bids for other lead types, then click **Save changes**.
+
+To stop bidding on a lead type entirely, use **Delete bid** on its row in the table.
 
 ## Smart pricing
 
-<Note>
-Your provider uses smart pricing, which means you only pay what's necessary to win—not your maximum bid.
-</Note>
+You don't always pay your full bid. When you win a lead, Juiced charges you the lowest allowed amount that still beats the next-highest bidder, so you pay just enough to win.
 
-Smart pricing ensures you never overpay for a lead. Even if you set a high bid to guarantee top position, you'll only pay one increment above the next highest bidder.
+**Example:** The minimum bid is &#36;10 and bids go up in &#36;10 steps. You bid &#36;100 and the next-highest bidder is at &#36;10. When you win, you pay &#36;20, not &#36;100.
 
-**Example:** If the minimum bid is &#36;10 with &#36;10 increments, and you bid &#36;100 while the next closest bidder is at &#36;10, you'll pay &#36;20 when you win—not &#36;100.
-
-This lets you bid confidently for top position without worrying about overpaying when competition is low.
-
-## Researching locations
-
-Before placing bids, you can research competition across different areas using the Counties tab.
-
-Search by state to see all counties within that area. For each location, you'll see the current top bid—helpful for understanding what you'd need to bid to compete.
-
-You can also filter by one or more lead types to focus on the lead types you're interested in and compare top bids across different areas.
+So bid what a lead is genuinely worth to you. Competition sets the price; your bid just sets the ceiling.

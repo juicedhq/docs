@@ -14,8 +14,22 @@ Limits exist at two scopes:
 
 A bid has to clear **both** its own limits and its customer's limits to win a lead. Whichever is most restrictive wins.
 
+## Turning limits on
+
+Every limit is off until you enable it. Open **Settings → Application → Bidding** and use the switches under **Lead Cap Settings** and **Budget Settings**. There are twelve in total: **Bid** and **Account** versions of daily, weekly, and monthly caps and budgets. Save with the floating save bar.
+
+<Frame>
+  <img className="block dark:hidden" src="/images/tenant/settings/bidding-light.webp" alt="Bidding settings page with Global Bid Settings, Customer Bidding Access, and Lead Cap Settings and Budget Settings switches for bid-level and account-level daily, weekly, and monthly limits" />
+  <img className="hidden dark:block" src="/images/tenant/settings/bidding-dark.webp" alt="Bidding settings page with Global Bid Settings, Customer Bidding Access, and Lead Cap Settings and Budget Settings switches for bid-level and account-level daily, weekly, and monthly limits" />
+</Frame>
+
+Each switch controls one field:
+
+- **Account** switches add that field to the **Bidding Limits** section when you [create or edit a customer](/features/customers#creating-and-editing-a-customer), and to the customer's own [bidding limits](/customer-portal/bidding-limits) page in their portal. With no Account switches on, the section is hidden entirely.
+- **Bid** switches add that field to a bid's **Bidding limits** section, and the matching **Caps** and **Budgets** columns to the customer's bid list. Bid-level limits only appear when editing an existing bid, not when creating one.
+
 <Note>
-Bid-level caps and budgets are optional and only appear on the bid form if you've enabled them for the tenant. Customer-level limits are always available.
+Turning a switch off doesn't just hide the field: limits of that kind stop being enforced, even if customers had values saved. Turn it back on and the saved values apply again.
 </Note>
 
 ## Two dimensions: caps vs. budgets
@@ -50,7 +64,7 @@ Resets are calendar-based, not rolling. A lead assigned at 23:59 UTC counts agai
 
 Caps and budgets only count **leads assigned through bidding**. Leads a customer purchases directly from the [marketplace](/features/marketplace) don't count—that's why these are sometimes called "bidding limits." The marketplace is a separate purchase channel that draws from the same wallet but doesn't flow through the bidding system.
 
-Returned leads also don't reduce consumption. Once a lead is assigned, it counts against caps and budgets; returning it credits the wallet but doesn't free up cap headroom.
+Returned leads stop counting. Once a lead is assigned it counts against caps and budgets, but if it's [returned](/features/returns#returning-leads), it no longer counts toward the customer's or bid's lead caps or budget spend, so the headroom comes back.
 
 ## How limits affect status
 

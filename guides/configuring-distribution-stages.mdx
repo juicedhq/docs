@@ -1,134 +1,177 @@
 ---
 title: Configuring Distribution Stages
-description: Build an ordered pipeline that routes each lead through auctions, round-robin, marketplace, data alterations, and third-party APIs.
+description: Build an ordered pipeline that routes each lead through auctions, round-robin, marketplace, Club, audits, data alterations, and third-party APIs.
 ---
 
-Distribution Stages give you an ordered pipeline that every accepted lead runs through — each stage tries to sell, route, or transform the lead, and leads that aren't terminated move to the next stage. This guide walks you through assembling a working pipeline end-to-end.
+Distribution Stages give you an ordered pipeline that every accepted lead runs through. Each stage tries to sell, route, hold, or transform the lead, and leads that aren't taken move on to the next stage. This guide walks you through assembling a working pipeline end-to-end.
 
-For the conceptual rundown — what each method does, what "terminal" means, how distribution flows are recorded — see the [Distribution Stages feature page](/features/distribution). This guide is the hands-on counterpart.
+For the conceptual rundown (what each method does, what "terminal" means, how distribution flows are recorded), see the [Distribution feature page](/features/distribution). This guide is the hands-on counterpart.
 
 ## Prerequisites
 
-- The **Distribution Stages** feature enabled on your tenant. If the **Distribution Stages** entry doesn't appear in the left sidebar, it hasn't been turned on — contact Juiced support.
+- A role with access to distribution stages. If **Distribution Stages** doesn't appear in your sidebar, ask an admin on your account.
 - At least one [lead category](/features/lead-categories) and [lead type](/features/lead-types) configured, so stages have something to match against.
 - A rough sketch of how you want leads to move: which buyers go first, where aged leads land, and what the final fallback is.
 
 ## Step 1: Open Distribution Stages
 
-Click **Distribution Stages** in the left sidebar. The list shows every stage you've created with its **Order**, **Name**, **Method**, whether it has eligibility filters, and whether it's paused.
+Click **Distribution Stages** in the sidebar. The list shows every stage in order with its **Name** (and description), **Method**, a filter icon under **Has Filters** when it has eligibility conditions, and its **Status** (Active or Paused). Use the search box or the **Method** filter to find a stage quickly.
 
-Order runs top-to-bottom: stage #1 gets the lead first, then stage #2, and so on until a terminal stage assigns it, routes it, or it falls off the end as unassigned.
+<Frame>
+  <img className="block dark:hidden" src="/images/tenant/distribution/stages-light.webp" alt="Distribution Stages list with eight stages in order, each showing a drag handle, name and description, method badge, and status" />
+  <img className="hidden dark:block" src="/images/tenant/distribution/stages-dark.webp" alt="Distribution Stages list with eight stages in order, each showing a drag handle, name and description, method badge, and status" />
+</Frame>
+
+Order runs top-to-bottom: the first stage gets the lead first, then the second, and so on until a terminal stage takes it or it falls off the end as unassigned.
 
 ## Step 2: Create a stage
 
-Click **New distribution stage** in the top-right. The create form has three always-present fields plus method-specific settings that swap in once you pick a method:
+Click **New stage** in the top-right. Every stage starts with a **Stage** section:
 
-- **Name** — required. Shown in the list and in distribution logs.
-- **Description** — optional. Plain text that describes what this stage does. Useful when you end up with ten stages and need to remember why one of them exists.
-- **Method** — required. Pick one of five methods (covered below). The form reveals method-specific settings as soon as you choose.
-- **Paused** — toggle. Paused stages are skipped entirely during distribution but stay in the pipeline so you can turn them back on without recreating.
+- **Name** — Required. Shown in the list and in your logs.
+- **Method** — Required. Pick one of seven methods (covered below). The form swaps in method-specific settings as soon as you choose.
+- **Description** — Optional. Plain text that describes what this stage does. Useful when you end up with ten stages and need to remember why one of them exists.
+- **Paused** — Paused stages are skipped during distribution but stay in the pipeline, so you can turn them back on without recreating them.
 
 ## Step 3: Pick a method
 
-Each method has its own settings panel. Pick the method that matches the role this stage plays in your pipeline:
+Each method has its own settings. Pick the one that matches the role this stage plays in your pipeline.
 
 ### Highest Price
 
-The classic auction: the lead goes to whoever bids the most. Under **Recipients**, decide who can compete:
+The classic auction: the lead goes to whoever offers the most.
 
-- **Enable Bids** — turn on to let customer bids compete. Reveals **Bidding Scopes**, which lets you limit to specific [scopes](/features/bidding#scopes) (county, state, nationwide) or leave as **Any** to allow all of them.
-- **Enable Partners** — turn on to let partner offers compete alongside bids. Reveals:
-  - **Partner Minimum Price** — the floor for partner offers. Customer bids have their own minimums set per bid; this only gates partners.
-  - **Partner Filter** — **All Partners**, or an include/exclude list of specific partners.
+- **Recipients → Deliveries per lead** — How many recipients can receive each lead at this stage. Deliveries also respect the lead type's sell limit.
+- **Bid Settings → Enable Bids** — Lets customer bids compete. **Bidding Scopes** limits them to specific [scopes](/features/bidding#scopes) (Nationwide, State, County). Leave all three unchecked to allow any scope.
+- **Partner Settings → Enable Partners** — Lets partner offers compete alongside bids. Reveals:
+  - **Minimum Price** — The floor for partner offers. Bids have their own minimums; this only gates partners.
+  - **Partner Filter** — **All Partners**, **Only Selected Partners**, or **All Except Selected**, with a list to pick from.
 
-The highest acceptable offer wins. Highest Price is terminal — a winning stage assigns the lead and stops the pipeline.
+<Frame>
+  <img className="block dark:hidden" src="/images/tenant/distribution/stage-highest-price-light.webp" alt="Highest Price stage edit page with Stage, Recipients, Bid Settings, Partner Settings, and Eligibility Conditions sections" />
+  <img className="hidden dark:block" src="/images/tenant/distribution/stage-highest-price-dark.webp" alt="Highest Price stage edit page with Stage, Recipients, Bid Settings, Partner Settings, and Eligibility Conditions sections" />
+</Frame>
+
+The highest acceptable offer wins. Highest Price is terminal: a winning stage assigns the lead and stops the pipeline.
 
 ### Round Robin
 
-Evenly distribute leads across a rotating set of recipients. **Method Settings**:
+Rotate leads evenly across a set of customers and/or partners at a flat price.
 
-- **Rotation Scope** — which past distributions count when deciding who's "next." "All Leads Ever Distributed" rotates over lifetime history; other options narrow the window.
-- **Price** — flat price charged per lead (same for everyone in the rotation).
+- **Rotation Scope** — Which past distributions count when deciding who's "next": **All Leads Ever Distributed**, or **Only Leads Distributed via This Stage**.
+- **Price** — Flat price charged per lead, the same for everyone in the rotation.
+- **Deliveries per lead** — How many recipients get each lead.
+- **Customer Settings → Enable Customers** — Include customers. **Customer Filter** picks all, only selected, or all except selected customers.
+- **Partner Settings → Enable Partners** — The same choice for partners.
 
-Under **Recipients**:
-
-- **Enable Customers** — include customers in the rotation.
-- **Enable Partners** — include partners in the rotation.
+<Frame>
+  <img className="block dark:hidden" src="/images/tenant/distribution/stage-round-robin-light.webp" alt="Round Robin stage edit page with Rotation Scope, Price, Deliveries per lead, and Customer Settings" />
+  <img className="hidden dark:block" src="/images/tenant/distribution/stage-round-robin-dark.webp" alt="Round Robin stage edit page with Rotation Scope, Price, Deliveries per lead, and Customer Settings" />
+</Frame>
 
 Round Robin is terminal when it finds an eligible recipient.
 
 ### Marketplace
 
-Place the lead in the [marketplace](/features/marketplace) for a reverse auction. There are no extra recipient settings on the stage itself — marketplace stages use the **fallback prices** configured on each [source](/features/sources) to respond to pings.
+Place the lead on the [marketplace](/features/marketplace) for a reverse auction. There are no recipient settings on the stage itself. Marketplace stages answer pings using the **fallback prices** configured on each [source](/features/sources#source-pricing): if the source has a fallback price for the ping's lead type, the ping is accepted at that price; otherwise it's rejected.
 
-Marketplace is terminal: once the lead is listed, the pipeline stops while buyers accept offers.
+<Frame>
+  <img className="block dark:hidden" src="/images/tenant/distribution/stage-marketplace-light.webp" alt="Marketplace stage edit page explaining that marketplace stages use source fallback prices to answer pings" />
+  <img className="hidden dark:block" src="/images/tenant/distribution/stage-marketplace-dark.webp" alt="Marketplace stage edit page explaining that marketplace stages use source fallback prices to answer pings" />
+</Frame>
+
+The auction itself (starting price, ending price, and timing) is set per lead type. See [Setting up the marketplace](/guides/setting-up-the-marketplace). Marketplace is terminal: once the lead is listed, the pipeline stops while buyers consider it.
+
+### Club
+
+Park the lead in your [Club](/features/club) so customers with Club access can claim it for free.
+
+- **Unlimited claims** — Any number of customers can claim each lead.
+- **Default claim cap** — When claims aren't unlimited, how many customers can claim each lead routed through this stage.
+
+<Frame>
+  <img className="block dark:hidden" src="/images/tenant/distribution/stage-club-light.webp" alt="Club stage edit page with Unlimited claims switched off and a Default claim cap of 3" />
+  <img className="hidden dark:block" src="/images/tenant/distribution/stage-club-dark.webp" alt="Club stage edit page with Unlimited claims switched off and a Default claim cap of 3" />
+</Frame>
+
+Club is terminal. It's a natural last stage for leads nobody bought.
+
+### Audit
+
+Hold matching leads for manual review. Audit stages have no settings of their own: when a lead matches the stage's eligibility conditions, it's set to **Audit** status and distribution stops. See [Audits](/features/audits) for how to review and release held leads.
+
+<Warning>
+An Audit stage with no eligibility conditions holds every lead that reaches it.
+</Warning>
 
 ### Alter Data
 
-Transform the lead before it moves to the next stage. Click **Add Operation** under **Operations** to add one or more transformations:
+Change the lead before it moves to the next stage. Under **Operations**, click **Add Operation** for each change:
 
-- **Set Lead Type** — reassign the lead to a different lead type. Common pattern: promote a "fresh" lead to an "aged" variant after the first marketplace pass fails.
-- **Set Field Value** — overwrite a specific field with a new value.
+- **Set Lead Type** — Reassign the lead to a different lead type. Common pattern: switch a "fresh" lead to an "aged" variant after the first marketplace pass fails.
+- **Set Field Value** — Set a field to a **Static Value** you type, or **Copy From Field** to copy another field's value.
 
-Alter Data is **not terminal** — leads continue to the next stage after the transformations apply. This is the only non-terminal method, which is what makes it useful for aging and rewriting between auction passes.
+<Frame>
+  <img className="block dark:hidden" src="/images/tenant/distribution/stage-alter-data-light.webp" alt="Alter Data stage with a Set Lead Type operation that switches a fresh lead type to its aged variant, and an eligibility condition on the fresh lead type" />
+  <img className="hidden dark:block" src="/images/tenant/distribution/stage-alter-data-dark.webp" alt="Alter Data stage with a Set Lead Type operation that switches a fresh lead type to its aged variant, and an eligibility condition on the fresh lead type" />
+</Frame>
+
+Alter Data is **not terminal**: leads continue to the next stage after the changes apply, which is what makes it useful for aging and rewriting between auction passes.
 
 ### Real Estate API
 
-Enrich the lead with property data and (optionally) skip-traced owner contacts from a third-party real estate API before subsequent stages run. Under **Real Estate API Configuration**:
+Enrich the lead with property data and, optionally, skip-traced owner contacts before later stages run. This method shows as "(integration required)" until your [Real Estate API integration](/features/integrations#real-estate-api) is connected, and you can have one Real Estate API stage per lead category. Under **Real Estate API Configuration**:
 
-- **Lead Category** — required. Only leads in this category are enriched; the selected category also scopes which lead fields are available for mapping.
-- **Property Data Enrichment** — toggle on to call the property data endpoint.
-- **Skip Trace Owner Contacts** — toggle on to call the skip-trace endpoint. Requires a Skip Trace API key configured in integration settings.
-- **Field Mappings** — for each API field you care about, enter the API field name, pick the **Lead Field** to populate, and decide whether to **Overwrite Existing** values on the lead.
+- **Lead Category** — Required. Only leads in this category are enriched, and the category scopes which lead fields you can map to.
+- **Property Data Enrichment** — Turn on to call the property data endpoint.
+- **Skip Trace Owner Contacts** — Turn on to call the skip-trace endpoint. Requires a Skip Trace API key in the integration settings.
+- **Field Mappings** — Check the API fields you want, map each one to a lead field, and decide whether to **Overwrite Existing** values on the lead.
 
-Real Estate API is non-terminal — the lead continues through the pipeline with enriched data.
+Real Estate API is non-terminal: the lead continues through the pipeline with its new data.
 
 ## Step 4: Add eligibility conditions (optional)
 
-Scroll to **Eligibility Conditions** and click **Add filters** to restrict this stage to a subset of leads. Conditions use the same builder as [lead types](/guides/defining-lead-types#step-3-define-matching-conditions): `Add "AND" Condition` within a group, `Add "OR" Group` to branch.
+Scroll to **Eligibility Conditions** and click **Add filters** to restrict this stage to a subset of leads. Conditions use the same builder as [lead types](/guides/defining-lead-types#step-2-define-conditions): each group says **Match all of the following**, `Add "AND" condition` adds a rule to the group, and `Add "OR" group` adds an alternative group.
 
-Eligibility filters evaluate against the lead's data, lead category, lead type, and source. If a lead doesn't match, the stage is skipped for that lead and the pipeline continues to the next stage.
+Pick a property from **Metadata** (Lead Category, Lead Type, Source) or from your lead **Fields**. If a lead doesn't match, the stage is skipped for that lead and the pipeline continues to the next stage. For Real Estate API stages, the selected lead category is enforced automatically.
 
 <Tip>
-Filters are the right tool for "only run this stage for aged leads" or "only run for leads from Source X." If you need to exclude a single partner or customer from a Highest Price stage, use the stage's own **Partner Filter** or per-bid settings instead.
+Conditions are the right tool for "only run this stage for aged leads" or "only run for leads from Source X." To exclude a single partner or customer from a stage, use the stage's own partner or customer filter instead.
 </Tip>
 
 ## Step 5: Save and order the stage
 
-Click **Create**. The stage appears at the bottom of the list by default.
+Click **Create stage**. On an existing stage, edits are saved from the bar at the bottom of the page, and **Delete** is in the page header.
 
-Back on the list page, drag the order handle on any row to reorder. The order determines the sequence leads flow through — the usual pattern is:
+Back on the list, drag the handle on any row to reorder, then click **Save changes** in the **Unsaved order changes** bar. Clear any search or method filter first; reordering only works on the full list. A typical pipeline looks like:
 
-1. Direct auction (Highest Price) — sell to the top bidder first.
-2. Round robin (Round Robin) — distribute to a partner/customer rotation for leads that didn't auction.
-3. Marketplace (fresh) — post to marketplace at full price.
-4. Age the lead (Alter Data) — rewrite the lead type.
-5. Marketplace (aged) — repost at a lower price.
-6. Fallback round robin — give aged leads away to relationship partners at no charge.
+1. Direct auction (Highest Price): sell to the top bidder first.
+2. Round robin (Round Robin): distribute to a partner or customer rotation for leads that didn't auction.
+3. Marketplace (fresh): list on the marketplace at full price.
+4. Age the lead (Alter Data): switch to the aged lead type.
+5. Marketplace (aged): relist at a lower price.
+6. Club pool (Club): let Club members claim whatever's left.
 
 Your own pipeline can be shorter or longer; the point is that each stage is responsible for a single decision, and the order reflects your preference.
 
 ## Step 6: Pause stages without deleting them
 
-Use the **Paused** toggle on the list or the **Paused** field on the edit form to temporarily take a stage out of the pipeline. Paused stages are skipped for every lead but keep all their settings — flip them back on any time without reconfiguring.
+Use **Pause** / **Resume** in a row's actions on the list, or the **Paused** switch on the edit page, to temporarily take a stage out of the pipeline. Paused stages keep all their settings, so you can flip them back on any time without reconfiguring.
 
 ## Step 7: Verify leads are flowing through
 
-Click **Logs** in the left sidebar (under **Entries**) to see every distribution flow. Each lead's flow shows the stages it ran through, what happened at each (matched, filtered out, skipped because paused, errored), and the final outcome.
+Open **Incoming logs** under **Entries** in the sidebar to see every distribution flow. Each log shows the stages a lead ran through, what happened at each (accepted, filtered out, skipped because paused, errored, held for audit), and the final outcome. See [Reading distribution logs](/guides/reading-distribution-logs) for a walkthrough.
 
-<Note>
-The Logs entry only appears in the sidebar when Distribution Stages is enabled. If you see it, you're running on the new pipeline.
-</Note>
-
-For an individual lead, click **Leads** in the sidebar, open a lead, and look at the timeline — every stage attempt shows up as an event, with the match/skip reason inline.
+For an individual lead, open it from **Leads** and choose **View Log** from its **More actions** menu.
 
 ## What happens next
 
 Once your pipeline is running:
 
-- **New leads** automatically run through every enabled stage in order.
-- **Distribution Flows** record the full history for auditing and debugging.
-- **Paused stages** are skipped without any history entry — flip them on and off without fear.
-- **Reordering** takes effect immediately on the next lead; in-flight flows are not replayed.
+- **New leads** automatically run through your stages in order.
+- **Incoming logs** record the full history for auditing and debugging.
+- **Paused stages** show up in a lead's log as skipped, so you can see they were bypassed.
+- **Reordering** takes effect on the next lead; in-flight flows are not replayed.
+- **Leads that need another try** can be [reprocessed](/features/leads#reprocessing-leads) from any stage you choose.
 
 From here, the natural next steps are setting up [partners](/features/partners) as recipients, wiring up [webhooks](/features/webhooks) for downstream systems to react to distribution events, and reviewing the [marketplace](/features/marketplace) configuration so fallback stages have buyers waiting.

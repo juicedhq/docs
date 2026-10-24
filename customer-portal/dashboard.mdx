@@ -1,0 +1,45 @@
+---
+title: Dashboard
+description: See your newest leads and how your latest bids are doing the moment you log in.
+---
+
+The Dashboard is the first page you see after logging in. It greets you by name ("Good morning", "Good afternoon", or "Good evening", depending on your local time) and shows a quick snapshot of what's fresh.
+
+<Frame>
+  <img className="block dark:hidden" src="/images/portal/overview/dashboard-light.webp" alt="Dashboard with a greeting, a Latest leads table, and a Recent bids table" />
+  <img className="hidden dark:block" src="/images/portal/overview/dashboard-dark.webp" alt="Dashboard with a greeting, a Latest leads table, and a Recent bids table" />
+</Frame>
+
+## Latest leads
+
+Your five most recently received leads, newest first:
+
+| Column | What it shows |
+|--------|---------------|
+| **Lead** | The lead's name and lead type. A green **New** badge marks leads received in the last 24 hours. |
+| **Contact** | Phone number and email. Click either to call or email, or use the copy button next to it. |
+| **Location** | Where the lead is located |
+| **Received** | How long ago you got the lead. Hover for the exact date and time. |
+| **Price** | What you paid |
+
+Click a row to open the lead's full details, or **View all →** to go to [Leads](/customer-portal/leads).
+
+## Recent bids
+
+Your five most recently updated bids:
+
+| Column | What it shows |
+|--------|---------------|
+| **Bid** | The location the bid covers, with its state (or "Statewide" / "Nationwide") underneath |
+| **Amount** | Your bid amount |
+| **Position** | Where you stand against other bidders: **Top**, **Tied**, **Under**, or **Out** |
+| **Lead Type** | The lead type the bid is for |
+| **Status** | Whether the bid can win leads right now |
+
+Click a row to find that bid on the [Bids](/customer-portal/bids) page, or **View all →** to see them all. [Bid position](/customer-portal/bids#bid-position) and [Bid statuses](/customer-portal/bids#bid-statuses) explain what each badge means.
+
+If you haven't placed a bid yet, this section says **No bids yet**. A good nudge to go [place your first one](/customer-portal/bids#creating-a-new-bid).
+
+## The webhook reminder
+
+Until your account has a webhook, the top of the dashboard shows a short reminder: **Using a CRM? Set up a webhook** to send new leads there automatically the moment they arrive. Click the link to [create a webhook](/customer-portal/webhooks), or click the **×** to hide the reminder in this browser.

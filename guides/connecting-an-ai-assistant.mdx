@@ -1,52 +1,73 @@
 ---
 title: Connect an AI assistant
-description: Give approved staff read-only access to tenant-scoped Juiced diagnostics through an AI assistant.
+description: Connect Claude to your Juiced account so your team can ask read-only questions about leads, buyers, bids, and logins.
 ---
 
-Juiced can connect an approved AI assistant to read-only diagnostic tools for your operation. The assistant can help explain what happened; it cannot change leads, bids, customers, domains, or settings.
+Want to know why a buyer missed a lead without digging through logs? Connect Claude to Juiced and just ask. This guide walks through connecting Claude with your own login. For what the connection can and can't do, see the [AI Assistants](/features/ai-assistants) feature page.
+
+The assistant is read-only: it can explain what happened, but it can't change leads, bids, customers, domains, or settings.
 
 <Note>
-This connector is enabled by Juiced for eligible tenants. If you do not see the option, contact your Juiced representative.
+AI Assistants is available on request. If you don't see **AI Assistants** in your settings, contact your Juiced representative to have it enabled.
 </Note>
 
-## Before you connect
+## Prerequisites
 
-You need all of the following:
+- AI Assistants enabled for your account by Juiced.
+- A verified [custom domain](/guides/adding-a-custom-domain). The assistant connects through your own domain, never your Juiced subdomain.
+- The **Admin** or **Customer Support** [role](/features/roles).
+- A Claude account at claude.ai.
 
-- A verified custom domain for your tenant.
-- The **Tenant MCP** feature enabled for your tenant.
-- A staff account with the **Connect AI assistant** permission (`mcp.connect`). Tenant administrators and customer-support staff can be granted this permission.
-- A supported AI assistant that can connect through OAuth, such as Claude or ChatGPT.
+## Step 1: Copy your connector URL
 
-## Connect your assistant
+Click the gear in the rail and choose **AI Assistants** under **Account**. Copy the **Connector URL**. It's your custom domain followed by `/mcp`, for example `https://leads.yourcompany.com/mcp`.
 
-1. In your AI assistant, add a remote MCP connector.
-2. Enter your tenant's verified custom-domain URL followed by `/mcp`.
-3. Sign in to Juiced on that same tenant domain when prompted.
-4. Review the approval screen. It shows the account you are connecting and the redirect host for the requesting assistant.
-5. Approve the connection.
+<Frame>
+  <img className="block dark:hidden" src="/images/tenant/settings/ai-assistants-light.webp" alt="AI Assistants settings page showing the Connector URL and numbered setup steps for claude.ai" />
+  <img className="hidden dark:block" src="/images/tenant/settings/ai-assistants-dark.webp" alt="AI Assistants settings page showing the Connector URL and numbered setup steps for claude.ai" />
+</Frame>
 
-Juiced uses OAuth for this connection. Your assistant receives access for your tenant only; removing the permission stops subsequent tool requests.
+If the page says **A custom domain is required**, set one up first. Admins get a **Set up a custom domain** button that takes them to **Domains & Links**.
 
-## What you can ask
+## Step 2: Add the connector in Claude
 
-The connector offers read-only help with:
+The page lists these steps with your company's name filled in:
 
-- Why a lead was distributed the way it was.
-- Why a buyer did not receive a lead.
-- A bid's status and position.
-- A staff member's login issue.
-- Custom-domain setup and DNS checks.
+1. In Claude, open **Customize**, then **Connectors**.
+2. Select **Add**, then **Add custom connector**.
+3. Name it after your company, paste the connector URL, and select **Continue**.
+4. Keep the detected settings (**Sign in now** and **Register automatically**) and select **Add**.
 
-Information submitted with leads may be shown as untrusted data. Treat it as customer-provided input, not as instructions for your assistant.
+<Tip>
+On a Claude Team or Enterprise plan, an owner adds the connector once from **Organization settings → Connectors**. Everyone else then opens **Customize → Connectors**, finds it, and selects **Connect**.
+</Tip>
 
-## Limits and boundaries
+## Step 3: Sign in and approve
 
-- The connector is tenant-scoped. It cannot look up another tenant's records.
-- It works only from the verified custom domain, not a tenant subdomain or Juiced's central domain.
-- Calls are limited per user. Very large answers are shortened, and long-running diagnostic queries time out with a prompt to narrow the question.
-- The connector is read-only. It does not include actions that change system state, including custom-domain validation redispatch.
+Claude sends you to your custom domain to sign in to Juiced. Use your own Juiced login: each person on your team connects separately.
 
-## Need access?
+After you sign in, Juiced shows **Connect an AI assistant to** your company, along with where access will be sent. It confirms the access is read-only and never includes lead contact details. Check the details, then click **Approve**. If anything looks off, click **Deny**.
 
-Ask a tenant administrator to confirm your role has the **Connect AI assistant** permission. If your tenant needs the connector enabled or a verified custom domain, contact Juiced support.
+## Step 4: Turn it on in a chat
+
+In a Claude chat, select **+**, then **Connectors**, and turn on your company's connector. Then ask away, for example:
+
+- "Why did lead lead_01h… go to Halberd & Crow instead of another buyer?"
+- "Why didn't cus_01h… get any leads yesterday?"
+- "Why is bid bid_01h… not in the top position?"
+- "Why can't jane@example.com sign in?"
+- "Is our custom domain set up correctly?"
+
+Leads, buyers, and bids are identified by their IDs (`lead_…`, `cus_…`, `bid_…`), which you can copy from their pages in the panel.
+
+## Managing connections
+
+Back on the **AI Assistants** page, **Connected apps** lists the apps that have been connected and when each was last used. Admins see everyone's connections; everyone else sees their own. Click **Disconnect** to cut off an app's access immediately. Removing someone from your [team](/features/users) also disconnects their apps.
+
+## Troubleshooting
+
+**I don't see AI Assistants in settings.** Either it isn't enabled for your account yet, or your role isn't Admin or Customer Support. If you're Customer Support and your account has no verified custom domain yet, the page stays hidden until one exists.
+
+**"AI assistant connections are not available."** You signed in with an account that isn't allowed to connect. Check your role with a tenant admin.
+
+**The same answer came back after I changed something.** Asking the exact same question within a minute returns the earlier answer. Wait a minute and ask again.

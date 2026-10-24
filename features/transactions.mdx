@@ -7,11 +7,27 @@ A transaction is any movement of funds in or out of a customer's wallet. Every l
 
 ## Where transactions appear
 
-- **Customer panel → Billing → Transactions** — What customers see for their own account
-- **Tenant panel → Customers → [Customer] → Transactions tab** — Full transaction history for any customer
-- **Webhooks** — The [Transaction Updated](/features/webhooks) webhook event fires whenever a transaction is created or modified
+- **Customer portal → Billing → Transactions**: what customers see for their own account ([Billing](/customer-portal/billing))
+- **Tenant panel → Customers → [Customer] → Transactions tab**: full transaction history for any customer
+- **Webhooks**: the [Transaction Updated](/features/webhooks) webhook event fires whenever a transaction is created or modified
 
-Each transaction shows the timestamp, amount, event type, a description, and (when applicable) a link to the related record—for example, a "Lead Assigned" transaction links to the lead it paid for.
+## The Transactions tab
+
+Open a customer and switch to the **Transactions** tab. Totals across the top show the number of **Transactions**, total **Deposits** and **Withdrawals**, and **Net** (deposits minus withdrawals) for whatever you've filtered to.
+
+<Frame>
+  <img className="block dark:hidden" src="/images/tenant/customers/customer-transactions-light.webp" alt="Customer Transactions tab with Transactions, Deposits, Withdrawals, and Net totals above a table of transactions with date, amount, event, and transaction ID" />
+  <img className="hidden dark:block" src="/images/tenant/customers/customer-transactions-dark.webp" alt="Customer Transactions tab with Transactions, Deposits, Withdrawals, and Net totals above a table of transactions with date, amount, event, and transaction ID" />
+</Frame>
+
+Each row shows:
+
+- **Date**: how long ago the transaction happened (hover for the exact time)
+- **Amount**: green for money in, red for money out
+- **Event**: why the transaction was created, linked to the related record where there is one. A "Lead Assigned" transaction, for example, links to the lead it paid for.
+- **Transaction ID**: the unique ID, handy when reconciling with Stripe or your own books
+
+Search matches the transaction ID. Use **Filters** to narrow by **Type** (Deposit or Withdraw) and **Event**, and sort by date or amount. The footer shows the **Filtered total**.
 
 ## Event types
 
@@ -19,7 +35,7 @@ Every transaction carries an event type describing why it was created:
 
 | Event | Direction | What it means |
 |-------|-----------|---------------|
-| **Funds Added** | Deposit | The customer added funds through the portal (credit card or other payment method). |
+| **Funds Added** | Deposit | The customer added funds through the portal (credit card or other payment method), or bought lead credit on a [checkout page](/features/checkout-pages). |
 | **Funds Added By Tenant** | Deposit | You added funds manually on behalf of the customer (credits, adjustments, reconciliation). |
 | **Funds Subtracted By Tenant** | Withdrawal | You removed funds manually. |
 | **Auto Recharge** | Deposit | The customer's wallet dropped below their auto-recharge threshold and was automatically topped up from their default payment method. |
@@ -28,6 +44,7 @@ Every transaction carries an event type describing why it was created:
 | **Placed Buy Order** | Hold | A marketplace buy order reserved funds from the wallet. (Not a real charge—the money is held pending the auction outcome.) |
 | **Canceled Buy Order** | Release | The customer canceled an active buy order; held funds are released back to the wallet. |
 | **Released Buy Order** | Release | A buy order expired or was superseded (e.g., someone else won the lead first); held funds are released. |
+| **Checkout Bonus** | Deposit | Bonus credit added when the customer bought a product with a bonus through one of your [checkout pages](/features/checkout-pages). |
 
 ## Holds vs. charges
 

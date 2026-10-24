@@ -1,0 +1,132 @@
+---
+title: Getting Around the Portal
+description: Find your way around the business rail, sidebar, status chips, search, notifications, and user menu.
+---
+
+Every page in the portal shares the same frame: a slim **business rail** on the far left, a **sidebar** with search, status chips, and navigation, and the page you're working on to the right. Learn the frame once and every page feels familiar.
+
+<Frame>
+  <img className="block dark:hidden" src="/images/portal/overview/dashboard-light.webp" alt="Customer portal with the business rail on the left, the sidebar with search, wallet chip and navigation, and the dashboard on the right" />
+  <img className="hidden dark:block" src="/images/portal/overview/dashboard-dark.webp" alt="Customer portal with the business rail on the left, the sidebar with search, wallet chip and navigation, and the dashboard on the right" />
+</Frame>
+
+## The business rail
+
+The rail runs down the left edge of the screen on desktop. From top to bottom it shows:
+
+- **Your provider's icon.** Hover it to see their name.
+- **One avatar per business** you belong to, shown as initials. The highlighted avatar is the business you're working in. A small dot shows each business's status: green for active, yellow for paused, red for inactive, and gray for archived.
+- **Create a new business** (the **+** button). This opens the business setup form so you can add another business to your login. See [Signing up and logging in](/customer-portal/signing-up-and-logging-in#adding-another-business).
+- **Company Profile** (the gear icon). Shown only if you're allowed to edit your company's details. See [Company Profile](/customer-portal/company-profile).
+- **Notifications** (the bell). See [Notifications bell](#notifications-bell) below.
+- **Documentation**, which opens these docs in a new tab.
+
+Click another business's avatar to switch to it. Each business is a completely separate account: its own wallet, payment methods, bids, leads, contacts, and webhooks. Nothing carries over between them, so double-check which avatar is highlighted before you start placing bids.
+
+<Tip>
+On a phone the rail is hidden. Use the **Switch business** menu at the top of the sidebar instead, and find the notification bell next to your name at the bottom of the sidebar.
+</Tip>
+
+## The sidebar
+
+The sidebar holds the main navigation, grouped by job:
+
+| Group | Pages |
+|-------|-------|
+| *(top)* | [Dashboard](/customer-portal/dashboard), [Leads](/customer-portal/leads), [Bids](/customer-portal/bids), [Marketplace](/customer-portal/marketplace), and your provider's [Club](/customer-portal/club) |
+| **Locations** | [Counties, States, and Countries](/customer-portal/locations) |
+| **Notifications** | [Contacts](/customer-portal/notifications) and [Webhooks](/customer-portal/webhooks) |
+| **Billing** | [Payment methods, Transactions, Auto recharge](/customer-portal/billing), [Subscription](/customer-portal/subscription), and [Bidding Limits](/customer-portal/bidding-limits) |
+| **Support** | Links your provider adds: **Support Portal**, **Email Us**, and **Lead Returns** |
+
+Click a group's label to collapse or expand it; the portal remembers your choice. You can also collapse the whole sidebar to icons with the toggle on its edge.
+
+### Why a page might be missing
+
+Your sidebar only shows what applies to your account, so it may look shorter than the table above:
+
+- **Marketplace** appears only when your provider sells leads through the marketplace.
+- **Club** appears only when your provider runs a Club. Your provider names it, so it might read "Fresh Squeeze Club" or something else entirely.
+- **Locations** shows only the location levels you can bid on. If you can only bid on counties, you'll only see **Counties**.
+- **Payment methods** appears when your provider accepts card payments, or when you still have a saved card on file.
+- **Auto recharge** is hidden when card payments are turned off or your account is archived.
+- **Subscription** appears when your provider offers a subscription, or when you already have one.
+- **Bidding Limits** appears only when your account can bid.
+- **Support** links appear one by one as your provider sets them up.
+
+## Status chips
+
+Just under the search box, a row of small chips sums up your account at a glance. Each one is a shortcut.
+
+### Wallet
+
+The wallet chip shows your current balance. Its color tells you whether that balance can keep your bids running:
+
+| Color | What it means |
+|-------|---------------|
+| <Icon icon="circle" color="green" size={12} /> Green | You have enough funds to cover your active bids |
+| <Icon icon="circle" color="yellow" size={12} /> Yellow | At least one bid is being limited by your balance |
+| <Icon icon="circle" color="red" size={12} /> Red | Your balance doesn't cover the minimum for any bid |
+| <Icon icon="circle" color="gray" size={12} /> Gray | Bidding isn't turned on for your account, so funding status doesn't apply |
+
+Click the chip to jump to [Payment methods](/customer-portal/billing#payment-methods), where you can add funds. If your provider doesn't take card payments, you land on [Transactions](/customer-portal/billing#transactions) instead.
+
+### Paused or archived
+
+If your account is paused or archived, a pulsing **Paused** or **Archived** chip appears first in the row. Leads aren't being assigned to your bids while it's there. Click it to open [Bidding Limits](/customer-portal/bidding-limits), where you can unpause.
+
+### Return rate or tier
+
+If your provider shares return information with you, a chip shows either your **return tier** (a badge with the tier's name) or your **return rate** as a percentage. Click it for the details. See [Returns and your return rate](/customer-portal/returns#your-return-rate-chip).
+
+### Lead cap and budget
+
+If your provider lets you set account-wide lead caps or budgets and you've set one, chips show how much of it you've used. They turn red once a cap or budget is used up. Click either one to open [Bidding Limits](/customer-portal/bidding-limits).
+
+## Search everything
+
+Click **Search everything...** at the top of the sidebar, or press <kbd>⌘</kbd> <kbd>K</kbd> (<kbd>Ctrl</kbd> <kbd>K</kbd> on Windows), to open search.
+
+<Frame>
+  <img className="block dark:hidden" src="/images/portal/overview/command-palette-light.webp" alt="Search dialog open over the dashboard, listing navigation shortcuts above a search field" />
+  <img className="hidden dark:block" src="/images/portal/overview/command-palette-dark.webp" alt="Search dialog open over the dashboard, listing navigation shortcuts above a search field" />
+</Frame>
+
+Before you type, it lists shortcuts to every page you can open, your support links, your other businesses, and **Log Out**. Type two or more characters to search your leads, bids, locations, transactions, notification contacts, and webhooks, plus matching articles from these docs. Use the arrow keys and <kbd>Enter</kbd>, or click a result, to jump straight to it.
+
+## Notifications bell
+
+The bell in the rail shows a red count when you have unread notifications. Click it to see the latest ones: alerts like **You got a new lead!** or **You've been outbid!**, and **Lead export complete** when a [lead export](/customer-portal/leads#exporting-leads) is ready to download. Your provider writes the wording of these alerts, so yours may read a little differently. Click a notification to open it and mark it read, or use **Mark all as read** to clear the count.
+
+<Frame>
+  <img className="block dark:hidden" src="/images/portal/overview/notifications-light.webp" alt="Notifications panel open from the bell in the rail, showing an unread count, recent notifications, and a Mark all as read button" />
+  <img className="hidden dark:block" src="/images/portal/overview/notifications-dark.webp" alt="Notifications panel open from the bell in the rail, showing an unread count, recent notifications, and a Mark all as read button" />
+</Frame>
+
+These in-portal notifications are just for you. Emails and texts about leads, bids, and your account go to the [notification contacts](/customer-portal/notifications) you set up.
+
+## Banners
+
+Your provider may post an announcement banner across the top of the portal, such as a heads-up about a holiday schedule or a new lead type. Some include a link to more information, and some can be dismissed with the close button on the right. A dismissed banner stays hidden in that browser.
+
+<Frame>
+  <img className="block dark:hidden" src="/images/portal/overview/banner-light.webp" alt="Announcement banner from the lead provider across the top of the portal" />
+  <img className="hidden dark:block" src="/images/portal/overview/banner-dark.webp" alt="Announcement banner from the lead provider across the top of the portal" />
+</Frame>
+
+## Your user menu
+
+Your name sits at the bottom of the sidebar. Click it to open the user menu:
+
+- **User Settings** opens your personal profile and security settings. See [Profile and security](/customer-portal/account-settings).
+- **Log out** signs you out.
+- **Theme** switches between light, dark, and your system setting. Pick whichever is easier on the eyes before your morning juice.
+
+## When a page is blocked
+
+Some pages show a message you can't close instead of their content:
+
+- **Bidding not available.** If your provider hasn't turned on bidding for your account, the **Bids** and **Counties** pages show a message from your provider (by default, an invitation to schedule a call with their sales team) and a button back to your dashboard.
+- **Account archived.** If your account has been archived, the **Bids**, **Locations**, and **Marketplace** pages say so. If your provider has set a support contact, a **Contact Support** button appears.
+
+Either way, your provider is the one who can change it.

@@ -26,7 +26,12 @@ Every bid is placed on a **lead type**. The lead type's bidding settings determi
 - **Maximum bid** — The ceiling (hidden when fixed pricing is enabled)
 - **Bid increments** — The step between valid bid amounts (hidden when fixed pricing is enabled)
 
-You can't place a bid on a lead type that doesn't have bidding enabled.
+You set these per lead type on its **Bidding** tab (open **Lead Types** under **Ingest**, pick a lead type, then **Bidding**). Each scope you open gets its own row with **Enabled**, **Fixed**, **Minimum**, **Maximum**, and **Step** values. Customers can only bid on scopes that have an enabled row.
+
+<Frame>
+  <img className="block dark:hidden" src="/images/tenant/ingest/lead-type-bidding-light.webp" alt="Lead type Bidding tab with county, state, and nationwide scopes, each showing Enabled, Fixed, Minimum, Maximum, and Step, and a New bidding scope button" />
+  <img className="hidden dark:block" src="/images/tenant/ingest/lead-type-bidding-dark.webp" alt="Lead type Bidding tab with county, state, and nationwide scopes, each showing Enabled, Fixed, Minimum, Maximum, and Step, and a New bidding scope button" />
+</Frame>
 
 ### Scopes
 
@@ -42,34 +47,42 @@ Broader scopes typically mean more lead volume but also more competition. A nati
 
 ## Creating a bid
 
-To create a bid, you'll need to specify:
+Customers place their own bids from the [Bids page](/customer-portal/bids) in their portal. You can also place, edit, and manage bids for them: open **Customers**, pick a customer, then open the **Bids** tab and click **New bid**.
 
-1. **Lead type** — Which lead type you want
-2. **Scope** — Geographic level (county, state, or nationwide)
-3. **Location** — The specific area within that scope
-4. **Amount** — How much you're willing to pay per lead
+The bid form asks for:
 
-The form will only show scopes that are enabled for the selected lead type, and the amount field will enforce the minimum, maximum, and step values from the lead type's bidding settings.
+1. **Location** — Search counties, states, and countries. The bid covers the area you pick, so the location sets the scope.
+2. **Lead type** — Only lead types that accept bids for that location are listed.
+3. **My bid** — Pick an amount. The form shows the current **Top bid** for that lead type and location so you know what you're up against.
+
+The amounts offered follow the lead type's minimum, maximum, and step. Because you're the one running the stand, the tenant form also offers amounts **below minimum** and a **Custom** amount, which the customer's own form doesn't.
 
 ### Optional limits
 
-If enabled by the tenant, bids can also have their own caps and budgets:
+If you've enabled bid-level limits in your [bidding settings](#bidding-settings), the form also has a **Bidding limits** section:
 
 - **Daily/weekly/monthly lead caps** — Maximum number of leads this bid can win
 - **Daily/weekly/monthly budgets** — Maximum spend for this bid
 
-These are separate from customer-level caps and budgets. A bid might hit its own limit even if the customer still has capacity.
+These are separate from customer-level caps and budgets. A bid might hit its own limit even if the customer still has capacity. See [budgets and caps](/features/budgets-and-caps).
 
 ## Managing bids
 
-From a customer's bid list, you can:
+The customer's **Bids** tab lists every bid with its location, **Status**, **My Bid**, **Top Bid**, **Position**, and **Lead Type**, plus **Caps** and **Budgets** columns when those limits are enabled.
 
-- **Add new bids** — Click "Create Bid" to place a new one
-- **Edit existing bids** — Change the amount or limits
-- **Pause/unpause** — Toggle the bid on or off without deleting it
-- **Delete** — Remove the bid entirely (archives it)
+<Frame>
+  <img className="block dark:hidden" src="/images/tenant/customers/customer-bids-light.webp" alt="A customer's Bids tab listing bids by location with Status, My Bid, Top Bid, Position, Lead Type, Caps, and Budgets columns and a New bid button" />
+  <img className="hidden dark:block" src="/images/tenant/customers/customer-bids-dark.webp" alt="A customer's Bids tab listing bids by location with Status, My Bid, Top Bid, Position, Lead Type, Caps, and Budgets columns and a New bid button" />
+</Frame>
 
-The pause toggle is available both in the bid table and on the edit page.
+Search by location, or use **Filters** to narrow by lead type or scope, or to include archived bids. Each row has actions to:
+
+- **Edit** — Change the amount or limits
+- **Pause / Unpause** — Turn the bid off or on without deleting it
+- **History** — See every change to the bid over time
+- **Delete** — Remove the bid (it's archived, and you can still find it with the archived filter)
+
+To see every bid on a lead type across all customers, open the lead type's **Overview**: its **Bids** table lists customer, location, status, and amount, with filters and an **Export** button.
 
 <Note>
 Pausing a bid is different from pausing a customer. A paused bid shows as "Paused" in its own status, but if the *customer* is paused, all their bids are functionally paused even though each bid might still display as "Active."
@@ -77,7 +90,7 @@ Pausing a bid is different from pausing a customer. A paused bid shows as "Pause
 
 ## Bid statuses
 
-Like customers, bids have multiple underlying statuses that roll up into a single **display status**. The display status is what you'll see most often, but the underlying statuses are available as optional columns in the bid table.
+Like customers, bids have multiple underlying statuses that roll up into a single **display status**. The display status is what you'll see most often. The underlying statuses appear as columns in the bids table on each location's page under **Locations** (see [location analytics](/features/location-analytics)).
 
 ### Underlying statuses
 
@@ -89,8 +102,6 @@ These four statuses each track a specific aspect of the bid's health:
 | **Funding** | Customer wallet relative to bid amount | Available, Limited, Exhausted |
 | **Cap** | Lead cap consumption | Unlimited, Available, Exhausted |
 | **Budget** | Budget consumption | Unlimited, Available, Limited, Exhausted |
-
-Tenants can toggle these columns on or off in the bid table to show as much or as little detail as needed.
 
 ### Display status
 
@@ -145,7 +156,7 @@ Lead caps limit the **number of leads** a bid can win:
 - **Weekly cap** — Resets each week
 - **Monthly cap** — Resets each month
 
-When a cap is reached, the bid shows as "Exhausted" until the period resets.
+When a cap is reached, the bid's display status shows as "Capped" (its underlying **Cap** status reads "Exhausted") until the period resets.
 
 Limits reset on the calendar day, week, or month in **UTC timezone**—not your local time.
 
@@ -179,19 +190,25 @@ The same logic applies at weekly and monthly levels, and also considers customer
 
 Beyond individual bids, there are tenant-level settings that control how bidding works across your operation.
 
-### Global bid lock
+Open them from the settings gear in the rail: **Settings → Application → Bidding**. The page has four sections (**Global Bid Settings**, **Customer Bidding Access**, **Lead Cap Settings**, and **Budget Settings**) and saves with the floating save bar.
 
-The bidding settings page includes a global option to lock bids. When enabled, customers cannot make changes to their bids through the customer portal—only tenants can modify bids.
+### Disable all customer bidding
+
+Under **Global Bid Settings**, **Disable all customer bidding** stops every customer from placing or editing bids in the customer portal. You can still manage bids from each customer's **Bids** tab.
 
 This allows tenants to create a fully managed pricing system where they control the price of all leads.
 
 ### Customer bidding access
 
-You can restrict customers from accessing bidding until they've deposited a minimum amount of funds. Once they reach or surpass the threshold, bidding access is automatically granted.
+You can restrict customers from accessing bidding until they've deposited a minimum amount of funds. Set **Minimum deposit for auto-access** under **Customer Bidding Access**; once a customer reaches or surpasses the threshold, bidding access is automatically granted. Leave it blank to grant access by hand with each customer's **Can Access Bidding** toggle.
 
-Tenants control the messaging shown to customers in the modal that blocks their access. This is useful for scenarios like requiring customers to schedule a call with your sales team before they can start bidding.
+Tenants control the messaging shown to customers in the modal that blocks their access (**Modal Subject**, **Modal Body**, **Button Text**, and **Button Link URL**). This is useful for scenarios like requiring customers to schedule a call with your sales team before they can start bidding.
 
-### Smart pricing
+### Lead caps and budgets
+
+**Lead Cap Settings** and **Budget Settings** decide which limits customers (and you) can set, at the bid level and the account level. See [budgets and caps](/features/budgets-and-caps).
+
+## Smart pricing
 
 Smart pricing ensures customers only pay what's necessary to win a lead—not their maximum bid. When a customer wins an auction, they pay one increment above the next highest bidder, regardless of how high they bid.
 

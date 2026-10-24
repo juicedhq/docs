@@ -1,73 +1,95 @@
 ---
 title: Marketplace
-description: Browse and purchase leads from the real-time reverse-auction marketplace.
+description: Buy leads on the spot from live, price-dropping auctions, or place a buy order and let the lead come to you.
 ---
 
-The Marketplace shows leads available for immediate purchase. Unlike bidding—where you set prices and wait for leads to come to you—the marketplace lets you browse inventory and buy on demand.
+The Marketplace lists leads you can buy right now. Bidding brings leads to you automatically; the marketplace lets you browse what's available and pick. It's the farmers' market to bidding's weekly produce box.
 
 <Note>
-The marketplace may not be available if your provider hasn't enabled it. If you browsed the marketplace before signing up, you may have seen a public preview—now that you're logged in, you have full purchasing capabilities.
+You'll only see **Marketplace** in the sidebar if your provider sells leads this way.
 </Note>
+
+<Frame>
+  <img className="block dark:hidden" src="/images/portal/marketplace/marketplace-light.webp" alt="Marketplace table listing leads by location and lead type with received time, time left, current price, next price drop, floor, and buy buttons" />
+  <img className="hidden dark:block" src="/images/portal/marketplace/marketplace-dark.webp" alt="Marketplace table listing leads by location and lead type with received time, time left, current price, next price drop, floor, and buy buttons" />
+</Frame>
 
 ## How it works
 
-Leads in the marketplace are sold through reverse auctions. Prices start high and drop over time until someone buys or the auction ends. You can either buy now at the current price or wait for a better deal—but risk losing the lead to someone else.
+Each lead in the marketplace is sold in a reverse auction: the price starts high and drops in steps over time until the lead sells or the auction ends. You can buy at today's price, or wait for a better deal and risk someone else getting there first.
+
+The lowest the price will go is the **floor**. When the price reaches the floor, the auction ends: the lead goes to whoever holds the highest buy order, or leaves the marketplace if nobody placed one.
 
 ## What you'll see
 
-Each lead in the marketplace displays:
+| Column | What it shows |
+|--------|---------------|
+| **Location** | The lead's county and state |
+| **Lead Type** | The lead type. Hover for a description, if your provider wrote one. |
+| **Received** | How long ago the lead came in |
+| **Ends in** | Time left in the auction |
+| **Current** | The buy-now price at this moment |
+| **Next drop** | The next, lower price and roughly when it kicks in. **Last chance!** means there are no more drops; **Ended** means the auction is over. |
+| **Floor** | The lowest price the auction will reach. Its color shows where buy orders stand (see [Watching the floor](#watching-the-floor)). |
 
-| Field | Description |
-|-------|-------------|
-| **County** | Where the lead originated |
-| **Lead type** | The type of lead |
-| **Time received** | How long ago the lead came in |
-| **Time remaining** | When the auction ends |
-| **Current price** | What you'd pay if you buy right now |
-| **Next price** | What the price will drop to, and when |
-| **Floor** | The lowest the price will go |
+The table updates live as leads are added, sold, and repriced, so there's no need to refresh.
 
-You can filter the marketplace by lead type or location to find what you're looking for.
+### Finding leads
 
-The marketplace refreshes as auctions are created, sold, or expire. You can also search the board and filter by state, county, lead type, and buy-order status.
+- **Search** by county or auction ID.
+- **Filters**: **State**, **County**, and **Lead type** (pick as many as you like), plus **My buy orders** to see only auctions where you have a buy order, and **My exceeded buy orders** to see the ones where someone has outbid you.
+- Sort by **Location**, **Received**, **Ends in**, **Current**, or **Floor**.
 
-## Buying leads
+Nothing that fits? The prompt under the table, **Didn't find what you are looking for? Place a bid**, takes you to [Bids](/customer-portal/bids) so matching leads come to you automatically next time.
 
-You have two ways to purchase:
+## Buying a lead now
 
-### Buy now
+Click **Buy now** on a row, check the details, and confirm with **Buy for $X**. Your wallet is charged immediately and the lead lands in your [Leads](/customer-portal/leads) list.
 
-Click **Buy Now** to purchase the lead immediately at the current price. The amount is deducted from your wallet and the lead is delivered to you.
+### Buying several at once
 
-### Buy several leads
+Tick the checkboxes beside the leads you want, then click **Buy leads** in the bar that appears. The confirmation shows the total at current prices; click **Buy N leads** to buy them all. Prices keep dropping while you shop, so the confirmation shows what you'll pay at that moment.
 
-Select the checkboxes beside available leads, then choose **Buy selected**. Juiced shows the current total for your selection before you confirm. Prices can move while an auction is active, so treat the confirmation amount as the price you are agreeing to pay at that moment.
+## Placing a buy order
 
-### Place a buy order
+A buy order says "I'll take this lead at this price." It's how you wait for a lower price without staring at the countdown.
 
-Don't want to watch the marketplace? Place a buy order at your target price and let the system do the work.
+1. Click **Place buy order** on a row.
+2. Choose an **Amount** from the list of remaining price steps.
+3. Click **Place buy order**.
 
-1. Click on a lead to open the buy order modal
-2. Set the price you're willing to pay
-3. Confirm your order
+Your buy order becomes the new floor: the price stops dropping there, and if nobody places a higher buy order before the auction ends, you get the lead at your price. Each new buy order has to beat the current highest one.
 
-The buy order amount is **held from your wallet** immediately—not charged, just reserved. If the auction price drops to your number, you automatically win the lead. If someone else buys it first or outbids you, the hold is released.
+The buy-order amount is **taken from your wallet when you place it**. You'll see it in [Transactions](/customer-portal/billing#transactions) as **Placed Buy Order**. You get it back as **Canceled Buy Order** if you cancel, or **Released Buy Order** when the auction ends without your order winning. If you win, the amount is released and the lead is charged at your buy-order price.
 
-You can cancel a buy order at any time before the lead sells.
+Changed your mind? Click **Cancel buy order** on the row while the auction is still running. You can only have one buy order per lead, so to go higher, cancel and place a new one.
 
-## Competing for leads
+## Watching the floor
 
-When you place a buy order, check the floor badge color to see where you stand:
+The **Floor** badge color tells you where you stand. Hover it for a reminder.
 
-| Floor color | What it means |
-|-------------|---------------|
-| **Gray** | No buy orders on this lead |
-| **Blue** | Someone else has a buy order, but you don't |
-| **Green** | You have the leading buy order |
-| **Red** | You have a buy order, but someone else is winning |
+| Color | What it means |
+|-------|---------------|
+| **Gray** | There are no buy orders yet |
+| **Blue** | Another customer has placed a buy order, and you haven't |
+| **Green** | You have the highest buy order |
+| **Red** | You have a buy order, but another customer has a higher one |
 
-If another customer places a higher buy order than yours, you'll be notified (if you have notifications enabled). You can then increase your buy order to stay competitive or cancel to release your held funds.
+When someone outbids you, Juiced can let you know by email or text, and tell you again if your buy order becomes the highest once more. Turn on **Buy order exceeded** and **Buy order reinstated** for your [notification contacts](/customer-portal/notifications#choosing-what-each-contact-receives).
 
 ## Wallet requirements
 
-All marketplace purchases draw from your wallet balance. No balance, no buying. Make sure you have sufficient funds before browsing—there's nothing worse than finding the perfect lead and not being able to grab it.
+Every marketplace purchase and buy order is paid from your wallet balance. Keep it topped up, or set up [auto recharge](/customer-portal/billing#auto-recharge), so you're not left squeezing the last drop out of an empty wallet when the perfect lead shows up.
+
+<Note>
+If your provider's own account has a billing issue, the marketplace shows a notice and the buy buttons are hidden until it's resolved. Buy orders you already placed are still processed normally.
+</Note>
+
+## The public marketplace
+
+If your provider offers it, anyone can browse their marketplace at `/marketplace` without logging in. It shows the same live auctions, with a **Sign up to purchase** button instead of the buy buttons. Once you [sign up](/customer-portal/signing-up-and-logging-in) and log in, you can buy from the marketplace inside the portal.
+
+<Frame>
+  <img className="block dark:hidden" src="/images/portal/marketplace/public-marketplace-light.webp" alt="Public marketplace page showing live auctions with sign-up prompts instead of buy buttons" />
+  <img className="hidden dark:block" src="/images/portal/marketplace/public-marketplace-dark.webp" alt="Public marketplace page showing live auctions with sign-up prompts instead of buy buttons" />
+</Frame>

@@ -1,86 +1,63 @@
 ---
 title: Introduction
-description: Your hub for purchasing leads, managing bids, and tracking your account.
+description: Your hub for buying leads, managing bids, and keeping your account funded.
 ---
 
-The Customer Portal is where you manage everything related to buying leads. Access it at your provider's `/app` URL—this is separate from the management interface your provider uses to run their operation.
+The Customer Portal is where you buy leads from your lead provider. You reach it at your provider's `/app` address. It's completely separate from the system your provider uses to run their side of the operation, so everything here is about your account: your bids, your leads, your wallet.
 
-## Wallet balance
+<Frame>
+  <img className="block dark:hidden" src="/images/portal/overview/dashboard-light.webp" alt="Customer portal dashboard with a greeting, latest leads, and recent bids" />
+  <img className="hidden dark:block" src="/images/portal/overview/dashboard-dark.webp" alt="Customer portal dashboard with a greeting, latest leads, and recent bids" />
+</Frame>
 
-In the top bar, you'll see your current wallet balance along with a color-coded funding status:
-
-| Color | Status | What it means |
-|-------|--------|---------------|
-| <Icon icon="circle" color="green" size={12} /> Green | Available | You have enough funds to cover all your active bids |
-| <Icon icon="circle" color="yellow" size={12} /> Yellow | Limited | At least one bid is being limited by your wallet balance |
-| <Icon icon="circle" color="red" size={12} /> Red | Exhausted | Your balance doesn't cover the minimum for any bid |
-
-Click on your wallet balance to go directly to the Billing page where you can add funds.
-
-## Customer badge
-
-You may also see a badge in the top bar that reflects your standing with your provider. Click on it to see:
-
-- Your current return rate
-- The badge title and description (if your provider uses return tiers)
-- All available tiers and the return rates that qualify for each
-
-If your provider doesn't use return tiers, clicking the badge will simply show your return rate.
-
-## Customer switcher
-
-If you have access to multiple customer accounts, you'll see a customer menu in the sidebar. Click it to:
-
-- View other customer accounts you're attached to
-- Switch between accounts
-- Set up a new customer account
-- Access your [Company Profile](/customer-portal/company-profile) (if you have permission)
-
-Each customer account is a completely separate context—different payment methods, bids, leads, notifications, and contacts. Think of each customer as its own container for buying leads.
-
-## Account status
-
-If your customer account is paused or archived, you'll see an indicator in the top bar. A paused account means your bids aren't competing for leads. An archived account is no longer active—contact your provider if you believe this is an error.
+Your provider brands the portal, so their name, colors, and icon appear throughout. If you buy for more than one business, each one is its own account with its own wallet, bids, and leads. [Getting around the portal](/customer-portal/getting-around) shows you how to switch between them.
 
 ## What you can do
 
 <CardGroup cols={2}>
-  <Card title="Browse the Marketplace" icon="store" href="/customer-portal/marketplace">
-    See available leads in real-time and purchase them instantly or place buy orders.
-  </Card>
   <Card title="Set up bidding" icon="hand" href="/customer-portal/bids">
-    Create bidding profiles to automatically compete for leads that match your criteria.
+    Bid on locations and lead types so matching leads come to you automatically.
+  </Card>
+  <Card title="Browse the Marketplace" icon="store" href="/customer-portal/marketplace">
+    Buy leads on the spot from a live, price-dropping auction board.
   </Card>
   <Card title="Review your leads" icon="book-user" href="/customer-portal/leads">
-    View all the leads you've purchased, with full contact details and history.
+    See every lead you've received, with full contact details, and export them.
   </Card>
   <Card title="Manage billing" icon="wallet" href="/customer-portal/billing">
-    Add payment methods, fund your wallet, and set up automatic recharging.
+    Add cards, fund your wallet, and keep it topped up with auto recharge.
   </Card>
 </CardGroup>
 
 ## Portal sections
 
-Here's what you'll find in the Customer Portal:
-
 | Section | What it does |
 |---------|--------------|
-| **Dashboard** | Quick overview of your recent leads and bid activity |
-| **Leads** | Browse and export all your purchased leads |
-| **Bids** | Create and manage your bidding profiles |
-| **Marketplace** | Purchase leads directly from the real-time marketplace |
-| **Notifications** | Configure who receives lead notifications and how |
-| **Billing** | Payment methods, transaction history, and auto-recharge settings |
-| **Bidding Limits** | Set daily, weekly, and monthly caps on leads and spending |
-| **Company Profile** | Update your company name, contact info, and address |
+| **[Dashboard](/customer-portal/dashboard)** | Your latest leads and recent bids at a glance |
+| **[Leads](/customer-portal/leads)** | Search, filter, and export the leads you've received |
+| **[Bids](/customer-portal/bids)** | Create and manage the bids that win you leads |
+| **[Marketplace](/customer-portal/marketplace)** | Buy leads directly from live auctions (when your provider offers it) |
+| **[Club](/customer-portal/club)** | Claim leads included with a subscription (when your provider offers it; the name varies) |
+| **[Locations](/customer-portal/locations)** | Compare top bids by county, state, or country before you bid |
+| **[Notifications](/customer-portal/notifications)** | Choose who gets emails and texts about leads, bids, and your account |
+| **[Webhooks](/customer-portal/webhooks)** | Send each new lead straight to your CRM or another system |
+| **[Billing](/customer-portal/billing)** | Payment methods, transactions, and auto recharge |
+| **[Subscription](/customer-portal/subscription)** | Start or manage a subscription (when your provider offers one) |
+| **[Bidding Limits](/customer-portal/bidding-limits)** | Pause your account and cap your leads and spending |
+| **Support** | Links to your provider's support portal, email, and lead returns form |
+
+Not seeing one of these? Your provider decides which features are turned on for your account. [Why a page might be missing](/customer-portal/getting-around#why-a-page-might-be-missing) explains each one.
+
+Your personal login settings live under **User Settings** in the menu at the bottom of the sidebar. See [Profile and security](/customer-portal/account-settings).
 
 ## Getting started
 
-If you're new to the Customer Portal, here's the typical flow:
+New to the portal? Here's the usual order of operations:
 
-1. **Add a payment method** — You'll need funds in your wallet to purchase leads
-2. **Set up bidding** — Create a bid profile for the types of leads you want
-3. **Configure notifications** — Make sure leads get delivered to the right people
-4. **Set your limits** — Protect your budget with caps on spending and lead volume
+1. **[Create your account](/customer-portal/signing-up-and-logging-in)**: set up your login, then your business details.
+2. **[Fund your wallet](/customer-portal/billing#adding-funds)**: leads are paid for from your wallet balance.
+3. **[Place your first bids](/customer-portal/bids#creating-a-new-bid)**: pick locations and lead types and set your price.
+4. **[Get leads where you work](/customer-portal/notifications)**: add notification contacts, or connect a [webhook](/customer-portal/webhooks) to your CRM.
+5. **[Set your limits](/customer-portal/bidding-limits)**: cap leads and spending so a busy day doesn't squeeze your budget dry.
 
-Your provider may have already configured some of these settings for you when they created your account.
+Your provider may have already set up some of this when they created your account.

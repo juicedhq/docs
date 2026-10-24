@@ -1,0 +1,32 @@
+---
+title: Registration & Login
+description: Customize the customer sign-up page with campaign text and a headline, and require customers to accept your terms when they register or log in.
+---
+
+The **Registration & Login** page controls the words and consent checkboxes customers see when they create an account in your portal and, optionally, every time they log in. Click the gear in the rail and choose **Registration & Login** under **Application**. Save changes with the floating save bar.
+
+<Frame>
+  <img className="block dark:hidden" src="/images/tenant/settings/registration-light.webp" alt="Registration & Login settings page with Campaign Banner Text, Account Creation Headline, two Consent Links for a privacy policy and terms of service, and the Require consent links on login switch" />
+  <img className="hidden dark:block" src="/images/tenant/settings/registration-dark.webp" alt="Registration & Login settings page with Campaign Banner Text, Account Creation Headline, two Consent Links for a privacy policy and terms of service, and the Require consent links on login switch" />
+</Frame>
+
+## Registration page text
+
+| Setting | What it does |
+|---------|--------------|
+| **Campaign Banner Text** | Optional. Use it to match the sign-up page to an ad campaign, like "Start buying fresh subscriber leads". When it's set, it becomes the page's title, and the account creation headline moves into the line beneath it. |
+| **Account Creation Headline** | The main call to action on the registration form. Leave it empty to use "Create your user account". |
+
+Customers register at `/app/register` on your portal's domain. See [Onboarding customers](/guides/onboarding-customers) for sharing the link and tracking where signups come from.
+
+## Consent links
+
+Add the documents customers must agree to, such as your privacy policy and terms of service. Click **Add link** and enter the link's **Text** and its URL. Customers see the links next to a checkbox and must check it before they can register.
+
+Turn on **Require consent links on login** to show the same links on the login page too. Customers then have to accept them each time they log in, which is handy right after you update your terms.
+
+## Related settings
+
+- [Branding](/features/branding) sets the logo and colors on the sign-up and login pages.
+- [Domains & Links](/features/domains) decides whether people who aren't signed in land on the login page or your marketplace.
+- [Signing up and logging in](/customer-portal/signing-up-and-logging-in) shows the experience from your customer's side.

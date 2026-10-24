@@ -1,0 +1,93 @@
+---
+title: Subscription products
+description: Sell your customers a monthly subscription, with tiers that unlock the Club and set how many leads they can claim.
+---
+
+Subscription Products let you charge customers a recurring monthly fee on top of whatever they spend on leads. Today, a tier's main job is to unlock the [Club](/features/club): your members-only pool of free, claimable leads. Think of it as a juice-of-the-month club, except the juice is leads.
+
+Customers subscribe from their own portal, and they're billed every month on their saved card through your connected Stripe account. You keep the full subscription price; Juiced doesn't take a platform fee.
+
+Find it under **Settings → Application → Subscription Products**.
+
+<Frame>
+  <img className="block dark:hidden" src="/images/tenant/settings/subscription-products-light.webp" alt="Subscription Products settings page with the product name and Stripe product ID, and a Tiers table listing Starter, Pro, and Unlimited tiers with price, Club access, claim limit, subscribers, and Stripe price" />
+  <img className="hidden dark:block" src="/images/tenant/settings/subscription-products-dark.webp" alt="Subscription Products settings page with the product name and Stripe product ID, and a Tiers table listing Starter, Pro, and Unlimited tiers with price, Club access, claim limit, subscribers, and Stripe price" />
+</Frame>
+
+## Before you start
+
+- **Stripe must be connected and fully onboarded.** Until it is, the page shows "Connect your Stripe account and finish onboarding before offering a subscription." See [Payments and deposits](/features/payments-and-deposits) to connect.
+- **Admins only.** The page is part of the billing settings, which only the Admin [role](/features/roles) can manage.
+
+## The product
+
+You have one subscription product. Give it a **Name** (for example, "Fresh Squeeze Club") and save it. The name shows on your customers' billing page and on their Stripe invoices, and it's also the name customers see for your Club. Once saved, Juiced creates the product in your Stripe account and shows its **Stripe product** ID.
+
+Save the product before adding tiers.
+
+## Tiers
+
+Tiers are the plans customers choose from. Click **Add tier** and fill in:
+
+| Field | What it does |
+|-------|--------------|
+| **Name** | Shown to customers when choosing a plan, e.g. "Basic" or "Pro". |
+| **Monthly Price** | Charged to the customer every month. |
+| **Grants access to** | Check **Club** to give subscribers on this tier access to your Club. |
+| **Claim limit** | How many Club leads a subscriber on this tier can claim per billing period. Leave it empty for unlimited. |
+
+The tiers table shows each tier's **Price**, **Access**, **Claim limit**, number of **Subscribers** (active or past due, including pending cancellations and pending moves), and its **Stripe price**.
+
+<Note>
+Each tier is a Stripe price. Changing a tier's price archives the old Stripe price and creates a new one. Existing subscribers keep the price they signed up on; only new subscribers pay the new amount.
+</Note>
+
+### Offered, hidden, and archived
+
+Every tier has an availability dot next to its name:
+
+- **Offered** (green) — new customers can subscribe to it.
+- **Hidden** (yellow) — not offered to new signups, but existing subscribers keep their price and allowance. Use **Hide from new signups** to retire a tier gently, and **Offer again** to bring it back.
+- **Archived** (gray) — a hidden tier you won't offer again. Only hidden tiers can be archived. Archived tiers drop out of the table unless you turn on the **Archived tiers** filter, and their subscribers still keep their price and allowance.
+
+Only offered tiers can be edited. Hide a tier and its **Edit** action goes away.
+
+<Note>
+If [checkout pages](/features/checkout-pages) are enabled for your account, a hidden tier can still be sold through a checkout page.
+</Note>
+
+## Moving subscribers to another tier
+
+Want to shift everyone on an old tier onto a new one? Use **Move subscribers** on the tier's row.
+
+1. Choose the tier to move them **to**. Only offered tiers are listed, so offer the destination tier first.
+2. Review the preview. Each subscriber shows their current and new price, their current and new claim allowance, and the date the move takes effect. If a subscriber has a discount, the preview says whether it carries over or ends before the move.
+3. Select the subscribers to move and click **Move _n_ at renewal**.
+
+Each subscriber keeps their current price and Club allowance until their next renewal, then renews on the new tier with the same card. Nobody is charged now, and Juiced doesn't notify the customer for you. Subscribers who can't be moved (for example, because their subscription is past due or ending) are listed with the reason. Failed moves can be retried safely, and nobody is moved twice.
+
+You can also move a single customer from their record: on the customer's **Overview**, the **Club** panel has **Change tier at renewal** and, once a change is scheduled, **Withdraw tier change**.
+
+## Cancelling a customer's subscription
+
+Open the customer, click **More actions** (⋯), and choose **Cancel subscription**. Pick:
+
+- **At end of current period** — the customer keeps access until the paid period lapses. This is the same cancellation customers can request themselves.
+- **Immediately** — the subscription and any Club access it grants end right away. You can also tick **Refund the last payment** to refund the most recent subscription payment in full through Stripe.
+
+A customer can't be [archived](/features/customers#archiving-and-reactivating) while their subscription is active, so cancel it first.
+
+## The Club card
+
+The bottom of the page holds the Club settings: whether leads can enter the Club, whether customers can see it, its URL, and the pitch shown to customers who haven't subscribed yet. See [Club](/features/club#turn-the-club-on) for what each setting does.
+
+## Related pages
+
+<CardGroup cols={2}>
+  <Card title="Club" icon="ticket" href="/features/club">
+    The claimable lead pool your tiers unlock.
+  </Card>
+  <Card title="Customer portal: Billing" icon="credit-card" href="/customer-portal/billing">
+    What customers see when they subscribe.
+  </Card>
+</CardGroup>

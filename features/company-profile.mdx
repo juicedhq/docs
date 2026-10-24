@@ -1,53 +1,60 @@
 ---
 title: Company Profile
-description: Your business identity, contact info, and support settings.
+description: Your business identity, billing address, operating countries, and support settings.
 ---
 
-Your company profile contains the core information about your business. This information appears throughout the platform and is shown to your customers in the buyer portal.
+Your company profile holds the core information about your business. Much of it appears throughout the platform and is shown to your customers in the buyer portal.
 
-To edit your profile, select **Company Profile** from the tenant menu.
+To edit it, click the gear in the rail and choose **Company Profile** under **Account**. Make your changes, then save with the floating save bar.
 
-## Identity
+<Frame>
+  <img className="block dark:hidden" src="/images/tenant/settings/company-profile-light.webp" alt="Company Profile settings page with Company, Billing Address, Operating Countries, Support, and 1:1 Default Consent sections" />
+  <img className="hidden dark:block" src="/images/tenant/settings/company-profile-dark.webp" alt="Company Profile settings page with Company, Billing Address, Operating Countries, Support, and 1:1 Default Consent sections" />
+</Frame>
 
-Your company name as it appears across the platform and to your customers.
+## Company
 
-## Contact
+How your company appears to customers:
 
-Primary contact information for your business:
+- **Name**: your company name as shown to customers
+- **Email**: the main contact email for your company
+- **Phone**: the main contact phone number for your company
 
-- **Email** — Your main business email
-- **Phone** — Your business phone number
+## Billing Address
 
-## Billing
-
-Your billing address for invoices. This includes:
-
-- Street address and apt/suite
-- City, state, and ZIP code
-- Country
+The address that appears on your invoices: street address, apt/suite, city, country, state (or province or territory), and ZIP or postal code. The state and postal code labels change to match the country you pick.
 
 This is separate from your payment methods, which you manage in [Billing](/features/billing).
 
 ## Operating countries
 
-Select the countries where you operate. This setting affects regional features and compliance options available to your account.
+The countries you accept and distribute leads in. You can operate in the **United States**, **Australia**, or both: switch each one on or off. At least one country must stay enabled, so the last one can't be turned off.
+
+You first choose these during [Finish setup](/get-started/quickstart#step-2-finish-setup) when you create your account.
 
 ## Support
 
-Configure how your customers reach you when they need help:
+How customers can reach your support team:
 
 | Field | Purpose |
 |-------|---------|
-| **Primary Contact Method** | How customers should contact you (shown in the buyer portal) |
+| **Primary Contact Method** | Email or URL. Choosing URL shows the **Support Portal URL** field and makes it required. |
 | **Support Email** | The email address customers are directed to for support |
-| **Support Portal URL** | Optional link to your helpdesk or support portal |
+| **Support Portal URL** | A link to your helpdesk or support portal |
+
+In the customer portal, the sidebar's support links include **Support Portal** when you've saved a support portal URL and **Email Us** when you've saved a support email, so customers see whichever you've filled in. A **Lead Returns** link to your [return policy](/features/returns) appears there too when you've set one.
 
 ## 1:1 Default Consent
 
 The **Default Name** field sets the default name used for TCPA compliance when recording consent. This applies to one-to-one consent scenarios where a specific company name is required.
 
-## Related guides
+## Related pages
 
-<Card title="Customizing the customer portal" icon="palette" href="/guides/customizing-the-portal" horizontal>
-  Set support contacts and consent links alongside the rest of your portal branding.
-</Card>
+<CardGroup cols={2}>
+  <Card title="Branding" icon="palette" href="/features/branding">
+    Colors, logos, and the look of your customer portal.
+  </Card>
+  <Card title="Customizing the customer portal" icon="paintbrush" href="/guides/customizing-the-portal">
+    Set support contacts and consent links alongside the rest of your portal branding.
+  </Card>
+</CardGroup>

@@ -1,71 +1,90 @@
 ---
-title: Domains
-description: Configure a custom domain for your buyer portal.
+title: Domains & Links
+description: Configure your public marketplace, where customer links land, and a custom domain for your customer portal.
 ---
 
-By default, your buyers access your portal through a Juiced subdomain (like `yourcompany.usejuiced.com/app`). With a custom domain, they'll access it through your own domain instead—`leads.yourcompany.com/app`, for example.
+The **Domains & Links** page controls how people reach you: whether visitors can browse your marketplace without an account, where your customer-facing links send people who aren't signed in, and the domain your customer portal lives on. Find it under **Settings → Account → Domains & Links**.
 
-Custom domains are a [premium feature](/features/billing#premium-features) available on higher-tier plans. If you try to access a custom domain on a plan that doesn't include this feature, you'll be redirected to your standard subdomain.
+<Frame>
+  <img className="block dark:hidden" src="/images/tenant/settings/domains-light.webp" alt="Domains & Links settings page with the Public Marketplace switch, the Customer Portal Entry Point select, and a verified custom domain with two validated CNAME records" />
+  <img className="hidden dark:block" src="/images/tenant/settings/domains-dark.webp" alt="Domains & Links settings page with the Public Marketplace switch, the Customer Portal Entry Point select, and a verified custom domain with two validated CNAME records" />
+</Frame>
 
-## What the domain applies to
+## Public Marketplace
 
-Your custom domain covers the **buyer portal**—the `/app` interface where your customers log in, view leads, manage their account, and access the marketplace.
+Turn on **Enable public marketplace** to let visitors who aren't signed in browse your available leads at `/marketplace`. It's a shop window: prospects can see what you sell before they create an account. See [Marketplace](/features/marketplace) for how the marketplace itself works.
 
-Once configured, your buyers will access your platform at:
+## Customer Portal Entry Point
 
-```
-https://{your-custom-domain}/app
-```
+**Unauthenticated visitors see** decides where your customer-facing links send people who aren't signed in:
 
-## Setting up a custom domain
+- **Customer sign-in page**: the default.
+- **Marketplace**: only offered when your distribution plan has a marketplace stage. If the public marketplace is off, links always go to the sign-in page.
+
+Save the marketplace and entry point settings with the floating save bar.
+
+## Custom domain
+
+By default, customers reach your portal through a Juiced subdomain (like `yourcompany.usejuiced.com/app`). With a custom domain, they reach it through your own domain instead, for example `leads.yourcompany.com/app`.
+
+### Who can use a custom domain
+
+Custom domains are a [premium feature](/features/billing#premium-features) on plans of **$500/month or more** (Citrus Splash and up). Juiced can also enable it for your account. Without access, the page shows a **Custom Domains: Higher Plan Required** card with an **Upgrade your plan** link instead of the domain field. If someone visits your custom domain while your plan doesn't include it, they're redirected to your standard subdomain.
+
+### Setting it up
 
 <Steps>
-  <Step title="Verify your plan">
-    Custom domains require a plan that includes this feature. Check your [Billing](/features/billing) page to confirm your plan has custom domain access.
-  </Step>
   <Step title="Enter your domain">
-    Go to **Domains** in the tenant menu and enter your custom domain. Don't include `https://`—just the domain itself (e.g., `leads.yourcompany.com`).
+    In the **Custom domain** field, enter a subdomain on a domain you own, like `leads.yourcompany.com`. Don't include `https://`. Click **Update custom domain** and confirm.
   </Step>
-  <Step title="Add the DNS record">
-    Juiced will provide you with a CNAME record to add at your domain registrar. This record points your domain to the Juiced infrastructure and is used to verify ownership.
+  <Step title="Add the DNS records">
+    Juiced shows the DNS records to add at your registrar under **Domain Validation**. Each card lists the record's **Type** (CNAME), **Name**, and **Value**: one points your domain at Juiced, and the other proves you own it. Copy them exactly.
 
-    | Type | Name | Value |
-    |------|------|-------|
-    | CNAME | Your subdomain | Provided by Juiced |
-
-    DNS changes can take anywhere from a few minutes to 48 hours to propagate, though most propagate within an hour.
+    DNS changes can take up to 24 hours to propagate, though most are much faster.
   </Step>
-  <Step title="Wait for SSL provisioning">
-    Once your DNS records propagate, Juiced automatically provisions an SSL certificate for your domain. You'll see the status update in the Domains page as this progresses.
+  <Step title="Check validation">
+    Each record shows a status: **Validated**, **Pending**, or **Incomplete**. Click **Check again** to refresh. Once everything is validated, Juiced issues an SSL certificate automatically, and the page shows "Your domain ... has been verified and is now active."
   </Step>
 </Steps>
 
-## Requirements and limitations
+### Changing your domain
+
+You can change your custom domain at most once per hour. Customers lose access through the old domain once the new one validates, and the new domain must be validated before it works.
+
+Once the SSL certificate has been issued, the field locks. To move to a different domain after that, contact support.
+
+## What the domain applies to
+
+Your custom domain covers the **customer portal**: the `/app` interface where your customers sign in, view leads, manage their account, and visit the marketplace.
+
+```text
+https://{your-custom-domain}/app
+```
+
+Once you've added a custom domain, links to your [checkout pages](/features/checkout-pages) use it too. Connecting [AI assistants](/features/ai-assistants) requires a verified custom domain.
+
+## Requirements
 
 **Domain format:**
 - Must be a valid domain without a scheme (`leads.example.com`, not `https://leads.example.com`)
-- Subdomains are supported and recommended (e.g., `app.yourcompany.com`, `leads.yourcompany.com`)
-
-**Reserved subdomains:**
-Certain subdomains are reserved and cannot be used, including: `admin`, `api`, `app`, `cdn`, `dev`, `docs`, `mail`, `portal`, `support`, `test`, and `www`.
+- Use a subdomain on a domain you own (e.g., `app.yourcompany.com`, `leads.yourcompany.com`)
 
 **SSL/TLS:**
-- SSL certificates are provisioned automatically—no need to provide your own
-- Minimum TLS version is 1.2
+- SSL certificates are provisioned automatically; you don't need to provide your own
 - Certificates are managed and renewed automatically
 
 ## Troubleshooting
 
-**Domain stuck in "Pending Validation"**
+**A record is stuck on Pending**
 
-DNS records haven't propagated yet, or the CNAME record wasn't added correctly. Double-check the record at your registrar matches exactly what Juiced provided. You can use a tool like [dnschecker.org](https://dnschecker.org) to verify propagation.
+DNS hasn't propagated yet, or a record wasn't added exactly as shown. Double-check each record at your registrar, then click **Check again**. You can use a tool like [dnschecker.org](https://dnschecker.org) to check propagation.
 
 **SSL certificate not issuing**
 
-This usually resolves itself once DNS propagates. If it's been more than 48 hours, verify your CNAME record is correct and doesn't have any conflicting records (like an existing A record for the same subdomain).
+This usually resolves itself once DNS propagates. If it's been more than 24 hours, verify the CNAME records are correct and that there are no conflicting records (like an existing A record for the same subdomain).
 
 ## Related guides
 
 <Card title="Adding a custom domain" icon="globe" href="/guides/adding-a-custom-domain" horizontal>
-  Swap the default subdomain for your own — the tenant setup, DNS records, and validation.
+  Swap the default subdomain for your own: the DNS records, validation, and what to tell your customers.
 </Card>

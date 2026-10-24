@@ -1,153 +1,93 @@
 ---
 title: Configuring Return Tiers
-description: Enable returns, build tiered brackets that reward low-returners and penalize abusers, and recalculate every customer's tier in one click.
+description: Turn on return tiers, build a ladder that rewards low returners and penalizes heavy ones, and recalculate every customer in one click.
 ---
 
-Returns are the safety valve — customers flag bad leads, you credit them back, everyone stays honest. But return policy without teeth gets abused. **Return tiers** solve that by bracketing customers into named tiers based on their return rate (as a % of revenue), and attaching rewards or penalties to each bracket. This guide walks through turning on returns, building a tier ladder, and recalculating every customer.
-
-For the conceptual model — how returns interact with wallets and bids, how penalties actually adjust auctions — see the [Returns feature page](/features/returns).
+Returns keep customers honest about bad leads, but a return policy without teeth gets abused. **Return tiers** group customers by their return rate and attach a reward or penalty to each group. This guide sets up a tier ladder from scratch. For how each setting behaves, see [Returns](/features/returns).
 
 ## Prerequisites
 
-- Admin role access to your tenant.
-- A decision on your return policy: what return rates are acceptable, which brackets you want, and whether to reward low-returners with discounts or just penalize high-returners.
-- A URL to your written return policy (optional but recommended) — a page customers can open from the portal to understand the rules.
+- The **Admin** [role](/features/roles).
+- A policy in mind: which return rates are fine, which deserve a nudge, and whether to reward good behavior with discounts.
+- Optionally, a page explaining your return policy, so customers can read the rules.
 
 ## Step 1: Open the Returns page
 
-Click **Settings** in the left sidebar, then **Returns** (`/manage/<tenant>/disputes`). The page has two sections stacked vertically:
+Click the gear in the rail and choose **Returns** under **Application**. The page has **Return Settings** at the top and the **Return Tiers** table below.
 
-- **Return Settings** at the top — a small form with two fields (enable toggle + policy URL).
-- **Return Tiers** below — a table of every tier you've defined, reorderable by drag-and-drop.
+<Frame>
+  <img className="block dark:hidden" src="/images/tenant/settings/returns-light.webp" alt="Returns settings page with Recalculate and New tier buttons, Return Settings for enabling and hiding return tiers, lead volume lookback, return rate message, and Lead Returns URL, followed by the Return Tiers table" />
+  <img className="hidden dark:block" src="/images/tenant/settings/returns-dark.webp" alt="Returns settings page with Recalculate and New tier buttons, Return Settings for enabling and hiding return tiers, lead volume lookback, return rate message, and Lead Returns URL, followed by the Return Tiers table" />
+</Frame>
 
-## Step 2: Turn on return tiers
+## Step 2: Set up returns
 
-In **Return Settings**, flip **Enable dispute tiers** on. This is what makes Juiced actually assign customers to tiers and apply any discounts/penalties.
-
-| Field | What it does |
-|-------|--------------|
-| **Enable return tiers** | Toggle. When on, every customer is placed into a tier automatically based on their return rate; tier effects (discounts/penalties) apply to subsequent auctions. Off = returns still work as an accounting flow, but no tiers are assigned. |
-| **Hide return tiers from customers** | Available while return tiers are enabled. Customers see their return percentage instead of the return badge and tier details; internal tier penalties still apply. You cannot hide tiers that apply a customer discount, because customers must be able to see price adjustments. |
-| **Lead volume lookback** | The assigned lead volume used to calculate return rates and to decide when the new-customer tier stops applying. This defaults to $5,000. |
-| **Return rate message** | The message shown when return tiers are disabled. Use `:rate` for the customer's current rate and `:lookback` for the lead volume used to calculate it. |
-| **Lead Returns URL** | The URL customers see in their portal when they click "View return policy". Typically a Notion/help-center/marketing-site page explaining what's returnable and what's not. |
-
-Click **Update return settings**. The setting commits, but no customer is assigned a tier until you've defined at least one and triggered a recalculation (Step 5).
-
-<Note>
-The enable toggle is Admin-only. Non-Admin roles may see the tier table in read-only form without the on/off switch.
-</Note>
+1. Turn on **Enable return tiers**. Customers are then assigned to a tier automatically based on their return rate.
+2. Set the **Lead volume lookback**: the assigned lead volume, in dollars, that return rates are calculated over. It defaults to $5,000. Customers who haven't reached it yet count as new customers.
+3. Add your policy page as the **Lead Returns URL**, so customers can find it from their portal.
+4. Leave **Hide return tiers from customers** off for now. You can't offer a discount while tiers are hidden, because customers have to be able to see price changes.
+5. Save with the floating save bar.
 
 ## Step 3: Create your first tier
 
-In the **Return Tiers** table, click **Create** in the top-right. The tier form has four groups of fields stacked down a modal.
+Click **New tier**.
 
-**Identity & copy:**
+**Who it's for and how it looks**
 
-| Field | What it does |
-|-------|--------------|
-| **Name** | Short name shown in the customer portal badge (e.g., "Golden", "Fresh Squeeze", "Bruised"). Must be unique within your tenant. |
-| **Headline** | One-line summary shown to customers when they click into their tier detail (e.g., "Top 10% — keep it up"). |
-| **Brief description** | Plain-text one-paragraph explainer of what this tier means. |
-| **Long description** | Rich-text (bold/italic/underline/strike) full explanation — use this for the rules, the benefits, the thresholds in words. |
+| Field | What to enter |
+|-------|---------------|
+| **Name** | Shown on the customer's badge, like "Golden" or "Overripe" |
+| **Headline**, **Brief description**, **Long description** | What the tier means, in increasing detail. Spell out the rules and any penalty here so customers understand it. |
+| **Color** and **Icon** | The badge's look in the portal |
 
-**Visual identity:**
+**Behavior**
 
-| Field | What it does |
-|-------|--------------|
-| **Color** | Badge color shown in the customer portal. Pick something distinctive per tier — gold for elite, amber for warning, red for penalty. |
-| **Icon** | Badge icon from Juiced's curated badge set. Goes next to the color — combine them for visual hierarchy. |
-
-**Behavior — tier bracket:**
-
-| Field | What it does |
-|-------|--------------|
-| **Apply to new customers** | Checkbox. When checked, this tier is assigned to customers who haven't built up enough history to calculate a meaningful return rate (less than $5,000 spent). Only one tier can be the new-customer tier. Checking this disables Lower/Upper Bound. |
-| **Lower bound** | Minimum return rate (percentage) for this tier. Required unless this is the new-customer tier. |
-| **Upper bound** | Maximum return rate. Required unless this is the new-customer tier. Must be ≥ Lower bound. |
-
-Lower/Upper Bound are validated against every other tier to prevent overlaps — if Tier A is `0–10%` and you try to create Tier B at `5–15%`, save fails with "tiers overlap".
-
-**Behavior — rewards and penalties:**
-
-| Field | What it does |
-|-------|--------------|
-| **Add a discount** | Checkbox. When checked, customers in this tier get a % off the lead price. |
-| **Discount percentage** | Required when **Add a discount** is on. The % discount off what they'd otherwise pay. |
-| **Add a penalty** | Checkbox. When checked, customers in this tier have their effective bid *reduced* in auctions — they lose more often, but pay full price when they win. |
-| **Match return rate** | Checkbox available only when **Add a penalty** is on. If checked, the penalty equals the customer's own return rate (auto-scales). |
-| **Penalty percentage** | Required when **Add a penalty** is on and **Match return rate** is off. The % the effective bid is reduced by. |
+- **Lower bound (%)** and **Upper bound (%)**: the return-rate range for this tier. Ranges can't overlap; Juiced tells you if one does.
+- **Apply to new customers**: makes this the tier for customers still below the lookback volume, in place of bounds.
+- **Add a discount** with a **Discount percentage**: customers in this tier pay less when they win, while their bid still competes at full price.
+- **Add a penalty** with a **Penalty percentage**, or **Match return rate** to make the penalty equal the customer's own return rate.
 
 <Warning>
-Penalty behavior is subtle. A customer with a 20% penalty bidding $100 is treated as a $80 bidder when the auction runs — so they lose more often. But if they *do* win, they pay the full $100. Customers feel this as "I never win anymore" without realizing the mechanism. Communicate it clearly in the **Long description**.
+Penalties are easy to misread. A customer with a 20% penalty bidding $100 competes as if they bid $80, so they win less often, but when they do win they pay the full $100. Explain it in the tier's long description, or expect "I never win anymore" emails.
 </Warning>
 
-Click **Create**. The tier appears in the table at the bottom of the order.
+Click **Create**.
 
-## Step 4: Build out the full ladder
+## Step 4: Build out the ladder
 
-Repeat Step 3 to fill in every bracket. A realistic pattern for a lead-buying business:
+Repeat Step 3 for each bracket. A typical pattern:
 
-| Tier name | Bracket | Reward / Penalty |
-|-----------|---------|------------------|
-| **Fresh** | New customers | No discount, no penalty (grace period) |
-| **Golden** | 0–5% return rate | 5% discount |
-| **Ripe** | 5–15% return rate | No discount, no penalty (normal) |
-| **Overripe** | 15–25% return rate | 15% penalty |
-| **Rotten** | 25–100% return rate | Match return rate penalty |
+| Tier | Bracket | Effect |
+|------|---------|--------|
+| **Fresh** | New customers | None, while they build history |
+| **Golden** | 0 to 5% | 5% discount |
+| **Ripe** | 5 to 15% | None |
+| **Overripe** | 15 to 25% | 15% penalty |
+| **Bruised** | 25 to 100% | Match return rate |
 
-You can add as many tiers as you want — 3 is common, 5–6 is the practical max before customers stop parsing the ladder. Make sure brackets don't overlap and that they cover 0–100% without gaps (Juiced will error on overlap, but gaps just mean a customer falls between tiers and gets no assignment).
+Three to five tiers is plenty; past that, customers stop reading the ladder. Cover 0 to 100% without gaps, or a customer whose rate falls in a gap gets no tier.
 
-## Step 5: Reorder tiers for display
+Use **Move up** and **Move down** to set the order customers see the tiers in. Order doesn't affect which tier a customer lands in; their return rate does. Most-favorable first is the usual choice.
 
-In the **Return Tiers** table, drag rows up or down to reorder. The order here determines:
+## Step 5: Recalculate
 
-- The order tiers are shown in the customer portal when customers browse "all tiers".
-- Nothing about assignment — customers are assigned by bracket, not by order.
+Click **Recalculate** in the page header and confirm. Juiced goes through every customer and assigns the tier that matches their current return rate. Customers whose tier changes get the **Return Tier Updated** notification.
 
-Typically you order from most-favorable (top) to least-favorable (bottom) so customers see the aspirational tier first.
+After that, tiers keep themselves up to date as customers are assigned leads and their returns are approved. Run **Recalculate** again whenever you change the tiers.
 
-<Note>
-Reordering is Admin-only. If rows don't drag for you, that's why.
-</Note>
+<Tip>
+If you're about to make several tier changes in a row, consider turning off the **Return Tier Updated** template in [Notification Templates](/features/notifications) first, so customers don't get an email for every tweak. Turn it back on before the final recalculation.
+</Tip>
 
-## Step 6: Recalculate every customer
+## Step 6: Exclude a customer (optional)
 
-After creating or editing tiers, existing customers aren't automatically moved — you need to trigger a recalculation.
+For a customer who shouldn't be tiered, such as a strategic account with its own contract or an internal test account, open the customer, click **Edit**, and turn on **Disable Return Tiers** under **Toggles**. They're left out of tier calculations, discounts, and penalties, and their return rate shows instead of a tier.
 
-In the **Return Tiers** table, click the **Recalculate** button in the top-right. A confirmation modal appears: "All customers will have their tier recalculated. Are you sure you want to do this?". Confirm.
+## What customers see
 
-Juiced queues a background job (`CalculateDisputeTiers`) that walks every customer, computes their return rate, and assigns the matching tier. The job finishes in seconds for most tenants and minutes for tenants with thousands of customers. Notification templates like **Return Tier Updated** (see [Customizing notification templates](/guides/customizing-notification-templates)) fire for any customer whose tier changed.
+Unless you hide tiers, customers see their tier as a badge in the portal and can open it to compare every tier. If you'd rather they didn't:
 
-<Warning>
-Recalculation is fine to run often — after every tier edit, after bulk return approvals, as a weekly cron. But each run fires notifications. If you don't want to flood customers after a trivial tweak, temporarily disable the **Return Tier Updated** notification template (Visible off + Default off) before recalculating, then re-enable it.
-</Warning>
+- **Hide return tiers from customers** shows their return percentage instead of the badge. Penalties still apply.
+- With tiers turned off, the **Return rate message** is shown instead (use `:rate` and `:lookback` in it), or turn on **Hide return percentages from customers** to remove return rates from the portal entirely.
 
-## Step 7: Edit or delete a tier
-
-Click any tier row in the table. An edit modal opens with the same form from Step 3. Change anything, save — the tier updates in place.
-
-To delete, bulk-select the tier(s) with the row checkboxes and use the **Delete** bulk action. Deleting a tier doesn't re-bracket existing customers — it just removes the tier definition. Recalculate (Step 6) to reassign orphaned customers.
-
-## Step 8: Exclude a specific customer (optional)
-
-If you've got a trusted strategic customer who shouldn't be tier-assigned regardless of return rate, exclude them individually.
-
-Navigate to **Customers** → pick the customer → **Edit** → scroll to **Ignore dispute tiers** and toggle it on. Save. That customer is now skipped by the tier engine — no tier badge, no discount, no penalty.
-
-This is most commonly used for:
-
-- High-volume partners where the return math is handled in a separate contract.
-- Brand-new customers running a trial you don't want dinged.
-- Internal test customers.
-
-## What happens next
-
-With tiers configured:
-
-- **Customer portal** — unless you hide tiers, each customer sees their current tier as a colored badge. Clicking it opens the list of all tiers with benefits/restrictions laid out. When tiers are disabled, you can instead show a custom return-rate message or hide return-rate information entirely. See [Return tiers](/features/returns#customer-visibility) on the feature page.
-- **Auctions** respect penalties — a 20% penalty customer is treated as an 80%-value bidder when distribution runs. See [Bidding](/features/bidding) for how this interacts with smart pricing.
-- **Returns** credit back as usual — a return moves the customer's rate up, which may shift their tier on the next recalc. See [Managing customer finances](/guides/managing-customer-finances).
-- **Notifications** fire on tier changes — customize the **Return Tier Updated** template under [Customizing notification templates](/guides/customizing-notification-templates).
-
-Return tiers are a "set the ladder, then let the system run" setting. Revisit them if your return volume or economics change materially — otherwise the brackets self-adjust customer behavior without ongoing babysitting.
+See [Returns in the customer portal](/customer-portal/returns) for their side of things.

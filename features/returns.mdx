@@ -1,39 +1,55 @@
 ---
 title: Returns
-description: Return policies and tiered penalties for managing lead quality disputes.
+description: Return policies and tiered rewards and penalties for managing lead quality disputes.
 ---
 
-In the pay-per-lead model, many companies allow customers to return leads that don't meet quality standards. However, this can be abused. Return tiers help you manage this by adjusting customer privileges based on their return behavior.
+In the pay-per-lead model, many companies let customers return leads that don't meet quality standards. That's great for trust, and also an open invitation for the occasional customer who returns everything that isn't perfectly ripe. Return tiers help you manage this by adjusting customer pricing and competitiveness based on their return behavior.
 
-## Enabling returns
+Find these settings under **Settings → Application → Returns**. Only Admins can open the page.
 
-The returns system can be enabled or disabled entirely from the returns settings page. You can also add a URL to your lead return policy, which will be displayed in the customer portal.
+<Frame>
+  <img className="block dark:hidden" src="/images/tenant/settings/returns-light.webp" alt="Returns settings page with Recalculate and New tier buttons, Return Settings for enabling and hiding return tiers, lead volume lookback, return rate message, and Lead Returns URL, followed by the Return Tiers table" />
+  <img className="hidden dark:block" src="/images/tenant/settings/returns-dark.webp" alt="Returns settings page with Recalculate and New tier buttons, Return Settings for enabling and hiding return tiers, lead volume lookback, return rate message, and Lead Returns URL, followed by the Return Tiers table" />
+</Frame>
+
+## How return rates are calculated
+
+A customer's return rate is the total value of their returned leads divided by the total value of leads assigned to them. It's based on revenue, not lead count, and only looks at their most recent assigned lead volume (the **Lead volume lookback**), so customers can improve their rate over time.
+
+## Return settings
+
+| Setting | What it does |
+|---------|--------------|
+| **Enable return tiers** | Turns the tier system on. Customers are automatically assigned to a tier based on their return rate. |
+| **Hide return tiers from customers** | Shown while tiers are on. Customers see their return percentage instead of the tier badge and details; tier penalties still apply behind the scenes. You can't hide tiers while any tier applies a discount, because customers must be able to see price adjustments. |
+| **Hide return percentages from customers** | Shown while tiers are off. Removes the return-rate badge, percentage, and explanatory modal from the customer portal. Return rates are still calculated internally. |
+| **Lead volume lookback** | The assigned lead volume (in dollars) used to calculate return rates and to decide when the new-customer tier stops applying. Defaults to $5,000. |
+| **Return rate message** | Shown to customers who have return tiers disabled. Use `:rate` for their current rate and `:lookback` for the lead volume used to calculate it. |
+| **Lead Returns URL** | A link to your lead return policy, shown in the customer portal. |
+
+Save your changes with the floating save bar.
 
 ## Return tiers
 
-Return tiers categorize customers based on their return rate (calculated as a percentage of revenue, not lead count). Each tier can reward good behavior or penalize excessive returns.
+Return tiers group customers by return rate. Each tier can reward good behavior, penalize excessive returns, or simply label where a customer stands. Click **New tier** to add one.
 
-### Tier configuration
+| Field | Description |
+|-------|-------------|
+| **Name** | Display name for the tier |
+| **Headline** | Short summary shown to customers |
+| **Brief description** | Quick explanation of the tier |
+| **Long description** | Detailed information about the tier's benefits or restrictions |
+| **Color** and **Icon** | Shown on the tier badge in the customer portal. Both are text fields. |
+| **Lower bound (%)** and **Upper bound (%)** | The return-rate range for this tier |
 
-For each tier, you can configure:
-
-| Setting | Description |
-|---------|-------------|
-| Name | Display name for the tier |
-| Headline | Short summary shown to customers |
-| Brief description | Quick explanation of the tier |
-| Long description | Detailed information about tier benefits or restrictions |
-| Color | Visual indicator in the customer portal |
-| Icon | Visual indicator alongside the color |
-| Lower bound | Minimum return rate percentage for this tier |
-| Upper bound | Maximum return rate percentage for this tier |
+The **Return Tiers** table lists each tier's **Bounds** and **Behavior**. Use **Move up** and **Move down** to change the order, and **Edit** or **Delete** to change a tier.
 
 ### Discounts and penalties
 
-Tiers can apply either a discount or a penalty:
+Under **Behavior**, a tier can:
 
-- **Discount**: Rewards customers with low return rates. This could be used to offer better pricing or other benefits.
-- **Penalty**: Reduces the effective bid amount for customers with high return rates.
+- **Add a discount**: rewards customers with low return rates. A discounted customer's bid still competes at full price, but they're charged less when they win. On the customer's **Bids** tab, the bid amount shows struck through with the discounted price. You can only add a discount while return tiers are visible to customers.
+- **Add a penalty**: makes customers with high return rates less competitive.
 
 #### How penalties work
 
@@ -48,23 +64,34 @@ This makes high-return customers less competitive without changing their actual 
 
 #### Match return rate
 
-You can also configure a penalty to match the customer's return rate. If a customer has a 15% return rate, their penalty will automatically be 15%.
+Turn on **Match return rate** instead of entering a **Penalty percentage**, and the penalty automatically equals the customer's return rate. A customer with a 15% return rate gets a 15% penalty.
 
 ### New customer tier
 
-One tier can be designated for new customers—those who have spent less than &#36;5,000. This tier applies regardless of return rate since new customers don't have enough history to calculate a meaningful rate.
+Turn on **Apply to new customers** to make a tier apply to customers whose assigned lead volume is still below the **Lead volume lookback**, regardless of their return rate. New customers don't have enough history for a meaningful rate yet, so this gives them a fair starting point. The table shows a **New customers** badge in place of bounds.
 
 ## Recalculating tiers
 
-After modifying existing tiers or adding new ones, use the recalculate option to update all customers. This goes through each customer and assigns them to the appropriate tier based on their current return rate.
+After you add or change tiers, click **Recalculate** in the page header. Juiced goes through every customer and assigns them to the right tier based on their current return rate. Customers whose tier changes get the **Return Tier Updated** [notification](/features/notifications).
+
+Between recalculations, a customer's tier also updates on its own as they're assigned leads and as their returns are approved, so you only need **Recalculate** after changing the tiers themselves.
 
 ## Excluding customers
 
-Individual customers can be excluded from the return tier system entirely. On the customer record, toggle the "ignore dispute tiers" option to remove them from tier calculations and any associated penalties or discounts.
+Individual customers can be excluded from return tiers entirely. Edit the customer and turn on **Disable Return Tiers** in the **Toggles** section. They're removed from tier calculations and any penalties or discounts, and their return rate shows instead of a tier.
+
+## Returning leads
+
+You can return a lead for a customer from their [Leads tab](/features/customers#leads), or from the lead's own page. Returning refunds the lead's price to the customer's wallet (as a **Lead Returned** [transaction](/features/transactions)), and the lead no longer counts against their [lead caps or budgets](/features/budgets-and-caps).
+
+<Frame>
+  <img className="block dark:hidden" src="/images/tenant/customers/customer-leads-light.webp" alt="Customer Leads tab listing assigned leads, where each returnable lead has a Return action" />
+  <img className="hidden dark:block" src="/images/tenant/customers/customer-leads-dark.webp" alt="Customer Leads tab listing assigned leads, where each returnable lead has a Return action" />
+</Frame>
 
 ## Customer visibility
 
-Customers can see their current return tier in the customer portal. They can click on it to view all available tiers and the benefits or restrictions associated with each one.
+Unless you hide them, customers see their current return tier in the customer portal and can click it to view all tiers and the benefits or restrictions of each. See [Returns in the customer portal](/customer-portal/returns) for their side.
 
 ## Related guides
 

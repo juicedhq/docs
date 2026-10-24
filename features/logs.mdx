@@ -1,0 +1,142 @@
+---
+title: Logs
+description: Incoming and outgoing logs, plus the ping and post inspectors—the receipts for every request in and out of Juiced.
+---
+
+Every request that touches Juiced leaves a receipt. When a source pings or posts, Juiced records an **incoming log**. When Juiced pings or posts to a partner, or sends a lead to a customer's webhook, it records an **outgoing log**. Together they answer the two questions you'll ask most: "What did they send us?" and "What did we send them?"
+
+Both live under **Entries** in the sidebar, next to **Leads**.
+
+## Incoming logs
+
+An incoming log (also called a distribution flow) is one run of the pipeline: a ping, a post, the lead it created, and every [distribution stage](/features/distribution) the lead visited. Open **Incoming logs** to see them all, newest first.
+
+<Frame>
+  <img className="block dark:hidden" src="/images/tenant/logs/incoming-logs-light.webp" alt="Incoming logs list with Source, Ping, Post, Lead, Honored, Recipient, and Sold For columns, a search box, and a Filters button" />
+  <img className="hidden dark:block" src="/images/tenant/logs/incoming-logs-dark.webp" alt="Incoming logs list with Source, Ping, Post, Lead, Honored, Recipient, and Sold For columns, a search box, and a Filters button" />
+</Frame>
+
+| Column | What it shows |
+|--------|---------------|
+| **Source** | The source that sent the traffic and when. A **Test** badge marks test traffic; an **Error** badge marks a flow that hit a distribution error. |
+| **Ping** | The ping's outcome: Matched, No Match, Pending, or Error. Blank means there was no ping (a direct post). |
+| **Post** | What happened when the full lead was posted. |
+| **Lead** | The lead that was created, linked to its page. A **Deleted** badge means the lead was later deleted. |
+| **Honored** | **Honored** when a ping's accepted offer won the lead on the post. |
+| **Recipient** | The customer or partner who received the lead. |
+| **Sold For** | What the lead sold for. |
+
+The search box matches source and recipient names. Click **Filters** to narrow by:
+
+- **Ping** status and **Source**
+- **Has Ping**, **Ping Honored**, **Has Post**, **Has Lead**, and **Assigned** (each Yes or No)
+- **Recipient Type** (Customer or Partner) and **Channel Type** (Bid, Customer, or Ping/Post)
+- **Test mode**: real traffic by default, or test only
+- **Created** date range
+
+Filters are kept in the page URL, so you can bookmark or share a filtered view.
+
+### Inside an incoming log
+
+Click a row to open it. The page title is the log's ID (it starts with `dflow_`).
+
+<Frame>
+  <img className="block dark:hidden" src="/images/tenant/logs/incoming-log-detail-light.webp" alt="Incoming log with an Inbound, Routing, and Outbound timeline, Details and Records in the sidebar, and an empty Outgoing logs table" />
+  <img className="hidden dark:block" src="/images/tenant/logs/incoming-log-detail-dark.webp" alt="Incoming log with an Inbound, Routing, and Outbound timeline, Details and Records in the sidebar, and an empty Outgoing logs table" />
+</Frame>
+
+- **Timeline** — Three lanes. **Inbound** holds what the source sent (the ping and post), **Routing** holds what Juiced did with it (lead created, each stage's result, who won), and **Outbound** holds pings and posts Juiced sent to partners. Each card describes its event in plain language and links to the related ping, post, or lead where there is one.
+- **Details** — The flow's **Status**, **Mode** (Live or Test), **Duration**, and when it was **Initiated**.
+- **Records** — Links to the **Source**, **Lead**, **Recipient**, **Ping**, and **Post**, plus **Offers**: the number of offers made, with a **View** link.
+- **Outgoing logs** — Every partner ping and post this flow triggered, with date, type, partner, result, and price.
+
+### Offers
+
+Click **View** next to **Offers** to see every offer the lead attracted. The dialog lists each bidder's **Name** (the winner is badged **Winner**), **Channel**, **Bid**, **Effective** price, **Penalty** (hover it for the reason), **Score**, **Discount**, **Charged**, and **Status**. It's the fastest way to see why one buyer beat another. See [ping-post](/features/ping-post) for how offers are scored.
+
+## Outgoing logs
+
+**Outgoing logs** lists every request Juiced sent out: pings and posts to [partners](/features/partners), and webhook deliveries. Rows are grouped by the incoming log they belong to, with a **View log** link to jump back to it.
+
+<Frame>
+  <img className="block dark:hidden" src="/images/tenant/logs/outgoing-logs-light.webp" alt="Outgoing logs list grouped by log number, with date, type, partner, result, price, and a View log link on each row" />
+  <img className="hidden dark:block" src="/images/tenant/logs/outgoing-logs-dark.webp" alt="Outgoing logs list grouped by log number, with date, type, partner, result, price, and a View log link on each row" />
+</Frame>
+
+The search box matches partner names and endpoint URLs. **Filters** include:
+
+- **Type**: Ping, Post, or Webhook
+- **Result**: Pending, Succeeded, Duplicate, Rejected, HTTP error, Timeout, Validation failed, or Error
+- **Partner**
+- **Test mode**: real traffic by default, or test only
+- **Created** date range
+
+Click a row to see the full exchange.
+
+<Frame>
+  <img className="block dark:hidden" src="/images/tenant/logs/outgoing-log-detail-light.webp" alt="Successful outgoing post with the request payload, the partner's response, and Details in the sidebar" />
+  <img className="hidden dark:block" src="/images/tenant/logs/outgoing-log-detail-dark.webp" alt="Successful outgoing post with the request payload, the partner's response, and Details in the sidebar" />
+</Frame>
+
+- **Request** — What Juiced sent, as **Payload**, **Headers**, or **Raw body**.
+- **Response** — What the partner sent back, as **Body**, **Headers**, or **Raw body**. When something went wrong on our side of the wire, an **Error** tab shows the error class and message.
+- **Details** — **Result**, **Type**, **Mode**, **Partner**, **Price**, **Response code**, **Method**, **Format** (JSON or Form), **Duration**, **Timestamp**, and **Endpoint**.
+- **Records** — A link to the incoming log.
+
+<Frame caption="A failed post: the partner's endpoint answered with a 503.">
+  <img className="block dark:hidden" src="/images/tenant/logs/outgoing-log-detail-failed-light.webp" alt="Outgoing post with an HTTP error result, a 503 response code, and a response body reading Service temporarily unavailable" />
+  <img className="hidden dark:block" src="/images/tenant/logs/outgoing-log-detail-failed-dark.webp" alt="Outgoing post with an HTTP error result, a 503 response code, and a response body reading Service temporarily unavailable" />
+</Frame>
+
+## Ping and post inspectors
+
+Pings and posts don't have their own list pages. You reach them from an incoming log (the **Ping** and **Post** links under **Records**, or **View ping** / **View post** on a timeline card), or from a lead's **View Ping** and **View Post** actions.
+
+### Ping inspector
+
+Shows exactly what a source sent to the [ping endpoint](/api-reference/endpoint/ping) and what Juiced answered.
+
+<Frame>
+  <img className="block dark:hidden" src="/images/tenant/logs/ping-inspector-light.webp" alt="Ping inspector with the request payload, a response body containing a price and Match found message, and Details and Records in the sidebar" />
+  <img className="hidden dark:block" src="/images/tenant/logs/ping-inspector-dark.webp" alt="Ping inspector with the request payload, a response body containing a price and Match found message, and Details and Records in the sidebar" />
+</Frame>
+
+- **Request** — **Payload** and **Headers**, plus **Validation errors** when the ping was rejected.
+- **Response** — The **Body** and **Headers** Juiced returned, including the price offered.
+- **Details** — The response **Status** code, **Mode**, **Source**, **Method**, **Timestamp**, and ping **ID**.
+- **Records** — The **Source**, **Lead category**, **Lead type**, **County**, and **Postal code** the ping resolved to.
+
+### Post inspector
+
+A post (also called a [submission](/features/submissions)) is the full lead a source sent to the [leads endpoint](/api-reference/endpoint/leads). Every post is stored as received, whether or not it became a lead.
+
+<Frame>
+  <img className="block dark:hidden" src="/images/tenant/logs/post-inspector-light.webp" alt="Post inspector with the request payload, Juiced's response, and Details and Records in the sidebar" />
+  <img className="hidden dark:block" src="/images/tenant/logs/post-inspector-dark.webp" alt="Post inspector with the request payload, Juiced's response, and Details and Records in the sidebar" />
+</Frame>
+
+- **Request** — The **Payload** as received (even fields that don't map to anything in your lead category), plus **Validation errors** when the post was rejected.
+- **Response** — The **Body**, **Headers**, and **Raw body** Juiced sent back.
+- **Details** — **Status** (Pending, Accepted, or Rejected), **Mode**, **Source**, **Response code**, **Duration**, **Timestamp**, and **ID**.
+- **Records** — The **Lead** the post created, if any.
+
+| Post status | Meaning |
+|--------|---------|
+| **Pending** | Still being processed. This is a brief, transient state. |
+| **Accepted** | Passed validation and produced a lead. |
+| **Rejected** | Failed validation; no lead was created. Check **Validation errors** for the field-by-field reasons. |
+
+<Tip>
+Test traffic is hidden by default. When a vendor is testing their integration, set the **Test mode** filter to **Test only** on Incoming logs to find their requests.
+</Tip>
+
+## Permissions
+
+Each log screen has its own permission, so you can give a support teammate access to the logs without access to everything else. Incoming logs, outgoing logs, pings, posts, and offers are each controlled separately in [roles](/features/roles).
+
+## Related pages
+
+- [Reading distribution logs](/guides/reading-distribution-logs)
+- [Distribution](/features/distribution)
+- [Ping-post](/features/ping-post)
+- [Sending leads to Juiced](/guides/sending-leads-to-juiced)

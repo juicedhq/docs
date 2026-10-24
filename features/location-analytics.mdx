@@ -5,62 +5,93 @@ description: Understand customer demand by geography to make smarter decisions a
 
 Location analytics shows you where your customers want leads—and where they're actually getting them. This data helps you make informed decisions about ad spend, source partnerships, and pricing strategy. If customers are bidding heavily in Miami but you're barely sourcing leads there, that's a gap worth closing.
 
-The system breaks down location data at three levels: countries, states, and counties. Each level shows the same core metrics, just at different geographic scopes.
+The data is broken down at three levels: countries, states, and counties. Each level shows the same core metrics at a different geographic scope.
 
 ## Location overview
 
-Navigate to **Analytics > Locations** and choose your geographic level (countries, states, or counties). You'll see a table with demand and performance data for each location.
+Open the **Locations** group in the sidebar and choose **Counties**, **States**, or **Countries**. You'll see a table with demand and performance data for each location.
+
+<Frame>
+  <img className="block dark:hidden" src="/images/tenant/locations/counties-light.webp" alt="Counties list with Active, Top Bid, Received, Min Value, Max Value, and Avg Value columns and a timeframe picker in the header" />
+  <img className="hidden dark:block" src="/images/tenant/locations/counties-dark.webp" alt="Counties list with Active, Top Bid, Received, Min Value, Max Value, and Avg Value columns and a timeframe picker in the header" />
+</Frame>
+
+Workspaces that operate in a single country see that country's own terms (for example, "ZIP Codes" in the US). Workspaces that operate in several countries see combined labels like **States / Territories** and **Counties / Postcodes**.
 
 ### Demand columns
 
 | Column | What it shows |
 |--------|---------------|
-| **Active bids** | Count of fully operating bids in this location—customers who are actively buying |
-| **Top bid** | The highest bid amount in this location |
+| **Active** | Count of fully operating bids at this level—customers who are ready to buy right now. On States, only state-wide bids count; on Countries, only nationwide bids. |
+| **Top Bid** | The highest current bid amount in this location. |
+
+Demand columns always reflect your bids as they stand right now.
 
 ### Lead performance columns
 
 | Column | What it shows |
 |--------|---------------|
-| **Leads** | Total leads received in this location |
-| **Assigned** | How many of those leads were successfully assigned to customers |
-| **Min** | Lowest sale price among assigned leads |
-| **Max** | Highest sale price among assigned leads |
-| **Avg** | Average sale price among assigned leads |
+| **Received** | On **Counties**, every lead received in the county. On **States** and **Countries**, only leads assigned at state-wide or nationwide scope. |
+| **Min Value** | Lowest charged amount among those leads |
+| **Max Value** | Highest charged amount among those leads |
+| **Avg Value** | Average charged amount among those leads |
 
-### Filtering and export
+These columns cover the timeframe you pick in the header.
 
-By default, the table shows data across all lead types. Use the lead type filter to narrow down to a specific lead type—useful if you want to see where demand is strongest for auto insurance versus home insurance, for example.
+### Timeframe, filters, and search
 
-You can export the current view to CSV for further analysis or reporting.
+Use the timeframe picker in the top-right to choose the period for the lead columns: **Billing period**, **Today**, **7D**, **4W**, **3M**, **12M**, **MTD**, **Last month**, **YTD**, **All**, or a **Custom** range. Your choice carries over between the Locations pages and the [Dashboard](/features/dashboard#choosing-a-timeframe).
+
+By default, the table covers all lead types. Use the **Lead types** filter to narrow down to specific ones—useful if you want to see where demand is strongest for one product versus another. The Counties page adds a **State** filter, plus a **Country** filter for multi-country workspaces. Search by name to find a location quickly. Filters and sorting are kept in the page URL, so you can bookmark a view.
+
+<Frame>
+  <img className="block dark:hidden" src="/images/tenant/locations/states-light.webp" alt="States list showing active bids, top bid, received leads, and value columns for each state" />
+  <img className="hidden dark:block" src="/images/tenant/locations/states-dark.webp" alt="States list showing active bids, top bid, received leads, and value columns for each state" />
+</Frame>
+
+### Exporting
+
+The **Counties** page has an **Export** button that builds a CSV of every county matching your filters. The export ignores the timeframe. When the file is ready, a **County export complete** notification arrives in the [notification bell](/features/dashboard#notifications) with a download link. States and Countries don't have an export.
 
 ## Individual location view
 
-Click on any location to see detailed information about that specific geography.
+Click any location to see detailed information about that specific geography.
+
+<Frame>
+  <img className="block dark:hidden" src="/images/tenant/locations/county-detail-light.webp" alt="County page with Active Bids, Interested Customers, and Top Bid tiles, a Last 30 Days values row, a bids table, and the county's ZIP codes in the sidebar" />
+  <img className="hidden dark:block" src="/images/tenant/locations/county-detail-dark.webp" alt="County page with Active Bids, Interested Customers, and Top Bid tiles, a Last 30 Days values row, a bids table, and the county's ZIP codes in the sidebar" />
+</Frame>
 
 ### Overview metrics
 
-- **Active bids** — Count of fully operating bids for this location
-- **Interested customers** — Customers who have *any* bid on this location, including paused or otherwise inactive bids
-- **Top bid** — The highest bid amount
+- **Active Bids** — Bids ready to receive leads in this location
+- **Interested Customers** — Customers with *any* bid on this location, including paused or otherwise inactive bids
+- **Top Bid** — The highest bid amount, across all lead types or just the ones you've filtered to
 
 The distinction between active bids and interested customers matters. Active bids tell you current demand. Interested customers tell you *potential* demand—people who've shown interest but might be paused due to budget, capacity, or other reasons.
 
-### Attached bids
+### Values
 
-This section shows all bids that include this location, giving you visibility into which customers are competing here and at what price points.
+Below the tiles, a row of values for the selected timeframe (the last 30 days unless you pick another): **Leads assigned**, **Minimum Value**, **Maximum Value**, and **Average Value**, each compared with the previous period of the same length.
+
+### Bids
+
+A table of the bids set at exactly this level: county bids on a county page, state-wide bids on a state page, nationwide bids on a country page. Each row shows the **Customer**, the customer's status, **Lead Type**, **Amount**, and the bid's status broken out into **Operational**, **Funding**, **Cap**, and **Budget**. Use **Filters** to narrow by lead type or any of the four status types, and search by customer.
 
 ### Child locations
 
-Locations are hierarchical. When viewing a specific location, you'll also see its children:
+The sidebar lists what's inside the location:
 
-| When viewing | Children shown |
+| When viewing | Shown in the sidebar |
 |--------------|----------------|
-| Country | States |
-| State | Counties |
-| County | Zip codes |
+| County | Its state and country, plus its postal codes |
+| State | Its country, plus its counties |
+| Country | No child list |
 
-This lets you drill down from broad regional trends to hyper-local demand patterns.
+<Frame>
+  <img className="block dark:hidden" src="/images/tenant/locations/state-detail-light.webp" alt="State page with overview tiles, values, state-wide bids, and the state's counties listed in the sidebar" />
+  <img className="hidden dark:block" src="/images/tenant/locations/state-detail-dark.webp" alt="State page with overview tiles, values, state-wide bids, and the state's counties listed in the sidebar" />
+</Frame>
 
 ## Related guides
 

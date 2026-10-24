@@ -1,68 +1,117 @@
 ---
 title: Billing
-description: Manage payment methods, view transactions, and configure auto-recharge.
+description: Save cards, add funds to your wallet, review every transaction, and turn on auto recharge.
 ---
 
-The Billing section is where you manage how your account is funded. It's organized into three tabs: Payment Methods, Transactions, and Auto Recharge.
+Leads are paid for from your **wallet**, a prepaid balance on your account. The **Billing** group in the sidebar holds everything that keeps it full: **Payment methods**, **Transactions**, and **Auto recharge**, plus [Subscription](/customer-portal/subscription) and [Bidding Limits](/customer-portal/bidding-limits) when they apply to you. Your current balance is always on the [wallet chip](/customer-portal/getting-around#wallet) at the top of the sidebar.
 
 <Note>
-If your provider has not connected Stripe, your account uses manual funds. You can view transactions, but card payment methods, deposits, auto recharge, and card subscriptions are unavailable until the provider connects Stripe.
+If your provider doesn't take card payments, you won't see **Payment methods** or **Auto recharge**, and your provider adds funds to your wallet for you. You can still review everything in **Transactions**.
 </Note>
 
-## Payment Methods
+## Payment methods
 
-This tab shows all payment methods linked to your account.
+This page lists the cards saved to your account.
 
-### Adding a payment method
+<Frame>
+  <img className="block dark:hidden" src="/images/portal/billing/payment-methods-light.webp" alt="Payment methods page listing two cards with status badges, expiration dates, and Add funds, Make default, and Remove card actions" />
+  <img className="hidden dark:block" src="/images/portal/billing/payment-methods-dark.webp" alt="Payment methods page listing two cards with status badges, expiration dates, and Add funds, Make default, and Remove card actions" />
+</Frame>
 
-Click **Add Payment Method** to link a new credit card. Once added, you can use it to manually deposit funds or set it up for automatic recharging.
+| Column | What it shows |
+|--------|---------------|
+| **Card** | The card brand and last four digits |
+| **Status** | **Default** (used for auto recharge), **Expiring** (expires soon), **Expired**, or **Invalid**. A **Subscription** badge marks the card your [subscription](/customer-portal/subscription) bills. |
+| **Expiration** | The card's expiry month and year |
 
-### Adding funds
+### Adding a card
 
-To deposit money into your wallet:
+Click **Add card**. You're taken to a secure Stripe page to enter your card details, then brought back to the portal with the card saved.
 
-1. Click **Add Funds** on an existing payment method
-2. Enter the amount you'd like to deposit
-3. Confirm the transaction
+### Managing cards
 
-The funds will be added to your wallet immediately and available for purchasing leads.
+Each card has these actions:
+
+- **Add funds** charges that card and tops up your wallet (see below).
+- **Make default** makes it the card [auto recharge](#auto-recharge) uses.
+- **Remove card** deletes it after you confirm. You can't remove your default card (make another card the default first) or the card your subscription bills (cancel the subscription first).
+
+## Adding funds
+
+<Frame>
+  <img className="block dark:hidden" src="/images/portal/billing/add-funds-light.webp" alt="Add funds dialog charging a Mastercard, with an Amount field, a 3% manual deposit fee note, the total to be charged, and a tip to reduce the fee to 1% with auto-recharge" />
+  <img className="hidden dark:block" src="/images/portal/billing/add-funds-dark.webp" alt="Add funds dialog charging a Mastercard, with an Amount field, a 3% manual deposit fee note, the total to be charged, and a tip to reduce the fee to 1% with auto-recharge" />
+</Frame>
+
+1. Click **Add funds** on the card you want to charge.
+2. Enter the **Amount** to add to your wallet. Your provider may set a minimum, and the minimum for your very first deposit can be different.
+3. Check the fee box. It shows your provider's **Manual deposit fee** (if any) and exactly what **You will be charged**. If auto recharge has a lower fee, it tells you how much you'd save. Some providers waive the fee on your first deposit.
+4. Click **Charge**.
+
+You'll see "Funds added! Your wallet balance may take a moment to update." The new balance shows on the wallet chip shortly after.
 
 <Note>
-Your provider may charge a transaction fee on deposits. The fee percentage (if any) will be shown before you confirm.
+If a yellow banner says card payments aren't available for your account, your provider has turned them off. Contact them to add funds.
 </Note>
-
-### Managing payment methods
-
-You can remove payment methods you no longer need. If you have multiple cards on file, you can set one as your default for auto-recharge.
 
 ## Transactions
 
-The Transactions tab shows your complete financial history—every deposit, lead purchase, refund, and fee. Use it to track spending, reconcile your records, or investigate specific charges.
+Transactions is your wallet's complete history: every deposit, purchase, refund, and adjustment.
 
-Each transaction displays:
-- Date and time
-- Transaction type (deposit, charge, refund, etc.)
-- Amount
-- A transaction ID
+<Frame>
+  <img className="block dark:hidden" src="/images/portal/billing/transactions-light.webp" alt="Transactions table with date, signed amount, event, and transaction ID columns and a running total below" />
+  <img className="hidden dark:block" src="/images/portal/billing/transactions-dark.webp" alt="Transactions table with date, signed amount, event, and transaction ID columns and a running total below" />
+</Frame>
 
-Your current wallet balance is shown in the customer panel widgets that appear throughout the portal, so you can still see available funds without relying on a running-balance column in the transactions table.
+| Column | What it shows |
+|--------|---------------|
+| **Date (UTC)** | When it happened, in UTC |
+| **Amount** | Green with **+** for money in, red with **−** for money out |
+| **Event** | What happened (see below), with a link to the related lead or record when there is one |
+| **Transaction ID** | A unique ID to quote if you ask your provider about a charge |
 
-## Auto Recharge
+Search by transaction ID, or use **Filters** to narrow by **Type** (**Deposit** or **Withdraw**), **Event**, and **Date**. Under the table, **Total** adds up every transaction matching your filters. Filter to **Lead Assigned** for last month, for example, and you have your lead spend in one number.
 
-Auto recharge keeps your wallet funded automatically so you never miss a lead due to insufficient funds.
+### Event types
 
-### How it works
+| Event | What it means |
+|-------|---------------|
+| **Funds Added** | You added funds with a card |
+| **Auto Recharge** | Auto recharge topped up your wallet |
+| **Funds Added By Tenant** | Your provider added funds to your wallet |
+| **Funds Subtracted By Tenant** | Your provider removed funds from your wallet |
+| **Lead Assigned** | You were charged for a lead |
+| **Lead Returned** | A returned lead was refunded |
+| **Placed Buy Order** | Funds set aside for a [marketplace buy order](/customer-portal/marketplace#placing-a-buy-order) |
+| **Canceled Buy Order** | A buy order you canceled was refunded |
+| **Released Buy Order** | A buy order's funds came back when its auction ended |
+| **Checkout Bonus** | Bonus credit from one of your provider's offers |
 
-When your wallet balance drops below a threshold you set, your default payment method is automatically charged to bring your balance back up.
+To see a single transaction's full record, search for its ID with [Search everything](/customer-portal/getting-around#search-everything) (<kbd>⌘</kbd> <kbd>K</kbd>).
 
-### Configuring auto recharge
+## Auto recharge
 
-1. **Enable auto recharge** — Toggle it on
-2. **Set your threshold** — The balance that triggers a recharge
-3. **Set your recharge amount** — How much to add when triggered
+Auto recharge keeps your wallet topped up so your bids never run dry mid-day. When your balance drops below an amount you choose, Juiced charges your default card and adds funds.
 
-For example, if you set a &#36;100 threshold and &#36;500 recharge amount, your card will be charged &#36;500 whenever your balance drops below &#36;100.
+<Frame>
+  <img className="block dark:hidden" src="/images/portal/billing/auto-recharge-light.webp" alt="Auto recharge settings with an Enable auto recharge switch turned off" />
+  <img className="hidden dark:block" src="/images/portal/billing/auto-recharge-dark.webp" alt="Auto recharge settings with an Enable auto recharge switch turned off" />
+</Frame>
 
-<Note>
-Your provider may set minimum deposit amounts and charge different fees for auto-recharge versus manual deposits.
-</Note>
+1. Turn on **Enable auto recharge**.
+2. Set **When my wallet falls below**: the balance that triggers a recharge.
+3. Set **Add the following funds**: how much to add each time. Your provider may set a minimum, shown under the field.
+4. Save your changes.
+
+For example, with a trigger of &#36;100 and an amount of &#36;500, your card is charged &#36;500 whenever your balance dips below &#36;100.
+
+If your balance is already below the trigger when you turn auto recharge on, a recharge runs straight away. Any auto recharge fee is shown before you save, along with what each recharge will cost. Many providers charge less for auto recharge than for manual deposits.
+
+### When auto recharge is unavailable
+
+If the settings are disabled, a notice explains why:
+
+- **You need an active payment method.** Add a card on [Payment methods](#payment-methods).
+- **Your payment method has expired.** Add a new card and make it your default.
+- **Card payments aren't available for your account.** Your provider has turned off card payments.
+- **Your account has been archived.** Contact your provider.

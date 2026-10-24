@@ -1,68 +1,61 @@
 ---
 title: Branding
-description: Customize your company's visual identity in the buyer portal.
+description: Customize your colors, logos, and icons in the customer portal.
 ---
 
-Make the buyer portal feel like your own. Branding lets you customize the colors, logos, and icons your customers see when they log in and use the platform.
+Make the customer portal feel like your own. Branding lets you customize the colors, logos, and icons your customers see when they sign in and use the platform. Think of it as the label on the bottle: the juice is the same, but now it's yours.
 
-To configure your branding, select **Branding** from the tenant menu.
+To configure your branding, click the gear in the rail and choose **Branding** under **Account**. Save your changes with the floating save bar.
 
-## Brand color
+<Frame>
+  <img className="block dark:hidden" src="/images/tenant/settings/branding-light.webp" alt="Branding settings page with Brand Color, Accent Color, and Rail Style in the Colors section, Primary Logo, Dark Mode Logo, Favicon, and Avatar upload slots, the Powered by Juiced footer switch, and a Preview section" />
+  <img className="hidden dark:block" src="/images/tenant/settings/branding-dark.webp" alt="Branding settings page with Brand Color, Accent Color, and Rail Style in the Colors section, Primary Logo, Dark Mode Logo, Favicon, and Avatar upload slots, the Powered by Juiced footer switch, and a Preview section" />
+</Frame>
 
-Your brand color is used for buttons, links, and accent elements throughout the buyer portal—including the sign-in page and navigation highlights.
+## Colors
 
-Bold, saturated colors work best since this color appears as text on both light and dark backgrounds.
+| Setting | What it does |
+|---------|--------------|
+| **Brand Color** | Used for buttons, links, and highlights throughout the customer portal, including the sign-in page and navigation. |
+| **Accent Color** | A second color for your brand. If you don't set one, the brand color is used. |
+| **Rail Style** | The background of the customer portal's navigation rail: **None**, **Primary**, **Accent**, or **Primary to Accent** (a gradient). |
+| **Reverse Direction** | Only shown for **Primary to Accent**. Flips the gradient to run from accent to primary. |
 
-## Logos
+Type a hex value, use the color swatch, or click **Pick from screen** to grab a color from anything on your display. Bold, saturated colors work best, since the brand color appears as text on both light and dark backgrounds.
 
-Upload your company logo to replace the default Juiced branding in the buyer portal. Logos appear in:
+## Logos & Icons
 
-- The navigation header
-- Authentication pages (sign in, sign up, password reset)
+Drop an image onto a slot, or click it to browse. PNG, SVG, or JPG files up to 4 MB are accepted. Hover the info icon under each slot for a reminder of where it's used.
 
-- **Primary Logo** — Displayed by default and in light mode
-- **Dark Mode Logo** — Displayed when a customer enables dark mode
+| Slot | Where it appears |
+|------|------------------|
+| **Primary Logo** | The customer portal navigation and the sign-in, sign-up, and password reset pages. A horizontally rectangular logo works best. |
+| **Dark Mode Logo** | Shown instead of the primary logo when a customer uses dark mode. |
+| **Favicon** | Browser tabs. Use a square image. |
+| **Avatar** | Your company avatar in notifications. Use a square image; it's shown in a circle. |
 
-A horizontally rectangular logo works best for these placements.
+Most tenants use the same image for the favicon and avatar.
 
-## Icons
+<Tip>
+If your primary logo is dark text, upload a light version as the **Dark Mode Logo** so it doesn't disappear on a dark background. Until you do, the preview falls back to your primary logo.
+</Tip>
 
-Icons are used in smaller contexts where a full logo won't fit:
+## Footer
 
-- **Favicon** — Browser tabs
-- **Avatar** — Notifications and anywhere your company avatar is displayed
+By default, the customer portal footer shows "Powered by Juiced". On plans of **$1,000/month or more** ([Berry Boost and up](/features/billing#premium-features)), you can turn on **Hide "Powered by Juiced" Footer** to remove it.
 
-A square image works best for both. Most tenants use the same image for favicon and avatar.
+On lower plans, the switch is disabled with the note "Upgrade your plan to enable this feature." Juiced can also enable it for your account by arrangement.
 
-## Removing Juiced branding
+## Preview
 
-By default, the buyer portal footer displays "Powered by Juiced" branding. On [higher-tier plans](/features/billing#premium-features), you can remove this branding entirely.
+The **Preview** at the bottom of the page is a rough look at the customer portal with your branding. It updates as you change colors and logos, and follows your own light or dark theme, so switch themes in the panel to check your dark mode logo.
 
-To hide the footer branding:
-
-1. Go to **Branding** in the tenant menu
-2. Enable the **Hide "Powered by Juiced" Footer** toggle
-
-If you're on a plan that doesn't include this feature, the toggle will be disabled with a message prompting you to upgrade.
-
-## Registration page
-
-Customize the content customers see when signing up:
-
-- **Headline** — The main heading on the registration page
-- **Banner text** — Additional messaging below the headline
-
-### Consent links
-
-Add links to your terms of service, privacy policy, or other legal documents that customers must acknowledge. You can require customers to accept these terms:
-
-- **At registration** — Customers must agree before creating an account
-- **On every login** — Ensures customers always agree to the latest version of your terms
-
-This is useful when you update your terms and need existing customers to re-accept them.
+<Note>
+Looking for the registration page headline, banner text, or consent links? They're in [Registration & Login](/features/registration-and-login).
+</Note>
 
 ## Related guides
 
 <Card title="Customizing the customer portal" icon="palette" href="/guides/customizing-the-portal" horizontal>
-  Apply your brand — logos, colors, favicon, and footer — across the customer portal.
+  Apply your brand (logos, colors, favicon, and footer) across the customer portal.
 </Card>

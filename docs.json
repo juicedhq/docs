@@ -30,6 +30,7 @@
               "index",
               "get-started/introduction",
               "get-started/core-concepts",
+              "get-started/finding-your-way-around",
               "get-started/quickstart",
               "get-started/next-steps"
             ]
@@ -41,7 +42,7 @@
         "groups": [
           {
             "group": "Features",
-            "pages": ["features/index"]
+            "pages": ["features/index", "features/dashboard"]
           },
           {
             "group": "Ingesting & Classifying Leads",
@@ -51,7 +52,15 @@
           {
             "group": "Selling Leads",
             "icon": "gavel",
-            "pages": ["features/ping-post", "features/bidding", "features/distribution", "features/marketplace", "features/club"]
+            "pages": [
+              "features/ping-post",
+              "features/bidding",
+              "features/distribution",
+              "features/marketplace",
+              "features/club",
+              "features/subscription-products",
+              "features/checkout-pages"
+            ]
           },
           {
             "group": "People",
@@ -66,12 +75,18 @@
           {
             "group": "Quality & Validation",
             "icon": "shield-check",
-            "pages": ["features/duplicate-detection", "features/submissions", "features/audits", "features/returns"]
+            "pages": [
+              "features/duplicate-detection",
+              "features/submissions",
+              "features/logs",
+              "features/audits",
+              "features/returns"
+            ]
           },
           {
             "group": "Events & Messaging",
             "icon": "bell",
-            "pages": ["features/notifications", "features/webhooks"]
+            "pages": ["features/notifications", "features/banners", "features/webhooks"]
           },
           {
             "group": "Observability",
@@ -86,7 +101,9 @@
               "features/branding",
               "features/billing",
               "features/domains",
+              "features/registration-and-login",
               "features/integrations",
+              "features/ai-assistants",
               "features/users",
               "features/roles"
             ]
@@ -125,7 +142,8 @@
             "pages": [
               "guides/onboarding-customers",
               "guides/managing-customer-finances",
-              "guides/adding-a-partner"
+              "guides/adding-a-partner",
+              "guides/setting-up-partner-ping-post"
             ]
           },
           {
@@ -181,13 +199,21 @@
             "group": "Customer Portal",
             "pages": [
               "customer-portal/index",
+              "customer-portal/getting-around",
+              "customer-portal/signing-up-and-logging-in",
+              "customer-portal/dashboard",
               "customer-portal/leads",
               "customer-portal/bids",
+              "customer-portal/locations",
               "customer-portal/marketplace",
               "customer-portal/club",
               "customer-portal/notifications",
+              "customer-portal/webhooks",
               "customer-portal/billing",
+              "customer-portal/subscription",
               "customer-portal/bidding-limits",
+              "customer-portal/returns",
+              "customer-portal/account-settings",
               "customer-portal/company-profile"
             ]
           }

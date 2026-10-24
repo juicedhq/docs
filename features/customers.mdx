@@ -1,9 +1,9 @@
 ---
 title: Customers
-description: The entities that purchase your leads—wallets, contacts, and configuration.
+description: The businesses that buy your leads, with their wallets, bids, eligibility, contacts, webhooks, and users.
 ---
 
-Customers are the businesses buying leads from you. They're the reason this whole operation exists—they want leads, you have them, and Juiced connects the two while making sure money changes hands appropriately.
+Customers are the businesses buying leads from you. They're the reason this whole operation exists: they want leads, you have them, and Juiced connects the two while making sure money changes hands appropriately.
 
 ## Customers vs. users
 
@@ -18,88 +18,140 @@ A single user can access multiple customers (useful for agencies managing severa
 
 ## The customer list
 
-Navigate to **Customers** in your tenant dashboard to see all your lead buyers. From here you can:
+Open **Customers** in the sidebar to see all your lead buyers.
 
-- **Search** by customer name, email, or associated user information
-- **Filter** by operational status, funding status, or archived state
-- **Sort by wallet balance** to find your best-funded customers or the accounts that need attention first
-- **Filter by a minimum or maximum wallet balance** to target a funding range
-- **Create** new customers manually
+<Frame>
+  <img className="block dark:hidden" src="/images/tenant/customers/customers-list-light.webp" alt="Customers list with Wallet Balance, Active Markets, New Customers, and Revenue stats above a revenue chart, status tabs, search, and a table of customers with status, balance, active markets, leads, and return tier" />
+  <img className="hidden dark:block" src="/images/tenant/customers/customers-list-dark.webp" alt="Customers list with Wallet Balance, Active Markets, New Customers, and Revenue stats above a revenue chart, status tabs, search, and a table of customers with status, balance, active markets, leads, and return tier" />
+</Frame>
 
-### Creating a customer manually
+If your role includes analytics, the top of the page shows **Wallet Balance**, **Active Markets**, **New Customers**, and **Revenue** for the selected timeframe, with a revenue chart underneath. Change the period with the timeframe picker in the header.
 
-Click **Create Customer** to add a new buyer. This is the same as what happens when a customer registers through your portal—you're just doing it on their behalf.
+Below that:
 
-You'll need to provide:
+- **Status tabs**: All, Active, Paused, Inactive, and Archived, each with a count
+- **Search**: by customer name or email, including the emails of users attached to the customer
+- **Filters**: Auto recharge, Subscribed, Archived customers, Operational, Funding, Cap, and Budget status, and a wallet **Balance** range. You'll also see **Return Tier** filters when you use return tiers, and an **Affiliate** filter when you have [checkout page](/features/checkout-pages) affiliates.
+- **Sorting**: by name, balance, active markets, leads, or created date
 
-- **Business name** and **email** (required)
-- **Phone** and **address** (optional, but helpful for records)
-- **Lead caps and budgets** if you want to limit their activity
-- **Access settings** like whether they can place bids
+The table shows each customer's status, balance, active markets, lead count, return tier and return rate, whether auto recharge is on, their subscription, and when they were created.
 
-## Customer overview
+## Creating and editing a customer
 
-Click on any customer to see their overview. This is your at-a-glance summary of how this buyer is performing.
+Click **New customer** to add a buyer. This creates the same kind of account as a customer registering through your portal; you're just doing it on their behalf. To change an existing customer, open them and click **Edit**.
+
+The form has these sections:
+
+| Section | Fields |
+|---------|--------|
+| **Basic Info** | Name, Business Email, Phone |
+| **Address** | Street Address, Apt / Suite, City, Country (United States, Canada, or Australia), State, and ZIP. Street address, city, state, and ZIP are required. |
+| **Toggles** | See [Account toggles](#account-toggles) below |
+| **Bidding Limits** | Daily, weekly, and monthly lead caps and budgets. Each field only appears when you've enabled that limit for customers in **Settings → Bidding**; if none are enabled, the section is hidden. Leave a limit empty for unlimited. See [Budgets and caps](/features/budgets-and-caps). |
+| **Auto Recharge** | Auto Recharge, Trigger Amount, and Recharge Amount. See [Auto recharge](#auto-recharge). |
+
+Click **Create customer** to save a new customer. When editing, the floating save bar appears as soon as you change something.
+
+### Account toggles
+
+- **Can Access Bidding**: lets the customer place bids and view counties in their portal. This starts **off** for customers you create, so turn it on if they should bid for themselves.
+- **Manual Club Access**: grants access to your [Club](/features/club) without a subscription, for example to comp a customer. An active subscription grants access automatically, independent of this toggle.
+- **Disable Return Tiers**: exempts the customer from your [return tiers](/features/returns); their return rate shows instead of a tier. Only appears when you use return tiers.
+
+Pausing isn't a form field; it lives in the customer's **More actions** menu.
+
+### Auto recharge
+
+Auto recharge tops up the wallet from the customer's default card whenever the balance falls below the **Trigger Amount**, adding the **Recharge Amount** each time. It's triggered immediately if the balance is already below the trigger when you turn it on.
+
+You can only turn it on when:
+
+- Stripe is connected (otherwise the section shows **Auto recharge needs Stripe**),
+- customer payments aren't disabled in [Payments & Deposits](/features/payments-and-deposits), and
+- the customer has an active payment method.
+
+## The customer record
+
+Click any customer to open their record. The header shows the customer's name and status, a timeframe picker, an **Edit** button, and the **More actions** (⋯) menu. Tabs underneath take you to everything about this customer: **Overview**, **Bids**, **Lead Eligibility**, **Leads**, **Transactions**, **Payment Methods**, **Contacts**, **Webhooks**, and **Users**.
+
+<Frame>
+  <img className="block dark:hidden" src="/images/tenant/customers/customer-overview-light.webp" alt="Customer overview for Halberd & Crow Coffee with Revenue, Wallet, Active Bids, and Return Rate stats, four status cards, an Activity feed, and Details, Account, and Club panels on the right" />
+  <img className="hidden dark:block" src="/images/tenant/customers/customer-overview-dark.webp" alt="Customer overview for Halberd & Crow Coffee with Revenue, Wallet, Active Bids, and Return Rate stats, four status cards, an Activity feed, and Details, Account, and Club panels on the right" />
+</Frame>
+
+### More actions
+
+| Action | What it does |
+|--------|--------------|
+| **Add funds** / **Remove funds** | Adjust the wallet by hand. See [Wallet management](#wallet-management). |
+| **Pause** / **Resume** | Temporarily stop the customer's bidding without archiving them. |
+| **Timeline** | Opens the customer's full activity history. |
+| **Cancel subscription** | Only shown when the customer has a live subscription. See [Subscription products](/features/subscription-products#cancelling-a-customers-subscription). |
+| **Archive** | Archives the customer and their bids. They can no longer receive leads or add funds. |
+| **Reactivate** | Only shown on archived customers. Makes the account available again. |
+
+<Frame>
+  <img className="block dark:hidden" src="/images/tenant/customers/customer-actions-menu-light.webp" alt="Customer More actions menu open with options to add or remove funds, pause, view the timeline, and archive" />
+  <img className="hidden dark:block" src="/images/tenant/customers/customer-actions-menu-dark.webp" alt="Customer More actions menu open with options to add or remove funds, pause, view the timeline, and archive" />
+</Frame>
+
+### Archiving and reactivating
+
+Archiving a customer also archives their bids. A customer with an active subscription can't be archived; cancel the subscription first (immediately, or wait for a scheduled cancellation to finish). To bring an archived customer back, open them and choose **Reactivate** from **More actions**.
+
+## Overview
 
 ### Key metrics
 
-The overview displays four stats at the top:
+If your role includes analytics, the overview opens with four stats:
 
 | Metric | What it shows |
 |--------|---------------|
-| **Revenue** | Total amount charged to this customer for assigned leads |
-| **Wallet** | Current available balance (minus any reserved funds) |
-| **Active Bids** | Number of bids currently running and competing for leads |
-| **Return Rate** | Percentage of leads this customer has returned |
+| **Revenue** | Amount charged to this customer in the selected timeframe (four weeks by default), with the change from the previous period |
+| **Wallet** | Current available balance |
+| **Active Bids** | Number of bids currently running |
+| **Return Rate** | Returned deliveries as a percentage of this customer's charged deliveries in the selected period |
 
-### Status indicators
+### Status cards
 
-Customers have several statuses that reflect different aspects of their account health. Understanding these helps you quickly diagnose why a customer might not be receiving leads.
+Four status cards help you quickly diagnose why a customer might not be receiving leads. Hover the info icon on each for a description.
 
-#### Operational status
-
-This is the customer's manual state—controlled by you or them:
+#### Operational
 
 | Status | Meaning |
 |--------|---------|
-| **Active** | Business as usual. Ready to receive leads. |
-| **Paused** | Temporarily stopped. No leads will be assigned. |
-| **Archived** | Removed from active operation. Historical data preserved. |
+| **Active** | Bidding on and receiving leads. |
+| **Paused** | Bidding is paused for this customer. |
+| **Archived** | No longer operating. Historical data is preserved. |
 
-#### Funding status
-
-Reflects wallet balance:
+#### Funding
 
 | Status | Meaning |
 |--------|---------|
-| **Available** | Sufficient funds for normal operation |
-| **Limited** | Running low—might not cover all potential purchases |
-| **Exhausted** | Out of funds. No leads will be assigned. |
+| **Available** | Balance can cover lead purchases. |
+| **Limited** | Balance is running low. |
+| **Exhausted** | Out of funds; can't buy leads. |
 
-#### Cap status
-
-Reflects lead volume limits:
+#### Cap
 
 | Status | Meaning |
 |--------|---------|
-| **Unlimited** | No caps configured |
-| **Available** | Under all cap limits |
-| **Exhausted** | At least one cap (daily, weekly, or monthly) has been reached |
+| **Unlimited** | No cap on lead volume. |
+| **Available** | Within the lead cap. |
+| **Exhausted** | Lead cap has been reached. |
 
-#### Budget status
-
-Reflects spending limits:
+#### Budget
 
 | Status | Meaning |
 |--------|---------|
-| **Unlimited** | No budgets configured |
-| **Available** | Under all budget limits |
-| **Limited** | Approaching a limit |
-| **Exhausted** | At least one budget has been reached |
+| **Unlimited** | No spending limit set. |
+| **Available** | Within the spending budget. |
+| **Limited** | Approaching the budget limit. |
+| **Exhausted** | Budget spent for this period. |
 
 #### Display status
 
-Rather than showing all four statuses everywhere, Juiced computes a **display status** that summarizes the customer's situation:
+Rather than showing all four statuses everywhere, Juiced computes a **display status** that summarizes the customer's situation. It's the badge next to the customer's name and the status in the customer list.
 
 | Display status | Shown when |
 |----------------|------------|
@@ -108,172 +160,173 @@ Rather than showing all four statuses everywhere, Juiced computes a **display st
 | **Inactive** | Wallet funding is exhausted (no bid can cover its minimum) |
 | **Archived** | Account archived |
 
-This is what you'll see in most places throughout the app.
-
 <Note>
-Display status only reflects operational and funding state. Cap and budget exhaustion show up on the customer's individual **bids** (as **Capped** or **Exhausted**) rather than changing the customer's own display status. A customer with every bid capped will still show as **Active** if their wallet is funded—they just won't be receiving leads.
+Display status only reflects operational and funding state. Cap and budget exhaustion show up on the customer's individual **bids** (as **Capped** or **Exhausted**) rather than changing the customer's own display status. A customer with every bid capped will still show as **Active** if their wallet is funded; they just won't be receiving leads.
 </Note>
 
-### Account toggles
+### Activity
 
-Several settings control customer behavior:
+The **Activity** feed shows the customer's eight most recent events: leads received, funds added or removed, pauses, and other account changes. Funds entries that have a receipt include a **View receipt** link. Click **View all**, or choose **Timeline** from **More actions**, to see the full history.
 
-- **Pause Account** — Temporarily halt all activity without archiving
-- **Onboarded** — Override the onboarding requirement (if your tenant uses onboarding videos)
-- **Can Access Bidding** — Allow or restrict this customer from placing bids
-- **Disable Return Tiers** — Exempt this customer from your return tier system; their raw return rate will display instead
+### Side panels
 
-### Lead eligibility
+The right-hand column shows:
 
-Use the **Lead Eligibility** tab on a customer to control which leads that buyer can receive. You can add conditions for the source, lead type, lead category, or lead fields.
-
-When you add conditions, a lead must match every condition in at least one group before the customer can receive it through bidding or round robin. Customers without conditions remain eligible for every lead. Juiced applies these checks during bid selection and round-robin delivery; Marketplace purchases and Club claims are not affected.
-
-<Note>
-You need permission to update customers to manage a customer's eligibility conditions. Buyers cannot view or edit these conditions themselves.
-</Note>
-
-### Auto-recharge
-
-If the customer has a payment method on file, you can configure auto-recharge:
-
-- **Enable auto-recharge** — Turn automatic funding on
-- **Trigger amount** — When the wallet drops below this amount, recharge kicks in
-- **Recharge amount** — How much to add when triggered
-
-This happens immediately if the wallet is already below the trigger when you enable it.
-
-### Stripe integration
-
-If the customer has a Stripe customer ID, you'll see a link to view them directly in your Stripe dashboard.
+- **Details**: Customer ID, email, phone, address, and created date
+- **Account**: return tier (when you use return tiers) and the customer's **Stripe ID**, which links straight to the customer in your Stripe dashboard
+- **Club**: access source, subscription tier, billing status, renewal date, and claims used this period. See [Club](/features/club#customer-access-and-subscriptions).
+- **Toggles**: the current state of each [account toggle](#account-toggles)
+- **Registration Tracking**: for customers who registered through a tracked link, the registration URL, its UTM parameters, and the affiliate who referred them, if any
 
 ## Wallet management
 
-Customers have a wallet balance that funds their lead purchases. You can add or remove funds without processing an actual payment—useful for credits, adjustments, or corrections.
+Customers have a wallet balance that funds their lead purchases. You can add or remove funds without processing an actual payment, which is useful for credits, adjustments, or corrections. Both actions are in the **More actions** menu.
 
-### Adding funds
+- **Add funds** asks for an **Amount**, a **Description** (the reason you're adding funds), and an optional **Receipt URL**.
+- **Remove funds** asks for an **Amount** and a **Description**, which is visible to the customer. You can't remove more than the current balance.
 
-Click **Add Funds** from the customer overview. You'll enter:
+Every adjustment shows up in the customer's [transactions](/features/transactions) and activity. For a step-by-step walkthrough, see [Managing customer finances](/guides/managing-customer-finances).
 
-- **Amount** — How much to add
-- **Description** — Why you're adding it (visible to the customer)
-- **Receipt URL** (optional) — Link to relevant documentation
+## Bids
 
-### Removing funds
+The **Bids** tab lists every bid this customer has placed, with its **Status**, **My Bid**, the current **Top Bid**, the customer's **Position**, and the **Lead Type**. **Caps** and **Budgets** columns appear when you've enabled bid-level limits in **Settings → Bidding**.
 
-Click **Remove Funds** for the reverse. This is useful for clawing back credits or correcting mistakes.
+<Frame>
+  <img className="block dark:hidden" src="/images/tenant/customers/customer-bids-light.webp" alt="Customer Bids tab listing bids by location with status, my bid, top bid, position, lead type, caps, and budgets columns" />
+  <img className="hidden dark:block" src="/images/tenant/customers/customer-bids-dark.webp" alt="Customer Bids tab listing bids by location with status, my bid, top bid, position, lead type, caps, and budgets columns" />
+</Frame>
 
-### Timeline
+Search by location, or filter by **Lead type**, **Scope** (county, state, or nationwide), and **Archived bids**. When a return-tier discount applies, **My Bid** is struck through: hover it to see what the customer actually pays. The bid still competes at full price.
 
-The **Timeline** action shows a history of all fund adjustments, including who made them and why. This creates an audit trail for financial changes.
+Each row has **Edit**, **Pause** / **Unpause**, **History** (a sheet showing changes to the bid), and **Delete**.
 
-### Reserved funds
+Click **New bid** to bid on the customer's behalf. Search for a **Location** (one search box covers counties, states, and countries), pick a **Lead type** (only types with bidding enabled for that location's level are offered), and choose **My bid** from the amounts allowed, or enter a custom amount. Bid-level caps and budgets only appear when you edit an existing bid.
 
-When a customer's bids are active, funds may be "reserved" to cover potential purchases. The displayed wallet balance accounts for these holds—what you see is what's actually available to spend.
+<Frame>
+  <img className="block dark:hidden" src="/images/tenant/customers/customer-bid-create-light.webp" alt="New bid form with a Targeting section for location and lead type and a Bid amount section showing the top bid and amount options" />
+  <img className="hidden dark:block" src="/images/tenant/customers/customer-bid-create-dark.webp" alt="New bid form with a Targeting section for location and lead type and a Bid amount section showing the top bid and amount options" />
+</Frame>
 
-## Return tiers
+## Lead eligibility
 
-Return tiers let you incentivize good behavior. Customers with low return rates can earn discounts, while serial returners face penalties.
+Use the **Lead Eligibility** tab to control which leads this customer can receive. Build conditions on lead fields, **Lead Category**, **Lead Type**, or **Source**, then click **Save conditions**.
 
-If a customer is assigned to a return tier, you'll see it displayed on their overview with a colored badge. Tiers can include:
+<Frame>
+  <img className="block dark:hidden" src="/images/tenant/customers/customer-eligibility-light.webp" alt="Customer Lead Eligibility tab with a condition builder for restricting which leads the customer receives" />
+  <img className="hidden dark:block" src="/images/tenant/customers/customer-eligibility-dark.webp" alt="Customer Lead Eligibility tab with a condition builder for restricting which leads the customer receives" />
+</Frame>
 
-- **Discounts** — Reduced pricing on bids (they compete at full price but pay less)
-- **Penalties** — Surcharges based on their return rate
-
-The **Disable Return Tiers** toggle exempts a customer from this system entirely.
-
-## Managing related data
-
-From the customer detail page, you can navigate to several related sections via the tabs at the top:
-
-### Bids
-
-View and manage all bids this customer has placed. You can:
-
-- Create new bids
-- Pause or resume existing bids
-- Edit bid parameters
-- View bid history
-
-### Leads
-
-See all leads assigned to this customer. Filter by source, date range, or value. Handle returns and disputes from here.
-
-### Transactions
-
-A record of every change to the customer's wallet balance. Each transaction shows:
-
-- **Timestamp** — When the transaction occurred
-- **Amount** — How much was deposited or withdrawn
-- **Event** — What triggered the transaction, with a link to the related record (lead, dispute, etc.)
-- **Transaction ID** — Unique identifier for the transaction
+Conditions inside a group must all match (AND), and a lead only needs to match one group (OR). With no conditions, every lead qualifies. These checks apply to **bidding** and **round robin** delivery only; Marketplace purchases and Club claims are not affected.
 
 <Note>
-These are wallet transactions, not necessarily real currency movements. Adding credits, adjusting balances, or processing returns all create transactions here even though no money changed hands externally.
+You need permission to update customers to open this tab. Buyers can't view or edit these conditions themselves.
 </Note>
 
-### Payment methods
+## Leads
 
-View the customer's saved payment methods, including card details and expiration dates. Tenants can:
+The **Leads** tab shows every lead assigned to this customer. Search, or filter by **Source**, **Status**, **Sold for** (a price range), and **Assigned date**.
 
-- **Set a default** — The default payment method is used for auto-recharges
-- **Delete** — Remove a payment method from the account
+<Frame>
+  <img className="block dark:hidden" src="/images/tenant/customers/customer-leads-light.webp" alt="Customer Leads tab listing assigned leads with status, address, sold-for price, and source" />
+  <img className="hidden dark:block" src="/images/tenant/customers/customer-leads-dark.webp" alt="Customer Leads tab listing assigned leads with status, address, sold-for price, and source" />
+</Frame>
 
-Customers add their own payment methods through the buyer portal.
+To return a lead on the customer's behalf, use **Return** on its row, or select several returnable leads and click **Return selected**. Returning refunds the customer, and the lead won't count against their lead cap. See [Returns](/features/returns).
 
-### Contacts
+## Transactions
 
-Contacts are phone numbers or email addresses used to send notifications. Each contact can optionally have a name attached for easier identification.
+A record of every change to the customer's wallet, with totals for **Transactions**, **Deposits**, **Withdrawals**, and **Net** at the top. See [Transactions](/features/transactions) for the full breakdown of events.
 
-<Note>
-You can only add contact types for integrations you've configured. No email integration means no email contacts. No texting integration means no phone contacts.
-</Note>
+## Payment methods
 
-From this page you can:
+The **Payment Methods** tab lists the customer's saved cards with their **Status** and **Expiration**. Each card has:
 
-- **Add contacts** — Enter a phone number or email address
-- **Test contacts** — Send a test notification to verify delivery
-- **Edit notification preferences** — Click edit to see a list of available notifications that can be enabled or disabled for that specific contact
+- **Make default**: the default card is used for auto recharge
+- **Remove**: detaches the card from the customer in Stripe. You can't remove the default card.
 
-Available notification categories include:
+Customers add their own cards from their portal; there's no way to add a card from the tenant panel. Without Stripe connected, this tab shows **Cards need Stripe**, and you can adjust balances by hand instead.
 
-- **Lead notifications** — Lead assigned, dispute approved
-- **Bid notifications** — Outbid, bid matched, underfunded bids
-- **Account notifications** — Paused/unpaused, tier updated
-- **Marketplace notifications** — Buy order status changes
+<Frame>
+  <img className="block dark:hidden" src="/images/tenant/customers/customer-payment-methods-light.webp" alt="Customer Payment Methods tab listing saved cards with status and expiration" />
+  <img className="hidden dark:block" src="/images/tenant/customers/customer-payment-methods-dark.webp" alt="Customer Payment Methods tab listing saved cards with status and expiration" />
+</Frame>
 
-Each contact has its own notification settings, so you can route different types of alerts to different people or channels.
+## Contacts
 
-### Webhooks
+Contacts are the email addresses and phone numbers that receive this customer's [notifications](/features/notifications). Each contact can have a name for easier identification.
 
-Set up an HTTP endpoint that receives lead data when a lead is assigned to this customer.
+<Frame>
+  <img className="block dark:hidden" src="/images/tenant/customers/customer-contacts-light.webp" alt="Customer Contacts tab listing contacts with value, type, and name" />
+  <img className="hidden dark:block" src="/images/tenant/customers/customer-contacts-dark.webp" alt="Customer Contacts tab listing contacts with value, type, and name" />
+</Frame>
 
-Configuration is straightforward:
+Click **New contact**, choose **Email** or **Phone**, and enter the value. Each row has:
 
-- **URL** — Where to send the POST request
-- **Payload** — Customize what data is sent using available variables (format is always JSON)
-- **Active state** — Toggle to pause the webhook without deleting it
+- **Test**: sends a test notification so you can confirm delivery
+- **Edit**: change the contact and its notification preferences
+- **Delete**: remove it (you can also select several and **Delete selected**)
 
-You can test webhooks before going live using either:
+Notification preferences appear when you edit a contact, grouped like this:
 
-- **Existing lead data** — Select a real lead from the customer's history to see exactly what your endpoint will receive
-- **Sample data** — Generate fake data based on a lead type to test without using real information
+| Group | Notifications |
+|-------|---------------|
+| **Leads** | Lead assigned, Return Approved |
+| **Bids** | Outbid, Bid matched, Under funded bids |
+| **Account Status** | Account paused, Account unpaused, Return Tier Updated |
+| **Marketplace** | Buy order exceeded, Buy order reinstated |
 
-This lets you verify your endpoint handles the payload correctly before enabling the webhook.
+<Frame>
+  <img className="block dark:hidden" src="/images/tenant/customers/customer-contact-edit-light.webp" alt="Edit contact form with the contact's type, value, and name, followed by notification toggles grouped into Leads, Bids, Account Status, and Marketplace" />
+  <img className="hidden dark:block" src="/images/tenant/customers/customer-contact-edit-dark.webp" alt="Edit contact form with the contact's type, value, and name, followed by notification toggles grouped into Leads, Bids, Account Status, and Marketplace" />
+</Frame>
 
-### Users
+Each contact has its own settings, so you can route different alerts to different people or channels. Whether a message actually goes out by email or text also depends on your [notification templates](/features/notifications) and your SendGrid and Twilio [integrations](/features/integrations).
 
-See all users who can access this customer account. You can detach users if they should no longer have access.
+## Webhooks
 
-### Invites
+Customer webhooks send lead data to an HTTP endpoint every time a lead is assigned to this customer. You and the customer can both manage them; customers do it from their portal.
 
-Manage pending invitations for users to join this customer account. Resend or revoke invites as needed.
+<Frame>
+  <img className="block dark:hidden" src="/images/tenant/customers/customer-webhooks-light.webp" alt="Customer Webhooks tab listing webhooks with name, URL, method, status, and last delivery" />
+  <img className="hidden dark:block" src="/images/tenant/customers/customer-webhooks-dark.webp" alt="Customer Webhooks tab listing webhooks with name, URL, method, status, and last delivery" />
+</Frame>
+
+Click **New webhook** and set up:
+
+- **Destination**: an optional **Name** and the **URL** the lead data is sent to
+- **Advanced settings**: **Method** (POST, PUT, or GET), **Authentication** (None, Basic Auth, or Bearer Token), **Format** (JSON or Form), **Timeout**, and extra **Headers**
+- **Payload**: the **Default payload** (every available field in the standard shape) or a **Custom payload** where you pick fields, rename keys, add static values, or paste your own JSON shape
+
+Click **Create & continue to testing**. On the edit page you can then test the webhook with a real lead, generated sample data, or test data you add by hand, and see the request and response.
+
+Click a webhook to open its overview: delivery stats (total deliveries, success rate, failures, average duration, and last delivery), its settings, and a **Deliveries** list split into **Live** and **Tests**. Filter by result or date, open any delivery to see the request and response, and **Redeliver** it if needed. **Pause webhook** stops deliveries without deleting it.
+
+<Frame>
+  <img className="block dark:hidden" src="/images/tenant/customers/customer-webhook-detail-light.webp" alt="Customer webhook overview with total deliveries, success rate, failed, average duration, and last delivery stats, a Live deliveries list with response codes, and the webhook's endpoint, method, format, and trigger" />
+  <img className="hidden dark:block" src="/images/tenant/customers/customer-webhook-detail-dark.webp" alt="Customer webhook overview with total deliveries, success rate, failed, average duration, and last delivery stats, a Live deliveries list with response codes, and the webhook's endpoint, method, format, and trigger" />
+</Frame>
+
+For a full walkthrough, see [Sending events to your webhook](/guides/sending-events-to-your-webhook).
+
+## Users
+
+The **Users** tab lists everyone who can sign in to this customer's portal, with their **Email**, **Authentication** methods, and **Joined on** date. Pending invitations appear in the same list with a **Pending** badge.
+
+<Frame>
+  <img className="block dark:hidden" src="/images/tenant/customers/customer-users-light.webp" alt="Customer Users tab listing users with email, authentication methods, and joined date, with an Invite user button" />
+  <img className="hidden dark:block" src="/images/tenant/customers/customer-users-dark.webp" alt="Customer Users tab listing users with email, authentication methods, and joined date, with an Invite user button" />
+</Frame>
+
+- **Invite user**: enter an email address and send an invitation. The person joins as an admin of this customer. Juiced doesn't email anyone when you create a customer, so this is how the first person gets in.
+- **Resend invite** and **Revoke invite**: on pending invitations
+- **Remove**: detach a user from this customer
+- **Reset 2FA and passkeys**: for a user who's locked out of their sign-in methods. Only tenant admins see this, and you'll be asked for your password.
 
 ## Related guides
 
 <CardGroup cols={2}>
   <Card title="Onboarding customers" icon="user-plus" href="/guides/onboarding-customers">
-    The three ways customers land in your tenant — self-serve, invite, and admin-created.
+    The three ways customers land in your tenant: self-serve, invite, and admin-created.
   </Card>
   <Card title="Managing customer finances" icon="wallet" href="/guides/managing-customer-finances">
     Fund a wallet, remove funds, and set up auto-recharge.

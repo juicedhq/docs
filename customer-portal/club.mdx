@@ -1,41 +1,55 @@
 ---
 title: Club
-description: Browse and claim available leads included with your Club access.
+description: Browse and claim leads included with your Club membership, at no per-lead cost.
 ---
 
-Club is a lead pool your provider makes available to eligible customers. When you claim a lead, it is delivered to your usual [Leads](/customer-portal/leads) list and your provider's normal delivery setup can send it to your CRM or workflow.
+Some providers run a Club: a members-only pool of leads you can claim for free as part of a monthly subscription. Claimed leads land in your usual [Leads](/customer-portal/leads) list and flow through your normal [webhooks](/customer-portal/webhooks) and notifications, just like leads you won.
 
-## Accessing Club
+Your provider names their Club, so in your sidebar it might say "Fresh Squeeze Club" or something else entirely. This page calls it the Club. You'll only see it if your provider runs one.
 
-Open **Club** in the customer portal. Your provider may give Club a custom name and URL, but `/club` is always available as a fallback.
+## Joining the Club
 
-If you have access, you can browse available leads. If your provider offers a Club subscription and you do not have access yet, the page explains the offer and lets you subscribe from your billing area.
+If you don't have access yet, the Club page shows your provider's pitch, the plan name, and the starting monthly price.
+
+<Frame>
+  <img className="block dark:hidden" src="/images/portal/club/club-pitch-light.webp" alt="Club page for a customer without access, showing Join the Fresh Squeeze Club, a short description, a from $49.00 per month price, and a Get started button" />
+  <img className="hidden dark:block" src="/images/portal/club/club-pitch-dark.webp" alt="Club page for a customer without access, showing Join the Fresh Squeeze Club, a short description, a from $49.00 per month price, and a Get started button" />
+</Frame>
+
+Click **Get started** to choose a plan and subscribe on the [Subscription](/customer-portal/subscription) page. Your access starts as soon as the subscription is active.
+
+If you already have a subscription but it isn't giving you access (for example, the first payment didn't go through), you'll see "Your subscription needs attention" with a **Manage subscription** button instead. Sort out the payment there and the Club opens back up.
+
+Your provider can also give you Club access directly, without a subscription.
 
 ## Finding a lead
 
-Use the available filters and sorting options to narrow the pool by location or lead type. Only leads that still have available claims are listed.
+Once you're in, the Club page lists the leads you can claim.
 
-The table shows the lead's location, lead type, and when it was received. Your provider controls the details and the number of customers who can claim each lead.
+<Frame>
+  <img className="block dark:hidden" src="/images/portal/club/club-entitled-light.webp" alt="Fresh Squeeze Club page listing claimable leads by county, lead type, and received time, each with a Claim button" />
+  <img className="hidden dark:block" src="/images/portal/club/club-entitled-dark.webp" alt="Fresh Squeeze Club page listing claimable leads by county, lead type, and received time, each with a Claim button" />
+</Frame>
+
+Each row shows the lead's **County** (with its state), **Lead type**, and when it was **Received**. Sort by any of them, or click **Filters** to narrow by **State**, **County**, or **Lead type** (pick as many as you like). Only leads that can still be claimed are listed.
 
 ## Claiming a lead
 
-Select **Claim** on a lead, then confirm the action.
+Click **Claim**, then confirm in the **Claim this lead?** dialog.
 
-- Club claims are free; they do not deduct from your wallet.
-- The lead is added to your [Leads](/customer-portal/leads) list.
-- You can only claim a source lead once.
-- Other eligible customers may also be able to claim the same lead, depending on your provider's settings.
+- Claiming is free. Nothing comes out of your wallet.
+- The lead is delivered to your [Leads](/customer-portal/leads) list with the **Club** status, and to your CRM if you have a webhook set up.
+- You can claim each lead only once.
+- Other members may be able to claim the same lead too, depending on how your provider runs the Club.
 
 <Note>
-Claiming a Club lead is not the same as buying an exclusive lead. If you need to know whether a lead is exclusive, ask your provider before you work it.
+A Club lead isn't an exclusive lead. If you need to know how many other buyers might receive it, ask your provider before you work it.
 </Note>
 
-## Managing a subscription
+### Your claim allowance
 
-When your provider offers Club subscriptions, you can select a plan from the billing area using a saved payment method. Your access starts after the subscription becomes active.
+Some plans include a set number of claims per billing period. If yours does, the top of the table shows how many you have left, for example **8 of 10 claims left**. When you reach zero, the **Claim** buttons are disabled until your next billing period starts. Plans without a limit don't show a counter.
 
-Your provider may offer a Stripe promotion code when you start a new Club subscription. Enter the code before subscribing to see the discounted first charge and the terms for future renewals. If a code is expired, exhausted, inactive, or does not apply to the plan, Juiced shows an error instead of subscribing you at the regular price.
+## Managing your subscription
 
-Promotion codes apply when starting a new subscription. To change an existing subscription or ask about a planned tier change, contact your provider.
-
-If you cancel, your Club access remains available through the end of the current billing period. You can resume before that date. If a payment needs attention, follow the instructions in the portal to restore access.
+Everything about your plan (subscribing, promotion codes, canceling, resuming, and fixing a failed payment) lives on the [Subscription](/customer-portal/subscription) page under **Billing**.

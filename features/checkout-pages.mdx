@@ -1,0 +1,152 @@
+---
+title: Checkout Pages
+description: Sell lead credit and Club memberships from public offer pages, track sales, and pay affiliates their commission.
+---
+
+Checkout pages are public, pay-first offer pages. A buyer picks a package, pays by card, and lands with credit in their wallet (and a Club membership, if the offer includes one) without waiting for you to set anything up. They're built for launches, webinars, and promotions where you want the money in before the conversation.
+
+<Note>
+Checkout pages are available on request. Juiced enables them for your account; if you don't see **Checkout Pages** in your settings, contact your Juiced representative.
+</Note>
+
+## Before you start
+
+- **The Admin role.** Checkout pages take payments on your Stripe account, so only users who can manage billing see them.
+- **Card payments.** Your [Stripe account](/features/integrations) must be connected and able to take customer payments. Until it is, pages show as **Not selling**.
+- **For Club offers:** turn on the [Club](/features/club) and offer a tier in [Subscription Products](/features/subscription-products).
+
+Click the gear in the rail and choose **Checkout Pages** under **Application**. The page has four tabs: **Pages**, **Products**, **Affiliates**, and **Results**.
+
+## Products
+
+Products are what your pages sell. Create them first: on the **Products** tab, click **New product**.
+
+<Frame>
+  <img className="block dark:hidden" src="/images/tenant/checkout/checkout-products-light.webp" alt="Checkout Products tab listing lead credit products with their bonus math, a buyer-entered amount product, and a Club membership, each with its type and number of live pages" />
+  <img className="hidden dark:block" src="/images/tenant/checkout/checkout-products-dark.webp" alt="Checkout Products tab listing lead credit products with their bonus math, a buyer-entered amount product, and a Club membership, each with its type and number of live pages" />
+</Frame>
+
+There are two kinds:
+
+**Lead credit** adds money to the buyer's wallet.
+
+- **Pricing**: a **Fixed price**, which is credited in full, or **Buyer enters the amount** with a **Minimum** and **Maximum** in whole dollars.
+- **Bonus**: **No bonus**, a **Fixed amount**, or a **Percent of price**, added on top as a separate checkout bonus. For buyer-entered amounts, **Bonus applies to the first** caps how much of the amount earns a bonus; leave it blank to apply the bonus to the whole amount. You can also round the bonus down to whole dollars.
+
+**Club membership** starts a subscription to one of your Club tiers. Add **Free months** to give buyers a head start: their card is saved and the tier price starts after the free months. Free months are only available through checkout pages.
+
+The name you give a product is shown to buyers on the page and in Stripe Checkout. Changes apply to future purchases only. Products can be archived and restored.
+
+## Pages
+
+The **Pages** tab lists each page with its **Status**, **Price**, **Visits**, **Sales**, and **Revenue**.
+
+<Frame>
+  <img className="block dark:hidden" src="/images/tenant/checkout/checkout-pages-light.webp" alt="Checkout Pages tab listing offer pages with status, price, visits, sales, and revenue" />
+  <img className="hidden dark:block" src="/images/tenant/checkout/checkout-pages-dark.webp" alt="Checkout Pages tab listing offer pages with status, price, visits, sales, and revenue" />
+</Frame>
+
+| Status | Meaning |
+|--------|---------|
+| **Live** | Buyers can check out |
+| **Off** | The page's **Live** switch is off |
+| **Ended** | The offer's end time has passed |
+| **Not selling** | The page is on but something is blocking sales. Hover the badge for the reason, for example card payments not being set up, the page having no offers, or a problem with one of its products. |
+
+Each row has **Edit**, **Preview**, and **Duplicate**.
+
+### Building a page
+
+<Frame>
+  <img className="block dark:hidden" src="/images/tenant/checkout/checkout-page-edit-light.webp" alt="Checkout page editor with Internal name, Link, Live switch, Who can buy, Offer ends, and Default affiliate fields, followed by the Offers table" />
+  <img className="hidden dark:block" src="/images/tenant/checkout/checkout-page-edit-dark.webp" alt="Checkout page editor with Internal name, Link, Live switch, Who can buy, Offer ends, and Default affiliate fields, followed by the Offers table" />
+</Frame>
+
+**Page**
+
+| Field | What it does |
+|-------|--------------|
+| **Internal name** | Only your team sees it |
+| **Link** | The page's address: `/offers/` followed by the link you choose, on your custom domain if you have one |
+| **Live** | Buyers can only check out while the page is live |
+| **Who can buy** | **Everyone**; **New customers only** (people who already have an account can't check out, good for welcome offers); or **Existing customers only** (buyers must sign in, good for reload sales) |
+| **Offer ends** | Optional. Shows a countdown on the page. Times are in UTC. |
+| **Default affiliate** | Sales are credited to this affiliate unless the link carries another affiliate's `?ref=` code |
+
+**Offers** are the packages buyers choose between. Click **Add offer**, give it a **Name**, and add products: the buyer gets all of them in one checkout. An offer can include one buyer-entered product and one Club tier. The dialog shows what's **Due today** and how much **Credit** the buyer gets. Mark one offer **Recommended** to select it when the page opens. Buyers see offers in the order you set.
+
+**Content** is what the page says: a **Headline**, **Subheadline**, an optional **Video** (YouTube, Vimeo, or Loom), and **Details**. In Details, lines written as "Label: text" or starting with "-" show as a highlighted list; other text shows as paragraphs.
+
+**Design** picks the look. Every design shows the same content and checkout:
+
+| Design | Best for |
+|--------|----------|
+| **Frame** | A full landing page that shows the buyer's account filling with credit |
+| **Receipt** | The offer printed as a receipt, with the money math up front |
+| **Stage** | Dark, with a big countdown. Built for traffic straight from a live webinar. |
+| **Split** | Your brand color on one half, a calm order form on the other |
+| **Bento** | One fact per tile, with checkout pinned beside them |
+
+Use **Preview** to see the saved page before you share it.
+
+### What happens when someone buys
+
+The buyer pays in Stripe Checkout. Once payment is confirmed, Juiced creates their customer account (or uses the one they signed in to), saves their card, adds the credit and any bonus to their wallet, and starts their Club membership if the offer included one. New buyers get a welcome email with a link to set up their login, and existing customers get a purchase confirmation. You can edit both emails in [Notification Templates](/features/notifications).
+
+In the customer's [transactions](/features/transactions), the credit shows as **Funds Added** and the bonus as a separate **Checkout Bonus**.
+
+### Page results
+
+Open a page to see its link (with **Copy link**), when the offer ends, and how it's doing.
+
+<Frame>
+  <img className="block dark:hidden" src="/images/tenant/checkout/checkout-page-detail-light.webp" alt="Checkout page detail with its live link, offer end date, Visits, Sales, Revenue, and New customers stats, sales by offer, and a list of orders" />
+  <img className="hidden dark:block" src="/images/tenant/checkout/checkout-page-detail-dark.webp" alt="Checkout page detail with its live link, offer end date, Visits, Sales, Revenue, and New customers stats, sales by offer, and a list of orders" />
+</Frame>
+
+- **Visits**, **Sales** (with the conversion rate), **Revenue**, and **New customers**
+- **Sales by offer**, including offers you've since removed
+- **Orders**, with the buyer, the customer account, what they **Paid**, **Credit + bonus**, and a status: **Pending**, **Fulfilled**, **Needs attention** (paid, but delivery couldn't complete as bought, so review it), or **Abandoned** (the buyer left Stripe Checkout and nothing was charged)
+
+## Affiliates
+
+Affiliates are the people promoting your offers, like a podcast host or a partner agency. Credit their sales and track what you owe them on the **Affiliates** tab.
+
+<Frame>
+  <img className="block dark:hidden" src="/images/tenant/checkout/checkout-affiliates-light.webp" alt="Checkout Affiliates tab listing affiliates with referral code, commission rate, sales, owed, and paid amounts" />
+  <img className="hidden dark:block" src="/images/tenant/checkout/checkout-affiliates-dark.webp" alt="Checkout Affiliates tab listing affiliates with referral code, commission rate, sales, owed, and paid amounts" />
+</Frame>
+
+Click **New affiliate** and enter:
+
+- **Name**, and an optional **Email** for your records (affiliates don't get a login)
+- **Referral code**: what goes after `?ref=` in their link
+- **Commission**: a percent of what the buyer pays at checkout. Bonus credit, free months, reloads, and renewals earn nothing. Rate changes only apply to future sales.
+- **Active**: inactive codes are ignored on checkout pages
+
+Open an affiliate to see their **Owed**, **Paid**, and **Sales**, and a list of **Commissions**. Use **Copy ?ref= code** to grab their code, and **View customers** to see who they brought in.
+
+<Frame>
+  <img className="block dark:hidden" src="/images/tenant/checkout/checkout-affiliate-detail-light.webp" alt="Affiliate detail with Owed, Paid, and Sales stats and a list of commissions with date, sale, amount, and status" />
+  <img className="hidden dark:block" src="/images/tenant/checkout/checkout-affiliate-detail-dark.webp" alt="Affiliate detail with Owed, Paid, and Sales stats and a list of commissions with date, sale, amount, and status" />
+</Frame>
+
+To record a payout, select the commissions you've paid and click **Mark paid**, then enter the **Paid on** date and a note such as "PayPal". Use **Void** on a commission the affiliate shouldn't be owed for, for example after a refund; it can't be undone.
+
+A customer's first affiliate also shows under **Registration Tracking** on their [customer overview](/features/customers).
+
+## Results
+
+The **Results** tab compares your pages and affiliates for the timeframe you pick, best performers first.
+
+<Frame>
+  <img className="block dark:hidden" src="/images/tenant/checkout/checkout-results-light.webp" alt="Checkout Results tab with Pages and Affiliates tables showing sales with conversion, revenue, buyers, and after-purchase activity" />
+  <img className="hidden dark:block" src="/images/tenant/checkout/checkout-results-dark.webp" alt="Checkout Results tab with Pages and Affiliates tables showing sales with conversion, revenue, buyers, and after-purchase activity" />
+</Frame>
+
+Each row shows **Sales** (with conversion from visits), **Revenue**, and **Buyers**, plus:
+
+- **After purchase**: what those buyers did next, meaning lead spend net of returns and how many added funds again by top-up or auto recharge. The original purchase doesn't count.
+- **Club** (when any sale included the Club): where those members stand today. Renewed means they've made a Club payment; canceled includes memberships set to end.
+
+It's the quickest way to see whether a promotion brought in buyers who stick around, or just a one-time sugar rush.

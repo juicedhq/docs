@@ -1,15 +1,51 @@
 ---
 title: Sources
-description: Where your leads come from—API credentials, field mapping, and configuration.
+description: Where your leads come from—API credentials, field mapping, pricing, quotas, and configuration.
 ---
 
-Sources are how leads get into the system. They represent where leads came from—usually a lead form on a website you control, but sometimes a partner you're buying leads from.
+Sources are how leads get into the system. They represent where leads came from—usually a lead form on a website you control, but sometimes a vendor you're buying leads from.
 
 Sources can be assigned to [partners](/features/partners) to organize them by business relationship. This helps you track which vendor or affiliate is responsible for which lead flows.
 
+## The sources list
+
+Open **Sources** under **Ingest** in the sidebar to see every source in your workspace.
+
+<Frame>
+  <img className="block dark:hidden" src="/images/tenant/ingest/sources-light.webp" alt="Sources list with Name, Type, Partners, Test Mode, Payout, and Return Rate (30d) columns, and a New source button" />
+  <img className="hidden dark:block" src="/images/tenant/ingest/sources-dark.webp" alt="Sources list with Name, Type, Partners, Test Mode, Payout, and Return Rate (30d) columns, and a New source button" />
+</Frame>
+
+Each row shows the source's name and lead category, its **Type** (Internal or Vendor), the **Partners** it belongs to, a **Test** badge when test mode is on, and its **Payout** percentage. If you can view analytics, you'll also see **Return Rate (30d)**. Search by name, or click **Filters** to narrow the list to one lead category.
+
+## Inside a source
+
+Click a source to open it. The tabs across the top are **Overview**, **Payouts** (only if you can view analytics), **Pricing**, **Authentication**, **Duplicate Checks**, and **Fields**.
+
+<Frame>
+  <img className="block dark:hidden" src="/images/tenant/ingest/source-detail-light.webp" alt="Source overview with Revenue, Payout, Leads, Pings, and Return Rate stats, a Status Responses board, and a Details panel" />
+  <img className="hidden dark:block" src="/images/tenant/ingest/source-detail-dark.webp" alt="Source overview with Revenue, Payout, Leads, Pings, and Return Rate stats, a Status Responses board, and a Details panel" />
+</Frame>
+
+The **Overview** tab shows:
+
+- **Stats** for the selected timeframe: **Revenue**, **Payout**, **Leads**, **Pings**, and **Return Rate**, each compared with the previous period. You need analytics-view permission to see them.
+- **Status Responses**: which lead statuses the source hears back as Success, Rejected, or Duplicate (see [Status responses](#status-responses)).
+- **Details**: lead category, type, partners, test mode, and when the source was created. A **Quotas** panel appears below it when the source has any [lead quotas](#lead-quotas).
+
+Click **Edit** to change the source's settings. The **More actions** (⋯) menu holds **View API Spec** and **Delete**.
+
 ## Authentication
 
-When you create a source, an API key and API secret are automatically generated for basic authentication. You can also use a bearer token if you prefer.
+When you create a source, an API key and API secret are generated automatically for HTTP Basic Authentication. You can also authenticate with a bearer token. Both live on the **Authentication** tab.
+
+<Frame>
+  <img className="block dark:hidden" src="/images/tenant/ingest/source-authentication-light.webp" alt="Source Authentication tab with the Basic Auth API key and masked API secret, and a Bearer Token table with a New bearer token button" />
+  <img className="hidden dark:block" src="/images/tenant/ingest/source-authentication-dark.webp" alt="Source Authentication tab with the Basic Auth API key and masked API secret, and a Bearer Token table with a New bearer token button" />
+</Frame>
+
+- **Basic Auth** shows the **API Key** and a masked **API Secret** you can reveal or copy. The key and secret can't be regenerated.
+- **Bearer Token** lists every token with when it was created, last used, and when it expires. Click **New bearer token** to create one. The new token is shown once, in a **Token created** banner, so copy it right away. Creating a token expires the previous one in 24 hours, giving the integrator a window to swap it in.
 
 ## Source types
 
@@ -20,7 +56,7 @@ Sources can be either **internal** or **vendor**. This setting affects several b
 - **Internal**: Returns a more detailed response from pings
 - **Vendor**: Returns a simplified response
 
-See the [API Reference](/api-reference/introduction) for specifics, or click the "API spec" button on a source to view its documentation. This generates a link that displays the basic auth credentials for up to one week, after which the credentials are hidden.
+See the [API Reference](/api-reference/introduction) for specifics, or choose **View API Spec** from a source's **More actions** menu to see its documentation. This opens a shareable link that shows the basic auth credentials for up to one week, after which the link expires.
 
 ### Subscription threshold behavior
 
@@ -37,14 +73,16 @@ If you've negotiated a profit-sharing arrangement with a vendor, use the payout 
 
 For example, if you split profits 50/50, set the payout percentage to 50%. A &#36;100 lead will be reported to the vendor as &#36;50.
 
+You can change it on the source's edit form, or from **Edit Payout** in the **More actions** menu on the **Pricing** tab. [Fixed and fallback prices](#source-pricing) override the percentage when they're set.
+
 ## Test mode
 
-Vendor sources can have test mode enabled, allowing vendors to test their integration without affecting production data. When test mode is on:
+Any source, internal or vendor, can have test mode turned on so an integrator can test without affecting production data. When test mode is on:
 
 - Pings and leads submitted through the source are marked as test data
-- Test data is hidden from normal views by default—use the "Test Mode" filter to see it
+- Test data is hidden from normal views by default. Set the **Test mode** filter on [Leads](/features/leads) or [Incoming logs](/features/logs) to see it
 - Five reserved zip codes return deterministic responses, making it easy to verify different scenarios
-- Any other zip code goes through normal routing but the lead is forced to **Audit** status and won't be distributed to customers
+- Any other zip code is marked as test data and the lead is moved to **Audit** status, so it won't be distributed to customers
 
 ### Testing with zip codes
 
@@ -61,66 +99,105 @@ When test mode is enabled, the system returns predictable responses based on the
 
 This lets vendors test every outcome—successful distribution, duplicates, rejections, no-match scenarios, and marketplace routing—without needing real buyer coverage in those areas.
 
-<Note>
-Test mode is only available for **vendor** sources. Internal sources don't need this feature since you control the data flow directly.
-</Note>
-
-## Source-level fields
-
-You can define fields at the source level. These fields are appended to the fields from the lead category associated with the source, allowing you to capture more precise information for specific sources.
-
-If you create a source-level field with the same title as a field on the lead category, the source configuration overrides the lead category configuration.
-
-## Source performance
-
-The source list includes a **Return Rate (30d)** column, and each source overview includes a **Return Rate** stat for the selected date range. This helps you spot traffic that is being returned without manually comparing assigned and returned lead lists.
-
-Return rate is the share of customer deliveries from the source that are currently returned. Each customer delivery counts separately, so a lead delivered to two customers counts as two deliveries. Test leads, partner deliveries, and pending reservations are not included. You need analytics-view permission to see return-rate reporting.
+<Tip>
+Test mode earns its keep with vendor sources, since someone outside your team is building the integration. Turn it off before go-live, or real leads will squeeze straight into Audit.
+</Tip>
 
 ## Lead quotas
 
-Use **Lead Quotas** on a source to stop accepting new pings and posts after the source reaches a limit. You can set daily, weekly, or monthly limits for both lead count and payout value; leave any field empty for no limit.
+Use **Lead Quotas** on a source's create or edit form to stop accepting new pings and posts after the source reaches a limit. You can set daily, weekly, or monthly limits for both **Lead Count** and **Payout Value**; leave any field blank for no limit.
 
-Source payout quotas use accepted, nonduplicate lead payout reporting. When a source reaches any configured quota, pings return the existing rejected response and posts fail validation without creating a lead. Review these limits with the source before enabling them so an expected pause does not arrive as a citrus-flavored surprise.
+<Frame>
+  <img className="block dark:hidden" src="/images/tenant/ingest/source-edit-light.webp" alt="Source edit form with Name, Lead Category, Internal and Vendor source type cards, Payout Percentage, Test Mode, and the Lead Quotas section" />
+  <img className="hidden dark:block" src="/images/tenant/ingest/source-edit-dark.webp" alt="Source edit form with Name, Lead Category, Internal and Vendor source type cards, Payout Percentage, Test Mode, and the Lead Quotas section" />
+</Frame>
+
+Limits use totals so far, so the final lead can take the payout total over the limit. Once any limit is reached, new pings return "No match found" and posts are rejected without creating a lead. Limits reset each day, week, or month. Review these limits with the source before enabling them so an expected pause doesn't arrive as a citrus-flavored surprise.
+
+## Status responses
+
+When a source posts a lead, Juiced answers with one of three responses: **Success**, **Rejected**, or **Duplicate**. Which one depends on the status the lead ends up in. By default:
+
+| Response | Lead statuses |
+|----------|---------------|
+| **Success** | Assigned, Posted, Marketplace, Club |
+| **Rejected** | Audit, Unassigned, Uncategorized |
+| **Duplicate** | Duplicate |
+
+To change the mapping, open the source's edit form and drag each status chip onto the response you want under **Status Responses**. Every status belongs to exactly one response. If a status isn't placed yet, it shows in an **Unassigned** area and you'll need to drop it on a response before you can save.
 
 ## Source pricing
 
-Beyond the payout percentage, you can configure specific pricing for each lead type within a source. This is found in the **Pricing** tab when viewing a source.
+Beyond the payout percentage, you can set prices for each lead type the source sends. Open the **Pricing** tab.
 
-The pricing table shows all lead types in the source's lead category. For each lead type, you can set:
+<Frame>
+  <img className="block dark:hidden" src="/images/tenant/ingest/source-pricing-light.webp" alt="Source Pricing tab listing each lead type with Fixed Price and Fallback Price inputs and a Behavior column describing the payout" />
+  <img className="hidden dark:block" src="/images/tenant/ingest/source-pricing-dark.webp" alt="Source Pricing tab listing each lead type with Fixed Price and Fallback Price inputs and a Behavior column describing the payout" />
+</Frame>
 
-| Setting | Description |
-|---------|-------------|
-| **Price** | The dollar amount for this lead type |
-| **Pricing Type** | How the price is used—either Fixed or Fallback |
+The table lists every lead type in the source's lead category. Each row has two inputs, and each saves as soon as you leave the field:
 
-### Pricing types
+| Setting | What it does |
+|---------|--------------|
+| **Fixed Price** | When a bidder matches, the source is paid this amount instead of its payout percentage of the winning bid. |
+| **Fallback Price** | When no bidder matches, this price lets an eligible [marketplace](/features/marketplace) or [Club](/features/club) stage accept the lead. |
 
-- **Fixed**: The source always receives this price, regardless of what customers bid. Useful for guaranteed payouts to vendors.
-- **Fallback**: The source receives the payout percentage of the winning bid when bids are received. If no bids come in, this price is used instead.
+The **Behavior** column spells out the result in plain language, such as "Pays 35% of the winning bid" and "No fallback configured." Leads that get a Rejected or Duplicate [status response](#status-responses) are always priced at &#36;0.00.
 
 <Note>
-A fallback price must be configured for a source/lead type combination to participate in [marketplace](/features/marketplace) distribution. Without a fallback price, leads from that source are ineligible for the marketplace.
+Fallback prices matter most for [ping-post](/features/ping-post) traffic. A marketplace stage only accepts a ping when the source has a fallback price for that lead type, and quotes that price in the ping response. A Club stage accepts pings at the fallback price, or at &#36;0 without one, but passes when the lead type has a fixed price and no fallback. Leads posted directly, without a ping, can reach either stage without a fallback price.
 </Note>
 
 ### Copying pricing from another source
 
-If you have multiple sources with similar pricing structures, you can copy pricing from one source to another. Click **Copy from source** in the pricing table header and select the source to copy from. Only lead types that don't already have a price configured will be copied.
+If several sources on the same lead category share a pricing structure, choose **Copy from Source** in the **More actions** menu on the **Pricing** tab and pick the source to copy from. Fixed and fallback prices are copied; prices you've already set aren't overwritten. The action only appears when another source shares this source's lead category.
+
+## Payouts
+
+The **Payouts** tab shows what you owe the source for a period (last month by default). It's handy at the end of the month when a vendor asks for their check.
+
+<Frame>
+  <img className="block dark:hidden" src="/images/tenant/ingest/source-payouts-light.webp" alt="Source Payouts tab with Leads Received, Payout Owed, and Expected Revenue stats above a table of leads with received date, status, payout, and revenue" />
+  <img className="hidden dark:block" src="/images/tenant/ingest/source-payouts-dark.webp" alt="Source Payouts tab with Leads Received, Payout Owed, and Expected Revenue stats above a table of leads with received date, status, payout, and revenue" />
+</Frame>
+
+- **Leads Received**: leads the source sent in the period.
+- **Payout Owed**: what's owed for accepted leads received in the period.
+- **Expected Revenue**: what customers were charged for those same leads.
+
+Below the stats, each lead is listed with when it was received, its status, its payout, and its revenue. Pick a different period from the timeframe menu in the header. You need analytics-view permission to see this tab.
+
+## Source-level fields
+
+You can define fields at the source level on the **Fields** tab. These fields are appended to the fields from the source's lead category, letting you capture more precise information for specific sources.
+
+<Frame>
+  <img className="block dark:hidden" src="/images/tenant/ingest/source-fields-light.webp" alt="Source Fields tab with an empty Source Fields table and a read-only Lead Category Fields table showing post, ping, deliverable, and hidden-from-spec settings" />
+  <img className="hidden dark:block" src="/images/tenant/ingest/source-fields-dark.webp" alt="Source Fields tab with an empty Source Fields table and a read-only Lead Category Fields table showing post, ping, deliverable, and hidden-from-spec settings" />
+</Frame>
+
+If you create a source-level field with the same title as a field on the lead category, the source's field overrides the lead category's. Overriding fields carry an **Overrides** badge, and the lead category field they replace is dimmed in the read-only **Lead Category Fields** table below.
 
 ## Source-level duplicate checks
 
-[Duplicate checks](/features/duplicate-detection) can also be configured at the source level. When set here, the check only applies to leads coming through that source—just like source-level fields only apply to that source.
+[Duplicate checks](/features/duplicate-detection) can also be configured on a source's **Duplicate Checks** tab. A check set here only applies to leads coming through that source, just like source-level fields only apply to that source.
+
+<Frame>
+  <img className="block dark:hidden" src="/images/tenant/ingest/source-duplicate-checks-light.webp" alt="Source Duplicate Checks tab with an empty table and a New duplicate check button" />
+  <img className="hidden dark:block" src="/images/tenant/ingest/source-duplicate-checks-dark.webp" alt="Source Duplicate Checks tab with an empty table and a New duplicate check button" />
+</Frame>
+
+## Source performance
+
+The source list includes a **Return Rate (30d)** column, and each source overview includes a **Return Rate** stat for the selected timeframe. This helps you spot traffic that is being returned without manually comparing assigned and returned lead lists.
+
+Return rate is the share of customer deliveries from the source that are currently returned. Each customer delivery counts separately, so a lead delivered to two customers counts as two deliveries. Test leads, partner deliveries, and pending reservations are not included. You need analytics-view permission to see return-rate reporting.
 
 ## Deleting sources
 
-When you delete a source, it's soft-deleted rather than permanently removed. This preserves data integrity—leads, submissions, and pings that came through that source still need to reference where they originated.
+To delete a source, choose **Delete** from the **More actions** menu on its overview. Once it's deleted, Juiced stops accepting leads from it.
 
-After deletion:
-
-- The source no longer appears in dropdowns when creating or editing records
-- Historical records (leads, submissions, pings) display the source name (with "(Deleted)" appended in list views)
-- You can still filter by deleted sources when viewing historical data tables
-- The source's API credentials are deactivated
+Deleted sources are soft-deleted rather than permanently removed. Leads, posts, and pings that came through the source keep pointing at it, so your history still shows where each lead came from.
 
 ## Related guides
 
