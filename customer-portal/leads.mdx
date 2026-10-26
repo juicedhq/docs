@@ -3,7 +3,7 @@ title: Leads
 description: Search, filter, and export the leads you've received, and open any lead for its full details.
 ---
 
-The Leads page lists every lead assigned to your account: leads you won with bids, bought in the [Marketplace](/customer-portal/marketplace), or claimed from your provider's [Club](/customer-portal/club), including any that were later returned. It's your purchase history and the fastest way back to a lead's contact details.
+The Leads page lists every lead assigned to your account, whether you won it with a bid, bought it in the [Marketplace](/customer-portal/marketplace), or claimed it from your provider's [Club](/customer-portal/club), including any that were later returned. It's your purchase history and the fastest way back to a lead's contact details.
 
 <Frame>
   <img className="block dark:hidden" src="/images/portal/leads/leads-list-light.webp" alt="Leads table with date, lead name and type, contact details, location, status, and price columns" />
@@ -15,11 +15,11 @@ The Leads page lists every lead assigned to your account: leads you won with bid
 | Column | What it shows |
 |--------|---------------|
 | **Date** | When you received the lead |
-| **Lead** | The lead's name and lead type. A green **New** badge marks leads from the last 24 hours. |
+| **Lead** | The lead's name and lead type. A <span className="tone-badge tone-success">New</span> badge marks leads from the last 24 hours. |
 | **Contact** | Phone and email. Click to call or email, or use the copy button beside each. |
 | **Location** | Where the lead is located |
-| **Status** | **Assigned** (yours), **Returned** (returned to your provider), or **Club** (claimed from the Club) |
-| **Price** | What you paid. A green price with a struck-through amount means a discount was applied; hover it to see the discount percentage and the price you were competing at. |
+| **Status** | <span className="tone-badge tone-success">Assigned</span> (yours), <span className="tone-badge tone-danger">Returned</span> (returned to your provider), or <span className="tone-badge tone-info">Club</span> (claimed from the Club) |
+| **Price** | What you paid. A green price with a struck-through amount means a discount was applied. Hover it to see the discount percentage and the price you were competing at. |
 
 Sort by **Date**, **Lead** (last name), or **Price** by clicking the column header. At the end of each row, the copy button copies a tidy summary of the lead (name, lead type, phone, email, address, and received time), ready to paste into a text or another tool.
 
@@ -34,13 +34,13 @@ Use **Search leads** to find a lead by its ID, name, email, phone number, or any
   <img className="hidden dark:block" src="/images/portal/leads/leads-filters-dark.webp" alt="Filters menu open on the Leads page with lead type, status, test mode, price, and received date options" />
 </Frame>
 
-Click **Filters** to narrow the list:
+Click **Filters** to narrow the list.
 
-- **Lead type**: one lead type at a time.
-- **Status**: **Assigned**, **Returned**, or both.
-- **Test mode**: show only test leads. Useful when you're checking that a [webhook](/customer-portal/webhooks) or notification is set up correctly.
-- **Price**: a minimum and maximum in dollars.
-- **Received**: a date range.
+- **Lead type** shows one lead type at a time.
+- **Status** shows **Assigned**, **Returned**, or both.
+- **Test mode** shows only test leads, which is useful when you're checking that a [webhook](/customer-portal/webhooks) or notification is set up correctly.
+- **Price** takes a minimum and maximum in dollars.
+- **Received** takes a date range.
 
 Each active filter appears as a chip above the table. Remove a chip to clear that filter.
 
@@ -53,9 +53,9 @@ Click any lead to open its details page.
   <img className="hidden dark:block" src="/images/portal/leads/lead-detail-dark.webp" alt="Lead detail page with Contact and Lead Details sections and a Purchase panel" />
 </Frame>
 
-- **Contact**: phone, email, and address, each with a copy button. The address has a **Maps** link, and a map of the location may appear alongside it.
-- **Lead Details**: the extra fields your provider delivers with this lead type, such as project details or timeframes.
-- **Purchase**: the **Lead type**, what you **Bought for**, the **Status**, the **Scope** you won it at (county, state, or country), when it was **Received**, and the **Lead ID** with a copy button.
+- **Contact** shows phone, email, and address, each with a copy button. The address has a **Maps** link, and a map of the location may appear alongside it.
+- **Lead Details** holds the extra fields your provider delivers with this lead type, such as project details or timeframes.
+- **Purchase** shows the **Lead type**, what you **Bought for**, the **Status**, the **Scope** you won it at (county, state, or country), when it was **Received**, and the **Lead ID** with a copy button.
 
 ## Exporting leads
 
@@ -65,6 +65,6 @@ Juiced builds the file in the background, so you can keep working. When it's rea
 
 ## Returned leads
 
-Leads you've returned stay in your list with the **Returned** status. To find them quickly, filter by **Status: Returned**.
+Leads you've returned stay in your list with the **Returned** status. To find them quickly, set the **Status** filter to **Returned**.
 
 You don't return leads from this page. Your provider handles returns through their own process, usually a **Lead Returns** link in the sidebar's Support group. See [Returns and your return rate](/customer-portal/returns).

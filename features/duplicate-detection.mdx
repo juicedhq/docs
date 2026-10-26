@@ -5,12 +5,12 @@ description: Field matching rules that stop duplicate leads at the door and keep
 
 Duplicate checks help you avoid selling the same lead twice. Nobody wants to pay for the same squeeze twice.
 
-Juiced checks for duplicates at two points:
+Juiced checks for duplicates at two points.
 
 - **When a lead arrives.** [Global](#global-duplicate-checks) and [source-level](#source-level-duplicate-checks) checks compare the new lead with leads you've already received. A match marks the lead as a duplicate and rejects it.
 - **When a lead is about to be delivered.** [Customer](#customer-duplicate-checks) and [partner](#partner-duplicate-checks) checks compare it with what that particular buyer has already received. A match skips that buyer, and the lead moves on to the next one.
 
-Open **Duplicate Checks** under **Ingest** in the sidebar. The tabs across the top are **Global Duplicate Checks**, **Customer Duplicate Checks**, and **Partner duplicate-check default**. You'll see the tabs your role allows: the global checks have their own permission, while the customer and partner tabs require permission to manage settings.
+Open **Duplicate Checks** under **Ingest** in the sidebar. The tabs across the top are **Global Duplicate Checks**, **Customer Duplicate Checks**, and **Partner duplicate-check default**. You'll see the tabs your role allows. The global checks have their own permission, while the customer and partner tabs require permission to manage settings.
 
 ## Global duplicate checks
 
@@ -21,7 +21,7 @@ Global duplicate checks apply to all leads coming in from any source.
   <img className="hidden dark:block" src="/images/tenant/ingest/duplicate-checks-global-dark.webp" alt="Global Duplicate Checks tab with one check on email and phone, all fields must match, over 30 days, and a New duplicate check button" />
 </Frame>
 
-Click **New duplicate check** to add one. Each check has:
+Click **New duplicate check** to add one. Each check has these settings.
 
 | Setting | What it does |
 |---------|--------------|
@@ -32,11 +32,11 @@ Click **New duplicate check** to add one. Each check has:
 | **Field matching** | **All selected fields must match**, or **Any selected field can match**. |
 | **Included statuses** | Which earlier leads count. A new lead is only a duplicate of an earlier lead whose status is selected here. |
 
-For example, a check on email with a 30-day window flags any lead whose email matches a lead from the last 30 days. Add phone to the same check and the **Field matching** setting decides the rest: with **All selected fields must match**, only leads matching *both* email and phone are flagged; with **Any selected field can match**, either one is enough.
+For example, a check on email with a 30-day window flags any lead whose email matches a lead from the last 30 days. Add phone to the same check and the **Field matching** setting decides the rest. With **All selected fields must match**, only leads matching *both* email and phone are flagged. With **Any selected field can match**, either one is enough.
 
 ### Included statuses
 
-By default, every status counts except **Duplicate** and **Unassigned**. That means a lead nobody bought doesn't block a fresh copy of itself, so a second chance at a sale isn't lost. Club leads are split into **Club (unclaimed)** and **Club (claimed)**; a Club lead counts as claimed once it's been delivered to anyone.
+By default, every status counts except **Duplicate** and **Unassigned**. That means a lead nobody bought doesn't block a fresh copy of itself, so a second chance at a sale isn't lost. Club leads are split into **Club (unclaimed)** and **Club (claimed)**, and a Club lead counts as claimed once it's been delivered to anyone.
 
 Unselected statuses are ignored. If you clear every status, the check won't reject anything.
 
@@ -57,7 +57,7 @@ Global and source-level checks can also apply to pings. When enabled, a ping tha
 
 ## Matching options
 
-Every kind of duplicate check supports these matching options:
+Every kind of duplicate check supports these matching options.
 
 | Option | Description |
 |--------|-------------|
@@ -66,7 +66,7 @@ Every kind of duplicate check supports these matching options:
 
 ## Customer duplicate checks
 
-A lead that's new to you might not be new to a customer: they may have bought the same person from you last month. **Customer duplicate checks** compare each delivery against that customer's own delivery history, so you don't sell a customer someone they already have.
+A lead that's new to you might not be new to a customer, who may have bought the same person from you last month. **Customer duplicate checks** compare each delivery against that customer's own delivery history, so you don't sell a customer someone they already have.
 
 <Frame>
   <img className="block dark:hidden" src="/images/tenant/ingest/duplicate-checks-customer-light.webp" alt="Customer Duplicate Checks tab with Enable duplicate checks, History window, Field matching, Fields, Matching options, and Marketplace and Club eligibility settings" />
@@ -83,15 +83,15 @@ A lead that's new to you might not be new to a customer: they may have bought th
 | **Marketplace eligibility** | Whether a lead that skipped a customer as a duplicate can still go to the [marketplace](/features/marketplace). |
 | **Club eligibility** | The same, for the [Club](/features/club). |
 
-The customer's history includes returned deliveries and Club claims; pending reservations are ignored. Save with the floating save bar.
+The customer's history includes returned deliveries and Club claims, but ignores pending reservations. Save with the floating save bar.
 
 ### Marketplace and Club eligibility
 
-When a lead skips a customer because they already have it, you decide whether it can still be listed on the marketplace or in the Club, where that customer could see it again:
+When a lead skips a customer because they already have it, you decide whether it can still be listed on the marketplace or in the Club, where that customer could see it again.
 
-- **Eligible immediately**: list it as usual.
-- **Never eligible for this routing attempt**: the Marketplace or Club stage passes on this lead.
-- **Eligible after** a number of days: list it only if the customer's earlier delivery was at least that many days before this lead arrived. The number can't exceed the history window.
+- **Eligible immediately** lists it as usual.
+- **Never eligible for this routing attempt** means the Marketplace or Club stage passes on this lead.
+- **Eligible after** a number of days lists it only if the customer's earlier delivery was at least that many days before this lead arrived. The number can't exceed the history window.
 
 These settings only apply when a buyer was skipped, and they're checked once, during routing. Juiced won't list the lead later on its own, and once a lead is listed, every customer can see it.
 

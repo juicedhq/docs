@@ -3,7 +3,7 @@ title: Setting Up a Source and Its Attributes
 description: How to create a source, configure its settings, and add source-level fields so your ingest pipeline captures exactly the data you need.
 ---
 
-A [source](/features/sources) represents where leads enter the system—a web form you own, a vendor API, a partner feed. Before any lead data can flow into Juiced, you need at least one source wired up to a lead category with the right credentials and field configuration.
+A [source](/features/sources) represents where leads enter the system, like a web form you own, a vendor API, or a partner feed. Before any lead data can flow into Juiced, you need at least one source wired up to a lead category with the right credentials and field configuration.
 
 This guide walks you through creating a source from scratch, exploring the settings that matter, and adding source-level fields (attributes) that extend or override your lead category's schema.
 
@@ -12,7 +12,7 @@ This guide walks you through creating a source from scratch, exploring the setti
 - You need at least one **lead category** already created. Sources are always tied to a lead category that defines the base schema. If you don't have one, open **Lead Categories** under **Ingest** in the sidebar and click **New lead category**.
 - Permission to create sources in your workspace (admins have it).
 
-## Step 1: Create the source
+## 1. Create the source
 
 Open **Sources** under **Ingest** in the sidebar and click **New source** in the top-right corner.
 
@@ -21,24 +21,24 @@ Open **Sources** under **Ingest** in the sidebar and click **New source** in the
   <img className="hidden dark:block" src="/images/tenant/ingest/sources-dark.webp" alt="Sources list with a New source button in the top-right corner" />
 </Frame>
 
-The form has two sections: **Source** and **Lead Quotas**.
+The form has two sections, **Source** and **Lead Quotas**.
 
 ### Name
 
-Give the source a descriptive name. This is how the source appears in tables, filters, and dropdowns throughout the system. Something like "Partner Web Form" or "Leadz.com Feed" works well—pick a name your team will recognize at a glance.
+Give the source a descriptive name. This is how the source appears in tables, filters, and dropdowns throughout the system. Something like "Partner Web Form" or "Leadz.com Feed" works well. Pick a name your team will recognize at a glance.
 
 ### Lead category
 
-Select the lead category this source will feed into. The category defines the base field schema—every lead submitted through this source must conform to its required fields and types.
+Select the lead category this source will feed into. The category defines the base field schema, so every lead submitted through this source must conform to its required fields and types.
 
 ### Source type
 
-Pick one of the two cards:
+Pick one of the two cards.
 
 | Type | What it means |
 |------|---------------|
-| **Internal** | For leads you generate yourself. Not subject to subscription threshold limits—leads are held in a "withheld" status if you hit your cap, rather than being rejected outright. |
-| **Vendor** | For leads purchased from third parties. When your subscription threshold is reached, pings are automatically rejected so you don't pay for leads you can't distribute. |
+| <span className="tone-badge tone-success">Internal</span> | For leads you generate yourself. Not subject to subscription threshold limits. Leads are held in a "withheld" status if you hit your cap, rather than being rejected outright. |
+| <span className="tone-badge tone-caution">Vendor</span> | For leads purchased from third parties. When your subscription threshold is reached, pings are automatically rejected so you don't pay for leads you can't distribute. |
 
 <Tip>
 If you're just getting started and generating your own leads, **Internal** is the right choice. Switch to **Vendor** when you start buying leads from outside sources.
@@ -46,7 +46,7 @@ If you're just getting started and generating your own leads, **Internal** is th
 
 ### Payout percentage
 
-The percentage of the charged amount reported back to the source. Defaults to 100%. If you have a profit-sharing arrangement with a vendor—say, a 70/30 split—set this to 70. A &#36;100 lead would then be reported to the vendor as &#36;70.
+The percentage of the charged amount reported back to the source. Defaults to 100%. If you have a profit-sharing arrangement with a vendor (say, a 70/30 split), set this to 70. A &#36;100 lead would then be reported to the vendor as &#36;70.
 
 ### Test mode
 
@@ -58,39 +58,39 @@ Under **Lead Quotas**, you can cap how much the source sends per day, week, or m
 
 Click **Create source** when you're done.
 
-## Step 2: Review the overview
+## 2. Review the overview
 
-Juiced takes you to the source's **Overview** tab. This is your at-a-glance view: stats for the selected timeframe, the source's **Status Responses**, and a **Details** panel with the lead category, type, partners, test mode, and creation date.
+Juiced takes you to the source's **Overview** tab. This is your at-a-glance view, with stats for the selected timeframe, the source's **Status Responses**, and a **Details** panel with the lead category, type, partners, test mode, and creation date.
 
 <Frame>
   <img className="block dark:hidden" src="/images/tenant/ingest/source-detail-light.webp" alt="Source overview with stats, Status Responses grouped into Success, Rejected, and Duplicate, and a Details panel" />
   <img className="hidden dark:block" src="/images/tenant/ingest/source-detail-dark.webp" alt="Source overview with stats, Status Responses grouped into Success, Rejected, and Duplicate, and a Details panel" />
 </Frame>
 
-**Status Responses** shows how Juiced maps lead statuses to the three responses a source receives via the API:
+**Status Responses** shows how Juiced maps lead statuses to the three responses a source receives via the API.
 
 | Response | Default lead statuses |
 |----------|----------------------|
-| **Success** | Assigned, Posted, Marketplace, Club |
-| **Rejected** | Audit, Unassigned, Uncategorized |
-| **Duplicate** | Duplicate |
+| **Success** | <span className="tone-badge tone-success">Assigned</span> <span className="tone-badge tone-success">Posted</span> <span className="tone-badge tone-success">Marketplace</span> <span className="tone-badge tone-success">Club</span> |
+| **Rejected** | <span className="tone-badge tone-danger">Audit</span> <span className="tone-badge tone-danger">Unassigned</span> <span className="tone-badge tone-danger">Uncategorized</span> |
+| **Duplicate** | <span className="tone-badge tone-caution">Duplicate</span> |
 
 To customize the mapping, click **Edit** and drag status chips between the Success, Rejected, and Duplicate columns under **Status Responses**. Every lead status must belong to exactly one response, and Juiced won't save until each one is placed.
 
 The **More actions** (⋯) menu in the header holds **View API Spec**, which opens a shareable link to this source's API documentation (valid for 7 days), and **Delete**.
 
-## Step 3: Grab API credentials
+## 3. Grab API credentials
 
-Click the **Authentication** tab. Juiced generates credentials automatically when a source is created—no extra setup needed.
+Click the **Authentication** tab. Juiced generates credentials automatically when a source is created, so no extra setup is needed.
 
 <Frame>
   <img className="block dark:hidden" src="/images/tenant/ingest/source-authentication-light.webp" alt="Authentication tab with the Basic Auth API key and masked secret, plus the Bearer Token section with a New bearer token button" />
   <img className="hidden dark:block" src="/images/tenant/ingest/source-authentication-dark.webp" alt="Authentication tab with the Basic Auth API key and masked secret, plus the Bearer Token section with a New bearer token button" />
 </Frame>
 
-You'll see two authentication options:
+You'll see two authentication options.
 
-**Basic Auth** shows your **API Key** and **API Secret** (masked by default—click the eye icon to reveal it, or the copy icon to grab it without revealing). Use these as the username and password for HTTP Basic Authentication.
+**Basic Auth** shows your **API Key** and **API Secret** (masked by default, so click the eye icon to reveal it, or the copy icon to grab it without revealing). Use these as the username and password for HTTP Basic Authentication.
 
 **Bearer Token** is the alternative. Click **New bearer token** and confirm with **Create token** to generate a token for the `Authorization` header. The token appears once in a **Token created** banner, so copy it before you leave the page. Each new token expires the previous one in 24 hours.
 
@@ -98,9 +98,9 @@ You'll see two authentication options:
 Treat your API credentials like passwords. Bearer tokens can be replaced from this page, but the Basic Auth key and secret can't be regenerated. If a bearer token is compromised, create a new one; the old token stops working 24 hours later.
 </Warning>
 
-## Step 4: Add source-level fields
+## 4. Add source-level fields
 
-Click the **Fields** tab. You'll see two sections:
+Click the **Fields** tab. You'll see two sections.
 
 **Source Fields** at the top is where you define fields specific to this source. It starts empty.
 
@@ -113,13 +113,13 @@ Click the **Fields** tab. You'll see two sections:
 
 ### Why source-level fields?
 
-Source-level fields let you capture data that only applies to a particular source—without cluttering the lead category schema that every other source shares. A vendor might send a `referral_code` or `campaign_id` that's irrelevant to your other sources.
+Source-level fields let you capture data that only applies to a particular source, without cluttering the lead category schema that every other source shares. A vendor might send a `referral_code` or `campaign_id` that's irrelevant to your other sources.
 
 They also let you **override** lead category fields. If you create a source field with the same title as a lead category field, the source's configuration wins. This is useful when a specific source needs different validation rules or delivery settings for a standard field.
 
 ### Creating a source field
 
-Click **New field** to open the field dialog. It works just like [adding fields to a lead category](/guides/adding-fields-to-a-lead-category)—same title rules, same type dropdown, same switches:
+Click **New field** to open the field dialog. It works just like [adding fields to a lead category](/guides/adding-fields-to-a-lead-category), with the same title rules, type dropdown, and switches.
 
 | Setting | What it controls |
 |---------|-----------------|
@@ -141,18 +141,18 @@ Click **Create** to save. Back in the table, the four switches can be flipped in
 
 To override a lead category field, create a source field with the exact same title. For example, if the lead category has a `phone` field typed as **Phone (US & CA)** but this source only accepts US numbers, create a source field titled `phone` with the type **Phone (US)**.
 
-Overriding source fields carry an **Overrides** badge in the Source Fields table, and the lead category field they replace is dimmed in the section below, so you can tell at a glance which fields are overrides.
+Overriding source fields carry an <span className="tone-badge tone-info">Overrides</span> badge in the Source Fields table, and the lead category field they replace is dimmed in the section below, so you can tell at a glance which fields are overrides.
 
-## Step 5: Configure additional settings (optional)
+## 5. Configure additional settings (optional)
 
-The tabs hold a few more settings worth knowing about:
+The tabs hold a few more settings worth knowing about.
 
 ### Pricing
 
-The **Pricing** tab lists every lead type in the source's category with two inputs:
+The **Pricing** tab lists every lead type in the source's category with two inputs.
 
-- **Fixed Price**: When a bidder matches, the source is paid this amount instead of its payout percentage of the winning bid.
-- **Fallback Price**: When no bidder matches, this price lets an eligible [marketplace](/features/marketplace) or [Club](/features/club) stage accept the lead.
+- **Fixed Price** is what the source is paid when a bidder matches, instead of its payout percentage of the winning bid.
+- **Fallback Price** lets an eligible [marketplace](/features/marketplace) or [Club](/features/club) stage accept the lead when no bidder matches.
 
 Each price saves when you leave the field, and the **Behavior** column describes the result. The **More actions** menu has **Edit Payout** to change the payout percentage, and **Copy from Source** when another source shares this category.
 
@@ -167,7 +167,7 @@ Fallback prices matter most for [ping-post](/features/ping-post) traffic. A mark
 
 ### Duplicate Checks
 
-The **Duplicate Checks** tab lets you configure source-specific [duplicate detection](/features/duplicate-detection) rules. These only apply to leads coming through this particular source—useful when different vendors have different tolerance for duplicates.
+The **Duplicate Checks** tab lets you configure source-specific [duplicate detection](/features/duplicate-detection) rules. These only apply to leads coming through this particular source, which is useful when different vendors have different tolerance for duplicates.
 
 ### Payouts
 
@@ -175,11 +175,11 @@ If you can view analytics, the **Payouts** tab totals what you owe the source fo
 
 ## What happens next
 
-Once your source is created and configured:
+Once your source is created and configured, here's where things stand.
 
-- **API credentials** are ready to use—share the Basic Auth credentials or a bearer token with whoever is integrating
+- **API credentials** are ready to use, so share the Basic Auth credentials or a bearer token with whoever is integrating
 - **Lead validation** enforces both the lead category fields and any source-level fields you added
-- **Source-level fields** override matching lead category fields for this source only—other sources on the same category are unaffected
+- **Source-level fields** override matching lead category fields for this source only, and other sources on the same category are unaffected
 - **The API spec** (from **View API Spec** in the **More actions** menu) reflects all fields, types, and requirements so integrators know exactly what to send
 
 Ready to send your first lead? Head to [Sending leads to Juiced](/guides/sending-leads-to-juiced).

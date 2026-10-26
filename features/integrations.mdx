@@ -5,14 +5,14 @@ description: Connect Stripe, SendGrid, Twilio, Google Tag Manager, Intercom, and
 
 Integrations connect Juiced to the outside services that send your emails and texts, take your customers' payments, track your portal, and enrich your leads.
 
-Open **Integrations** under **Integrations** in the sidebar. Each service has a card with its status: **Enabled**, **Not Configured**, or **Failing** when the service has started rejecting your credentials.
+Open **Integrations** under **Integrations** in the sidebar. Each service has a card showing its status, which is **Enabled**, **Not Configured**, or **Failing** when the service has started rejecting your credentials.
 
 <Frame>
   <img className="block dark:hidden" src="/images/tenant/integrations/integrations-light.webp" alt="Integrations page with cards for Google Tag Manager, Intercom, SendGrid, Stripe, Twilio, and RealEstateAPI, each marked Enabled or Not Configured" />
   <img className="hidden dark:block" src="/images/tenant/integrations/integrations-dark.webp" alt="Integrations page with cards for Google Tag Manager, Intercom, SendGrid, Stripe, Twilio, and RealEstateAPI, each marked Enabled or Not Configured" />
 </Frame>
 
-Click a card to connect it. Fill in the credentials and click **Connect**. Once it's connected, the same card opens the edit page: change what you need and click **Save changes** on the save bar, or click **Delete** in the header to disconnect it.
+Click a card to connect it. Fill in the credentials and click **Connect**. Once it's connected, the same card opens the edit page. Change what you need and click **Save changes** on the save bar, or click **Delete** in the header to disconnect it.
 
 <Frame>
   <img className="block dark:hidden" src="/images/tenant/integrations/integration-sendgrid-light.webp" alt="Edit SendGrid page with Key Name, API Key ID, a masked API Key, From Address, and From Name, and a Delete button in the header" />
@@ -21,7 +21,7 @@ Click a card to connect it. Fill in the credentials and click **Connect**. Once 
 
 ## Stripe
 
-Stripe takes your customers' card payments: deposits, auto recharge, and subscriptions. Stripe is optional. If you don't collect payments from customers through Juiced (say, you bill them elsewhere, or you only sell to partners), you can skip it.
+Stripe takes your customers' card payments for deposits, auto recharge, and subscriptions. Stripe is optional. If you don't collect payments from customers through Juiced (say, you bill them elsewhere, or you only sell to partners), you can skip it.
 
 You don't connect Stripe from this page. Go to **Settings → Application → Payments & Deposits** and click **Connect Stripe** to go through Stripe's onboarding (see [Payments and deposits](/features/payments-and-deposits#connecting-stripe)). Once you're connected, the Stripe card shows **Enabled**, and its page shows your **Account ID**. It's managed automatically, so you can't edit or delete it here.
 
@@ -66,14 +66,14 @@ Both keys are encrypted. When editing, leave a key blank to keep the current one
 
 ### Enriching leads during distribution
 
-Enrichment runs as a **Real Estate API** stage in your [distribution stages](/features/distribution). The method appears once the integration is connected, and you can have one Real Estate API stage per lead category. In the stage's **Real Estate API Configuration**:
+Enrichment runs as a **Real Estate API** stage in your [distribution stages](/features/distribution). The method appears once the integration is connected, and you can have one Real Estate API stage per lead category. The stage's **Real Estate API Configuration** has four settings.
 
-- **Lead Category**: only leads in this category are enriched.
-- **Property Data Enrichment**: pick property values such as **Estimated Value**, **Bedrooms**, **Year Built**, **Owner 1 Full Name**, or **Last Sale Price**.
-- **Skip Trace Owner Contacts**: pick owner values such as **Owner Names**, **Owner Phones**, and **Owner Emails**. This needs the Skip Trace API key.
-- **Field Mappings**: map each picked value to one of your lead fields. Turn on **Overwrite Existing** for a field that should replace a value the lead already has; otherwise, enrichment only fills empty fields.
+- **Lead Category** limits enrichment to leads in this category.
+- **Property Data Enrichment** lets you pick property values such as **Estimated Value**, **Bedrooms**, **Year Built**, **Owner 1 Full Name**, or **Last Sale Price**.
+- **Skip Trace Owner Contacts** lets you pick owner values such as **Owner Names**, **Owner Phones**, and **Owner Emails**. This needs the Skip Trace API key.
+- **Field Mappings** map each picked value to one of your lead fields. Turn on **Overwrite Existing** for a field that should replace a value the lead already has; otherwise, enrichment only fills empty fields.
 
-The stage doesn't end distribution: the lead moves on to the next stage with its new data, so later stages can use it in their conditions. The stage's result in the lead's [incoming log](/features/logs#incoming-logs) shows how it went, such as "No fields enriched" when the lookup found nothing to add. For setup steps, see [Configuring distribution stages](/guides/configuring-distribution-stages#real-estate-api).
+The stage doesn't end distribution. The lead moves on to the next stage with its new data, so later stages can use it in their conditions. The stage's result in the lead's [incoming log](/features/logs#incoming-logs) shows how it went, such as "No fields enriched" when the lookup found nothing to add. For setup steps, see [Configuring distribution stages](/guides/configuring-distribution-stages#real-estate-api).
 
 <Warning>
 Deleting the RealEstateAPI integration also deletes your Real Estate API distribution stages. Juiced tells you how many before you confirm.

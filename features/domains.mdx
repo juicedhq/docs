@@ -3,7 +3,9 @@ title: Domains & Links
 description: Configure your public marketplace, where customer links land, and a custom domain for your customer portal.
 ---
 
-The **Domains & Links** page controls how people reach you: whether visitors can browse your marketplace without an account, where your customer-facing links send people who aren't signed in, and the domain your customer portal lives on. Find it under **Settings → Account → Domains & Links**.
+import { HugeIcon } from '/snippets/hugeicon.jsx';
+
+The **Domains & Links** page controls how people reach you. It sets whether visitors can browse your marketplace without an account, where your customer-facing links send people who aren't signed in, and the domain your customer portal lives on. Find it under **Settings → Account → Domains & Links**.
 
 <Frame>
   <img className="block dark:hidden" src="/images/tenant/settings/domains-light.webp" alt="Domains & Links settings page with the Public Marketplace switch, the Customer Portal Entry Point select, and a verified custom domain with two validated CNAME records" />
@@ -12,14 +14,14 @@ The **Domains & Links** page controls how people reach you: whether visitors can
 
 ## Public Marketplace
 
-Turn on **Enable public marketplace** to let visitors who aren't signed in browse your available leads at `/marketplace`. It's a shop window: prospects can see what you sell before they create an account. See [Marketplace](/features/marketplace) for how the marketplace itself works.
+Turn on **Enable public marketplace** to let visitors who aren't signed in browse your available leads at `/marketplace`. It's a shop window where prospects can see what you sell before they create an account. See [Marketplace](/features/marketplace) for how the marketplace itself works.
 
 ## Customer Portal Entry Point
 
-**Unauthenticated visitors see** decides where your customer-facing links send people who aren't signed in:
+**Unauthenticated visitors see** decides where your customer-facing links send people who aren't signed in.
 
-- **Customer sign-in page**: the default.
-- **Marketplace**: only offered when your distribution plan has a marketplace stage. If the public marketplace is off, links always go to the sign-in page.
+- **Customer sign-in page** is the default.
+- **Marketplace** is only offered when your distribution plan has a marketplace stage. If the public marketplace is off, links always go to the sign-in page.
 
 Save the marketplace and entry point settings with the floating save bar.
 
@@ -38,12 +40,12 @@ Custom domains are a [premium feature](/features/billing#premium-features) on pl
     In the **Custom domain** field, enter a subdomain on a domain you own, like `leads.yourcompany.com`. Don't include `https://`. Click **Update custom domain** and confirm.
   </Step>
   <Step title="Add the DNS records">
-    Juiced shows the DNS records to add at your registrar under **Domain Validation**. Each card lists the record's **Type** (CNAME), **Name**, and **Value**: one points your domain at Juiced, and the other proves you own it. Copy them exactly.
+    Juiced shows the DNS records to add at your registrar under **Domain Validation**. Each card lists the record's **Type** (CNAME), **Name**, and **Value**. One points your domain at Juiced, and the other proves you own it. Copy them exactly.
 
     DNS changes can take up to 24 hours to propagate, though most are much faster.
   </Step>
   <Step title="Check validation">
-    Each record shows a status: **Validated**, **Pending**, or **Incomplete**. Click **Check again** to refresh. Once everything is validated, Juiced issues an SSL certificate automatically, and the page shows "Your domain ... has been verified and is now active."
+    Each record shows a status of **Validated**, **Pending**, or **Incomplete**. Click **Check again** to refresh. Once everything is validated, Juiced issues an SSL certificate automatically, and the page shows "Your domain ... has been verified and is now active."
   </Step>
 </Steps>
 
@@ -55,7 +57,7 @@ Once the SSL certificate has been issued, the field locks. To move to a differen
 
 ## What the domain applies to
 
-Your custom domain covers the **customer portal**: the `/app` interface where your customers sign in, view leads, manage their account, and visit the marketplace.
+Your custom domain covers the **customer portal**, which is the `/app` interface where your customers sign in, view leads, manage their account, and visit the marketplace.
 
 ```text
 https://{your-custom-domain}/app
@@ -65,13 +67,9 @@ Once you've added a custom domain, links to your [checkout pages](/features/chec
 
 ## Requirements
 
-**Domain format:**
-- Must be a valid domain without a scheme (`leads.example.com`, not `https://leads.example.com`)
-- Use a subdomain on a domain you own (e.g., `app.yourcompany.com`, `leads.yourcompany.com`)
+Your domain must be a valid domain without a scheme (`leads.example.com`, not `https://leads.example.com`). Use a subdomain on a domain you own, such as `app.yourcompany.com` or `leads.yourcompany.com`.
 
-**SSL/TLS:**
-- SSL certificates are provisioned automatically; you don't need to provide your own
-- Certificates are managed and renewed automatically
+SSL/TLS certificates are provisioned automatically, so you don't need to provide your own. They're also managed and renewed automatically.
 
 ## Troubleshooting
 
@@ -85,6 +83,6 @@ This usually resolves itself once DNS propagates. If it's been more than 24 hour
 
 ## Related guides
 
-<Card title="Adding a custom domain" icon="globe" href="/guides/adding-a-custom-domain" horizontal>
-  Swap the default subdomain for your own: the DNS records, validation, and what to tell your customers.
+<Card title="Adding a custom domain" icon={<HugeIcon name="link-04" card />} href="/guides/adding-a-custom-domain" horizontal>
+  Swap the default subdomain for your own, including the DNS records, validation, and what to tell your customers.
 </Card>

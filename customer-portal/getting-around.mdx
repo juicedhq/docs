@@ -3,7 +3,7 @@ title: Getting Around the Portal
 description: Find your way around the business rail, sidebar, status chips, search, notifications, and user menu.
 ---
 
-Every page in the portal shares the same frame: a slim **business rail** on the far left, a **sidebar** with search, status chips, and navigation, and the page you're working on to the right. Learn the frame once and every page feels familiar.
+Every page in the portal shares the same frame, with a slim **business rail** on the far left, a **sidebar** with search, status chips, and navigation, and the page you're working on to the right. Learn the frame once and every page feels familiar.
 
 <Frame>
   <img className="block dark:hidden" src="/images/portal/overview/dashboard-light.webp" alt="Customer portal with the business rail on the left, the sidebar with search, wallet chip and navigation, and the dashboard on the right" />
@@ -12,16 +12,16 @@ Every page in the portal shares the same frame: a slim **business rail** on the 
 
 ## The business rail
 
-The rail runs down the left edge of the screen on desktop. From top to bottom it shows:
+The rail runs down the left edge of the screen on desktop. Here's what it shows, from top to bottom.
 
 - **Your provider's icon.** Hover it to see their name.
-- **One avatar per business** you belong to, shown as initials. The highlighted avatar is the business you're working in. A small dot shows each business's status: green for active, yellow for paused, red for inactive, and gray for archived.
+- **One avatar per business** you belong to, shown as initials. The highlighted avatar is the business you're working in. A small dot shows each business's status (green for active, yellow for paused, red for inactive, and gray for archived).
 - **Create a new business** (the **+** button). This opens the business setup form so you can add another business to your login. See [Signing up and logging in](/customer-portal/signing-up-and-logging-in#adding-another-business).
 - **Company Profile** (the gear icon). Shown only if you're allowed to edit your company's details. See [Company Profile](/customer-portal/company-profile).
 - **Notifications** (the bell). See [Notifications bell](#notifications-bell) below.
 - **Documentation**, which opens these docs in a new tab.
 
-Click another business's avatar to switch to it. Each business is a completely separate account: its own wallet, payment methods, bids, leads, contacts, and webhooks. Nothing carries over between them, so double-check which avatar is highlighted before you start placing bids.
+Click another business's avatar to switch to it. Each business is a completely separate account, with its own wallet, payment methods, bids, leads, contacts, and webhooks. Nothing carries over between them, so double-check which avatar is highlighted before you start placing bids.
 
 <Tip>
 On a phone the rail is hidden. Use the **Switch business** menu at the top of the sidebar instead, and find the notification bell next to your name at the bottom of the sidebar.
@@ -29,7 +29,7 @@ On a phone the rail is hidden. Use the **Switch business** menu at the top of th
 
 ## The sidebar
 
-The sidebar holds the main navigation, grouped by job:
+The sidebar holds the main navigation, grouped by job.
 
 | Group | Pages |
 |-------|-------|
@@ -37,13 +37,13 @@ The sidebar holds the main navigation, grouped by job:
 | **Locations** | [Counties, States, and Countries](/customer-portal/locations) |
 | **Notifications** | [Contacts](/customer-portal/notifications) and [Webhooks](/customer-portal/webhooks) |
 | **Billing** | [Payment methods, Transactions, Auto recharge](/customer-portal/billing), [Subscription](/customer-portal/subscription), and [Bidding Limits](/customer-portal/bidding-limits) |
-| **Support** | Links your provider adds: **Support Portal**, **Email Us**, and **Lead Returns** |
+| **Support** | Links your provider adds (**Support Portal**, **Email Us**, and **Lead Returns**) |
 
 Click a group's label to collapse or expand it; the portal remembers your choice. You can also collapse the whole sidebar to icons with the toggle on its edge.
 
 ### Why a page might be missing
 
-Your sidebar only shows what applies to your account, so it may look shorter than the table above:
+Your sidebar only shows what applies to your account, so it may look shorter than the table above.
 
 - **Marketplace** appears only when your provider sells leads through the marketplace.
 - **Club** appears only when your provider runs a Club. Your provider names it, so it might read "Fresh Squeeze Club" or something else entirely.
@@ -60,14 +60,14 @@ Just under the search box, a row of small chips sums up your account at a glance
 
 ### Wallet
 
-The wallet chip shows your current balance. Its color tells you whether that balance can keep your bids running:
+The wallet chip shows your current balance. Its color tells you whether that balance can keep your bids running.
 
-| Color | What it means |
-|-------|---------------|
-| <Icon icon="circle" color="green" size={12} /> Green | You have enough funds to cover your active bids |
-| <Icon icon="circle" color="yellow" size={12} /> Yellow | At least one bid is being limited by your balance |
-| <Icon icon="circle" color="red" size={12} /> Red | Your balance doesn't cover the minimum for any bid |
-| <Icon icon="circle" color="gray" size={12} /> Gray | Bidding isn't turned on for your account, so funding status doesn't apply |
+| Chip | What it means |
+|------|---------------|
+| <span className="wallet-chip wallet-chip--success">Green</span> | Every active bid is fully funded |
+| <span className="wallet-chip wallet-chip--warning">Yellow</span> | Some bids are held back, either competing at a lower amount than you bid or out of funds while others keep running |
+| <span className="wallet-chip wallet-chip--danger">Red</span> | None of your active bids can compete, because your balance is below their minimums (this also shows when you have no active bids) |
+| <span className="wallet-chip wallet-chip--neutral">Gray</span> | Bidding isn't turned on for your account, so funding status doesn't apply |
 
 Click the chip to jump to [Payment methods](/customer-portal/billing#payment-methods), where you can add funds. If your provider doesn't take card payments, you land on [Transactions](/customer-portal/billing#transactions) instead.
 
@@ -96,7 +96,7 @@ Before you type, it lists shortcuts to every page you can open, your support lin
 
 ## Notifications bell
 
-The bell in the rail shows a red count when you have unread notifications. Click it to see the latest ones: alerts like **You got a new lead!** or **You've been outbid!**, and **Lead export complete** when a [lead export](/customer-portal/leads#exporting-leads) is ready to download. Your provider writes the wording of these alerts, so yours may read a little differently. Click a notification to open it and mark it read, or use **Mark all as read** to clear the count.
+The bell in the rail shows a red count when you have unread notifications. Click it to see the latest ones. These include alerts like **You got a new lead!** or **You've been outbid!**, and **Lead export complete** when a [lead export](/customer-portal/leads#exporting-leads) is ready to download. Your provider writes the wording of these alerts, so yours may read a little differently. Click a notification to open it and mark it read, or use **Mark all as read** to clear the count.
 
 <Frame>
   <img className="block dark:hidden" src="/images/portal/overview/notifications-light.webp" alt="Notifications panel open from the bell in the rail, showing an unread count, recent notifications, and a Mark all as read button" />
@@ -116,7 +116,7 @@ Your provider may post an announcement banner across the top of the portal, such
 
 ## Your user menu
 
-Your name sits at the bottom of the sidebar. Click it to open the user menu:
+Your name sits at the bottom of the sidebar. Click it to open the user menu.
 
 - **User Settings** opens your personal profile and security settings. See [Profile and security](/customer-portal/account-settings).
 - **Log out** signs you out.
@@ -124,7 +124,7 @@ Your name sits at the bottom of the sidebar. Click it to open the user menu:
 
 ## When a page is blocked
 
-Some pages show a message you can't close instead of their content:
+Some pages show a message you can't close instead of their content.
 
 - **Bidding not available.** If your provider hasn't turned on bidding for your account, the **Bids** and **Counties** pages show a message from your provider (by default, an invitation to schedule a call with their sales team) and a button back to your dashboard.
 - **Account archived.** If your account has been archived, the **Bids**, **Locations**, and **Marketplace** pages say so. If your provider has set a support contact, a **Contact Support** button appears.

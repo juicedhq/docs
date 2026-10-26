@@ -3,18 +3,18 @@ title: Onboarding Customers
 description: The ways customers land in your account (self-serve registration, accounts you create, invites, and checkout pages) and how to customize each path.
 ---
 
-Customers, the businesses that buy your leads, can get into Juiced a few ways: they register themselves from your portal, you create the account and invite them, or they buy through a [checkout page](/features/checkout-pages). This guide covers each path and how to tune the experience. For everything on the customer record, see [Customers](/features/customers).
+Customers, the businesses that buy your leads, can get into Juiced a few ways. They register themselves from your portal, you create the account and invite them, or they buy through a [checkout page](/features/checkout-pages). This guide covers each path and how to tune the experience. For everything on the customer record, see [Customers](/features/customers).
 
 ## Prerequisites
 
 - The **Admin** or **Customer Support** [role](/features/roles). Both can create customers and send invites.
-- An idea of how customers should arrive: self-serve suits marketing-driven signups, while creating accounts yourself suits hand-sold deals and migrations.
+- An idea of how customers should arrive. Self-serve suits marketing-driven signups, while creating accounts yourself suits hand-sold deals and migrations.
 
-## Path 1: Self-serve registration
+## Self-serve registration
 
 Anyone with your portal link can create an account. You just need to share it.
 
-### Step 1: Share your registration link
+### 1. Share your registration link
 
 Registration lives at `/app/register` on your Juiced subdomain, or on your [custom domain](/features/domains#custom-domain) once you have one, for example `https://leads.yourcompany.com/app/register`.
 
@@ -22,7 +22,7 @@ Registration lives at `/app/register` on your Juiced subdomain, or on your [cust
 Add UTM parameters to see which campaigns drive signups, for example `?utm_source=google&utm_campaign=spring-launch`. The customer's overview shows the full **URL** and each parameter under **Registration Tracking**.
 </Tip>
 
-### Step 2: Customize the registration page
+### 2. Customize the registration page
 
 Click the gear in the rail and choose **Registration & Login** under **Application**.
 
@@ -35,19 +35,19 @@ Click the gear in the rail and choose **Registration & Login** under **Applicati
 
 Save with the floating save bar. See [Registration & Login](/features/registration-and-login) for the full page, and [Branding](/features/branding) for the logo and colors customers see.
 
-### Step 3: What the customer does
+### 3. What the customer does
 
-Customers create their login, verify their email, and then fill in **Set up your business**: business name, billing email, phone, and address (United States, Canada, or Australia). They land on their dashboard, ready to add funds. [Signing up and logging in](/customer-portal/signing-up-and-logging-in) covers their side step by step.
+Customers create their login, verify their email, and then fill in **Set up your business** with their business name, billing email, phone, and address (United States, Canada, or Australia). They land on their dashboard, ready to add funds. [Signing up and logging in](/customer-portal/signing-up-and-logging-in) covers their side step by step.
 
 <Note>
 Registration is always open. If you want invite-only access, don't publish the registration link.
 </Note>
 
-## Path 2: Create the customer yourself
+## Create the customer yourself
 
 Use this for hand-sold accounts, migrations, or test accounts.
 
-### Step 1: Create the customer
+### 1. Create the customer
 
 Click **Customers** in the sidebar, then **New customer**.
 
@@ -56,14 +56,14 @@ Click **Customers** in the sidebar, then **New customer**.
   <img className="hidden dark:block" src="/images/tenant/customers/customer-create-dark.webp" alt="New customer form with Basic Info, Address, Toggles, and Auto Recharge sections" />
 </Frame>
 
-1. **Basic Info**: Name, Business Email, and Phone.
-2. **Address**: street address, city, state, and ZIP are required. Country can be the United States, Canada, or Australia.
-3. **Toggles**: **Can Access Bidding** starts off for customers you create. Turn it on if they should place their own bids.
-4. **Bidding Limits** (only if you've turned on account-level limits): optional caps and budgets. See [Budgets and caps](/features/budgets-and-caps).
-5. **Auto Recharge**: optional. See [Managing customer finances](/guides/managing-customer-finances#step-6-set-up-auto-recharge).
+1. In **Basic Info**, enter the Name, Business Email, and Phone.
+2. In **Address**, the street address, city, state, and ZIP are required. Country can be the United States, Canada, or Australia.
+3. Under **Toggles**, **Can Access Bidding** starts off for customers you create. Turn it on if they should place their own bids.
+4. **Bidding Limits** (only if you've turned on account-level limits) holds optional caps and budgets. See [Budgets and caps](/features/budgets-and-caps).
+5. **Auto Recharge** is optional. See [Managing customer finances](/guides/managing-customer-finances#6-set-up-auto-recharge).
 6. Click **Create customer**.
 
-### Step 2: Invite their team
+### 2. Invite their team
 
 A customer you create has no users yet, and Juiced doesn't email anyone when you create one. Nobody can log in until you invite them.
 
@@ -77,24 +77,28 @@ They get an email with a link to accept the invitation and create their login. P
   <img className="hidden dark:block" src="/images/tenant/customers/customer-users-dark.webp" alt="Customer Users tab listing users and pending invites with email, authentication method, and joined date, and an Invite user button" />
 </Frame>
 
-## Path 3: Add someone to an existing customer
+## Add someone to an existing customer
 
-To add a teammate to an account that already exists, use the same **Users** tab: **Invite user**, enter their email, send. If the email already belongs to someone on that customer, or already has an invite waiting, Juiced tells you instead of sending a duplicate.
+To add a teammate to an account that already exists, use the same **Users** tab. Click **Invite user**, enter their email, and send. If the email already belongs to someone on that customer, or already has an invite waiting, Juiced tells you instead of sending a duplicate.
 
-Pending invites show in the list with:
+Pending invites show in the list with two actions.
 
-- **Resend invite**: sends the email again, for example when it landed in spam
-- **Revoke invite**: cancels it, so the link stops working
+- **Resend invite** sends the email again, for example when it landed in spam
+- **Revoke invite** cancels it, so the link stops working
 
-## Path 4: Checkout pages
+## Checkout pages
 
 If Juiced has enabled [checkout pages](/features/checkout-pages) for your account, a prospect can buy a credit package or subscription from a public page and get a customer account in the same step. Affiliate signups show up under **Registration Tracking** on the customer's overview.
 
+<Tip>
+  Finding buyers is the one part Juiced can't do for you. Trade notes on where to find them in [That Agency Group](https://www.skool.com/that-agency-group), our free Skool community, or work on it directly with our sales team in the [Hybrid Agency Mastermind](https://www.skool.com/hybrid-agency-mastermind).
+</Tip>
+
 ## What happens next
 
-However a customer arrives:
+However a customer arrives, keep these in mind.
 
-- **Funding**: they start with no balance. They add funds from their portal, or you can **Add funds** from the customer's **More actions** menu. See [Managing customer finances](/guides/managing-customer-finances).
-- **Bidding access**: **Can Access Bidding** starts off for every new customer, however they arrive. Turn it on from the customer's **Edit** page. To grant it automatically, set **Minimum deposit for auto-access** under **Settings → Bidding**, and customers get access once they deposit that much.
-- **Notifications**: emails and texts go to the customer's contacts. Check who's set up on the customer's [Contacts](/features/customers#contacts) tab; customers can add their own under **Notifications → Contacts** in the portal.
-- **Tracking**: check **Registration Tracking** on the customer's overview to see which link or campaign they came from.
+- **Funding** starts at zero. They add funds from their portal, or you can **Add funds** from the customer's **More actions** menu. See [Managing customer finances](/guides/managing-customer-finances).
+- **Bidding access** (**Can Access Bidding**) starts off for every new customer, however they arrive. Turn it on from the customer's **Edit** page. To grant it automatically, set **Minimum deposit for auto-access** under **Settings → Bidding**, and customers get access once they deposit that much.
+- **Notifications** (emails and texts) go to the customer's contacts. Check who's set up on the customer's [Contacts](/features/customers#contacts) tab. Customers can add their own under **Notifications → Contacts** in the portal.
+- For **Tracking**, check **Registration Tracking** on the customer's overview to see which link or campaign they came from.

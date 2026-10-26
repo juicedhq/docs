@@ -8,10 +8,10 @@ Every time something happens on a customer's account (a lead assigned, a bid out
 ## Prerequisites
 
 - The **Admin** [role](/features/roles).
-- For email templates: [SendGrid](/features/integrations#sendgrid) set up. For SMS: [Twilio](/features/integrations#twilio). Without them, those channels don't appear.
-- A sense of your voice: friendly, brisk, formal, whatever matches the rest of your customer communication.
+- [SendGrid](/features/integrations#sendgrid) set up for email templates, and [Twilio](/features/integrations#twilio) for SMS. Without them, those channels don't appear.
+- A sense of your voice (friendly, brisk, formal, whatever matches the rest of your customer communication).
 
-## Step 1: Open Notification Templates
+## 1. Open Notification Templates
 
 Click the gear in the rail and choose **Notification Templates** under **Application**.
 
@@ -20,33 +20,30 @@ Click the gear in the rail and choose **Notification Templates** under **Applica
   <img className="hidden dark:block" src="/images/tenant/settings/notification-templates-dark.webp" alt="Notification Templates list with one row per notification type and Visible and Default columns for each channel" />
 </Frame>
 
-Each row is a notification type with a short description of when it's sent. For each channel (**Email**, **SMS**, **In-App**), two columns show its settings:
+Each row is a notification type with a short description of when it's sent. For each channel (**Email**, **SMS**, **In-App**), two columns show its settings.
 
-- **Visible**: customers can see and change this notification in their preferences.
-- **Default**: it's turned on for new contacts.
+- **Visible** means customers can see and change this notification in their preferences.
+- **Default** means it's turned on for new contacts.
 
 A type that doesn't support a channel shows a dash there. Payment emails, for example, are email-only.
 
-## Step 2: Open a template
+## 2. Open a template
 
-Click a notification type. The top of the page lists its **Available variables**, and below that is a card per channel: **Email Template**, **SMS Template**, and **In-App Template**.
+Click a notification type. The top of the page lists its **Available variables**, and below that is a card per channel (**Email Template**, **SMS Template**, and **In-App Template**).
 
 <Frame>
   <img className="block dark:hidden" src="/images/tenant/settings/notification-template-manage-light.webp" alt="Edit Lead Assigned Template page listing available variables such as lead.full_name and customer.name, followed by the Email Template card with Visible to customers and Enabled by default switches" />
   <img className="hidden dark:block" src="/images/tenant/settings/notification-template-manage-dark.webp" alt="Edit Lead Assigned Template page listing available variables such as lead.full_name and customer.name, followed by the Email Template card with Visible to customers and Enabled by default switches" />
 </Frame>
 
-## Step 3: Write the copy
+## 3. Write the copy
 
-In each card:
+Each card has two fields.
 
-- **Subject**: the email subject, or the in-app notification's title. SMS has no subject.
-- **Body**: the message. Drop in variables from the list at the top, for example `{{ lead.full_name }}` or `{{ customer.name }}`.
+- **Subject** is the email subject, or the in-app notification's title. SMS has no subject.
+- **Body** is the message. Drop in variables from the list at the top, for example `{{ lead.full_name }}` or `{{ customer.name }}`.
 
-A Lead Assigned email might read:
-
-- **Subject**: `New {{ lead.leadType.name }} lead in {{ lead.city }}`
-- **Body**:
+A Lead Assigned email might use the subject `New {{ lead.leadType.name }} lead in {{ lead.city }}` and this body.
 
 ```text
 Hi {{ customer.name }},
@@ -54,7 +51,7 @@ You just won a new lead: {{ lead.full_name }} in {{ lead.city }}.
 Phone: {{ lead.phone }}
 ```
 
-A few things to know about how messages come out:
+A few things to know about how messages come out.
 
 - **Emails** keep basic formatting (bold, italic, underline, strikethrough), and each line becomes its own paragraph. Lines written as `Label: value`, like the phone line above, are laid out as a tidy details list.
 - **Emails get a button** to the relevant page automatically, so you don't need to paste the link in.
@@ -64,28 +61,28 @@ A few things to know about how messages come out:
 Only use variables listed for that notification type. Juiced checks when you save, and a variable that doesn't exist for this type (say, a lead field on Customer Paused, which has no lead) shows an error.
 </Warning>
 
-## Step 4: Decide who can turn it off
+## 4. Decide who can turn it off
 
-Each card also has two switches:
+Each card also has two switches.
 
-- **Visible to customers**: when off, the notification is hidden from customers' preferences, so they can't change it.
-- **Enabled by default**: whether new contacts start with it on.
+- **Visible to customers** hides the notification from customers' preferences when it's off, so they can't change it.
+- **Enabled by default** sets whether new contacts start with it on.
 
 They work together. Visible and on by default is the usual setup. Hidden and on makes a must-send message. Visible and off makes it opt-in, which suits chatty notifications like Bid Matched.
 
-## Step 5: Save
+## 5. Save
 
 Click **Save all** in the floating save bar. Every channel saves together.
 
 If you get it wrong, **Reset to Default** on a card restores that channel's default template, and **Reset All to Default** at the top restores every channel for this type. Both ask you to confirm, and there's no undo, so copy anything you want to keep first.
 
-## Step 6: Test it
+## 6. Test it
 
-Add yourself as a [contact](/features/customers#contacts) on a test customer, then use the contact's **Test** action to send a test notification. Or wait for the real thing: post a test lead through one of your sources and watch it arrive.
+Add yourself as a [contact](/features/customers#contacts) on a test customer, then use the contact's **Test** action to send a test notification. Or wait for the real thing by posting a test lead through one of your sources and watching it arrive.
 
 ## Good to know
 
-- Branding carries through: your [logo and colors](/features/branding) appear in emails without extra setup.
+- Branding carries through, so your [logo and colors](/features/branding) appear in emails without extra setup.
 - Customers manage which notifications each contact gets under **Notifications → Contacts** in their portal. See [Notifications in the customer portal](/customer-portal/notifications).
 - In-app notifications land in the bell of every user on the customer's account.
 - Sending lead data to a CRM is a different job. Use [webhooks](/features/webhooks) for that.

@@ -3,33 +3,33 @@ title: Reading Distribution Logs
 description: Trace a single lead end-to-end through pings, posts, offers, and distribution stages, and use the logs to answer "what happened to this lead?"
 ---
 
-Every time a source sends traffic to Juiced, the platform runs a small pipeline: answer the ping, accept or reject the post, run your distribution stages, collect offers, and decide who won. **Incoming logs** are the persistent record of that pipeline, one per run. When something surprising happens (a lead didn't sell, a bid was passed over, a ping was rejected), the log is where you find out why.
+Every time a source sends traffic to Juiced, the platform runs a small pipeline. It answers the ping, accepts or rejects the post, runs your distribution stages, collects offers, and decides who won. **Incoming logs** are the persistent record of that pipeline, one per run. When something surprising happens (a lead didn't sell, a bid was passed over, a ping was rejected), the log is where you find out why.
 
 This guide walks through the logs and how to use them to answer the most common support questions. For a reference of every screen, see [Logs](/features/logs).
 
 ## Prerequisites
 
 - A role that can view incoming logs. If **Incoming logs** isn't under **Entries** in your sidebar, ask an admin on your account.
-- A question in mind. Logs are most useful when you open them with one: "Why didn't customer X win this lead?", "Why was this lead unsold?", "Did the ping come in?"
+- A question in mind. Logs are most useful when you open them with one, like "Why didn't customer X win this lead?", "Why was this lead unsold?", or "Did the ping come in?"
 
-## Step 1: Open Incoming logs
+## 1. Open Incoming logs
 
-In the sidebar, expand **Entries** and click **Incoming logs**. The page lists every flow, newest first: one row for every ping or post that came in, whether or not it ended up assigned.
+In the sidebar, expand **Entries** and click **Incoming logs**. The page lists every flow, newest first, with one row for every ping or post that came in, whether or not it ended up assigned.
 
 <Frame>
   <img className="block dark:hidden" src="/images/tenant/logs/incoming-logs-light.webp" alt="Incoming logs list showing a row per flow with the source, ping status, post status, lead, honored badge, recipient, and sold-for amount" />
   <img className="hidden dark:block" src="/images/tenant/logs/incoming-logs-dark.webp" alt="Incoming logs list showing a row per flow with the source, ping status, post status, lead, honored badge, recipient, and sold-for amount" />
 </Frame>
 
-## Step 2: Read the columns
+## 2. Read the columns
 
 | Column | What it means |
 |--------|---------------|
-| **Source** | The source name, with the time the flow started underneath. A red **Error** badge means the flow hit a distribution error, so open those first. A **Test** badge marks test traffic. |
-| **Ping** | `Matched` (Juiced offered a price), `No Match` (nobody wanted it), `Pending` (still processing), or `Error`. Blank means no ping came in: a direct post. |
+| **Source** | The source name, with the time the flow started underneath. An <span className="tone-badge tone-danger">Error</span> badge means the flow hit a distribution error, so open those first. A <span className="tone-badge tone-warning">Test</span> badge marks test traffic. |
+| **Ping** | <span className="tone-badge tone-success">Matched</span> (Juiced offered a price), <span className="tone-badge tone-neutral">No Match</span> (nobody wanted it), <span className="tone-badge tone-info">Pending</span> (still processing), or <span className="tone-badge tone-danger">Rejected</span> (the ping failed validation). Blank means no ping came in, so it was a direct post. |
 | **Post** | What happened when the source posted the full lead. |
-| **Lead** | The lead's name, linked to the lead. A red `Deleted` badge means the lead was later removed. |
-| **Honored** | `Honored` when the ping's accepted offer won the lead on the post. A high honor rate means your ping-post discipline is working. |
+| **Lead** | The lead's name, linked to the lead. A <span className="tone-badge tone-danger">Deleted</span> badge means the lead was later removed. |
+| **Honored** | <span className="tone-badge tone-success">Honored</span> when the ping's accepted offer won the lead on the post. A high honor rate means your ping-post discipline is working. |
 | **Recipient** | The customer or partner who won. Blank means nobody did. |
 | **Sold For** | The amount charged for the lead. Blank if it wasn't sold. |
 
@@ -37,21 +37,21 @@ In the sidebar, expand **Entries** and click **Incoming logs**. The page lists e
 Most investigations start with "a customer asked about a lead that came in 20 minutes ago." Search for the source or customer name, find it near the top, and open the log.
 </Tip>
 
-## Step 3: Filter to narrow the search
+## 3. Filter to narrow the search
 
-The search box matches source and recipient names. Click **Filters** for the rest. The ones you'll actually use:
+The search box matches source and recipient names. Click **Filters** for the rest. These are the ones you'll actually use.
 
-- **Created** (from/until) — Scope to a specific window. Always the first filter to set during an incident.
-- **Source** — Check a single source's health. Deleted sources are still listed, tagged "(Deleted)".
-- **Ping** — `Matched`, `No Match`, `Pending`, or `Error`. "My ping integration isn't matching" starts here.
-- **Ping Honored** — Yes or No. No is the interesting one: flows where the ping's winner didn't end up with the lead.
-- **Has Ping / Has Post / Has Lead / Assigned** — Presence filters. "Show me flows that had a ping but never became a lead" is Has Ping: Yes, Has Lead: No.
-- **Recipient Type** and **Channel Type** — Narrow to customers or partners, and to bids, direct customer assignment, or ping/post.
-- **Test mode** — Real traffic is shown by default. Switch to **Test only** to see only test flows.
+- **Created** (from/until) scopes to a specific window. It's always the first filter to set during an incident.
+- **Source** checks a single source's health. Deleted sources are still listed, tagged "(Deleted)".
+- **Ping** filters by `Matched`, `No Match`, `Pending`, or `Error`. "My ping integration isn't matching" starts here.
+- **Ping Honored** is Yes or No. No is the interesting one, showing flows where the ping's winner didn't end up with the lead.
+- **Has Ping / Has Post / Has Lead / Assigned** are presence filters. "Show me flows that had a ping but never became a lead" is Has Ping set to Yes and Has Lead set to No.
+- **Recipient Type** and **Channel Type** narrow to customers or partners, and to bids, direct customer assignment, or ping/post.
+- **Test mode** shows real traffic by default. Switch to **Test only** to see only test flows.
 
 Filters live in the page URL, so they survive clicking into a log and back, and you can bookmark a filtered view.
 
-## Step 4: Open a single log
+## 4. Open a single log
 
 Click any row to open the log. It has three parts.
 
@@ -64,39 +64,39 @@ Click any row to open the log. It has three parts.
 
 **Details** shows the flow's **Status** (for example Distributed, No Match, On Marketplace, Audit, or Error), its **Mode** (Live or Test), how long it took (**Duration**), and when it was **Initiated**.
 
-**Records** links to everything the flow touched: the **Source**, **Lead**, **Recipient**, **Ping**, and **Post**, plus the number of **Offers**. A dash means that step didn't happen. No ping means a direct post. No post means the ping matched but the full lead never arrived. No lead means the flow stopped before a lead was created, usually because the post was rejected.
+**Records** links to everything the flow touched, including the **Source**, **Lead**, **Recipient**, **Ping**, and **Post**, plus the number of **Offers**. A dash means that step didn't happen. No ping means a direct post. No post means the ping matched but the full lead never arrived. No lead means the flow stopped before a lead was created, usually because the post was rejected.
 
 ### The timeline
 
-The heart of the log. Events are laid out top to bottom in three lanes:
+This is the heart of the log. Events are laid out top to bottom in three lanes.
 
-- **Inbound** — What the source sent: the ping and the post.
-- **Routing** — What Juiced did: the lead being created, each distribution stage's result, and the final outcome.
-- **Outbound** — Pings and posts Juiced sent to partners.
+- **Inbound** shows what the source sent, meaning the ping and the post.
+- **Routing** shows what Juiced did, including the lead being created, each distribution stage's result, and the final outcome.
+- **Outbound** shows pings and posts Juiced sent to partners.
 
-Each card describes its event in plain language, like "Found matches in the Direct auction stage" or "No matches found in the Partner ad-spend allotment stage", often with a reason underneath ("No eligible recipients found for round robin"). Green dots mean something succeeded; red means it failed. Cards link to the related ping, post, or lead.
+Each card describes its event in plain language, like "Found matches in the Direct auction stage" or "No matches found in the Partner ad-spend allotment stage", often with a reason underneath ("No eligible recipients found for round robin"). Green dots mean something succeeded, and red means it failed. Cards link to the related ping, post, or lead.
 
 ### Outgoing logs
 
 Below the timeline, **Outgoing logs** lists every partner ping and post this flow triggered, with the result and price. Click a row to see the full request and response. See [Outgoing logs](/features/logs#outgoing-logs).
 
-## Step 5: Check the offers
+## 5. Check the offers
 
-Click **View** next to **Offers** to see every offer the lead received: each bidder's **Bid**, **Effective** price, any **Penalty** (hover it for the reason), **Score**, **Discount**, what was **Charged**, and their **Status**. The winner is marked **Winner**.
+Click **View** next to **Offers** to see every offer the lead received. It lists each bidder's **Bid**, **Effective** price, any **Penalty** (hover it for the reason), **Score**, **Discount**, what was **Charged**, and their **Status**. The winner is marked **Winner**.
 
 This is where "why did customer A beat customer B?" gets answered. Offers are ranked by score, not raw bid, so a penalty can push a bigger bid below a smaller one. See [ping-post](/features/ping-post) for how scoring works.
 
-## Step 6: Jump to a log from a lead
+## 6. Jump to a log from a lead
 
 If you already have the lead open, there's a shortcut. From **Leads**, open the lead and choose **View Log** from its **More actions** menu. You'll land directly on that lead's log.
 
 This is the fastest path when a support question names a specific lead.
 
-## Step 7: Common debugging patterns
+## 7. Common debugging patterns
 
-### "Customer X didn't get this lead—why?"
+### "Why didn't customer X get this lead?"
 
-Open the lead's log and click **View** next to **Offers**. If the customer is listed, compare their score and status with the winner's. If they're not listed at all, they never made an offer: check that their bid covers the lead's location and lead type, and that it's active and funded. The bid's [status](/features/bidding) usually tells you why it isn't receiving leads.
+Open the lead's log and click **View** next to **Offers**. If the customer is listed, compare their score and status with the winner's. If they're not listed at all, they never made an offer. Check that their bid covers the lead's location and lead type, and that it's active and funded. The bid's [status](/features/bidding) usually tells you why it isn't receiving leads.
 
 ### "Why was this lead unsold?"
 
@@ -108,11 +108,11 @@ Look for the stage card from your [Audit stage](/features/audits). The lead matc
 
 ### "Why did the ping match but the post not assign?"
 
-Check the **Post** record. If it was rejected, open it and look at **Validation errors**: usually a required field was missing. If the post was accepted, follow the Routing lane to see which stage passed on it.
+Check the **Post** record. If it was rejected, open it and look at **Validation errors**, which usually show a required field was missing. If the post was accepted, follow the Routing lane to see which stage passed on it.
 
 ### "Did this source's ping integration even fire?"
 
-Filter by **Source**, set **Has Ping** to Yes, and narrow **Created** to the last hour. Zero rows means no pings came in: the source's integration didn't call Juiced. Rows with an `Error` ping status mean the ping was malformed; open one and check the ping's **Validation errors**.
+Filter by **Source**, set **Has Ping** to Yes, and narrow **Created** to the last hour. Zero rows means no pings came in, so the source's integration didn't call Juiced. Rows with an `Error` ping status mean the ping was malformed, so open one and check the ping's **Validation errors**.
 
 ### "Show me everything that went to customer Y today"
 
@@ -120,11 +120,11 @@ Search for the customer's name and set **Created** to today. The **Sold For** co
 
 ## What happens next
 
-Logs are a reactive tool: you open them when something needs explaining. A few habits that pay off:
+Logs are a reactive tool, since you open them when something needs explaining. A few habits pay off.
 
 - **Bookmark a filtered view.** Set **Assigned** to No and bookmark the page for a one-click "what didn't sell today" review.
-- **Triage Error rows first** during a morning health check. They're flagged with a red **Error** badge on the Source column and mean something went wrong while the flow ran.
+- **Triage Error rows first** during a morning health check. They're flagged with an <span className="tone-badge tone-danger">Error</span> badge on the Source column and mean something went wrong while the flow ran.
 - **Check outgoing logs for partner problems.** When a partner says they never got a lead, [Outgoing logs](/features/logs#outgoing-logs) shows exactly what was sent and what came back.
-- **Correlate with [location analytics](/guides/reading-location-analytics).** A county showing zero leads assigned despite active bids is worth checking against the logs: are flows happening there and failing, or is no traffic arriving at all?
+- **Correlate with [location analytics](/guides/reading-location-analytics).** A county showing zero leads assigned despite active bids is worth checking against the logs to see whether flows are happening there and failing, or no traffic is arriving at all.
 
 Logs are the receipt drawer of your platform. Most days you won't open them. The days you do, they save hours.

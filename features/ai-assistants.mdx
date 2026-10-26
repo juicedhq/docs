@@ -3,10 +3,10 @@ title: AI Assistants
 description: Let your team ask Claude about leads, buyers, bids, and logins, with read-only access to your Juiced account.
 ---
 
-AI Assistants lets your team connect Claude to your Juiced account and ask questions in plain language: "Why didn't this buyer get that lead?", "Why is this bid in second place?", "Why can't this user sign in?" Access is read-only, so Claude can look things up but can't change anything.
+AI Assistants lets your team connect Claude to your Juiced account and ask questions in plain language, like "Why didn't this buyer get that lead?", "Why is this bid in second place?", or "Why can't this user sign in?" Access is read-only, so Claude can look things up but can't change anything.
 
 <Note>
-AI Assistants is available on request. Juiced enables it for your account; if you don't see **AI Assistants** in your settings, contact your Juiced representative.
+AI Assistants is available on request. Juiced enables it for your account, so if you don't see **AI Assistants** in your settings, contact your Juiced representative.
 </Note>
 
 <Frame>
@@ -24,9 +24,9 @@ AI Assistants is available on request. Juiced enables it for your account; if yo
 
 Click the gear in the rail and choose **AI Assistants** under **Account**.
 
-- **Connector URL**: your custom domain followed by `/mcp`, for example `https://leads.yourcompany.com/mcp`. Paste it into Claude when you add the connector.
-- **Set up in claude.ai**: step-by-step instructions for adding the connector. Each person connects with their own login. On a Claude Team or Enterprise plan, an owner adds the connector once from Organization settings, and everyone else connects to it.
-- **Connected apps**: the AI apps that have been connected, with when each was **Connected** and **Last used**. Admins see everyone's connections (with a **User** column); everyone else sees only their own.
+- **Connector URL** is your custom domain followed by `/mcp`, for example `https://leads.yourcompany.com/mcp`. Paste it into Claude when you add the connector.
+- **Set up in claude.ai** gives step-by-step instructions for adding the connector. Each person connects with their own login. On a Claude Team or Enterprise plan, an owner adds the connector once from Organization settings, and everyone else connects to it.
+- **Connected apps** lists the AI apps that have been connected, with when each was **Connected** and **Last used**. Admins see everyone's connections (with a **User** column), and everyone else sees only their own.
 
 Use **Disconnect** to cut off an app's access right away, for example if a login may have been compromised. The person can connect again from Claude at any time.
 
@@ -34,11 +34,11 @@ For the full walkthrough, see [Connecting an AI assistant](/guides/connecting-an
 
 ## Approving a connection
 
-When someone connects, Juiced asks them to sign in on your custom domain and shows an approval page: **Connect an AI assistant to** your company. It shows the name the app gave itself and where access will be sent, and confirms that access is read-only and never includes lead contact details. They choose **Approve** or **Deny**.
+When someone connects, Juiced asks them to sign in on your custom domain and shows an approval page titled **Connect an AI assistant to** your company. It shows the name the app gave itself and where access will be sent, and confirms that access is read-only and never includes lead contact details. They choose **Approve** or **Deny**.
 
 ## What you can ask
 
-The assistant has read-only tools that explain:
+The assistant's read-only tools can explain each of these.
 
 - Why a lead was distributed the way it was
 - Why a particular buyer didn't receive a lead
@@ -53,5 +53,5 @@ It never sees lead contact details such as names, phone numbers, emails, or stre
 - **Your account only.** The assistant can't look up another Juiced account's records.
 - **Custom domain only.** It works only from your verified custom domain, not your Juiced subdomain.
 - **Read-only.** It can't pause a buyer, move a lead, edit a bid, or change any settings. Make changes in the panel yourself.
-- **Usage limits.** Each question draws from an hourly allowance per person and for your whole account; heavier lookups use more of it. Asking the exact same question again within a minute returns the earlier answer without using any allowance (so if you just changed something, wait a minute before checking again). Very large answers are shortened, and slow lookups time out with a prompt to narrow the question.
+- **Usage limits.** Each question draws from an hourly allowance per person and for your whole account, and heavier lookups use more of it. Asking the exact same question again within a minute returns the earlier answer without using any allowance (so if you just changed something, wait a minute before checking again). Very large answers are shortened, and slow lookups time out with a prompt to narrow the question.
 - **Removing access.** Removing a user from your tenant also disconnects their AI apps.

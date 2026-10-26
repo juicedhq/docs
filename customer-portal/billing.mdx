@@ -3,7 +3,7 @@ title: Billing
 description: Save cards, add funds to your wallet, review every transaction, and turn on auto recharge.
 ---
 
-Leads are paid for from your **wallet**, a prepaid balance on your account. The **Billing** group in the sidebar holds everything that keeps it full: **Payment methods**, **Transactions**, and **Auto recharge**, plus [Subscription](/customer-portal/subscription) and [Bidding Limits](/customer-portal/bidding-limits) when they apply to you. Your current balance is always on the [wallet chip](/customer-portal/getting-around#wallet) at the top of the sidebar.
+Leads are paid for from your **wallet**, a prepaid balance on your account. The **Billing** group in the sidebar holds everything that keeps it full, including **Payment methods**, **Transactions**, and **Auto recharge**, plus [Subscription](/customer-portal/subscription) and [Bidding Limits](/customer-portal/bidding-limits) when they apply to you. Your current balance is always on the [wallet chip](/customer-portal/getting-around#wallet) at the top of the sidebar.
 
 <Note>
 If your provider doesn't take card payments, you won't see **Payment methods** or **Auto recharge**, and your provider adds funds to your wallet for you. You can still review everything in **Transactions**.
@@ -21,7 +21,7 @@ This page lists the cards saved to your account.
 | Column | What it shows |
 |--------|---------------|
 | **Card** | The card brand and last four digits |
-| **Status** | **Default** (used for auto recharge), **Expiring** (expires soon), **Expired**, or **Invalid**. A **Subscription** badge marks the card your [subscription](/customer-portal/subscription) bills. |
+| **Status** | <span className="tone-badge tone-success">Default</span> (used for auto recharge), <span className="tone-badge tone-warning">Expiring</span> (expires soon), <span className="tone-badge tone-danger">Expired</span>, or <span className="tone-badge tone-danger">Invalid</span>. A <span className="tone-badge tone-neutral">Subscription</span> badge marks the card your [subscription](/customer-portal/subscription) bills. |
 | **Expiration** | The card's expiry month and year |
 
 ### Adding a card
@@ -30,7 +30,7 @@ Click **Add card**. You're taken to a secure Stripe page to enter your card deta
 
 ### Managing cards
 
-Each card has these actions:
+Each card has three actions.
 
 - **Add funds** charges that card and tops up your wallet (see below).
 - **Make default** makes it the card [auto recharge](#auto-recharge) uses.
@@ -56,7 +56,7 @@ If a yellow banner says card payments aren't available for your account, your pr
 
 ## Transactions
 
-Transactions is your wallet's complete history: every deposit, purchase, refund, and adjustment.
+Transactions is your wallet's complete history, covering every deposit, purchase, refund, and adjustment.
 
 <Frame>
   <img className="block dark:hidden" src="/images/portal/billing/transactions-light.webp" alt="Transactions table with date, signed amount, event, and transaction ID columns and a running total below" />
@@ -99,8 +99,8 @@ Auto recharge keeps your wallet topped up so your bids never run dry mid-day. Wh
 </Frame>
 
 1. Turn on **Enable auto recharge**.
-2. Set **When my wallet falls below**: the balance that triggers a recharge.
-3. Set **Add the following funds**: how much to add each time. Your provider may set a minimum, shown under the field.
+2. Set **When my wallet falls below** to the balance that triggers a recharge.
+3. Set **Add the following funds** to the amount to add each time. Your provider may set a minimum, shown under the field.
 4. Save your changes.
 
 For example, with a trigger of &#36;100 and an amount of &#36;500, your card is charged &#36;500 whenever your balance dips below &#36;100.
@@ -109,7 +109,7 @@ If your balance is already below the trigger when you turn auto recharge on, a r
 
 ### When auto recharge is unavailable
 
-If the settings are disabled, a notice explains why:
+If the settings are disabled, a notice explains why with one of these messages.
 
 - **You need an active payment method.** Add a card on [Payment methods](#payment-methods).
 - **Your payment method has expired.** Add a new card and make it your default.

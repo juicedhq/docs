@@ -3,6 +3,8 @@ title: Partners
 description: Manage the outside businesses that send you leads or buy them by ping/post, with their sources, payouts, eligibility, and users.
 ---
 
+import { HugeIcon } from '/snippets/hugeicon.jsx';
+
 Partners are the businesses you trade leads with outside your own customer base. A partner can be on the supply side (affiliates and vendors whose [sources](/features/sources) send you leads), on the buy side (a lead buyer you ping for a price and post leads to), or both. Customers buy through your portal; partners plug in over the wire.
 
 ## Partners vs. sources
@@ -52,11 +54,11 @@ Click **New partner**, fill in the form, and click **Create partner**. To change
 
 ### Duplicate checks
 
-Duplicate checks stop you from sending a partner a lead they've already received. They compare against the partner's own delivery history: the window starts when a lead is delivered, returned deliveries and Club claims count, and pending reservations don't.
+Duplicate checks stop you from sending a partner a lead they've already received. They compare against the partner's own delivery history. The window starts when a lead is delivered, returned deliveries and Club claims count, and pending reservations don't.
 
 - **Use tenant default** follows the partner default under **Ingest → Duplicate Checks**.
 - **Disabled** turns checks off for this partner.
-- **Custom** replaces the default with this partner's own **History window**, **Field matching** (all or any of the selected fields), **Fields**, and **Matching options** (case sensitivity and punctuation). You can also choose whether a lead skipped as a duplicate can still go to the **Marketplace** or **Club**: immediately, never, or after a number of days.
+- **Custom** replaces the default with this partner's own **History window**, **Field matching** (all or any of the selected fields), **Fields**, and **Matching options** (case sensitivity and punctuation). You can also choose whether a lead skipped as a duplicate can still go to the **Marketplace** or **Club** immediately, never, or after a number of days.
 
 See [Duplicate detection](/features/duplicate-detection) for how duplicate checks work across Juiced.
 
@@ -64,7 +66,7 @@ See [Duplicate detection](/features/duplicate-detection) for how duplicate check
 
 Lead quotas cap what you send to a partner. Set daily, weekly, and monthly limits for lead count and revenue; leave any field blank for no limit. Limits use totals so far, so the final lead can take the revenue total over the limit.
 
-Once a partner reaches any quota, Juiced stops sending them new pings and posts: they drop out of highest-price and round-robin selection, and the limit is checked again right before each outbound ping or post. Leads keep flowing to other eligible partners, the marketplace, or fallback stages. Quotas reset each day, week, or month.
+Once a partner reaches any quota, Juiced stops sending them new pings and posts. They drop out of highest-price and round-robin selection, and the limit is checked again right before each outbound ping or post. Leads keep flowing to other eligible partners, the marketplace, or fallback stages. Quotas reset each day, week, or month.
 
 ## The partner record
 
@@ -75,22 +77,22 @@ Open a partner to see its record. The tabs across the top are **Overview**, **Pa
   <img className="hidden dark:block" src="/images/tenant/partners/partner-overview-dark.webp" alt="Partner overview with Pings, Posts, Leads, and Payout stats, a Ping/Post table listing a ping and a post endpoint, and a Details panel with Offer Penalty, Show Returned Status, Exclude Returned from Payout, and Created" />
 </Frame>
 
-The **Overview** shows **Pings**, **Posts**, **Leads**, and **Payout** for the timeframe you pick in the header, plus a **Details** panel with the partner's settings and any quotas. Below that are three tabs:
+The **Overview** shows **Pings**, **Posts**, **Leads**, and **Payout** for the timeframe you pick in the header, plus a **Details** panel with the partner's settings and any quotas. Below that are three tabs.
 
-- **Ping/Post**: the partner's ping and post endpoints. See [Ping/post endpoints](#pingpost-endpoints).
-- **Leads**: leads assigned to this partner, with **Status**, **Payout**, and **Date**. Filter by status.
-- **Outgoing logs**: every ping and post attempt sent to this partner, with its result and price. Click a row for the full request and response.
+- **Ping/Post** lists the partner's ping and post endpoints. See [Ping/post endpoints](#pingpost-endpoints).
+- **Leads** lists leads assigned to this partner, with **Status**, **Payout**, and **Date**. Filter by status.
+- **Outgoing logs** lists every ping and post attempt sent to this partner, with its result and price. Click a row for the full request and response.
 
 ### Archiving and deleting
 
-From the page header:
+Both of these actions live in the page header.
 
 - **Archive** removes the partner from active lists and lead distribution. Existing leads keep the partner's name for reference, and you can bring it back with **Restore**.
-- **Delete permanently** is only offered for archived partners. It can't be undone: the partner is removed, detached from its leads and invites, and its offers are deleted.
+- **Delete permanently** is only offered for archived partners. It can't be undone. The partner is removed, detached from its leads and invites, and its offers are deleted.
 
 ## Ping/post endpoints
 
-To sell leads to a partner, give them a ping, a post, or both:
+To sell leads to a partner, give them a ping, a post, or both.
 
 - A **ping** runs before a lead is posted. It asks the partner for a price and whether they want the lead.
 - A **post** delivers the lead to the partner once they win it.
@@ -165,16 +167,16 @@ Partners can have their own users who sign in to the partner portal to see their
   <img className="hidden dark:block" src="/images/tenant/partners/partner-users-dark.webp" alt="Partner Users tab listing partner users with email, authentication method, and joined date, and an Invite user button" />
 </Frame>
 
-- **Invite user**: enter an email and send. The invitee gets an email to accept and create their account, and joins as a partner admin with full access to the partner account.
+- **Invite user** sends an invite to the email you enter. The invitee gets an email to accept and create their account, and joins as a partner admin with full access to the partner account.
 - **Pending** invites show in the same list with **Resend invite** and **Revoke invite**. A revoked invite stops working immediately.
 - **Reset 2FA and passkeys** helps a partner user who's lost their authenticator app or passkey.
 - **Remove** takes away their access right away.
 
 ## Related guides
 
-<Card title="Adding a partner" icon="handshake" href="/guides/adding-a-partner" horizontal>
+<Card title="Adding a partner" icon={<HugeIcon name="handshake" card />} href="/guides/adding-a-partner" horizontal>
   Create a partner record, attach sources, define eligibility, and invite their team.
 </Card>
-<Card title="Setting up partner ping/post" icon="arrow-right-left" href="/guides/setting-up-partner-ping-post" horizontal>
+<Card title="Setting up partner ping/post" icon={<HugeIcon name="radar-01" card />} href="/guides/setting-up-partner-ping-post" horizontal>
   Configure a buyer's ping and post endpoints, test them, and watch the deliveries.
 </Card>

@@ -1,15 +1,17 @@
 ---
 title: Transactions
-description: Every wallet movement—deposits, charges, and the events that create them.
+description: Every wallet movement, including deposits, charges, and the events that create them.
 ---
+
+import { HugeIcon } from '/snippets/hugeicon.jsx';
 
 A transaction is any movement of funds in or out of a customer's wallet. Every lead assignment, deposit, refund, buy-order hold, and manual adjustment produces a transaction record. Collectively, a customer's transactions are the ledger behind their current wallet balance.
 
 ## Where transactions appear
 
-- **Customer portal → Billing → Transactions**: what customers see for their own account ([Billing](/customer-portal/billing))
-- **Tenant panel → Customers → [Customer] → Transactions tab**: full transaction history for any customer
-- **Webhooks**: the [Transaction Updated](/features/webhooks) webhook event fires whenever a transaction is created or modified
+- **Customer portal → Billing → Transactions** is what customers see for their own account ([Billing](/customer-portal/billing)).
+- **Tenant panel → Customers → [Customer] → Transactions tab** shows the full transaction history for any customer.
+- In **Webhooks**, the [Transaction Updated](/features/webhooks) webhook event fires whenever a transaction is created or modified.
 
 ## The Transactions tab
 
@@ -20,18 +22,20 @@ Open a customer and switch to the **Transactions** tab. Totals across the top sh
   <img className="hidden dark:block" src="/images/tenant/customers/customer-transactions-dark.webp" alt="Customer Transactions tab with Transactions, Deposits, Withdrawals, and Net totals above a table of transactions with date, amount, event, and transaction ID" />
 </Frame>
 
-Each row shows:
+Each row shows these columns.
 
-- **Date**: how long ago the transaction happened (hover for the exact time)
-- **Amount**: green for money in, red for money out
-- **Event**: why the transaction was created, linked to the related record where there is one. A "Lead Assigned" transaction, for example, links to the lead it paid for.
-- **Transaction ID**: the unique ID, handy when reconciling with Stripe or your own books
+| Column | What it shows |
+|--------|---------------|
+| **Date** | How long ago the transaction happened (hover for the exact time) |
+| **Amount** | Green for money in, red for money out |
+| **Event** | Why the transaction was created, linked to the related record where there is one. A "Lead Assigned" transaction, for example, links to the lead it paid for. |
+| **Transaction ID** | The unique ID, handy when reconciling with Stripe or your own books |
 
 Search matches the transaction ID. Use **Filters** to narrow by **Type** (Deposit or Withdraw) and **Event**, and sort by date or amount. The footer shows the **Filtered total**.
 
 ## Event types
 
-Every transaction carries an event type describing why it was created:
+Every transaction carries an event type describing why it was created.
 
 | Event | Direction | What it means |
 |-------|-----------|---------------|
@@ -41,27 +45,27 @@ Every transaction carries an event type describing why it was created:
 | **Auto Recharge** | Deposit | The customer's wallet dropped below their auto-recharge threshold and was automatically topped up from their default payment method. |
 | **Lead Assigned** | Charge | The customer won a lead and was charged for it. |
 | **Lead Returned** | Credit | A previously assigned lead was returned, and the charge was refunded to the wallet. |
-| **Placed Buy Order** | Hold | A marketplace buy order reserved funds from the wallet. (Not a real charge—the money is held pending the auction outcome.) |
-| **Canceled Buy Order** | Release | The customer canceled an active buy order; held funds are released back to the wallet. |
-| **Released Buy Order** | Release | A buy order expired or was superseded (e.g., someone else won the lead first); held funds are released. |
+| **Placed Buy Order** | Hold | A marketplace buy order reserved funds from the wallet. (Not a real charge, since the money is held pending the auction outcome.) |
+| **Canceled Buy Order** | Release | The customer canceled an active buy order, so held funds are released back to the wallet. |
+| **Released Buy Order** | Release | A buy order expired or was superseded (e.g., someone else won the lead first), so held funds are released. |
 | **Checkout Bonus** | Deposit | Bonus credit added when the customer bought a product with a bonus through one of your [checkout pages](/features/checkout-pages). |
 
 ## Holds vs. charges
 
-Buy orders are a special case. When a customer places a buy order, funds are **held** rather than charged. Held funds still appear as transactions in the ledger—that's how the wallet balance reflects reserved amounts correctly—but no money has actually moved to you until the buy order executes. If it never executes (the lead sells to someone else, the customer cancels, the auction expires), a matching Canceled or Released Buy Order transaction reverses the hold.
+Buy orders are a special case. When a customer places a buy order, funds are **held** rather than charged. Held funds still appear as transactions in the ledger (that's how the wallet balance reflects reserved amounts correctly), but no money has actually moved to you until the buy order executes. If it never executes (the lead sells to someone else, the customer cancels, the auction expires), a matching Canceled or Released Buy Order transaction reverses the hold.
 
 <Note>
-Because holds use the same wallet mechanism as charges, a customer with $500 available and a $50 buy order in place will show a $450 spendable balance even though the hold hasn't become a charge yet. The transaction list makes the distinction visible.
+Because holds use the same wallet mechanism as charges, a customer with \$500 available and a \$50 buy order in place will show a \$450 spendable balance even though the hold hasn't become a charge yet. The transaction list makes the distinction visible.
 </Note>
 
 ## Adjustments and reconciliation
 
-**Funds Added By Tenant** and **Funds Subtracted By Tenant** exist for the moments when real life and the system get out of sync—issuing a credit to a customer for a quality complaint, correcting a mistake, or reconciling with an external billing system. Both accept a description so your team can record the *why* alongside the *what*; descriptions are visible to the customer in their portal.
+**Funds Added By Tenant** and **Funds Subtracted By Tenant** exist for the moments when real life and the system get out of sync, such as issuing a credit to a customer for a quality complaint, correcting a mistake, or reconciling with an external billing system. Both accept a description so your team can record the *why* alongside the *what*. Descriptions are visible to the customer in their portal.
 
-These adjustments don't charge a payment method—they only move virtual wallet funds.
+These adjustments don't charge a payment method. They only move virtual wallet funds.
 
 ## Related guides
 
-<Card title="Managing customer finances" icon="wallet" href="/guides/managing-customer-finances" horizontal>
+<Card title="Managing customer finances" icon={<HugeIcon name="wallet-01" card />} href="/guides/managing-customer-finances" horizontal>
   Fund a wallet, remove funds, and review every transaction in the ledger.
 </Card>

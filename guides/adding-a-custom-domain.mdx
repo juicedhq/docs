@@ -3,7 +3,7 @@ title: Adding a Custom Domain
 description: Serve your customer portal from your own domain, like leads.yourcompany.com, with the DNS records and validation steps to get there.
 ---
 
-By default, customers reach your portal on a Juiced subdomain. A custom domain puts it on your own, like `leads.yourcompany.com/app`: the last mile of making the portal feel like your product. This guide covers entering the domain, adding the DNS records, and checking validation. For the full settings page, see [Domains & Links](/features/domains).
+By default, customers reach your portal on a Juiced subdomain. A custom domain puts it on your own, like `leads.yourcompany.com/app`, which is the last mile of making the portal feel like your product. This guide covers entering the domain, adding the DNS records, and checking validation. For the full settings page, see [Domains & Links](/features/domains).
 
 ## Prerequisites
 
@@ -12,13 +12,13 @@ By default, customers reach your portal on a Juiced subdomain. A custom domain p
 - A domain where you can add CNAME records at your DNS provider (Cloudflare, Route 53, Namecheap, GoDaddy, and so on).
 - A subdomain picked out, such as `leads`, `buyers`, or `members`.
 
-## Step 1: Open Domains & Links
+## 1. Open Domains & Links
 
 Click the gear in the rail and choose **Domains & Links** under **Account**. Scroll to **Custom domain**.
 
 If your plan doesn't include custom domains, you'll see **Custom Domains: Higher Plan Required** with an **Upgrade your plan** link instead of the field.
 
-## Step 2: Enter your domain
+## 2. Enter your domain
 
 In the **Custom domain** field, enter the full hostname, like `leads.yourcompany.com`. Leave off `https://`. Click **Update custom domain** and confirm.
 
@@ -27,11 +27,11 @@ In the **Custom domain** field, enter the full hostname, like `leads.yourcompany
   <img className="hidden dark:block" src="/images/tenant/settings/domains-dark.webp" alt="Domains & Links settings page with the Public Marketplace switch, the Customer Portal Entry Point select, and a verified custom domain with two validated CNAME records" />
 </Frame>
 
-## Step 3: Add the DNS records
+## 3. Add the DNS records
 
-Juiced shows the records to add under **Domain Validation**. There are two, both **CNAME** records: one points your domain at Juiced, and the other proves you own it so Juiced can issue an SSL certificate. Each card lists the **Type**, **Name**, and **Value**.
+Juiced shows the records to add under **Domain Validation**. There are two, both **CNAME** records. One points your domain at Juiced, and the other proves you own it so Juiced can issue an SSL certificate. Each card lists the **Type**, **Name**, and **Value**.
 
-At your DNS provider:
+Then head to your DNS provider.
 
 1. Open the DNS settings for your domain.
 2. Add a CNAME record for each card, copying the **Name** and **Value** exactly.
@@ -46,23 +46,23 @@ DNS providers differ on the **Name** field. Some want the full name (`leads.your
 On Cloudflare, set both records to **DNS only** (gray cloud), not proxied. Proxying gets in the way of validation and the SSL certificate.
 </Warning>
 
-## Step 4: Check validation
+## 4. Check validation
 
 Back in Juiced, each record shows **Validated**, **Pending**, or **Incomplete**. Click **Check again** to refresh.
 
 DNS changes usually show up within minutes, though they can take up to 24 hours. Once both records are validated, Juiced issues an SSL certificate automatically and the page confirms your domain is verified and active.
 
-## Step 5: Try it
+## 5. Try it
 
 Open `https://leads.yourcompany.com/app` (with your domain) in a new tab. You should see your portal's login page with your branding. Existing customers can sign in there straight away with their usual login.
 
-## Step 6: Update your links
+## 6. Update your links
 
-Point customer-facing links at the new domain:
+Point customer-facing links at the new domain.
 
 - The login or "Customer portal" button on your website
 - Help center articles and onboarding emails you send yourself
-- Your registration link, if you share it in ads: `https://leads.yourcompany.com/app/register`
+- Your registration link, if you share it in ads (`https://leads.yourcompany.com/app/register`)
 
 Links to your [checkout pages](/features/checkout-pages) switch to the custom domain on their own, and a verified custom domain is what lets your team [connect an AI assistant](/guides/connecting-an-ai-assistant).
 

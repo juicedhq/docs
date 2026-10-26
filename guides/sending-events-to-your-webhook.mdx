@@ -3,7 +3,7 @@ title: Sending Events to Your Webhook
 description: Create a webhook, pick an event, shape the payload, test the delivery, and keep an eye on it afterward.
 ---
 
-Webhooks push events from Juiced into the rest of your stack: CRMs, data warehouses, chat alerts, internal dashboards. When a lead is assigned, a transaction posts, or a customer signs up, Juiced sends an HTTP request to your URL with the payload you shaped. This guide walks through one from start to finish.
+Webhooks push events from Juiced into the rest of your stack, like CRMs, data warehouses, chat alerts, and internal dashboards. When a lead is assigned, a transaction posts, or a customer signs up, Juiced sends an HTTP request to your URL with the payload you shaped. This guide walks through one from start to finish.
 
 For the full list of events, payload fields, and retry behavior, see the [Webhooks feature page](/features/webhooks).
 
@@ -13,7 +13,7 @@ For the full list of events, payload fields, and retry behavior, see the [Webhoo
 - A destination URL on the public internet. If you don't have a real one yet, [webhook.site](https://webhook.site) gives you a throwaway URL to test against.
 - Any credentials your receiver requires (a username and password, a bearer token, or custom headers).
 
-## Step 1: Open the Webhooks page
+## 1. Open the Webhooks page
 
 Open **Webhooks** under **Integrations** in the sidebar. You'll see every webhook you've created, with its **Event**, **URL**, and whether it's **Active**.
 
@@ -24,27 +24,27 @@ Open **Webhooks** under **Integrations** in the sidebar. You'll see every webhoo
 
 Click **New webhook**.
 
-## Step 2: Pick the event and URL
+## 2. Pick the event and URL
 
-In the **Webhook** section:
+Start in the **Webhook** section.
 
 | Field | What it does |
 |-------|--------------|
 | **Event** | What triggers the webhook. Each webhook listens for one event. |
-| **URL** | Where the request goes, such as `https://api.yourcompany.com/webhooks/juiced`. It must be a public address; internal and private addresses are rejected. |
+| **URL** | Where the request goes, such as `https://api.yourcompany.com/webhooks/juiced`. It must be a public address. Internal and private addresses are rejected. |
 
-Some common picks:
+Here are some common picks.
 
-- **Lead Assigned**: push sold leads into your CRM.
-- **Lead Not Assigned**: ping your team when a lead finishes distribution unsold.
-- **Transaction Updated**: mirror wallet activity into your accounting tools.
-- **Customer Created**: start an onboarding sequence for each new customer.
+- **Lead Assigned** pushes sold leads into your CRM.
+- **Lead Not Assigned** pings your team when a lead finishes distribution unsold.
+- **Transaction Updated** mirrors wallet activity into your accounting tools.
+- **Customer Created** starts an onboarding sequence for each new customer.
 
 Need the same event in two places, with different payloads? Create two webhooks. Each one fires on its own.
 
-## Step 3: Check the advanced settings
+## 3. Check the advanced settings
 
-**Advanced settings** is collapsed, with a summary of the current choices (for example "No auth", "POST", "JSON", "10s timeout", "No headers"). The defaults suit most CRMs. Expand it if your receiver needs something different:
+**Advanced settings** is collapsed, with a summary of the current choices (for example "No auth", "POST", "JSON", "10s timeout", "No headers"). The defaults suit most CRMs. Expand it if your receiver needs something different.
 
 | Setting | What it does |
 |---------|--------------|
@@ -58,9 +58,9 @@ Need the same event in two places, with different payloads? Create two webhooks.
 Juiced doesn't sign webhook requests. If your receiver needs to verify where a request came from, use Basic Auth, a bearer token, or a secret header it can check.
 </Warning>
 
-## Step 4: Shape the payload
+## 4. Shape the payload
 
-In the **Payload** section, choose one:
+In the **Payload** section, choose one of two options.
 
 - **Default payload** sends every field available for the event in a standard shape. For lead events, that includes the lead's deliverable fields, and new fields are added automatically.
 - **Custom payload** lets you choose fields, rename keys, add static values, or paste your own JSON shape.
@@ -70,9 +70,9 @@ In the **Payload** section, choose one:
   <img className="hidden dark:block" src="/images/tenant/integrations/webhook-create-dark.webp" alt="New webhook form with Event set to Customer Created, a URL field, collapsed Advanced settings, and Default payload selected over Custom payload" />
 </Frame>
 
-With a custom payload, each row has a **Key** and a value. Use dot notation in the key, like `contact.email`, to nest it. The value can be static text, a field you insert from the picker, or a mix of both, and fields can take transformers to reformat them. **Add row** adds another; on lead events, **Add all lead fields** adds a single row that sends every deliverable field.
+With a custom payload, each row has a **Key** and a value. Use dot notation in the key, like `contact.email`, to nest it. The value can be static text, a field you insert from the picker, or a mix of both, and fields can take transformers to reformat them. **Add row** adds another. On lead events, **Add all lead fields** adds a single row that sends every deliverable field.
 
-Two shortcuts save typing:
+Two shortcuts save typing.
 
 - **Load default mapping** replaces the rows with the default payload, so you can delete or rename from there.
 - **Paste JSON** turns a sample payload, such as one from your receiver's docs, into rows. Values that match an available field, like `{{ lead.email }}`, become linked fields.
@@ -83,13 +83,13 @@ When in doubt, start with **Load default mapping**. You get every field for the 
 
 See [Available fields](/features/webhooks#available-fields) for what each event can include.
 
-## Step 5: Create and test
+## 5. Create and test
 
-Click **Create & continue to testing**. The webhook is active right away, and its edit page opens with a **Testing** section. Choose what to send:
+Click **Create & continue to testing**. The webhook is active right away, and its edit page opens with a **Testing** section. Choose what to send.
 
-- **Test with a real lead**: search by ID, name, email, or phone and send exactly what that lead would produce.
-- **Generate sample data**: realistic but fake values for every mapped field.
-- **Add test data manually**: type in the values yourself.
+- **Test with a real lead** searches by ID, name, email, or phone and sends exactly what that lead would produce.
+- **Generate sample data** fills every mapped field with realistic but fake values.
+- **Add test data manually** lets you type in the values yourself.
 
 <Frame>
   <img className="block dark:hidden" src="/images/tenant/integrations/webhook-edit-light.webp" alt="Edit page for a Lead Assigned webhook with Delete and Overview buttons, the webhook settings and payload, and a Testing section offering Test with a real lead, Generate sample data, and Add test data manually" />
@@ -98,10 +98,10 @@ Click **Create & continue to testing**. The webhook is active right away, and it
 
 Click **Run Webhook Test**. The **Request** (method, URL, headers, and body) and the **Response** (status code, headers, and body) appear below.
 
-- **2xx**: you're wired up.
-- **4xx**: check the URL and credentials.
-- **5xx**: the receiver had a problem. Check its logs.
-- **Timeout**: the receiver is slow. Raise the **Timeout** in advanced settings.
+- A **2xx** means you're wired up.
+- A **4xx** means you should check the URL and credentials.
+- A **5xx** means the receiver had a problem, so check its logs.
+- A **Timeout** means the receiver is slow, so raise the **Timeout** in advanced settings.
 
 <Warning>
 Tests go to your real endpoint. Make sure your receiver can handle a test record, or point the webhook at a staging receiver while you test.
@@ -109,13 +109,13 @@ Tests go to your real endpoint. Make sure your receiver can handle a test record
 
 If you change anything on the edit page, click **Save changes** on the save bar.
 
-## Step 6: Verify with a real event
+## 6. Verify with a real event
 
-Trigger the event for real and watch your receiver:
+Trigger the event for real and watch your receiver.
 
-- **Lead Created** or **Lead Assigned**: send a lead (see [Sending leads to Juiced](/guides/sending-leads-to-juiced)).
-- **Customer Created**: create a customer.
-- **Transaction Updated**: add funds to a customer's wallet (see [Managing customer finances](/guides/managing-customer-finances)).
+- For **Lead Created** or **Lead Assigned**, send a lead (see [Sending leads to Juiced](/guides/sending-leads-to-juiced)).
+- For **Customer Created**, create a customer.
+- For **Transaction Updated**, add funds to a customer's wallet (see [Managing customer finances](/guides/managing-customer-finances)).
 
 Then click **Overview** on the edit page, or the webhook's row in the list, to open its deliveries.
 
@@ -126,7 +126,7 @@ Then click **Overview** on the edit page, or the webhook's row in the list, to o
 
 The stats across the top show **Total deliveries**, **Success rate**, **Failed**, **Average duration**, and **Last delivery**. Real deliveries are under **Live**, and your test sends are under **Tests**. Click any delivery to see the request Juiced sent and the response it got back.
 
-If nothing arrives:
+If nothing arrives, work through these checks.
 
 - Check the webhook is **Active**, not **Paused**.
 - Check the URL is reachable from the public internet.
@@ -134,21 +134,21 @@ If nothing arrives:
 
 ## Managing webhooks over time
 
-- **Pause or resume**: use the pause button on the webhook's row, or **Pause webhook** (or **Enable webhook**) on its deliveries page. The settings stay put while it's paused.
-- **Edit**: click the edit button on the row, or **Edit** on the deliveries page. Payload changes apply to the next delivery.
-- **Redeliver**: for lead events, open a delivery and click **Redeliver** to send that lead again with the webhook's current settings. Handy once a broken receiver is fixed.
-- **Delete**: click the delete button on the row, or **Delete** on the edit page.
+- **Pause or resume** with the pause button on the webhook's row, or with **Pause webhook** (or **Enable webhook**) on its deliveries page. The settings stay put while it's paused.
+- **Edit** with the edit button on the row, or with **Edit** on the deliveries page. Payload changes apply to the next delivery.
+- **Redeliver** a lead event by opening a delivery and clicking **Redeliver**, which sends that lead again with the webhook's current settings. It's handy once a broken receiver is fixed.
+- **Delete** with the delete button on the row, or with **Delete** on the edit page.
 
 ## Customer webhooks
 
-Customer webhooks are a separate flow: they send each lead assigned to one customer to that customer's own endpoint. You can set one up from the customer's **Webhooks** tab (see [Customers](/features/customers#webhooks)), and customers can manage their own in their portal (see [Webhooks in the customer portal](/customer-portal/webhooks)). The form, payload options, testing, and deliveries work the same way as above.
+Customer webhooks are a separate flow that sends each lead assigned to one customer to that customer's own endpoint. You can set one up from the customer's **Webhooks** tab (see [Customers](/features/customers#webhooks)), and customers can manage their own in their portal (see [Webhooks in the customer portal](/customer-portal/webhooks)). The form, payload options, testing, and deliveries work the same way as above.
 
 ## What happens next
 
-With webhooks flowing:
+With webhooks flowing, they cover a few common jobs.
 
-- **CRM sync**: Lead Assigned webhooks are the usual way to get sold leads into Salesforce, HubSpot, or your own CRM.
-- **Finance**: Transaction Updated webhooks mirror wallet activity into your accounting tools or data warehouse.
-- **Alerts**: send Lead Not Assigned to a chat bot so your team hears when leads go unsold.
+- For **CRM sync**, Lead Assigned webhooks are the usual way to get sold leads into Salesforce, HubSpot, or your own CRM.
+- For **finance**, Transaction Updated webhooks mirror wallet activity into your accounting tools or data warehouse.
+- For **alerts**, send Lead Not Assigned to a chat bot so your team hears when leads go unsold.
 
 Every event that matters, squeezed straight into the tools you already use.

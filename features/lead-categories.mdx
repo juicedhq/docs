@@ -3,6 +3,8 @@ title: Lead Categories
 description: Schemas that define the structure and required fields for your leads.
 ---
 
+import { HugeIcon } from '/snippets/hugeicon.jsx';
+
 Lead categories and [lead types](/features/lead-types) are classification concepts unique to Juiced. Together, they help you categorize leads based on who they are and what they're worth.
 
 - **Lead category** represents who the person is and what they want to do
@@ -19,7 +21,7 @@ You'll find them under **Ingest → Lead Categories** in the sidebar. The list s
 
 ## Start from a template or from scratch
 
-Click **New lead category**. When templates are available, you'll choose **Start from a template** to begin with a market-specific field set, or **Start from scratch** to name the category and add your own fields. The template list is searchable and shows how many fields each template adds. Templates are a starting point: review the included fields, required settings, and deliverable settings before you connect a source.
+Click **New lead category**. When templates are available, you'll choose **Start from a template** to begin with a market-specific field set, or **Start from scratch** to name the category and add your own fields. The template list is searchable and shows how many fields each template adds. Templates are a starting point, so review the included fields, required settings, and deliverable settings before you connect a source.
 
 Creating a category from a template copies its fields into the new category. Later template changes do not rewrite categories you already created, so your existing schemas stay yours to control.
 
@@ -27,11 +29,11 @@ Every new category, template or not, also gets a [fallback lead type](/features/
 
 ## The lead category page
 
-Click a category to open it. The top of the page shows **Leads received**, **Leads assigned**, and **Revenue** for the selected timeframe (the last 30 days by default), each compared with the previous period. Below that, three tabs:
+Click a category to open it. The top of the page shows **Leads received**, **Leads assigned**, and **Revenue** for the selected timeframe (the last 30 days by default), each compared with the previous period. Below that are three tabs.
 
-- **Lead Types** — The category's lead types, with the fallback marked.
-- **Sources** — The sources that send leads into this category.
-- **Fields** — The category's schema. This is where you add and configure fields.
+- **Lead Types** lists the category's lead types, with the fallback marked.
+- **Sources** lists the sources that send leads into this category.
+- **Fields** holds the category's schema. This is where you add and configure fields.
 
 <Frame>
   <img className="block dark:hidden" src="/images/tenant/ingest/lead-category-detail-light.webp" alt="Lead category page with Leads received, Leads assigned, and Revenue stats, Lead Types, Sources, and Fields tabs, and a Details sidebar" />
@@ -42,7 +44,7 @@ Click a category to open it. The top of the page shows **Leads received**, **Lea
 
 ## Basic fields
 
-Every lead category comes with a set of basic fields automatically attached when you create it:
+Every lead category comes with a set of basic fields automatically attached when you create it.
 
 - First name
 - Last name
@@ -55,11 +57,11 @@ Every lead category comes with a set of basic fields automatically attached when
 - ZIP
 - County
 
-They're marked with a **System** badge in the Fields tab. You can't rename or remove them, but you can configure their properties and add custom fields on top of them.
+They're marked with a <span className="tone-badge tone-neutral">System</span> badge in the Fields tab. You can't rename or remove them, but you can configure their properties and add custom fields on top of them.
 
 ## Field properties
 
-Each field has four important properties that control how it behaves during the lead lifecycle:
+Each field has four important properties that control how it behaves during the lead lifecycle.
 
 ### Required for post
 
@@ -86,12 +88,12 @@ Hidden fields don't appear on the API specification page you share with your sou
 You can flip any of these four properties straight from the switches in the **Fields** table, without opening the field.
 
 <Note>
-The entire system is geographically based, so ZIP code is always required. If you're generating leads at a state or national level only, you can pre-fill a valid ZIP code within the target state—or any valid US postal code for national campaigns.
+The entire system is geographically based, so ZIP code is always required. If you're generating leads at a state or national level only, you can pre-fill a valid ZIP code within the target state, or any valid US postal code for national campaigns.
 </Note>
 
 ## Creating custom fields
 
-When creating a new field, you'll need to provide:
+When creating a new field, you'll provide the following.
 
 | Property | Required | Description |
 |----------|----------|-------------|
@@ -106,7 +108,7 @@ When creating a new field, you'll need to provide:
 
 ## Field types
 
-Field types determine what kind of data a field accepts and how it's validated. Choose the type that matches your data format—the system will reject values that don't match.
+Field types determine what kind of data a field accepts and how it's validated. Choose the type that matches your data format, because the system will reject values that don't match.
 
 ### Text and numeric
 
@@ -189,6 +191,6 @@ When using `list-of-values`, you'll define the allowed options as a comma-separa
 
 ## Related guides
 
-<Card title="Adding fields to a lead category" icon="list-plus" href="/guides/adding-fields-to-a-lead-category" horizontal>
+<Card title="Adding fields to a lead category" icon={<HugeIcon name="folder-tree" card />} href="/guides/adding-fields-to-a-lead-category" horizontal>
   Extend a category's schema with custom fields beyond the basics.
 </Card>

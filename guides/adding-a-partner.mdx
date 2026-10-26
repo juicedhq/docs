@@ -3,16 +3,16 @@ title: Adding a Partner
 description: Create a partner record, attach their sources, set which leads they can take, and invite their team to the partner portal.
 ---
 
-Partners are the outside businesses you trade leads with: affiliates and vendors who *send* you leads through their sources, and buyers you *sell* to by ping/post. This guide walks through setting one up from scratch. For everything the partner record can do, see [Partners](/features/partners).
+Partners are the outside businesses you trade leads with, like affiliates and vendors who *send* you leads through their sources, and buyers you *sell* to by ping/post. This guide walks through setting one up from scratch. For everything the partner record can do, see [Partners](/features/partners).
 
 ## Prerequisites
 
 - The **Admin** [role](/features/roles). Other roles don't see **Partners** in the sidebar.
-- For a supplier: at least one [source](/features/sources) to attach.
-- For a buyer: their ping and post specs (URLs, authentication, payload shape, and what their responses look like).
+- For a supplier, at least one [source](/features/sources) to attach.
+- For a buyer, their ping and post specs (URLs, authentication, payload shape, and what their responses look like).
 - The email addresses of the partner's people who'll sign in.
 
-## Step 1: Create the partner
+## 1. Create the partner
 
 Click **Partners** in the sidebar, then **New partner**.
 
@@ -30,7 +30,7 @@ Click **Partners** in the sidebar, then **New partner**.
 
 You land on the partner's record, with tabs for **Overview**, **Payouts**, **Lead Eligibility**, **Sources**, and **Users**.
 
-## Step 2: Assign their sources
+## 2. Assign their sources
 
 If the partner sends you leads, attach the sources they post through so their portal shows those leads.
 
@@ -44,17 +44,17 @@ Assignment is retroactive. If the source already has leads, Juiced warns you tha
 
 To move a source to a different partner, use **Unassign** on its row first.
 
-## Step 3: Set lead eligibility (optional)
+## 3. Set lead eligibility (optional)
 
 If you'll sell leads to this partner, decide which ones they can receive. Open the **Lead Eligibility** tab, build condition groups from lead fields, and click **Save conditions**.
 
 With no conditions, the partner is eligible for every lead. Eligibility applies wherever the partner can compete, so use it for standing rules like "only auto insurance leads". Routing order belongs in your [distribution stages](/features/distribution).
 
-## Step 4: Connect their ping and post (buyers only)
+## 4. Connect their ping and post (buyers only)
 
 For a partner who buys leads, stay on the **Overview** tab, open **Ping/Post**, and click **Configure Ping** and **Configure Post**. Map the payload, tell Juiced how to read the response, and run a test before going live. [Setting up partner ping/post](/guides/setting-up-partner-ping-post) walks through it step by step.
 
-## Step 5: Invite the partner's team
+## 5. Invite the partner's team
 
 1. Open the **Users** tab and click **Invite user**.
 2. Enter their **Email** and send it.
@@ -63,15 +63,19 @@ The invitee gets an email to accept and create their account, and joins as a par
 
 Once they accept, they appear in the same list. **Remove** takes their access away right away, and **Reset 2FA and passkeys** helps someone who's lost their authenticator app or passkey.
 
-## Step 6: Check the partner portal
+## 6. Check the partner portal
 
 Partner users sign in at `/partners/login` on your Juiced subdomain or [custom domain](/guides/adding-a-custom-domain). Their portal covers their dashboard, sources (with integration details for posting leads), pings, posts, leads, and logs, plus settings for their profile and password.
 
 If a partner can't see leads they expect, check that their sources are assigned (Step 2).
 
-## Step 7: Send them leads (optional)
+## 7. Send them leads (optional)
 
-To route leads to a buyer partner, turn on partners in a [distribution stage](/features/distribution): **Enable Partners** in the stage's partner settings, then include all partners or just the ones you choose. Lead quotas, eligibility, and duplicate checks from the earlier steps all apply on top.
+To route leads to a buyer partner, turn on partners in a [distribution stage](/features/distribution). Switch on **Enable Partners** in the stage's partner settings, then include all partners or just the ones you choose. Lead quotas, eligibility, and duplicate checks from the earlier steps all apply on top.
+
+<Tip>
+  Looking for partners to buy or supply leads? The [Hybrid Agency Mastermind](https://www.skool.com/hybrid-agency-mastermind) includes a private buyer and seller network.
+</Tip>
 
 ## Later changes
 

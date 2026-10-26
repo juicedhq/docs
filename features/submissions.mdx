@@ -7,7 +7,7 @@ A submission (shown in the panel as a **post**) is the exact payload a source se
 
 ## Why submissions exist
 
-Leads are the cleaned, validated, categorized result of a post. Submissions are the original data. They're useful when:
+Leads are the cleaned, validated, categorized result of a post. Submissions are the original data. They're useful in cases like these.
 
 - A source is reporting that a lead wasn't created, and you need to see what they actually sent.
 - Validation is rejecting leads and you need the original payload plus the exact validation errors.
@@ -17,19 +17,19 @@ Every lead that came in through the API has one submission behind it. Rejected s
 
 ## What a submission stores
 
-- **Source** — Which source posted the data.
-- **Payload** — The request body as received, preserved as-is, even for fields that don't map to anything on your lead category.
-- **Status** — **Pending** (briefly, while processing), **Accepted** (became a lead), or **Rejected** (failed validation).
-- **Validation errors** — For rejected posts, the field-by-field errors returned to the caller.
-- **Response** — What Juiced sent back, with the response code and how long it took.
-- **Mode** — Live, or Test when the post came through a [test-mode source](/features/sources#test-mode).
+- **Source** is the source that posted the data.
+- **Payload** is the request body as received, preserved as-is, even for fields that don't map to anything on your lead category.
+- **Status** is **Pending** (briefly, while processing), **Accepted** (became a lead), or **Rejected** (failed validation).
+- **Validation errors** holds the field-by-field errors returned to the caller for rejected posts.
+- **Response** is what Juiced sent back, with the response code and how long it took.
+- **Mode** is Live, or Test when the post came through a [test-mode source](/features/sources#test-mode).
 
 ## Where to find submissions
 
-There's no separate list of posts. Open one from:
+There's no separate list of posts. You open one from either of two places.
 
-- An [incoming log](/features/logs#incoming-logs): the **Post** link under **Records**, or **View post** on the timeline.
-- A lead's **More actions** menu: **View Post**.
+- In an [incoming log](/features/logs#incoming-logs), click the **Post** link under **Records**, or **View post** on the timeline.
+- In a lead's **More actions** menu, choose **View Post**.
 
 Both open the [post inspector](/features/logs#post-inspector), which shows the request, response, and status side by side.
 

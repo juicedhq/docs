@@ -3,18 +3,18 @@ title: Setting Up the Marketplace
 description: Configure reverse-auction pricing per lead type, add a Marketplace stage to your distribution, and set fallback prices for ping-post sources.
 ---
 
-The marketplace is a reverse auction where unsold leads (and any lead your distribution pipeline decides to list) drop in price over time until a customer buys them. Setting it up takes three passes: auction pricing on each lead type, a Marketplace stage in your distribution, and fallback prices on any source that pings. This guide walks all three.
+The marketplace is a reverse auction where unsold leads (and any lead your distribution pipeline decides to list) drop in price over time until a customer buys them. Setting it up takes three passes, covering auction pricing on each lead type, a Marketplace stage in your distribution, and fallback prices on any source that pings. This guide walks all three.
 
-For the conceptual model — how the floor moves with buy orders, what customers see, the full auction lifecycle — see the [Marketplace feature page](/features/marketplace). For the customer-side buying experience, see the [Marketplace page](/customer-portal/marketplace) in the customer portal reference.
+For the conceptual model (how the floor moves with buy orders, what customers see, the full auction lifecycle), see the [Marketplace feature page](/features/marketplace). For the customer-side buying experience, see the [Marketplace page](/customer-portal/marketplace) in the customer portal reference.
 
 ## Prerequisites
 
 - Admin role access to your tenant.
 - At least one [lead type](/features/lead-types) with active inventory.
 - At least one [source](/features/sources) generating leads for that lead type.
-- A pricing plan — what price should leads start at, where should they floor, and how fast should they drop?
+- A pricing plan. What price should leads start at, where should they floor, and how fast should they drop?
 
-## Step 1: Enable the marketplace per lead type
+## 1. Enable the marketplace per lead type
 
 Each lead type opts in to the marketplace on its own, with its own auction curve.
 
@@ -25,7 +25,7 @@ Open **Lead Types** under **Ingest** in the sidebar, click a lead type, then cli
   <img className="hidden dark:block" src="/images/tenant/ingest/lead-type-marketplace-dark.webp" alt="Lead type Marketplace tab with Enable marketplace on, First Price, Last Price, Increment, and Interval filled in, and a summary sentence describing the auction" />
 </Frame>
 
-Turn on **Enable marketplace**. Four pricing fields appear:
+Turn on **Enable marketplace**. Four pricing fields appear.
 
 | Field | What it does |
 |-------|--------------|
@@ -34,17 +34,17 @@ Turn on **Enable marketplace**. Four pricing fields appear:
 | **Increment** | How much the price drops each tick. E.g., `5` means every interval the price drops &#36;5. |
 | **Interval** | How long between ticks, in minutes. E.g., `120` means a price drop every two hours. |
 
-As you type, a plain-English summary below the fields updates — "Your auction will start at &#36;75.00 and end at &#36;15.00. The price will drop by &#36;5.00 every 120 minutes. The auction will last for a total of 1560 minutes." That's the sanity check that your numbers feel right.
+As you type, a plain-English summary below the fields updates to read something like "Your auction will start at &#36;75.00 and end at &#36;15.00. The price will drop by &#36;5.00 every 120 minutes. The auction will last for a total of 1560 minutes." That's the sanity check that your numbers feel right.
 
 Click **Save changes** on the save bar. Leads of this lead type can now be listed by a Marketplace stage.
 
 <Note>
-Each lead type has its own auction curve. A fresh lead can start high with a steep decline, while an aged lead can start low and floor even lower — tune each independently.
+Each lead type has its own auction curve. A fresh lead can start high with a steep decline, while an aged lead can start low and floor even lower, so tune each independently.
 </Note>
 
-## Step 2: Add a Marketplace stage
+## 2. Add a Marketplace stage
 
-A lead doesn't enter the marketplace just because its lead type allows it — it has to be *routed* there by a **Marketplace** stage in your [distribution stages](/features/distribution).
+A lead doesn't enter the marketplace just because its lead type allows it. It has to be *routed* there by a **Marketplace** stage in your [distribution stages](/features/distribution).
 
 Open **Distribution Stages** in the sidebar. If you don't already have a Marketplace stage, click **New stage**, choose **Marketplace** as the **Method**, and give it a name. Add **Eligibility Conditions** if only some leads should be listed. Click **Create stage**.
 
@@ -53,9 +53,9 @@ Open **Distribution Stages** in the sidebar. If you don't already have a Marketp
   <img className="hidden dark:block" src="/images/tenant/distribution/stage-marketplace-dark.webp" alt="Marketplace stage form with Name, Method set to Marketplace, Description, Paused, a note about fallback prices, and Eligibility Conditions" />
 </Frame>
 
-Order matters: stages run top to bottom, so the usual spot for a Marketplace stage is after your bidding stage (leads nobody bid on get a second chance). If a lead's auction ends unsold, distribution resumes with the stages below it. See [Configuring distribution stages](/guides/configuring-distribution-stages) for ordering and the "fresh, then aged" pattern.
+Order matters. Stages run top to bottom, so the usual spot for a Marketplace stage is after your bidding stage (leads nobody bid on get a second chance). If a lead's auction ends unsold, distribution resumes with the stages below it. See [Configuring distribution stages](/guides/configuring-distribution-stages) for ordering and the "fresh, then aged" pattern.
 
-## Step 3: Set fallback prices on ping-post sources
+## 3. Set fallback prices on ping-post sources
 
 If a source sends [pings](/features/ping-post) before posting, a Marketplace stage can only accept the ping when the source has a **fallback price** for the lead type. The fallback is the price Juiced quotes back in the ping response. Sources that only post leads directly can skip this step.
 
@@ -68,17 +68,17 @@ Open **Sources** under **Ingest**, pick a source, and click the **Pricing** tab.
 
 Got several sources on the same category? **Copy from Source** in the **More actions** menu copies another source's prices without overwriting any you've set. See [Source pricing](/features/sources#source-pricing).
 
-## Step 4: Turn on the public marketplace (optional)
+## 4. Turn on the public marketplace (optional)
 
 Want prospects to browse your inventory before signing up? Click the settings gear in the rail, choose **Domains & Links** under **Account**, and turn on **Enable public marketplace** in the **Public Marketplace** section.
 
 Visitors can then browse live auctions at `/marketplace` on your domain without logging in. Buy buttons are replaced with **Sign up to purchase**, which sends them to registration. The same page lets you choose whether unauthenticated visitors who follow a customer link land on the public marketplace or the sign-in page.
 
 <Tip>
-Turn on the public marketplace when you want it to double as a live shop window for sales — it's usually easier to close prospects who can already see your inventory and pricing.
+Turn on the public marketplace when you want it to double as a live shop window for sales, since it's usually easier to close prospects who can already see your inventory and pricing.
 </Tip>
 
-## Step 5: Verify with a test lead
+## 5. Verify with a test lead
 
 The surest check is a real lead that no bidder will match.
 
@@ -90,29 +90,33 @@ The surest check is a real lead that no bidder will match.
 Test mode's zip `00005` returns a marketplace response without running your stages or starting a real auction. It's handy for an integrator checking response handling, but it won't prove your marketplace setup works.
 </Note>
 
-If a real lead doesn't land on the marketplace:
+If a real lead doesn't land on the marketplace, work through these checks.
 
 - Check the lead type's **Marketplace** tab has **Enable marketplace** on.
 - Check you have a Marketplace stage, it isn't paused, and its eligibility conditions match the lead.
 - For pinged leads, check the source's fallback price is set for that lead type.
 - Open the lead's incoming log (**View Log** on the lead) and read the Marketplace stage's result in the timeline. See [Logs](/features/logs).
 
-## Step 6: Read the marketplace activity (optional)
+## 6. Read the marketplace activity (optional)
 
-Once real leads are flowing:
+Once real leads are flowing, here's what to watch.
 
 - **Customers buy leads** via **Buy now** (instant) or **buy orders** (set a target price; the amount is withdrawn from their wallet right away and the sale fires when the auction price reaches their target). See [the customer marketplace page](/customer-portal/marketplace) for the full buyer walkthrough.
 - **Sold leads** move from the **Marketplace** tab to **Assigned** on the Leads page.
 - **Unsold leads** continue to the next distribution stage. Auctions are kept for 90 days, then pruned.
-- **Wallet transactions** — Each buy is a regular lead charge. Each buy order appears as **Placed Buy Order** when the amount is withdrawn, then comes back as **Canceled Buy Order** (customer cancelled) or **Released Buy Order** (auction ended or the order won). See [Transactions](/features/transactions).
+- In **wallet transactions**, each buy is a regular lead charge. Each buy order appears as **Placed Buy Order** when the amount is withdrawn, then comes back as **Canceled Buy Order** (customer cancelled) or **Released Buy Order** (auction ended or the order won). See [Transactions](/features/transactions).
+
+<Tip>
+  Curious what other operators charge for leads that didn't sell the first time? Ask in [That Agency Group](https://www.skool.com/that-agency-group), our free Skool community.
+</Tip>
 
 ## What happens next
 
-With the marketplace running, the natural follow-ups are:
+With the marketplace running, here are the natural follow-ups.
 
-- **Tune pricing** — Watch which lead types sell fast vs. floor unsold. Drop the First Price on the stale ones, raise the Last Price on the ones selling instantly.
-- **Customize buy order notifications** — Customers with outbid buy orders want to know. The default template usually works; customize it under **Settings → Application → Notification Templates** if you want your own copy. See [Customizing notification templates](/guides/customizing-notification-templates).
-- **Run the marketplace twice** — If you want a fresh pass and an aged pass, put an **Alter Data** stage between two Marketplace stages to switch the lead to an aged lead type. See [Configuring distribution stages](/guides/configuring-distribution-stages).
-- **Promote the public marketplace** — Link your marketing site to `/marketplace` so prospects see live inventory. Pair it with your sign-up call to action.
+- **Tune pricing.** Watch which lead types sell fast vs. floor unsold. Drop the First Price on the stale ones, raise the Last Price on the ones selling instantly.
+- **Customize buy order notifications.** Customers with outbid buy orders want to know. The default template usually works; customize it under **Settings → Application → Notification Templates** if you want your own copy. See [Customizing notification templates](/guides/customizing-notification-templates).
+- **Run the marketplace twice.** If you want a fresh pass and an aged pass, put an **Alter Data** stage between two Marketplace stages to switch the lead to an aged lead type. See [Configuring distribution stages](/guides/configuring-distribution-stages).
+- **Promote the public marketplace.** Link your marketing site to `/marketplace` so prospects see live inventory. Pair it with your sign-up call to action.
 
-The marketplace is the workhorse of lead sell-through — once tuned, it quietly squeezes value out of overflow without babysitting.
+The marketplace is the workhorse of lead sell-through. Once tuned, it quietly squeezes value out of overflow without babysitting.

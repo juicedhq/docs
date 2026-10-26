@@ -1,11 +1,13 @@
 ---
 title: Distribution
-description: How leads move from intake to delivery—stages, attempts, and the flow timeline.
+description: How leads move from intake to delivery through stages, attempts, and the flow timeline.
 ---
 
-Distribution is the pipeline a lead travels through after it arrives. Ping-post, bidding, the marketplace, and Club are individual pieces of machinery; distribution is how they're strung together. You define the order of operations, and Juiced runs every lead through that sequence until it sells, gets held, or runs out of stages.
+import { HugeIcon } from '/snippets/hugeicon.jsx';
 
-You'll find it under **Distribution Stages** in the sidebar. If you don't see it, your role doesn't include access to distribution stages; ask an admin on your account.
+Distribution is the pipeline a lead travels through after it arrives. Ping-post, bidding, the marketplace, and Club are individual pieces of machinery, and distribution is how they're strung together. You define the order of operations, and Juiced runs every lead through that sequence until it sells, gets held, or runs out of stages.
+
+You'll find it under **Distribution Stages** in the sidebar. If you don't see it, your role doesn't include access to distribution stages, so ask an admin on your account.
 
 ## Distribution stages
 
@@ -20,26 +22,26 @@ A stage is a single step in your pipeline. Each stage has a **method** that dete
 
 | Method | What it does | Terminal? |
 |--------|--------------|-----------|
-| **Highest Price** | Collects offers from your customers' bids and from eligible partners, then assigns the lead to the highest-scoring offer. | Yes |
-| **Round Robin** | Rotates leads across a set of customers and/or partners at a flat price, rather than by price. | Yes |
-| **Marketplace** | Creates a reverse auction on your [marketplace](/features/marketplace) so customers can claim the lead. | Yes |
-| **Club** | Parks the lead in your [Club](/features/club) so customers with Club access can claim it for free. | Yes |
-| **Audit** | Holds matching leads for manual review and stops distribution. See [Audits](/features/audits). | Yes |
-| **Alter Data** | Changes the lead mid-pipeline (sets its lead type or a field value) before the next stage runs. | No |
-| **Real Estate API** | Enriches the lead with property or owner data from your [Real Estate API integration](/features/integrations#real-estate-api) before continuing. Only available once the integration is connected. | No |
+| <span className="tone-badge tone-success">Highest Price</span> | Collects offers from your customers' bids and from eligible partners, then assigns the lead to the highest-scoring offer. | Yes |
+| <span className="tone-badge tone-info">Round Robin</span> | Rotates leads across a set of customers and/or partners at a flat price, rather than by price. | Yes |
+| <span className="tone-badge tone-success">Marketplace</span> | Creates a reverse auction on your [marketplace](/features/marketplace) so customers can claim the lead. | Yes |
+| <span className="tone-badge tone-neutral">Club</span> | Parks the lead in your [Club](/features/club) so customers with Club access can claim it for free. | Yes |
+| <span className="tone-badge tone-neutral">Audit</span> | Holds matching leads for manual review and stops distribution. See [Audits](/features/audits). | Yes |
+| <span className="tone-badge tone-caution">Alter Data</span> | Changes the lead mid-pipeline (sets its lead type or a field value) before the next stage runs. | No |
+| <span className="tone-badge tone-info">Real Estate API</span> | Enriches the lead with property or owner data from your [Real Estate API integration](/features/integrations#real-estate-api) before continuing. Only available once the integration is connected. | No |
 
 "Terminal" stages can take the lead and end the flow. "Non-terminal" stages always pass the lead on to the next stage.
 
 ### Stage settings
 
-Every stage has a **Name**, an optional **Description**, a **Method**, and a **Paused** switch. Depending on the method, you'll also see:
+Every stage has a **Name**, an optional **Description**, a **Method**, and a **Paused** switch. Depending on the method, you'll also see some of these settings.
 
-- **Deliveries per lead** (Highest Price, Round Robin) — How many recipients can receive each lead at this stage. Deliveries also respect the lead type's sell limit.
-- **Bid Settings** (Highest Price) — **Enable Bids** lets customer bids compete, optionally limited to certain **Bidding Scopes** (Nationwide, State, County). Leave the scopes empty for any scope.
-- **Partner Settings** — **Enable Partners** lets partner offers compete. Highest Price adds a **Minimum Price** for partner offers. Both methods let you include all partners, only selected partners, or all except selected ones.
-- **Customer Settings** (Round Robin) — The same all/include/exclude choice for customers in the rotation.
-- **Eligibility Conditions** — Rules that decide whether a lead qualifies for this stage. A stage with conditions only runs when the lead matches; otherwise it's skipped.
-- **Paused** — Temporarily skip a stage without deleting it. Useful when you're troubleshooting or rolling out changes gradually.
+- **Deliveries per lead** (Highest Price, Round Robin) sets how many recipients can receive each lead at this stage. Deliveries also respect the lead type's sell limit.
+- **Bid Settings** (Highest Price) include **Enable Bids**, which lets customer bids compete, optionally limited to certain **Bidding Scopes** (Nationwide, State, County). Leave the scopes empty for any scope.
+- **Partner Settings** include **Enable Partners**, which lets partner offers compete. Highest Price adds a **Minimum Price** for partner offers. Both methods let you include all partners, only selected partners, or all except selected ones.
+- **Customer Settings** (Round Robin) offer the same all/include/exclude choice for customers in the rotation.
+- **Eligibility Conditions** are rules that decide whether a lead qualifies for this stage. A stage with conditions only runs when the lead matches, and otherwise it's skipped.
+- **Paused** temporarily skips a stage without deleting it, which is useful when you're troubleshooting or rolling out changes gradually.
 
 The [configuring distribution stages guide](/guides/configuring-distribution-stages) walks through every method's settings screen.
 
@@ -49,14 +51,14 @@ Stages run top-to-bottom. Drag the handle on a row to reorder, then click **Save
 
 ## Distribution attempts
 
-Every time a lead enters a stage, Juiced records a **distribution attempt**. Each attempt has a status:
+Every time a lead enters a stage, Juiced records a **distribution attempt**. Each attempt gets one of these statuses.
 
 | Status | Meaning |
 |--------|---------|
 | **Processing** | The attempt is in flight. |
 | **Success** | The stage accepted the lead and distributed it. |
 | **Failed** | The stage ran but produced no winner (no eligible offers, no match). The flow continues to the next stage. |
-| **Skipped** | The stage was bypassed—either paused or the lead didn't match its conditions. |
+| **Skipped** | The stage was bypassed, either because it was paused or because the lead didn't match its conditions. |
 | **Error** | The stage encountered an unexpected problem (network failure, bad config). Details are recorded on the attempt. |
 | **Continue** | The stage finished without finalizing the lead (typical for non-terminal stages like Alter Data) and the flow moves on. |
 | **Audit** | An Audit stage matched and the lead is being held for review. |
@@ -65,9 +67,9 @@ Attempts are stored per flow, so a single lead can have many attempts across mul
 
 ## Distribution flows and the log
 
-A **distribution flow** is the record of a lead's full journey—every stage it visited, every attempt, and the outcome. Flows are listed under **Entries → Incoming logs**, and you can jump to a lead's flow with **View Log** on the lead page. See [Logs](/features/logs) for a tour.
+A **distribution flow** is the record of a lead's full journey, including every stage it visited, every attempt, and the outcome. Flows are listed under **Entries → Incoming logs**, and you can jump to a lead's flow with **View Log** on the lead page. See [Logs](/features/logs) for a tour.
 
-Each log lays the flow's events out on a timeline, in chronological order. Every card describes its event in plain language (for example, "Lead distributed to Halberd & Crow Coffee"). These are the kinds of events you'll see:
+Each log lays the flow's events out on a timeline, in chronological order. Every card describes its event in plain language (for example, "Lead distributed to Halberd & Crow Coffee"). These are the kinds of events you'll see.
 
 | Event | When it fires |
 |-------|---------------|
@@ -76,7 +78,7 @@ Each log lays the flow's events out on a timeline, in chronological order. Every
 | **Ping Responded** | The partner replied to the ping. |
 | **Ping Honored** | The ping winner was honored on the subsequent post. |
 | **Submission Accepted** | The [post](/features/submissions) passed validation and became a lead. |
-| **Submission Rejected** | Validation failed; no lead was created. |
+| **Submission Rejected** | Validation failed, so no lead was created. |
 | **Lead** | A lead record now exists for this flow. |
 | **Attempt Failed / Skipped / Succeeded / Error** | An individual stage attempt completed with the noted status. |
 | **Accepted** | A stage accepted the lead. |
@@ -87,29 +89,29 @@ Each log lays the flow's events out on a timeline, in chronological order. Every
 | **Marketplace Unsold** | The marketplace auction ended without a sale. |
 | **Reprocessed** | The lead was [reprocessed](/features/leads#reprocessing-leads) and re-entered the pipeline. |
 | **Withheld** | The lead hit your [plan's lead limit](/features/billing) and is waiting for capacity. |
-| **Lead Deleted** | The underlying lead was deleted; the flow is preserved for historical reference. |
+| **Lead Deleted** | The underlying lead was deleted, but the flow is preserved for historical reference. |
 
 Use the log to diagnose why a particular lead didn't sell, or to review the decisions made across a day's volume.
 
 ## Typical patterns
 
-A few common pipeline shapes:
+Here are a few common pipeline shapes.
 
-- **Ping-post first, marketplace fallback** — Highest Price (with partner ping-post enabled) → Marketplace. Unsold leads cascade automatically.
-- **Review before selling** — Audit (conditions for a new source) → Highest Price → Marketplace. Leads from the new source wait for you; everything else sells as normal.
-- **Enrich then sell** — Real Estate API → Highest Price → Marketplace. Property data is attached before the auction so conditions and pricing can use it.
-- **Tiered partners** — Highest Price (Tier 1 partners only) → Highest Price (Tier 2 partners only) → Marketplace. Each stage can have its own include-list.
-- **Age and relist** — Marketplace (fresh) → Alter Data (switch to an "aged" lead type) → Marketplace (aged) → Club.
+- **Ping-post first, marketplace fallback** runs Highest Price (with partner ping-post enabled) → Marketplace. Unsold leads cascade automatically.
+- **Review before selling** runs Audit (conditions for a new source) → Highest Price → Marketplace. Leads from the new source wait for you, and everything else sells as normal.
+- **Enrich then sell** runs Real Estate API → Highest Price → Marketplace. Property data is attached before the auction so conditions and pricing can use it.
+- **Tiered partners** runs Highest Price (Tier 1 partners only) → Highest Price (Tier 2 partners only) → Marketplace. Each stage can have its own include-list.
+- **Age and relist** runs Marketplace (fresh) → Alter Data (switch to an "aged" lead type) → Marketplace (aged) → Club.
 
 Stages are cheap to add and reorder, so iterate on your pipeline as you learn what sells.
 
 ## Related guides
 
 <CardGroup cols={2}>
-  <Card title="Configuring distribution stages" icon="route" href="/guides/configuring-distribution-stages">
+  <Card title="Configuring distribution stages" icon={<HugeIcon name="left-to-right-list-number" card />} href="/guides/configuring-distribution-stages">
     Build a pipeline of stages that route leads from arrival to assignment.
   </Card>
-  <Card title="Reading distribution logs" icon="activity" href="/guides/reading-distribution-logs">
+  <Card title="Reading distribution logs" icon={<HugeIcon name="workflow-square-10" card />} href="/guides/reading-distribution-logs">
     Trace any lead end-to-end through the pipeline to answer "what happened?".
   </Card>
 </CardGroup>

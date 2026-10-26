@@ -3,7 +3,9 @@ title: Introduction
 description: Your hub for buying leads, managing bids, and keeping your account funded.
 ---
 
-The Customer Portal is where you buy leads from your lead provider. You reach it at your provider's `/app` address. It's completely separate from the system your provider uses to run their side of the operation, so everything here is about your account: your bids, your leads, your wallet.
+import { HugeIcon } from '/snippets/hugeicon.jsx';
+
+The Customer Portal is where you buy leads from your lead provider. You reach it at your provider's `/app` address. It's completely separate from the system your provider uses to run their side of the operation, so everything here is about your account, meaning your bids, your leads, and your wallet.
 
 <Frame>
   <img className="block dark:hidden" src="/images/portal/overview/dashboard-light.webp" alt="Customer portal dashboard with a greeting, latest leads, and recent bids" />
@@ -15,16 +17,16 @@ Your provider brands the portal, so their name, colors, and icon appear througho
 ## What you can do
 
 <CardGroup cols={2}>
-  <Card title="Set up bidding" icon="hand" href="/customer-portal/bids">
+  <Card title="Set up bidding" icon={<HugeIcon name="hand" card />} href="/customer-portal/bids">
     Bid on locations and lead types so matching leads come to you automatically.
   </Card>
-  <Card title="Browse the Marketplace" icon="store" href="/customer-portal/marketplace">
+  <Card title="Browse the Marketplace" icon={<HugeIcon name="store-01" card />} href="/customer-portal/marketplace">
     Buy leads on the spot from a live, price-dropping auction board.
   </Card>
-  <Card title="Review your leads" icon="book-user" href="/customer-portal/leads">
+  <Card title="Review your leads" icon={<HugeIcon name="contact-book" card />} href="/customer-portal/leads">
     See every lead you've received, with full contact details, and export them.
   </Card>
-  <Card title="Manage billing" icon="wallet" href="/customer-portal/billing">
+  <Card title="Manage billing" icon={<HugeIcon name="wallet-01" card />} href="/customer-portal/billing">
     Add cards, fund your wallet, and keep it topped up with auto recharge.
   </Card>
 </CardGroup>
@@ -52,12 +54,12 @@ Your personal login settings live under **User Settings** in the menu at the bot
 
 ## Getting started
 
-New to the portal? Here's the usual order of operations:
+New to the portal? Here's the usual order of operations.
 
-1. **[Create your account](/customer-portal/signing-up-and-logging-in)**: set up your login, then your business details.
-2. **[Fund your wallet](/customer-portal/billing#adding-funds)**: leads are paid for from your wallet balance.
-3. **[Place your first bids](/customer-portal/bids#creating-a-new-bid)**: pick locations and lead types and set your price.
-4. **[Get leads where you work](/customer-portal/notifications)**: add notification contacts, or connect a [webhook](/customer-portal/webhooks) to your CRM.
-5. **[Set your limits](/customer-portal/bidding-limits)**: cap leads and spending so a busy day doesn't squeeze your budget dry.
+1. **[Create your account](/customer-portal/signing-up-and-logging-in)**. Set up your login, then your business details.
+2. **[Fund your wallet](/customer-portal/billing#adding-funds)**. Leads are paid for from your wallet balance.
+3. **[Place your first bids](/customer-portal/bids#creating-a-new-bid)**. Pick locations and lead types and set your price.
+4. **[Get leads where you work](/customer-portal/notifications)**. Add notification contacts, or connect a [webhook](/customer-portal/webhooks) to your CRM.
+5. **[Set your limits](/customer-portal/bidding-limits)**. Cap leads and spending so a busy day doesn't squeeze your budget dry.
 
 Your provider may have already set up some of this when they created your account.

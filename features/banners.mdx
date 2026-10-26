@@ -3,7 +3,9 @@ title: Banners
 description: Show announcements across the top of the customer portal, schedule them, target them at specific customers, and see how they perform.
 ---
 
-Banners are announcements that run across the top of the customer portal: a maintenance window, a new Club drop, a nudge to top up. You write them once, schedule them, and optionally target them so only the right customers see them. Click the gear in the rail and choose **Banners** under **Application**.
+import { HugeIcon } from '/snippets/hugeicon.jsx';
+
+Banners are announcements that run across the top of the customer portal, like a maintenance window, a new Club drop, or a nudge to top up. You write them once, schedule them, and optionally target them so only the right customers see them. Click the gear in the rail and choose **Banners** under **Application**.
 
 <Frame>
   <img className="block dark:hidden" src="/images/tenant/settings/banners-light.webp" alt="Banners settings page listing banners in order with headline, style, active state, and publish and until dates" />
@@ -14,7 +16,7 @@ Banners are announcements that run across the top of the customer portal: a main
 
 Each banner shows its **Order**, **Headline**, **Style**, whether it's **Active**, and its **Publish** and **Until** dates. Filter by **Status** (active or inactive), or include deleted banners to restore one.
 
-Order matters. Use **Move up** and **Move down** to rank banners. The customer portal shows one banner at a time: the first one in this order that's active, inside its schedule, and matches the customer's conditions.
+Order matters. Use **Move up** and **Move down** to rank banners. The customer portal shows one banner at a time, which is the first one in this order that's active, inside its schedule, and matches the customer's conditions.
 
 ## Creating a banner
 
@@ -46,11 +48,11 @@ Click **New banner**. A live preview at the top of the form shows the banner's s
 
 ### Conditions
 
-Leave **Conditions** empty to show the banner to every customer. To target a group, build conditions on customer attributes, such as the customer's state, country, balance, available budget, or the user's role. Conditions within a group must all match (AND); the banner shows if any group matches (OR).
+Leave **Conditions** empty to show the banner to every customer. To target a group, build conditions on customer attributes, such as the customer's state, country, balance, available budget, or the user's role. Conditions within a group must all match (AND), and the banner shows if any group matches (OR).
 
 Conditions are checked each time a customer loads the portal, so a customer who starts matching later (say, their balance drops) sees the banner then without you changing anything.
 
-Click **Create banner** to save. To change a banner later, open it and click **Edit**; changes save with the floating save bar.
+Click **Create banner** to save. To change a banner later, open it and click **Edit**. Changes save with the floating save bar.
 
 ## Banner performance
 
@@ -77,6 +79,6 @@ Use **Delete** on a banner's page to remove it. Deleted banners stop showing but
 
 ## Related guides
 
-<Card title="Publishing a banner" icon="megaphone" href="/guides/publishing-a-banner" horizontal>
+<Card title="Publishing a banner" icon={<HugeIcon name="flag-02" card />} href="/guides/publishing-a-banner" horizontal>
   Write, schedule, target, and check a customer portal announcement.
 </Card>

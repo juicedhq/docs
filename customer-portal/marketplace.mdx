@@ -16,9 +16,9 @@ You'll only see **Marketplace** in the sidebar if your provider sells leads this
 
 ## How it works
 
-Each lead in the marketplace is sold in a reverse auction: the price starts high and drops in steps over time until the lead sells or the auction ends. You can buy at today's price, or wait for a better deal and risk someone else getting there first.
+Each lead in the marketplace is sold in a reverse auction, where the price starts high and drops in steps over time until the lead sells or the auction ends. You can buy at today's price, or wait for a better deal and risk someone else getting there first.
 
-The lowest the price will go is the **floor**. When the price reaches the floor, the auction ends: the lead goes to whoever holds the highest buy order, or leaves the marketplace if nobody placed one.
+The lowest the price will go is the **floor**. When the price reaches the floor, the auction ends. The lead goes to whoever holds the highest buy order, or leaves the marketplace if nobody placed one.
 
 ## What you'll see
 
@@ -37,7 +37,7 @@ The table updates live as leads are added, sold, and repriced, so there's no nee
 ### Finding leads
 
 - **Search** by county or auction ID.
-- **Filters**: **State**, **County**, and **Lead type** (pick as many as you like), plus **My buy orders** to see only auctions where you have a buy order, and **My exceeded buy orders** to see the ones where someone has outbid you.
+- **Filter** by **State**, **County**, and **Lead type** (pick as many as you like). Use **My buy orders** to see only auctions where you have a buy order, and **My exceeded buy orders** to see the ones where someone has outbid you.
 - Sort by **Location**, **Received**, **Ends in**, **Current**, or **Floor**.
 
 Nothing that fits? The prompt under the table, **Didn't find what you are looking for? Place a bid**, takes you to [Bids](/customer-portal/bids) so matching leads come to you automatically next time.
@@ -58,7 +58,7 @@ A buy order says "I'll take this lead at this price." It's how you wait for a lo
 2. Choose an **Amount** from the list of remaining price steps.
 3. Click **Place buy order**.
 
-Your buy order becomes the new floor: the price stops dropping there, and if nobody places a higher buy order before the auction ends, you get the lead at your price. Each new buy order has to beat the current highest one.
+Your buy order becomes the new floor. The price stops dropping there, and if nobody places a higher buy order before the auction ends, you get the lead at your price. Each new buy order has to beat the current highest one.
 
 The buy-order amount is **taken from your wallet when you place it**. You'll see it in [Transactions](/customer-portal/billing#transactions) as **Placed Buy Order**. You get it back as **Canceled Buy Order** if you cancel, or **Released Buy Order** when the auction ends without your order winning. If you win, the amount is released and the lead is charged at your buy-order price.
 
@@ -70,10 +70,10 @@ The **Floor** badge color tells you where you stand. Hover it for a reminder.
 
 | Color | What it means |
 |-------|---------------|
-| **Gray** | There are no buy orders yet |
-| **Blue** | Another customer has placed a buy order, and you haven't |
-| **Green** | You have the highest buy order |
-| **Red** | You have a buy order, but another customer has a higher one |
+| <span className="tone-badge tone-neutral">Gray</span> | There are no buy orders yet |
+| <span className="tone-badge tone-info">Blue</span> | Another customer has placed a buy order, and you haven't |
+| <span className="tone-badge tone-success">Green</span> | You have the highest buy order |
+| <span className="tone-badge tone-danger">Red</span> | You have a buy order, but another customer has a higher one |
 
 When someone outbids you, Juiced can let you know by email or text, and tell you again if your buy order becomes the highest once more. Turn on **Buy order exceeded** and **Buy order reinstated** for your [notification contacts](/customer-portal/notifications#choosing-what-each-contact-receives).
 

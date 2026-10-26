@@ -3,7 +3,7 @@ title: Adding Fields to a Lead Category
 description: How to add custom fields to a lead category so your schema captures exactly the data you need.
 ---
 
-Every lead category starts with a set of [basic fields](/features/lead-categories#basic-fields)—name, email, phone, address, and so on. But your leads almost certainly carry more information than that. A home insurance lead might include property type and current coverage amount. A solar lead might include roof age and electric bill.
+Every lead category starts with a set of [basic fields](/features/lead-categories#basic-fields), like name, email, phone, address, and so on. But your leads almost certainly carry more information than that. A home insurance lead might include property type and current coverage amount. A solar lead might include roof age and electric bill.
 
 Custom fields let you extend a lead category's schema so you can capture, validate, and deliver that extra data.
 
@@ -12,7 +12,7 @@ Custom fields let you extend a lead category's schema so you can capture, valida
 - An existing lead category. If you don't have one yet, open **Lead Categories** and click **New lead category**. Starting from a template gives you a market-specific set of fields to build on.
 - A role that can update lead categories.
 
-## Step 1: Open the lead category's Fields tab
+## 1. Open the lead category's Fields tab
 
 Open **Lead Categories** in the sidebar (under the **Ingest** group) and click the lead category you want to add fields to. Then click the **Fields** tab.
 
@@ -21,30 +21,30 @@ Open **Lead Categories** in the sidebar (under the **Ingest** group) and click t
   <img className="hidden dark:block" src="/images/tenant/ingest/lead-category-detail-dark.webp" alt="Lead category page with stats at the top and Lead Types, Sources, and Fields tabs" />
 </Frame>
 
-The Fields table lists every field with its **Title**, **Type**, and four switches: **Required (post)**, **Required (ping)**, **Deliverable**, and **Hidden from spec**. The 10 default fields (first\_name, last\_name, email, and so on) carry a **System** badge: they can't be renamed or deleted.
+The Fields table lists every field with its **Title**, **Type**, plus four switches for **Required (post)**, **Required (ping)**, **Deliverable**, and **Hidden from spec**. The 10 default fields (first\_name, last\_name, email, and so on) carry a **System** badge, which means they can't be renamed or deleted.
 
-## Step 2: Click New field
+## 2. Click New field
 
 Click **New field** above the table. This opens the **New field** dialog.
 
-## Step 3: Fill in the field details
+## 3. Fill in the field details
 
 ### Title
 
-Enter a name for your field. This is the identifier sources use when submitting lead data through the API, so keep it machine-friendly:
+Enter a name for your field. This is the identifier sources use when submitting lead data through the API, so keep it machine-friendly.
 
 - Must start with a letter or underscore
 - Can only contain letters, numbers, and underscores (no dashes or spaces)
 - Must be unique within this lead category
 
-Good examples: `property_type`, `coverage_amount`, `roof_age`, `electric_bill`
+Good examples include `property_type`, `coverage_amount`, `roof_age`, and `electric_bill`.
 
 ### Type
 
 Select the data type from the dropdown. The type you choose determines how the field's value is validated when leads are submitted. See [field types](/features/lead-categories#field-types) for the full list.
 
 <Tip>
-Choose your type carefully—it affects validation. A field typed as **Phone (US)** will reject values that don't match actual US phone number patterns, not just any 10-digit string.
+Choose your type carefully, because it affects validation. A field typed as **Phone (US)** will reject values that don't match actual US phone number patterns, not just any 10-digit string.
 </Tip>
 
 ### Values (List of Values type only)
@@ -53,20 +53,20 @@ If you selected **List of Values**, a **Values** box appears. Enter the allowed 
 
 ### Toggle settings
 
-Four switches control how the field behaves across the system:
+Four switches control how the field behaves across the system.
 
 | Toggle | What it does |
 |--------|-------------|
 | **Required for post** | The field must be present when a lead is submitted through the API. Missing it returns a `422` error. |
 | **Required for ping** | The field must be present when a source checks for buyers during the [ping phase](/features/ping-post). |
-| **Deliverable** | The field is included in lead data sent to customers: visible in the customer portal and included in webhook payloads. |
+| **Deliverable** | The field is included in lead data sent to customers, so it's visible in the customer portal and included in webhook payloads. |
 | **Hidden from API spec** | The field won't appear on your public API specification page. Useful for internal tracking fields you don't want sources to see. |
 
 ### Description
 
 An optional description of what this field captures. It's for your team's reference.
 
-## Step 4: Create the field
+## 4. Create the field
 
 Click **Create field**. You'll see a "Field created." confirmation, and your new field appears in the Fields table. Repeat from Step 2 for each field you need.
 
@@ -82,7 +82,7 @@ Deleting a field is permanent. Any historical lead data for that field is preser
 
 ## Quick-toggling field properties
 
-You don't need to open the dialog to change a field's switches. The **Required (post)**, **Required (ping)**, **Deliverable**, and **Hidden from spec** columns in the Fields table are live switches: click one to flip it, and it saves immediately.
+You don't need to open the dialog to change a field's switches. The **Required (post)**, **Required (ping)**, **Deliverable**, and **Hidden from spec** columns in the Fields table are live switches. Click one to flip it, and it saves immediately.
 
 <Note>
 The required switches are disabled for the **zip** field. ZIP code is always required at the system level because all routing is geographically based.
@@ -90,7 +90,7 @@ The required switches are disabled for the **zip** field. ZIP code is always req
 
 ## What happens next
 
-Once a field is added to a lead category, it takes effect immediately:
+Once a field is added to a lead category, it takes effect immediately.
 
 - **API validation** starts enforcing the field's type and required rules on new submissions
 - **Deliverable fields** start appearing in the customer portal and webhook payloads

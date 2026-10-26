@@ -1,9 +1,11 @@
 ---
 title: Sources
-description: Where your leads come from—API credentials, field mapping, pricing, quotas, and configuration.
+description: Where your leads come from, plus API credentials, field mapping, pricing, quotas, and configuration.
 ---
 
-Sources are how leads get into the system. They represent where leads came from—usually a lead form on a website you control, but sometimes a vendor you're buying leads from.
+import { HugeIcon } from '/snippets/hugeicon.jsx';
+
+Sources are how leads get into the system. They represent where leads came from, usually a lead form on a website you control, but sometimes a vendor you're buying leads from.
 
 Sources can be assigned to [partners](/features/partners) to organize them by business relationship. This helps you track which vendor or affiliate is responsible for which lead flows.
 
@@ -16,7 +18,7 @@ Open **Sources** under **Ingest** in the sidebar to see every source in your wor
   <img className="hidden dark:block" src="/images/tenant/ingest/sources-dark.webp" alt="Sources list with Name, Type, Partners, Test Mode, Payout, and Return Rate (30d) columns, and a New source button" />
 </Frame>
 
-Each row shows the source's name and lead category, its **Type** (Internal or Vendor), the **Partners** it belongs to, a **Test** badge when test mode is on, and its **Payout** percentage. If you can view analytics, you'll also see **Return Rate (30d)**. Search by name, or click **Filters** to narrow the list to one lead category.
+Each row shows the source's name and lead category, its **Type** (<span className="tone-badge tone-success">Internal</span> or <span className="tone-badge tone-caution">Vendor</span>), the **Partners** it belongs to, a <span className="tone-badge tone-warning">Test</span> badge when test mode is on, and its **Payout** percentage. If you can view analytics, you'll also see **Return Rate (30d)**. Search by name, or click **Filters** to narrow the list to one lead category.
 
 ## Inside a source
 
@@ -27,11 +29,11 @@ Click a source to open it. The tabs across the top are **Overview**, **Payouts**
   <img className="hidden dark:block" src="/images/tenant/ingest/source-detail-dark.webp" alt="Source overview with Revenue, Payout, Leads, Pings, and Return Rate stats, a Status Responses board, and a Details panel" />
 </Frame>
 
-The **Overview** tab shows:
+The **Overview** tab shows three things.
 
-- **Stats** for the selected timeframe: **Revenue**, **Payout**, **Leads**, **Pings**, and **Return Rate**, each compared with the previous period. You need analytics-view permission to see them.
-- **Status Responses**: which lead statuses the source hears back as Success, Rejected, or Duplicate (see [Status responses](#status-responses)).
-- **Details**: lead category, type, partners, test mode, and when the source was created. A **Quotas** panel appears below it when the source has any [lead quotas](#lead-quotas).
+- **Stats** for the selected timeframe cover **Revenue**, **Payout**, **Leads**, **Pings**, and **Return Rate**, each compared with the previous period. You need analytics-view permission to see them.
+- **Status Responses** shows which lead statuses the source hears back as Success, Rejected, or Duplicate (see [Status responses](#status-responses)).
+- **Details** lists the lead category, type, partners, test mode, and when the source was created. A **Quotas** panel appears below it when the source has any [lead quotas](#lead-quotas).
 
 Click **Edit** to change the source's settings. The **More actions** (⋯) menu holds **View API Spec** and **Delete**.
 
@@ -49,21 +51,21 @@ When you create a source, an API key and API secret are generated automatically 
 
 ## Source types
 
-Sources can be either **internal** or **vendor**. This setting affects several behaviors:
+Sources can be either **internal** or **vendor**. This setting affects several behaviors.
 
 ### Ping responses
 
-- **Internal**: Returns a more detailed response from pings
-- **Vendor**: Returns a simplified response
+- **Internal** sources get a more detailed ping response.
+- **Vendor** sources get a simplified response.
 
 See the [API Reference](/api-reference/introduction) for specifics, or choose **View API Spec** from a source's **More actions** menu to see its documentation. This opens a shareable link that shows the basic auth credentials for up to one week, after which the link expires.
 
 ### Subscription threshold behavior
 
-When you've reached your [subscription threshold](/features/billing#what-happens-at-100):
+When you've reached your [subscription threshold](/features/billing#what-happens-at-100), the two types behave differently.
 
-- **Internal**: Pings are still accepted. Leads are held in a "withheld" status and won't be processed until capacity frees up.
-- **Vendor**: Pings are automatically rejected so you don't purchase leads you can't distribute.
+- For **internal** sources, pings are still accepted. Leads are held in a "withheld" status and won't be processed until capacity frees up.
+- For **vendor** sources, pings are automatically rejected so you don't purchase leads you can't distribute.
 
 To avoid hitting your threshold entirely, consider enabling [auto-upgrade](/features/billing#auto-upgrade) to automatically move to the next plan tier when you reach your limit.
 
@@ -77,7 +79,7 @@ You can change it on the source's edit form, or from **Edit Payout** in the **Mo
 
 ## Test mode
 
-Any source, internal or vendor, can have test mode turned on so an integrator can test without affecting production data. When test mode is on:
+Any source, internal or vendor, can have test mode turned on so an integrator can test without affecting production data. When test mode is on, a few things change.
 
 - Pings and leads submitted through the source are marked as test data
 - Test data is hidden from normal views by default. Set the **Test mode** filter on [Leads](/features/leads) or [Incoming logs](/features/logs) to see it
@@ -86,7 +88,7 @@ Any source, internal or vendor, can have test mode turned on so an integrator ca
 
 ### Testing with zip codes
 
-When test mode is enabled, the system returns predictable responses based on the zip code submitted:
+When test mode is enabled, the system returns predictable responses based on the zip code submitted.
 
 | Zip code | Ping response | Lead status |
 |----------|---------------|-------------|
@@ -97,7 +99,7 @@ When test mode is enabled, the system returns predictable responses based on the
 | `00005` | Match found | Marketplace |
 | Any other | Normal routing | Audit |
 
-This lets vendors test every outcome—successful distribution, duplicates, rejections, no-match scenarios, and marketplace routing—without needing real buyer coverage in those areas.
+This lets vendors test every outcome (successful distribution, duplicates, rejections, no-match scenarios, and marketplace routing) without needing real buyer coverage in those areas.
 
 <Tip>
 Test mode earns its keep with vendor sources, since someone outside your team is building the integration. Turn it off before go-live, or real leads will squeeze straight into Audit.
@@ -116,13 +118,13 @@ Limits use totals so far, so the final lead can take the payout total over the l
 
 ## Status responses
 
-When a source posts a lead, Juiced answers with one of three responses: **Success**, **Rejected**, or **Duplicate**. Which one depends on the status the lead ends up in. By default:
+When a source posts a lead, Juiced answers with one of three responses (**Success**, **Rejected**, or **Duplicate**). Which one depends on the status the lead ends up in. Here's the default mapping.
 
 | Response | Lead statuses |
 |----------|---------------|
-| **Success** | Assigned, Posted, Marketplace, Club |
-| **Rejected** | Audit, Unassigned, Uncategorized |
-| **Duplicate** | Duplicate |
+| **Success** | <span className="tone-badge tone-success">Assigned</span> <span className="tone-badge tone-success">Posted</span> <span className="tone-badge tone-success">Marketplace</span> <span className="tone-badge tone-success">Club</span> |
+| **Rejected** | <span className="tone-badge tone-danger">Audit</span> <span className="tone-badge tone-danger">Unassigned</span> <span className="tone-badge tone-danger">Uncategorized</span> |
+| **Duplicate** | <span className="tone-badge tone-caution">Duplicate</span> |
 
 To change the mapping, open the source's edit form and drag each status chip onto the response you want under **Status Responses**. Every status belongs to exactly one response. If a status isn't placed yet, it shows in an **Unassigned** area and you'll need to drop it on a response before you can save.
 
@@ -135,7 +137,7 @@ Beyond the payout percentage, you can set prices for each lead type the source s
   <img className="hidden dark:block" src="/images/tenant/ingest/source-pricing-dark.webp" alt="Source Pricing tab listing each lead type with Fixed Price and Fallback Price inputs and a Behavior column describing the payout" />
 </Frame>
 
-The table lists every lead type in the source's lead category. Each row has two inputs, and each saves as soon as you leave the field:
+The table lists every lead type in the source's lead category. Each row has two inputs, and each saves as soon as you leave the field.
 
 | Setting | What it does |
 |---------|--------------|
@@ -161,9 +163,9 @@ The **Payouts** tab shows what you owe the source for a period (last month by de
   <img className="hidden dark:block" src="/images/tenant/ingest/source-payouts-dark.webp" alt="Source Payouts tab with Leads Received, Payout Owed, and Expected Revenue stats above a table of leads with received date, status, payout, and revenue" />
 </Frame>
 
-- **Leads Received**: leads the source sent in the period.
-- **Payout Owed**: what's owed for accepted leads received in the period.
-- **Expected Revenue**: what customers were charged for those same leads.
+- **Leads Received** counts the leads the source sent in the period.
+- **Payout Owed** is what's owed for accepted leads received in the period.
+- **Expected Revenue** is what customers were charged for those same leads.
 
 Below the stats, each lead is listed with when it was received, its status, its payout, and its revenue. Pick a different period from the timeframe menu in the header. You need analytics-view permission to see this tab.
 
@@ -176,7 +178,7 @@ You can define fields at the source level on the **Fields** tab. These fields ar
   <img className="hidden dark:block" src="/images/tenant/ingest/source-fields-dark.webp" alt="Source Fields tab with an empty Source Fields table and a read-only Lead Category Fields table showing post, ping, deliverable, and hidden-from-spec settings" />
 </Frame>
 
-If you create a source-level field with the same title as a field on the lead category, the source's field overrides the lead category's. Overriding fields carry an **Overrides** badge, and the lead category field they replace is dimmed in the read-only **Lead Category Fields** table below.
+If you create a source-level field with the same title as a field on the lead category, the source's field overrides the lead category's. Overriding fields carry an <span className="tone-badge tone-info">Overrides</span> badge, and the lead category field they replace is dimmed in the read-only **Lead Category Fields** table below.
 
 ## Source-level duplicate checks
 
@@ -202,10 +204,10 @@ Deleted sources are soft-deleted rather than permanently removed. Leads, posts, 
 ## Related guides
 
 <CardGroup cols={2}>
-  <Card title="Setting up a source and its attributes" icon="plug" href="/guides/setting-up-a-source-and-its-attributes">
+  <Card title="Setting up a source and its attributes" icon={<HugeIcon name="app-window" card />} href="/guides/setting-up-a-source-and-its-attributes">
     Create a source, configure its settings, and add source-level fields.
   </Card>
-  <Card title="Sending leads to Juiced" icon="send" href="/guides/sending-leads-to-juiced">
+  <Card title="Sending leads to Juiced" icon={<HugeIcon name="inbox-download" card />} href="/guides/sending-leads-to-juiced">
     Submit your first lead through the source API.
   </Card>
 </CardGroup>

@@ -3,6 +3,8 @@ title: Company Profile
 description: Your business identity, billing address, operating countries, and support settings.
 ---
 
+import { HugeIcon } from '/snippets/hugeicon.jsx';
+
 Your company profile holds the core information about your business. Much of it appears throughout the platform and is shown to your customers in the buyer portal.
 
 To edit it, click the gear in the rail and choose **Company Profile** under **Account**. Make your changes, then save with the floating save bar.
@@ -14,27 +16,27 @@ To edit it, click the gear in the rail and choose **Company Profile** under **Ac
 
 ## Company
 
-How your company appears to customers:
+This section sets how your company appears to customers.
 
-- **Name**: your company name as shown to customers
-- **Email**: the main contact email for your company
-- **Phone**: the main contact phone number for your company
+- **Name** is your company name as shown to customers.
+- **Email** is the main contact email for your company.
+- **Phone** is the main contact phone number for your company.
 
 ## Billing Address
 
-The address that appears on your invoices: street address, apt/suite, city, country, state (or province or territory), and ZIP or postal code. The state and postal code labels change to match the country you pick.
+This is the address that appears on your invoices, with street address, apt/suite, city, country, state (or province or territory), and ZIP or postal code. The state and postal code labels change to match the country you pick.
 
 This is separate from your payment methods, which you manage in [Billing](/features/billing).
 
 ## Operating countries
 
-The countries you accept and distribute leads in. You can operate in the **United States**, **Australia**, or both: switch each one on or off. At least one country must stay enabled, so the last one can't be turned off.
+The countries you accept and distribute leads in. You can operate in the **United States**, **Australia**, or both, switching each one on or off. At least one country must stay enabled, so the last one can't be turned off.
 
-You first choose these during [Finish setup](/get-started/quickstart#step-2-finish-setup) when you create your account.
+You first choose these during [Finish setup](/get-started/quickstart#2-finish-setup) when you create your account.
 
 ## Support
 
-How customers can reach your support team:
+These fields set how customers can reach your support team.
 
 | Field | Purpose |
 |-------|---------|
@@ -51,10 +53,10 @@ The **Default Name** field sets the default name used for TCPA compliance when r
 ## Related pages
 
 <CardGroup cols={2}>
-  <Card title="Branding" icon="palette" href="/features/branding">
+  <Card title="Branding" icon={<HugeIcon name="paint-board" card />} href="/features/branding">
     Colors, logos, and the look of your customer portal.
   </Card>
-  <Card title="Customizing the customer portal" icon="paintbrush" href="/guides/customizing-the-portal">
+  <Card title="Customizing the customer portal" icon={<HugeIcon name="paint-board" card />} href="/guides/customizing-the-portal">
     Set support contacts and consent links alongside the rest of your portal branding.
   </Card>
 </CardGroup>

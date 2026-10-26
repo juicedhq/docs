@@ -3,15 +3,15 @@ title: Publishing a Banner
 description: Write a customer portal announcement, schedule it, target it at the right customers, and check how it performs.
 ---
 
-Banners are the in-portal megaphone: a strip across the top of the customer portal for maintenance windows, promotions, and gentle nudges. This guide publishes one end to end. For every field and stat, see [Banners](/features/banners).
+Banners are the in-portal megaphone, a strip across the top of the customer portal for maintenance windows, promotions, and gentle nudges. This guide publishes one end to end. For every field and stat, see [Banners](/features/banners).
 
 ## Prerequisites
 
 - The **Admin** [role](/features/roles).
-- Your copy: a full headline, plus a shorter one for phones.
+- Your copy, with a full headline plus a shorter one for phones.
 - Optionally, a button label and the URL it should open.
 
-## Step 1: Start a new banner
+## 1. Start a new banner
 
 Click the gear in the rail, choose **Banners** under **Application**, and click **New banner**. Keep an eye on the live preview at the top of the form; it updates as you type.
 
@@ -20,41 +20,41 @@ Click the gear in the rail, choose **Banners** under **Application**, and click 
   <img className="hidden dark:block" src="/images/tenant/settings/banner-edit-dark.webp" alt="Banner form with a live preview at the top, then Banner Content, Status & Visibility, and Conditions sections" />
 </Frame>
 
-## Step 2: Write the content
+## 2. Write the content
 
-1. **Desktop Headline**: the full message, for example "Scheduled maintenance Saturday 3 to 5 AM ET. The portal will be read-only."
-2. **Mobile Headline**: the short version, for example "Maintenance Sat 3 to 5 AM ET".
-3. **Call to Action** and **Link** (optional): the button text and where it goes. The button only appears when both are filled in.
-4. **Style**: **Info** for announcements, **Warning** for "please act soon", **Alert** for "act now", **Primary** for promotions.
+1. In **Desktop Headline**, write the full message, for example "Scheduled maintenance Saturday 3 to 5 AM ET. The portal will be read-only."
+2. In **Mobile Headline**, write the short version, for example "Maintenance Sat 3 to 5 AM ET".
+3. Optionally, fill in **Call to Action** and **Link** with the button text and where it goes. The button only appears when both are filled in.
+4. Pick a **Style**. Use **Info** for announcements, **Warning** for "please act soon", **Alert** for "act now", and **Primary** for promotions.
 
-## Step 3: Schedule it
+## 3. Schedule it
 
 1. Leave **Active** on.
 2. Set **Publish At** to when it should start. A future time schedules it.
 3. Set **Display Until** to when it should stop, or leave it blank to keep it up.
 4. Leave **Dismissable** on unless customers truly can't be allowed to close it, like an outage notice.
 
-## Step 4: Target it (optional)
+## 4. Target it (optional)
 
 With no conditions, every customer sees the banner. To narrow it down, add a condition group under **Conditions** and pick a customer attribute, an operator, and a value. For example, a low-balance nudge might use **Customer Balance** less than 50. Every condition in a group must match; add another group for an "or".
 
 Conditions are checked whenever a customer loads the portal, so customers start (or stop) seeing the banner as they start (or stop) matching.
 
-## Step 5: Create and order it
+## 5. Create and order it
 
 Click **Create banner**. If **Publish At** has passed and the banner is active, matching customers see it on their next page load.
 
 The portal shows one banner at a time, the first match in your list order. If you have several active banners, use **Move up** and **Move down** on the Banners list so the most important one wins. An outage notice should sit above a promotion.
 
-## Step 6: Check it
+## 6. Check it
 
-Look at the portal as a test customer who matches your conditions. If the banner doesn't show, check that:
+Look at the portal as a test customer who matches your conditions. If the banner doesn't show, check each of these.
 
-- **Active** is on
-- **Publish At** has passed and **Display Until** hasn't
-- the customer matches the conditions
-- no other banner higher in the list matches the same customer
-- the customer hasn't already dismissed it
+- **Active** is on.
+- **Publish At** has passed and **Display Until** hasn't.
+- The customer matches the conditions.
+- No other banner higher in the list matches the same customer.
+- The customer hasn't already dismissed it.
 
 After it's been up a while, open the banner to see **Total Views**, **Unique Views**, **Total Clicks**, **Engagement**, and how often customers dismissed it. A high dismissal rate with few clicks is a hint the message isn't landing.
 

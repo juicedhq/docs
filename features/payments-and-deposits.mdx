@@ -3,7 +3,9 @@ title: Payments & Deposits
 description: How customers fund their accounts, what fees apply, and the minimums you require.
 ---
 
-The **Payments & Deposits** settings control how customers fund their wallets: whether they can pay by card at all, what fees you add on top, and the minimum amounts they can deposit. Find them under **Settings → Application → Payments & Deposits**. Like the rest of the billing settings, only Admins can change them.
+import { HugeIcon } from '/snippets/hugeicon.jsx';
+
+The **Payments & Deposits** settings control how customers fund their wallets, including whether they can pay by card at all, what fees you add on top, and the minimum amounts they can deposit. Find them under **Settings → Application → Payments & Deposits**. Like the rest of the billing settings, only Admins can change them.
 
 <Frame>
   <img className="block dark:hidden" src="/images/tenant/settings/payments-light.webp" alt="Payments & Deposits settings page with Transaction Fee Percentage fields for Manual Deposit and Auto Recharge, fee waiver and payment method switches, and Minimum Deposit fields" />
@@ -12,13 +14,13 @@ The **Payments & Deposits** settings control how customers fund their wallets: w
 
 ## Connecting Stripe
 
-Customers pay you through [Stripe Connect](/features/integrations#stripe). Stripe is optional: if you don't collect payments from customers (for example, you bill them outside Juiced, or you only work with partners), you can skip it.
+Customers pay you through [Stripe Connect](/features/integrations#stripe). Stripe is optional. If you don't collect payments from customers (for example, you bill them outside Juiced, or you only work with partners), you can skip it.
 
-Without a connected Stripe account, the page shows a notice: "Stripe isn't connected, so customers can't add cards, deposit funds, or set up auto recharge." You can still adjust wallet balances by hand from each [customer's record](/features/customers#wallet-management). Admins see a **Connect Stripe** button in the notice, which takes you through Stripe's onboarding.
+Without a connected Stripe account, the page shows a notice that reads "Stripe isn't connected, so customers can't add cards, deposit funds, or set up auto recharge." You can still adjust wallet balances by hand from each [customer's record](/features/customers#wallet-management). Admins see a **Connect Stripe** button in the notice, which takes you through Stripe's onboarding.
 
 ## Transaction Fee Percentage
 
-You can add a percentage fee on top of customer deposits to help offset your platform subscription and Stripe fees. The fee is added to the amount charged: a 1% fee on a $100 deposit charges the customer $101, and $100 lands in their wallet.
+You can add a percentage fee on top of customer deposits to help offset your platform subscription and Stripe fees. The fee is added to the amount charged, so a 1% fee on a \$100 deposit charges the customer \$101, and \$100 lands in their wallet.
 
 | Setting | When it applies |
 |---------|-----------------|
@@ -27,10 +29,10 @@ You can add a percentage fee on top of customer deposits to help offset your pla
 
 Set them independently, so you could charge a fee on manual deposits but waive it for auto recharges (or vice versa).
 
-Two switches round out the section:
+Two switches round out the section.
 
-- **Waive fees on first transaction**: skips the fee on each customer's first transaction, which takes the sting out of funding a new account.
-- **Disable customer payment methods**: stops customers from adding payment methods, adding funds, or setting up auto recharge. Use this if you handle billing outside Juiced; you'll need to update their balances by hand.
+- **Waive fees on first transaction** skips the fee on each customer's first transaction, which takes the sting out of funding a new account.
+- **Disable customer payment methods** stops customers from adding payment methods, adding funds, or setting up auto recharge. Use this if you handle billing outside Juiced; you'll need to update their balances by hand.
 
 ## Minimum Deposit
 
@@ -46,6 +48,6 @@ Save your changes with the floating save bar at the bottom of the page.
 
 ## Related guides
 
-<Card title="Managing customer finances" icon="wallet" href="/guides/managing-customer-finances" horizontal>
+<Card title="Managing customer finances" icon={<HugeIcon name="wallet-01" card />} href="/guides/managing-customer-finances" horizontal>
   Fund customer wallets manually and configure the auto-recharge flow.
 </Card>

@@ -8,10 +8,10 @@ Returns keep customers honest about bad leads, but a return policy without teeth
 ## Prerequisites
 
 - The **Admin** [role](/features/roles).
-- A policy in mind: which return rates are fine, which deserve a nudge, and whether to reward good behavior with discounts.
+- A policy in mind, covering which return rates are fine, which deserve a nudge, and whether to reward good behavior with discounts.
 - Optionally, a page explaining your return policy, so customers can read the rules.
 
-## Step 1: Open the Returns page
+## 1. Open the Returns page
 
 Click the gear in the rail and choose **Returns** under **Application**. The page has **Return Settings** at the top and the **Return Tiers** table below.
 
@@ -20,15 +20,15 @@ Click the gear in the rail and choose **Returns** under **Application**. The pag
   <img className="hidden dark:block" src="/images/tenant/settings/returns-dark.webp" alt="Returns settings page with Recalculate and New tier buttons, Return Settings for enabling and hiding return tiers, lead volume lookback, return rate message, and Lead Returns URL, followed by the Return Tiers table" />
 </Frame>
 
-## Step 2: Set up returns
+## 2. Set up returns
 
 1. Turn on **Enable return tiers**. Customers are then assigned to a tier automatically based on their return rate.
-2. Set the **Lead volume lookback**: the assigned lead volume, in dollars, that return rates are calculated over. It defaults to $5,000. Customers who haven't reached it yet count as new customers.
+2. Set the **Lead volume lookback**, which is the assigned lead volume, in dollars, that return rates are calculated over. It defaults to $5,000. Customers who haven't reached it yet count as new customers.
 3. Add your policy page as the **Lead Returns URL**, so customers can find it from their portal.
 4. Leave **Hide return tiers from customers** off for now. You can't offer a discount while tiers are hidden, because customers have to be able to see price changes.
 5. Save with the floating save bar.
 
-## Step 3: Create your first tier
+## 3. Create your first tier
 
 Click **New tier**.
 
@@ -42,20 +42,20 @@ Click **New tier**.
 
 **Behavior**
 
-- **Lower bound (%)** and **Upper bound (%)**: the return-rate range for this tier. Ranges can't overlap; Juiced tells you if one does.
-- **Apply to new customers**: makes this the tier for customers still below the lookback volume, in place of bounds.
-- **Add a discount** with a **Discount percentage**: customers in this tier pay less when they win, while their bid still competes at full price.
-- **Add a penalty** with a **Penalty percentage**, or **Match return rate** to make the penalty equal the customer's own return rate.
+- Set **Lower bound (%)** and **Upper bound (%)** to the return-rate range for this tier. Ranges can't overlap, and Juiced tells you if one does.
+- Turn on **Apply to new customers** to make this the tier for customers still below the lookback volume, in place of bounds.
+- Turn on **Add a discount** with a **Discount percentage** so customers in this tier pay less when they win, while their bid still competes at full price.
+- Turn on **Add a penalty** with a **Penalty percentage**, or **Match return rate** to make the penalty equal the customer's own return rate.
 
 <Warning>
-Penalties are easy to misread. A customer with a 20% penalty bidding $100 competes as if they bid $80, so they win less often, but when they do win they pay the full $100. Explain it in the tier's long description, or expect "I never win anymore" emails.
+Penalties are easy to misread. A customer with a 20% penalty bidding \$100 competes as if they bid \$80, so they win less often, but when they do win they pay the full \$100. Explain it in the tier's long description, or expect "I never win anymore" emails.
 </Warning>
 
 Click **Create**.
 
-## Step 4: Build out the ladder
+## 4. Build out the ladder
 
-Repeat Step 3 for each bracket. A typical pattern:
+Repeat step 3 for each bracket. Here's a typical pattern.
 
 | Tier | Bracket | Effect |
 |------|---------|--------|
@@ -65,11 +65,11 @@ Repeat Step 3 for each bracket. A typical pattern:
 | **Overripe** | 15 to 25% | 15% penalty |
 | **Bruised** | 25 to 100% | Match return rate |
 
-Three to five tiers is plenty; past that, customers stop reading the ladder. Cover 0 to 100% without gaps, or a customer whose rate falls in a gap gets no tier.
+Three to five tiers is plenty, because past that, customers stop reading the ladder. Cover 0 to 100% without gaps, or a customer whose rate falls in a gap gets no tier.
 
-Use **Move up** and **Move down** to set the order customers see the tiers in. Order doesn't affect which tier a customer lands in; their return rate does. Most-favorable first is the usual choice.
+Use **Move up** and **Move down** to set the order customers see the tiers in. Order doesn't affect which tier a customer lands in. Their return rate does. Most-favorable first is the usual choice.
 
-## Step 5: Recalculate
+## 5. Recalculate
 
 Click **Recalculate** in the page header and confirm. Juiced goes through every customer and assigns the tier that matches their current return rate. Customers whose tier changes get the **Return Tier Updated** notification.
 
@@ -79,13 +79,17 @@ After that, tiers keep themselves up to date as customers are assigned leads and
 If you're about to make several tier changes in a row, consider turning off the **Return Tier Updated** template in [Notification Templates](/features/notifications) first, so customers don't get an email for every tweak. Turn it back on before the final recalculation.
 </Tip>
 
-## Step 6: Exclude a customer (optional)
+## 6. Exclude a customer (optional)
 
 For a customer who shouldn't be tiered, such as a strategic account with its own contract or an internal test account, open the customer, click **Edit**, and turn on **Disable Return Tiers** under **Toggles**. They're left out of tier calculations, discounts, and penalties, and their return rate shows instead of a tier.
 
+<Tip>
+  How generous should your return policy be? Operators in [That Agency Group](https://www.skool.com/that-agency-group), our free Skool community, have tried most of the options and are happy to share how it went.
+</Tip>
+
 ## What customers see
 
-Unless you hide tiers, customers see their tier as a badge in the portal and can open it to compare every tier. If you'd rather they didn't:
+Unless you hide tiers, customers see their tier as a badge in the portal and can open it to compare every tier. If you'd rather they didn't, you have two options.
 
 - **Hide return tiers from customers** shows their return percentage instead of the badge. Penalties still apply.
 - With tiers turned off, the **Return rate message** is shown instead (use `:rate` and `:lookback` in it), or turn on **Hide return percentages from customers** to remove return rates from the portal entirely.

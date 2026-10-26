@@ -3,9 +3,11 @@ title: Location Analytics
 description: Understand customer demand by geography to make smarter decisions about where to invest.
 ---
 
-Location analytics shows you where your customers want leads—and where they're actually getting them. This data helps you make informed decisions about ad spend, source partnerships, and pricing strategy. If customers are bidding heavily in Miami but you're barely sourcing leads there, that's a gap worth closing.
+import { HugeIcon } from '/snippets/hugeicon.jsx';
 
-The data is broken down at three levels: countries, states, and counties. Each level shows the same core metrics at a different geographic scope.
+Location analytics shows you where your customers want leads, and where they're actually getting them. This data helps you make informed decisions about ad spend, source partnerships, and pricing strategy. If customers are bidding heavily in Miami but you're barely sourcing leads there, that's a gap worth closing.
+
+The data is broken down into countries, states, and counties. Each level shows the same core metrics at a different geographic scope.
 
 ## Location overview
 
@@ -22,7 +24,7 @@ Workspaces that operate in a single country see that country's own terms (for ex
 
 | Column | What it shows |
 |--------|---------------|
-| **Active** | Count of fully operating bids at this level—customers who are ready to buy right now. On States, only state-wide bids count; on Countries, only nationwide bids. |
+| **Active** | Count of fully operating bids at this level, meaning customers who are ready to buy right now. On States, only state-wide bids count, and on Countries, only nationwide bids do. |
 | **Top Bid** | The highest current bid amount in this location. |
 
 Demand columns always reflect your bids as they stand right now.
@@ -40,9 +42,9 @@ These columns cover the timeframe you pick in the header.
 
 ### Timeframe, filters, and search
 
-Use the timeframe picker in the top-right to choose the period for the lead columns: **Billing period**, **Today**, **7D**, **4W**, **3M**, **12M**, **MTD**, **Last month**, **YTD**, **All**, or a **Custom** range. Your choice carries over between the Locations pages and the [Dashboard](/features/dashboard#choosing-a-timeframe).
+Use the timeframe picker in the top-right to choose the period for the lead columns. The options are **Billing period**, **Today**, **7D**, **4W**, **3M**, **12M**, **MTD**, **Last month**, **YTD**, **All**, and a **Custom** range. Your choice carries over between the Locations pages and the [Dashboard](/features/dashboard#choosing-a-timeframe).
 
-By default, the table covers all lead types. Use the **Lead types** filter to narrow down to specific ones—useful if you want to see where demand is strongest for one product versus another. The Counties page adds a **State** filter, plus a **Country** filter for multi-country workspaces. Search by name to find a location quickly. Filters and sorting are kept in the page URL, so you can bookmark a view.
+By default, the table covers all lead types. Use the **Lead types** filter to narrow down to specific ones, which is useful if you want to see where demand is strongest for one product versus another. The Counties page adds a **State** filter, plus a **Country** filter for multi-country workspaces. Search by name to find a location quickly. Filters and sorting are kept in the page URL, so you can bookmark a view.
 
 <Frame>
   <img className="block dark:hidden" src="/images/tenant/locations/states-light.webp" alt="States list showing active bids, top bid, received leads, and value columns for each state" />
@@ -64,23 +66,23 @@ Click any location to see detailed information about that specific geography.
 
 ### Overview metrics
 
-- **Active Bids** — Bids ready to receive leads in this location
-- **Interested Customers** — Customers with *any* bid on this location, including paused or otherwise inactive bids
-- **Top Bid** — The highest bid amount, across all lead types or just the ones you've filtered to
+- **Active Bids** are bids ready to receive leads in this location
+- **Interested Customers** are customers with *any* bid on this location, including paused or otherwise inactive bids
+- **Top Bid** is the highest bid amount, across all lead types or just the ones you've filtered to
 
-The distinction between active bids and interested customers matters. Active bids tell you current demand. Interested customers tell you *potential* demand—people who've shown interest but might be paused due to budget, capacity, or other reasons.
+The distinction between active bids and interested customers matters. Active bids tell you current demand. Interested customers tell you *potential* demand, meaning people who've shown interest but might be paused due to budget, capacity, or other reasons.
 
 ### Values
 
-Below the tiles, a row of values for the selected timeframe (the last 30 days unless you pick another): **Leads assigned**, **Minimum Value**, **Maximum Value**, and **Average Value**, each compared with the previous period of the same length.
+Below the tiles, a row of values covers the selected timeframe (the last 30 days unless you pick another). It shows **Leads assigned**, **Minimum Value**, **Maximum Value**, and **Average Value**, each compared with the previous period of the same length.
 
 ### Bids
 
-A table of the bids set at exactly this level: county bids on a county page, state-wide bids on a state page, nationwide bids on a country page. Each row shows the **Customer**, the customer's status, **Lead Type**, **Amount**, and the bid's status broken out into **Operational**, **Funding**, **Cap**, and **Budget**. Use **Filters** to narrow by lead type or any of the four status types, and search by customer.
+This table lists the bids set at exactly this level, so county bids on a county page, state-wide bids on a state page, and nationwide bids on a country page. Each row shows the **Customer**, the customer's status, **Lead Type**, **Amount**, and the bid's status broken out into **Operational**, **Funding**, **Cap**, and **Budget**. Use **Filters** to narrow by lead type or any of the four status types, and search by customer.
 
 ### Child locations
 
-The sidebar lists what's inside the location:
+The sidebar lists what's inside the location.
 
 | When viewing | Shown in the sidebar |
 |--------------|----------------|
@@ -95,6 +97,6 @@ The sidebar lists what's inside the location:
 
 ## Related guides
 
-<Card title="Reading location analytics" icon="chart-line" href="/guides/reading-location-analytics" horizontal>
+<Card title="Reading location analytics" icon={<HugeIcon name="maps-location-01" card />} href="/guides/reading-location-analytics" horizontal>
   Spot geographic supply-and-demand gaps and act on them.
 </Card>

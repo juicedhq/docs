@@ -3,6 +3,8 @@ title: Notifications
 description: Templates and delivery configuration for automated messages.
 ---
 
+import { HugeIcon } from '/snippets/hugeicon.jsx';
+
 Notification templates let you customize the messaging customers receive when events happen in the system. You control the verbiage, formatting, and what details are included in each notification.
 
 Find them under **Settings → Application → Notification Templates**. Each row is a notification type, with columns for each channel showing whether it's **Visible** to customers and turned on by **Default** for new contacts.
@@ -14,7 +16,7 @@ Find them under **Settings → Application → Notification Templates**. Each ro
 
 ## Channels
 
-Notifications can be delivered through three channels, but channel availability varies by event:
+Notifications can be delivered through three channels, but channel availability varies by event.
 
 | Channel | Description | Requirements |
 |---------|-------------|--------------|
@@ -22,13 +24,13 @@ Notifications can be delivered through three channels, but channel availability 
 | SMS | Sent via Twilio | [Twilio integration](/features/integrations#twilio) |
 | In-App | Shown in the notifications bell of every user on the customer's account | None |
 
-Each channel has its own template, so you can tailor the message format and length appropriately: detailed HTML emails, concise text messages, and quick in-app alerts. The Email channel only appears once SendGrid is configured, and SMS only once Twilio is.
+Each channel has its own template, so you can tailor the message format and length appropriately, such as detailed HTML emails, concise text messages, and quick in-app alerts. The Email channel only appears once SendGrid is configured, and SMS only once Twilio is.
 
 Some events don't support every channel. Account Archived, Account Restored, Payment Failed, Payment Successful, and the two checkout emails are email-only, and Subscription Payment Failed goes out by email and in-app.
 
 ## Notification events
 
-Templates are available for the following events:
+Templates are available for the following events.
 
 | Event | Description |
 |-------|-------------|
@@ -54,39 +56,39 @@ The two checkout emails only appear when checkout pages are enabled for your acc
 
 ## Template variables
 
-Templates support merge fields using double curly braces: `{{ variable_name }}`. Available variables depend on the notification type.
+Templates support merge fields using double curly braces, like `{{ variable_name }}`. Available variables depend on the notification type.
 
 ### Common variables
 
-These are available in all templates:
+These are available in all templates.
 
-- `{{ actionLink }}` - URL to the relevant page
-- `{{ defaultActionText }}` - Default text for the action button
-- `{{ supportEmail }}` - Your tenant's support email
+- `{{ actionLink }}` is the URL to the relevant page.
+- `{{ defaultActionText }}` is the default text for the action button.
+- `{{ supportEmail }}` is your tenant's support email.
 
 ### Lead variables
 
-Available for lead-related notifications (Lead Assigned, Outbid, Bid Matched, Return Approved):
+These are available for lead-related notifications (Lead Assigned, Outbid, Bid Matched, Return Approved).
 
 - `{{ lead.public_id }}`, `{{ lead.uuid }}`
 - `{{ lead.full_name }}`, `{{ lead.first_name }}`, `{{ lead.last_name }}`
 - `{{ lead.email }}`, `{{ lead.phone }}`
 - `{{ lead.address_1 }}`, `{{ lead.address_2 }}`, `{{ lead.city }}`
 - `{{ lead.leadType.name }}`
-- `{{ lead.details.field_name }}` - Any custom field on the lead category
+- `{{ lead.details.field_name }}` for any custom field on the lead category
 
 ### Customer variables
 
-Available for customer-related notifications:
+These are available for customer-related notifications.
 
 - `{{ customer.name }}`, `{{ customer.email }}`, `{{ customer.phone }}`
 - `{{ customer.address }}`, `{{ customer.city }}`, `{{ customer.state }}`, `{{ customer.zip }}`
-- `{{ customer.leads_count }}` - For batch notifications
+- `{{ customer.leads_count }}` for batch notifications
 
 ### Other variables
 
-- **Buy order notifications**: `{{ buyOrder.amount }}`, `{{ buyOrder.scope }}`, `{{ buyOrder.status }}`
-- **Return tier notifications**: `{{ disputeTier.name }}`, `{{ disputeTier.discount_percentage }}`, `{{ disputeTier.penalty_percentage }}`
+- **Buy order notifications** can use `{{ buyOrder.amount }}`, `{{ buyOrder.scope }}`, `{{ buyOrder.status }}`
+- **Return tier notifications** can use `{{ disputeTier.name }}`, `{{ disputeTier.discount_percentage }}`, `{{ disputeTier.penalty_percentage }}`
 
 ## Editing templates
 
@@ -97,12 +99,12 @@ Click a notification type to open its editor. The top of the page lists the **Av
   <img className="hidden dark:block" src="/images/tenant/settings/notification-template-manage-dark.webp" alt="Edit Lead Assigned Template page listing available variables such as lead.full_name and customer.name, followed by the Email Template card with Visible to customers and Enabled by default switches" />
 </Frame>
 
-Below that is one card per channel (**Email Template**, **SMS Template**, **In-App Template**), each with:
+Below that is one card per channel (**Email Template**, **SMS Template**, **In-App Template**), each with four settings.
 
-- **Visible to customers**: when off, this notification type is hidden from customers' notification preferences.
-- **Enabled by default**: the initial preference when a new contact is created.
-- **Subject**: the email subject or the in-app notification's title. Required for email; SMS has no subject.
-- **Body**: use `{{ variable }}` placeholders. Emails keep basic formatting (bold, italic, underline, strikethrough) and put each line in its own paragraph; lines written as `Label: value` are laid out as a tidy details list. Keep SMS bodies short.
+- **Visible to customers** hides this notification type from customers' notification preferences when it's off.
+- **Enabled by default** sets the initial preference when a new contact is created.
+- **Subject** is the email subject or the in-app notification's title. It's required for email, and SMS has no subject.
+- **Body** takes `{{ variable }}` placeholders. Emails keep basic formatting (bold, italic, underline, strikethrough) and put each line in its own paragraph; lines written as `Label: value` are laid out as a tidy details list. Keep SMS bodies short.
 
 Emails get a button to the relevant page automatically, labeled with the type's default action text, so you don't need to add the link yourself.
 
@@ -114,6 +116,6 @@ To check how a message lands, add yourself as a [contact](/features/customers#co
 
 ## Related guides
 
-<Card title="Customizing notification templates" icon="bell" href="/guides/customizing-notification-templates" horizontal>
+<Card title="Customizing notification templates" icon={<HugeIcon name="notification-03" card />} href="/guides/customizing-notification-templates" horizontal>
   Rewrite the email, SMS, and in-app messages Juiced sends customers.
 </Card>

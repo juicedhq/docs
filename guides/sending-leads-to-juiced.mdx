@@ -1,18 +1,18 @@
 ---
 title: Sending Leads to Juiced
-description: How to submit leads to Juiced via the API — from grabbing credentials to verifying the lead landed.
+description: How to submit leads to Juiced via the API, from grabbing credentials to verifying the lead landed.
 ---
 
 Once you've [set up a source](/guides/setting-up-a-source-and-its-attributes), you're ready to start sending leads. Submissions go to a single REST endpoint, authenticated with the source's credentials, with the payload shaped by the source's [fields](/features/lead-categories#field-types) and required-for-post settings.
 
-This guide walks you through making your first submission end-to-end: pulling credentials, reading the field reference, posting a lead, and confirming it was accepted.
+This guide walks you through making your first submission end-to-end, from pulling credentials and reading the field reference to posting a lead and confirming it was accepted.
 
 ## Prerequisites
 
 - A source configured for the lead category you want to ingest into. If you don't have one yet, see [Setting Up a Source and Its Attributes](/guides/setting-up-a-source-and-its-attributes).
-- Something to make HTTP requests with — `curl`, Postman, your application code, or whatever your integrator uses.
+- Something to make HTTP requests with, like `curl`, Postman, your application code, or whatever your integrator uses.
 
-## Step 1: Open the source's API specification
+## 1. Open the source's API specification
 
 Open **Sources** under **Ingest** in the sidebar and click the source you're integrating. On the source's **Overview**, open the **More actions** (⋯) menu in the header and choose **View API Spec**.
 
@@ -21,15 +21,15 @@ Open **Sources** under **Ingest** in the sidebar and click the source you're int
   <img className="hidden dark:block" src="/images/tenant/ingest/source-detail-dark.webp" alt="Source overview with the Edit button and the More actions menu in the header" />
 </Frame>
 
-A new tab opens with a shareable page titled "API Specification for [Source Name]". This page contains everything an integrator needs: credentials, the endpoints, example requests and responses, and the full field reference.
+A new tab opens with a shareable page titled "API Specification for [Source Name]". This page contains everything an integrator needs, including credentials, the endpoints, example requests and responses, and the full field reference.
 
 <Warning>
 The API spec link is a signed URL that expires in 7 days. After that, the link stops working. If you need to share it again, come back to the source and choose **View API Spec** to generate a fresh link.
 </Warning>
 
-## Step 2: Grab authentication credentials
+## 2. Grab authentication credentials
 
-The first section of the API spec is **Authentication**. Juiced supports two auth methods—pick whichever fits your integration:
+The first section of the API spec is **Authentication**. Juiced supports two auth methods, so pick whichever fits your integration.
 
 | Method | How it works |
 |--------|-------------|
@@ -40,23 +40,23 @@ The first section of the API spec is **Authentication**. Juiced supports two aut
 On the spec page, expand **Manually constructing the authorization header** for the exact base64-encoded value to use with Basic Auth.
 </Tip>
 
-## Step 3: Review the field reference
+## 3. Review the field reference
 
 Scroll down to **Field Reference**. The table lists every field this source accepts, what type it is, whether it's required for pings, required for posts, and a realistic example value.
 
 The fields marked **Required for post** must be present in every lead submission or the API returns a `422` with a list of validation errors. Fields marked **Required for ping** must also be present when using [ping-post](/features/ping-post).
 
-Fields typed as **List of Values** show the allowed values next to the example—any submitted value outside that list will fail validation.
+Fields typed as **List of Values** show the allowed values next to the example. Any submitted value outside that list will fail validation.
 
 <Note>
-The Field Reference is the source of truth for what this source accepts. It automatically reflects both lead category fields and any source-level fields you've added (except fields hidden from the API spec), so integrators don't need to ask "what fields do I send?"—they can see it here.
+The Field Reference is the source of truth for what this source accepts. It automatically reflects both lead category fields and any source-level fields you've added (except fields hidden from the API spec), so integrators don't need to ask "what fields do I send?" because they can see it here.
 </Note>
 
-## Step 4: Submit a lead
+## 4. Submit a lead
 
 Send a `POST` to the `/api/leads` endpoint shown on the spec page. Use the exact URL from the spec rather than typing it yourself.
 
-The spec page includes a copy-paste-ready **Example cURL Request** block with your credentials already baked in. Here's the general shape:
+The spec page includes a copy-paste-ready **Example cURL Request** block with your credentials already baked in. Here's the general shape.
 
 ```bash
 curl -X POST \
@@ -76,7 +76,7 @@ curl -X POST \
   https://usejuiced.com/api/leads
 ```
 
-An accepted submission returns `201 Created` with a body like:
+An accepted submission returns `201 Created` with a body like this one.
 
 ```json
 {
@@ -87,7 +87,7 @@ An accepted submission returns `201 Created` with a body like:
 }
 ```
 
-The `status` field is one of three values, decided by the source's [status responses](/features/sources#status-responses) mapping:
+The `status` field is one of three values, decided by the source's [status responses](/features/sources#status-responses) mapping.
 
 | Status | What it means (by default) |
 |--------|--------------|
@@ -98,14 +98,14 @@ The `status` field is one of three values, decided by the source's [status respo
 If you've changed the source's status response mapping, the statuses behind each value change with it. Your own lead's actual status is always visible on its page in Juiced.
 
 <Warning>
-Validation failures return `422` with an `errors` object keyed by field. Fix the payload and re-submit; the original submission is recorded as rejected and won't be retried automatically.
+Validation failures return `422` with an `errors` object keyed by field. Fix the payload and re-submit. The original submission is recorded as rejected and won't be retried automatically.
 </Warning>
 
-## Step 5: Verify the submission landed
+## 5. Verify the submission landed
 
 Back in Juiced, open **Incoming logs** under **Entries** in the sidebar. Every submission gets an incoming log, newest first, showing the source, the post's outcome, the lead it created, and who bought it.
 
-Click the log, then the **Post** link under **Records**, to open the post inspector:
+Click the log, then the **Post** link under **Records**, to open the post inspector.
 
 <Frame>
   <img className="block dark:hidden" src="/images/tenant/logs/post-inspector-light.webp" alt="Post inspector with the request payload, Juiced's response, and Details and Records in the sidebar" />
@@ -125,7 +125,7 @@ Test traffic is hidden by default. If the source is in test mode, set the **Test
 
 ## Testing without real data
 
-If your source is in **test mode** (switched on from the source's edit form), you can submit leads using test zip codes without touching production data:
+If your source is in **test mode** (switched on from the source's edit form), you can submit leads using test zip codes without touching production data.
 
 | Zip | Response `status` (default mapping) | Lead status |
 |-----|----------|-------------|
@@ -137,16 +137,20 @@ If your source is in **test mode** (switched on from the source's edit form), yo
 | Any other zip | `rejected` | Marked as test data and moved to Audit |
 
 <Tip>
-Test mode is the right tool for integration development and vendor sandboxing. Turn it off before going live — leads posted while test mode is on won't be distributed to real customers.
+Test mode is the right tool for integration development and vendor sandboxing. Turn it off before going live, because leads posted while test mode is on won't be distributed to real customers.
+</Tip>
+
+<Tip>
+  Buying traffic to fill this pipeline? Our media buyers are on the live calls in the [Hybrid Agency Mastermind](https://www.skool.com/hybrid-agency-mastermind), our paid coaching group.
 </Tip>
 
 ## What happens next
 
-Once a lead is accepted:
+Once a lead is accepted, a few things follow.
 
-- **Matching** runs immediately — Juiced classifies the lead into a [lead type](/features/lead-types) and runs it through your [distribution stages](/features/distribution).
+- **Matching** runs immediately. Juiced classifies the lead into a [lead type](/features/lead-types) and runs it through your [distribution stages](/features/distribution).
 - **The response** tells you the outcome before the API call returns.
-- **Delivery** — if the lead was assigned, the customer sees it in their portal and any configured [webhooks](/features/webhooks) fire.
-- **Leads page** — every accepted lead appears under **Entries** → **Leads** with its full history.
+- **Delivery** follows if the lead was assigned, so the customer sees it in their portal and any configured [webhooks](/features/webhooks) fire.
+- The **Leads page** lists every accepted lead under **Entries** → **Leads** with its full history.
 
 If you're expecting higher volume or want to check price and availability before committing to a full submission, see [ping-post](/features/ping-post) for the two-phase submission flow.

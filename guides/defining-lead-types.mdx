@@ -3,7 +3,7 @@ title: Defining Lead Types
 description: How to create a lead type, set its conditions, and configure bidding and marketplace behavior so leads are routed exactly where you want them.
 ---
 
-[Lead types](/features/lead-types) are a refinement of a [lead category](/features/lead-categories)—they classify leads by intent, value, or any other axis you care about. A single "Home Insurance" lead category might route into three lead types: *High-Value Homeowners*, *Renters*, and a fallback for everything else.
+[Lead types](/features/lead-types) are a refinement of a [lead category](/features/lead-categories), and they classify leads by intent, value, or any other axis you care about. A single "Home Insurance" lead category might route into three lead types (*High-Value Homeowners*, *Renters*, and a fallback for everything else).
 
 This guide walks you through creating a lead type from scratch, writing the conditions that match it, setting priority, and configuring the bidding and marketplace settings that decide how customers compete for its leads.
 
@@ -12,11 +12,11 @@ This guide walks you through creating a lead type from scratch, writing the cond
 - An existing **lead category** with the fields you plan to match on. If you haven't added custom fields yet, see [Adding Fields to a Lead Category](/guides/adding-fields-to-a-lead-category) first.
 - A role that can create and update lead types.
 
-## Step 1: Create the lead type
+## 1. Create the lead type
 
 Open **Lead Types** in the sidebar (under the **Ingest** group) and click **New lead type** in the top-right corner.
 
-The **Lead Type** section has these settings:
+The **Lead Type** section has these settings.
 
 ### Name
 
@@ -32,10 +32,10 @@ Optional free-text description for your team's reference. 1,024 characters maxim
 
 ### Fallback Lead Type
 
-Turn this on to make the type a catch-all. Fallback types automatically match any lead that doesn't match any other lead type in the same category. When it's on:
+Turn this on to make the type a catch-all. Fallback types automatically match any lead that doesn't match any other lead type in the same category. When it's on, two things change.
 
-- The **Priority** field is hidden—fallback types are always evaluated last.
-- The **Conditions** section is hidden—fallbacks match by definition, not by rule.
+- The **Priority** field is hidden, because fallback types are always evaluated last.
+- The **Conditions** section is hidden, because fallbacks match by definition, not by rule.
 
 Only one fallback is allowed per lead category, and every category already has one from when it was created. If you try to add a second, you'll see "A fallback lead type already exists for this lead category."
 
@@ -46,23 +46,23 @@ Only one fallback is allowed per lead category, and every category already has o
 
 ### Priority
 
-A number that decides which lead type wins when a lead matches more than one non-fallback type. **Lower values mean higher priority**—a type with priority `1` beats a type with priority `2`.
+A number that decides which lead type wins when a lead matches more than one non-fallback type. **Lower values mean higher priority**, so a type with priority `1` beats a type with priority `2`.
 
 <Tip>
 Priority only matters when your conditions overlap. If every lead type has mutually exclusive conditions, each lead matches exactly one type and priority is irrelevant.
 </Tip>
 
-## Step 2: Define conditions
+## 2. Define conditions
 
 The **Conditions** section is where you write the rules that decide whether an incoming lead matches this type. It's hidden when **Fallback Lead Type** is on.
 
-Click **Add filters** to add your first condition. Each condition has three parts:
+Click **Add filters** to add your first condition. Each condition has three parts.
 
 | Part | What to set |
 |------|-------------|
-| **Property** | What to check. Your lead fields appear under **Fields**; **Source** appears under **Metadata**. |
-| **Operator** | How to compare the property to the value. The options depend on the property's type—see [Available operators](/features/lead-types#available-operators) for the full list. |
-| **Value** | What to compare against. The input adapts to the field type: list-of-values fields get a dropdown of their allowed values, numeric fields get a number input, and so on. |
+| **Property** | What to check. Your lead fields appear under **Fields**, and **Source** appears under **Metadata**. |
+| **Operator** | How to compare the property to the value. The options depend on the property's type. See [Available operators](/features/lead-types#available-operators) for the full list. |
+| **Value** | What to compare against. The input adapts to the field type, so list-of-values fields get a dropdown of their allowed values, numeric fields get a number input, and so on. |
 
 <Note>
 The **Fields** list includes every field in your workspace, not just the ones in this lead type's category. Pick fields this category actually collects.
@@ -70,12 +70,12 @@ The **Fields** list includes every field in your workspace, not just the ones in
 
 ### Combining conditions
 
-- **Conditions within a group** are combined with **AND**—every condition in the group must be true for the group to match. Each group is labeled **Match all of the following**.
-- **Groups are combined with OR**—a lead matches the lead type if any group matches.
+- **Conditions within a group** are combined with **AND**, so every condition in the group must be true for the group to match. Each group is labeled **Match all of the following**.
+- **Groups are combined with OR**, so a lead matches the lead type if any group matches.
 
 To add another AND condition to a group, click `Add "AND" condition` at the bottom of the group. To add a new OR group, click `Add "OR" group` at the bottom of the section.
 
-<Accordion title="Example: Qualified auto insurance leads">
+<Accordion title="Example of qualified auto insurance leads">
 You want a lead type that catches drivers who are either experienced with a clean record, or young with a premium vehicle.
 
 **Group 1**
@@ -93,19 +93,19 @@ A lead matches this type if it satisfies all of Group 1's conditions *or* all of
 Turning **Fallback Lead Type** on clears all existing conditions. If you turn it back off, you'll need to click **Add filters** to rebuild them from scratch.
 </Warning>
 
-## Step 3: Save the lead type
+## 3. Save the lead type
 
 Click **Create lead type** at the bottom of the form. You'll see "Lead type created." and land on the new lead type's edit page.
 
 From here, the tabs along the top take you to **Overview**, **Bidding**, and **Marketplace**. The lead type's page header has **Edit** and **Archive**.
 
-## Step 4: Add at least one bidding scope
+## 4. Add at least one bidding scope
 
-A new lead type has no bidding scopes, which means customers can't bid on it yet. Open the **Bidding** tab and click **New bidding scope**. The form has these fields:
+A new lead type has no bidding scopes, which means customers can't bid on it yet. Open the **Bidding** tab and click **New bidding scope**. The form has these fields.
 
 | Field | What it controls |
 |-------|-----------------|
-| **Scope** | The geographic level customers bid at: **County**, **State**, or **Nationwide**. Each scope can only be added once per lead type. |
+| **Scope** | The geographic level customers bid at (**County**, **State**, or **Nationwide**). Each scope can only be added once per lead type. |
 | **Enabled** | Whether this scope is active. Disabled scopes don't appear to customers. |
 | **Fixed Price** | When on, customers pay a single set price instead of bidding within a range. Relabels **Minimum** to **Price** and hides **Maximum** and **Step**. |
 | **Minimum** | The lowest bid a customer can place. When Fixed Price is on, this becomes the single price. |
@@ -113,7 +113,7 @@ A new lead type has no bidding scopes, which means customers can't bid on it yet
 | **Step** | The increment between allowed bid values. Can't be larger than Maximum. |
 
 <Tip>
-**Fixed Price** is the right choice for flat-rate pricing where you don't want price competition—every customer pays the same. Use the range (Minimum/Maximum/Step) when you want customers competing on price.
+**Fixed Price** is the right choice for flat-rate pricing where you don't want price competition, since every customer pays the same. Use the range (Minimum/Maximum/Step) when you want customers competing on price.
 </Tip>
 
 Save the scope. It appears in the **Bidding Scopes** table with its **Scope**, **Enabled** status, **Fixed** price, **Minimum**, **Maximum**, and **Step**. Use a row's actions to **Edit** or **Delete** it.
@@ -127,9 +127,9 @@ Save the scope. It appears in the **Bidding Scopes** table with its **Scope**, *
 Until at least one bidding scope is enabled, customers won't see any bidding options for this lead type in the customer portal.
 </Note>
 
-## Step 5: Configure marketplace settings (optional)
+## 5. Configure marketplace settings (optional)
 
-The **Marketplace** tab controls the reverse auction for this lead type's leads when a [Marketplace distribution stage](/features/distribution#stage-methods) lists them. Turn on **Enable marketplace** and fill in:
+The **Marketplace** tab controls the reverse auction for this lead type's leads when a [Marketplace distribution stage](/features/distribution#stage-methods) lists them. Turn on **Enable marketplace** and fill in these settings.
 
 | Setting | What it means |
 |---------|---------------|
@@ -138,7 +138,7 @@ The **Marketplace** tab controls the reverse auction for this lead type's leads 
 | **Increment** | How much the price drops at the end of each interval. |
 | **Interval** | The number of minutes between price drops (1 to 525,600). |
 
-As you type, a summary below the form spells out the auction in plain English, for example: "Your auction will start at $50.00 and end at $10.00. The price will drop by $5.00 every 60 minutes. The auction will last for a total of 480 minutes." Until all four values are valid, it asks you to fill them in instead. Save with the bar at the bottom of the page.
+As you type, a summary below the form spells out the auction in plain English. For example, it might say "Your auction will start at \$50.00 and end at \$10.00. The price will drop by \$5.00 every 60 minutes. The auction will last for a total of 480 minutes." Until all four values are valid, it asks you to fill them in instead. Save with the bar at the bottom of the page.
 
 <Frame>
   <img className="block dark:hidden" src="/images/tenant/ingest/lead-type-marketplace-light.webp" alt="Marketplace tab with Enable marketplace on, First Price, Last Price, Increment, and Interval fields, and a plain-English summary of the auction" />
@@ -149,13 +149,17 @@ As you type, a summary below the form spells out the auction in plain English, f
 Make sure **First Price** is higher than **Last Price**. The form doesn't stop you from saving them the other way around.
 </Warning>
 
+<Tip>
+  How you tier leads is a business decision as much as a settings one. Ask how other operators price their premium leads in [That Agency Group](https://www.skool.com/that-agency-group), our free Skool community.
+</Tip>
+
 ## What happens next
 
-Once your lead type is created and configured:
+Once your lead type is created and configured, a few things happen.
 
 - **Incoming leads** start being evaluated against its conditions. Matches are classified as this lead type.
-- **Priority** resolves conflicts—if a lead matches multiple types, the one with the lowest priority value wins.
+- **Priority** resolves conflicts. If a lead matches multiple types, the one with the lowest priority value wins.
 - **Bidding scopes** show up in the customer portal under this lead type, and customers can place bids that compete for its leads.
-- **Marketplace behavior** kicks in when a Marketplace stage lists the lead—the reverse auction starts at **First Price** and drops by **Increment** every **Interval** minutes until a buyer takes it or it hits **Last Price**.
+- **Marketplace behavior** kicks in when a Marketplace stage lists the lead. The reverse auction starts at **First Price** and drops by **Increment** every **Interval** minutes until a buyer takes it or it hits **Last Price**.
 
-To change any of this later, open **Lead Types**, click the type, and use the tabs to jump between Overview, Bidding, and Marketplace; click **Edit** to change its name, category, conditions, or priority. To retire a lead type, click **Archive**—this archives the type and all bids associated with it.
+To change any of this later, open **Lead Types**, click the type, and use the tabs to jump between Overview, Bidding, and Marketplace. Click **Edit** to change its name, category, conditions, or priority. To retire a lead type, click **Archive**, which archives the type and all bids associated with it.

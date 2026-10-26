@@ -3,27 +3,27 @@ title: Managing Customer Finances
 description: Add and remove wallet funds, read a customer's transactions and timeline, and set up auto recharge so the tap never runs dry.
 ---
 
-Every customer has a wallet that pays for their leads. Deposits go in, assigned leads take money out, and returns put it back. This guide covers the controls you have for moving money on a customer's behalf and keeping their wallet topped up. For the full list of transaction types, see [Transactions](/features/transactions); for fees and minimums, see [Payments & Deposits](/features/payments-and-deposits).
+Every customer has a wallet that pays for their leads. Deposits go in, assigned leads take money out, and returns put it back. This guide covers the controls you have for moving money on a customer's behalf and keeping their wallet topped up. For the full list of transaction types, see [Transactions](/features/transactions). For fees and minimums, see [Payments & Deposits](/features/payments-and-deposits).
 
 ## Prerequisites
 
 - The **Admin** or **Customer Support** [role](/features/roles). Both can add and remove funds.
 - A customer to work with. See [Onboarding customers](/guides/onboarding-customers).
-- For auto recharge: Stripe connected and a card saved on the customer.
+- Stripe connected and a card saved on the customer, if you want auto recharge.
 
-## Step 1: Check the customer's funding
+## 1. Check the customer's funding
 
-Click **Customers** in the sidebar and open the customer. On the **Overview**, the **Wallet** stat shows the current balance, and the **Funding** status card tells you where they stand:
+Click **Customers** in the sidebar and open the customer. On the **Overview**, the **Wallet** stat shows the current balance, and the **Funding** status card tells you where they stand.
 
 | Funding | What it means |
 |---------|---------------|
-| **Available** | The balance can cover lead purchases |
-| **Limited** | The balance is running low |
-| **Exhausted** | Out of funds, so they can't buy leads. The customer shows as **Inactive** in your lists. |
+| <span className="tone-badge tone-success">Available</span> | The balance can cover lead purchases |
+| <span className="tone-badge tone-warning">Limited</span> | Some bids are held back, because the balance covers their minimum but not the full bid amount |
+| <span className="tone-badge tone-danger">Exhausted</span> | No bid can compete, because the balance doesn't cover any bid's minimum. The customer shows as <span className="tone-badge tone-danger">Inactive</span> in your lists. |
 
-You don't set funding status yourself; it follows the balance. To change it, move money.
+You don't set funding status yourself, because it follows the balance. To change it, move money.
 
-## Step 2: Add funds
+## 2. Add funds
 
 Open the **More actions** (⋯) menu in the header and choose **Add funds**.
 
@@ -38,22 +38,22 @@ Open the **More actions** (⋯) menu in the header and choose **Add funds**.
 | **Description** | Required. Why you're adding funds, for example "Wire transfer received 4/15" or "Goodwill credit". |
 | **Receipt URL** | Optional. A link to the invoice, wire confirmation, or receipt. It shows as **View receipt** in the customer's activity. |
 
-The balance updates right away and the deposit appears in the customer's transactions as **Funds Added By Tenant**. No card is charged; use this for money you've collected some other way, or for credits.
+The balance updates right away and the deposit appears in the customer's transactions as **Funds Added By Tenant**. No card is charged, so use this for money you've collected some other way, or for credits.
 
 <Tip>
 Always fill in the receipt URL for real money. When someone asks about this deposit in six months, you'll have the answer one click away.
 </Tip>
 
-## Step 3: Remove funds
+## 3. Remove funds
 
 Choose **Remove funds** from **More actions** to take money back, for example after a mistaken credit or a refund you handled outside Juiced.
 
-- **Amount**: at least $1 and no more than the current balance
-- **Description**: required, and **visible to the customer**, so write it for them ("Refund for duplicate deposit on 4/21")
+- **Amount** must be at least $1 and no more than the current balance.
+- **Description** is required and **visible to the customer**, so write it for them ("Refund for duplicate deposit on 4/21").
 
 The withdrawal is recorded as **Funds Subtracted By Tenant**. If you take out too much, add it back with **Add funds** and an explanatory description.
 
-## Step 4: Read the transactions
+## 4. Read the transactions
 
 Open the **Transactions** tab for every wallet movement, newest first, with totals for **Transactions**, **Deposits**, **Withdrawals**, and **Net** at the top.
 
@@ -64,18 +64,18 @@ Open the **Transactions** tab for every wallet movement, newest first, with tota
 
 Each row shows the event, such as **Lead Assigned**, **Lead Returned**, **Funds Added**, **Auto Recharge**, or **Checkout Bonus**. See [Transactions](/features/transactions) for what each one means.
 
-## Step 5: Check the timeline
+## 5. Check the timeline
 
-Transactions are the money log. The timeline is the account log: leads received, funds added or removed, pauses, and other changes. The **Activity** feed on the overview shows the latest few; choose **Timeline** from **More actions** (or **View all** under the feed) for the full history.
+Transactions are the money log. The timeline is the account log, covering leads received, funds added or removed, pauses, and other changes. The **Activity** feed on the overview shows the latest few. Choose **Timeline** from **More actions** (or **View all** under the feed) for the full history.
 
 <Frame>
   <img className="block dark:hidden" src="/images/tenant/customers/customer-timeline-light.webp" alt="Customer Timeline panel listing recent customer activity, such as leads received from a source, with how long ago each happened" />
   <img className="hidden dark:block" src="/images/tenant/customers/customer-timeline-dark.webp" alt="Customer Timeline panel listing recent customer activity, such as leads received from a source, with how long ago each happened" />
 </Frame>
 
-## Step 6: Set up auto recharge
+## 6. Set up auto recharge
 
-Auto recharge charges the customer's default card whenever their balance drops below a trigger, so they don't run dry mid-campaign. Customers can turn it on themselves under **Billing → Auto recharge** in their portal ([see their side](/customer-portal/billing#auto-recharge)), or you can set it for them:
+Auto recharge charges the customer's default card whenever their balance drops below a trigger, so they don't run dry mid-campaign. Customers can turn it on themselves under **Billing → Auto recharge** in their portal ([see their side](/customer-portal/billing#auto-recharge)), or you can set it for them.
 
 1. On the customer, click **Edit**.
 2. In **Auto Recharge**, turn on **Auto Recharge**.
@@ -88,16 +88,16 @@ If the balance is already below the trigger, the first recharge runs straight aw
 You can only turn auto recharge on when Stripe is connected (otherwise you'll see **Auto recharge needs Stripe**), customer payments aren't disabled in Payments & Deposits, and the customer has an active card.
 </Warning>
 
-## Step 7: Check payment methods
+## 7. Check payment methods
 
-The **Payment Methods** tab lists the customer's saved cards with their **Status** and **Expiration**. You can **Make default** (the default card is the one auto recharge uses) or **Remove** a card, but not add one: customers add cards from their portal, so card details never pass through your hands.
+The **Payment Methods** tab lists the customer's saved cards with their **Status** and **Expiration**. You can **Make default** (the default card is the one auto recharge uses) or **Remove** a card, but not add one. Customers add cards from their portal, so card details never pass through your hands.
 
 ## When a customer says they can't buy
 
-Check in this order:
+Check these in order.
 
-1. **Funding**: is the wallet **Exhausted**? Add funds or get them to.
-2. **Caps and budgets**: a full wallet doesn't lift a cap. Look for **Capped** or **Exhausted** on their bids. See [Budgets and caps](/features/budgets-and-caps).
-3. **The bids themselves**: on the **Bids** tab, check that they're active and competitive.
+1. Check **Funding**. Is the wallet **Exhausted**? Add funds or get them to.
+2. Check **caps and budgets**, because a full wallet doesn't lift a cap. Look for <span className="tone-badge tone-danger">Exhausted</span> on their bids. See [Budgets and caps](/features/budgets-and-caps).
+3. Check **the bids themselves** on the **Bids** tab to make sure they're active and competitive.
 
 Nine times out of ten, it's the wallet.

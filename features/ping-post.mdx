@@ -5,13 +5,13 @@ description: The ping/post workflow for real-time lead validation and delivery t
 
 Ping-post is a two-step process for selling leads in real time. First, a **ping** sends partial lead data to determine pricing and acceptance. Then, a **post** delivers the full lead data once a buyer is confirmed.
 
-This workflow lets you validate leads and get competitive bids before committing to a sale—maximizing revenue while ensuring leads only go where they're wanted.
+This workflow lets you validate leads and get competitive bids before committing to a sale, which maximizes revenue while ensuring leads only go where they're wanted.
 
 ## How it works
 
-1. **Ping phase**: Your source sends partial lead data (typically just enough to identify the lead type and location). Juiced auctions this data to your customers, collecting bids in real time.
+1. In the **ping phase**, your source sends partial lead data (typically just enough to identify the lead type and location). Juiced auctions this data to your customers, collecting bids in real time.
 
-2. **Post phase**: Once a winning bid is determined, your source sends the complete lead data. The lead is assigned to the winning customer, funds are transferred, and everyone's happy.
+2. In the **post phase**, your source sends the complete lead data once a winning bid is determined. The lead is assigned to the winning customer, funds are transferred, and everyone's happy.
 
 The ping contains minimal information to protect the lead's value until a buyer commits. The post delivers everything needed to contact and convert the lead.
 
@@ -23,7 +23,7 @@ Partners are external systems that receive your leads. When you configure a part
 
 Each partner has their own field names and payload structure. Request mapping lets you transform Juiced's lead data into whatever format your partner expects.
 
-Use merge fields in double curly braces to insert lead data:
+Use merge fields in double curly braces to insert lead data.
 
 ```json
 {
@@ -38,9 +38,9 @@ The mapping field picker shows all available fields for the lead category, with 
 
 ### Using ping response data in posts
 
-Some partners return data in their ping response that must be included in the subsequent post request—things like session IDs, tracking tokens, or campaign identifiers.
+Some partners return data in their ping response that must be included in the subsequent post request, such as session IDs, tracking tokens, or campaign identifiers.
 
-When configuring a post request mapping, you can reference fields from the ping response using the `response.` namespace:
+When configuring a post request mapping, you can reference fields from the ping response using the `response.` namespace.
 
 ```json
 {
@@ -63,13 +63,13 @@ If you don't see ping response fields in the picker, the partner may not have re
 
 ### Offer penalty percentage
 
-Sometimes you want to give certain partners a competitive disadvantage without changing what they actually pay. The **offer penalty percentage** does exactly this—it reduces a partner's offer score without affecting the charged amount.
+Sometimes you want to give certain partners a competitive disadvantage without changing what they actually pay. The **offer penalty percentage** does exactly this. It reduces a partner's offer score without affecting the charged amount.
 
-For example, if a partner submits a $100 offer and has a 25% penalty:
+For example, say a partner submits a $100 offer and has a 25% penalty.
 - Their **offer score** becomes $75 (used for ranking)
 - Their **charged amount** stays $100 (what they actually pay if they win)
 
-This is useful when:
+This is useful when any of these are true.
 - A partner has lower lead quality or conversion rates
 - You want to favor other partners without explicitly blocking anyone
 - You're managing partner relationships while maintaining pricing transparency
@@ -77,30 +77,30 @@ This is useful when:
 To set a penalty, enter a percentage (0-100) in the **Offer Penalty** field on the [partner](/features/partners) form. Leave it empty for no penalty.
 
 <Note>
-The penalty percentage is snapshotted on each offer, so changing a partner's penalty only affects future offers—not ones already in the system.
+The penalty percentage is snapshotted on each offer, so changing a partner's penalty only affects future offers, not ones already in the system.
 </Note>
 
 ## Offer scoring
 
-When multiple partners respond to a ping, their offers are ranked by score. The highest score wins. By default, the score equals the offer amount, but penalties can reduce this:
+When multiple partners respond to a ping, their offers are ranked by score. The highest score wins. By default, the score equals the offer amount, but penalties can reduce this.
 
 | Partner | Offer Amount | Penalty | Offer Score | Winner? |
 |---------|-------------|---------|-------------|---------|
-| Partner A | $100 | 0% | $100 | Yes |
-| Partner B | $110 | 25% | $82.50 | No |
-| Partner C | $90 | 0% | $90 | No |
+| Partner A | \$100 | 0% | \$100 | Yes |
+| Partner B | \$110 | 25% | \$82.50 | No |
+| Partner C | \$90 | 0% | \$90 | No |
 
-In this example, Partner A wins even though Partner B offered more money—because Partner B's penalty brought their score below Partner A's.
+In this example, Partner A wins even though Partner B offered more money, because Partner B's penalty brought their score below Partner A's.
 
 You can see every offer for a lead, with its penalty and score, in the **Offers** dialog on the lead's [incoming log](/features/logs#offers).
 
 ## Seeing ping-post traffic
 
-Every ping and post leaves a trail you can inspect:
+Every ping and post leaves a trail you can inspect.
 
-- **Incoming logs** — Each ping or post a source sends to you starts an [incoming log](/features/logs#incoming-logs). The **Ping**, **Post**, and **Honored** columns tell you at a glance whether the ping matched and whether its offer won on the post.
-- **Ping and post inspectors** — Open a ping or post from its log (or from a lead's **View Ping** / **View Post**) to see the exact request and response. See [Ping and post inspectors](/features/logs#ping-and-post-inspectors).
-- **Outgoing logs** — Every ping and post Juiced sends to a partner, with the partner's response, response code, and timing. See [Outgoing logs](/features/logs#outgoing-logs).
+- In **Incoming logs**, each ping or post a source sends to you starts an [incoming log](/features/logs#incoming-logs). The **Ping**, **Post**, and **Honored** columns tell you at a glance whether the ping matched and whether its offer won on the post.
+- **Ping and post inspectors** show the exact request and response. Open a ping or post from its log (or from a lead's **View Ping** / **View Post**) to see them. See [Ping and post inspectors](/features/logs#ping-and-post-inspectors).
+- **Outgoing logs** list every ping and post Juiced sends to a partner, with the partner's response, response code, and timing. See [Outgoing logs](/features/logs#outgoing-logs).
 
 <Frame>
   <img className="block dark:hidden" src="/images/tenant/logs/ping-inspector-light.webp" alt="Ping inspector showing the source's ping payload and Juiced's response with the offered price" />

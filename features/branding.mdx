@@ -3,7 +3,9 @@ title: Branding
 description: Customize your colors, logos, and icons in the customer portal.
 ---
 
-Make the customer portal feel like your own. Branding lets you customize the colors, logos, and icons your customers see when they sign in and use the platform. Think of it as the label on the bottle: the juice is the same, but now it's yours.
+import { HugeIcon } from '/snippets/hugeicon.jsx';
+
+Make the customer portal feel like your own. Branding lets you customize the colors, logos, and icons your customers see when they sign in and use the platform. Think of it as the label on the bottle. The juice is the same, but now it's yours.
 
 To configure your branding, click the gear in the rail and choose **Branding** under **Account**. Save your changes with the floating save bar.
 
@@ -18,7 +20,7 @@ To configure your branding, click the gear in the rail and choose **Branding** u
 |---------|--------------|
 | **Brand Color** | Used for buttons, links, and highlights throughout the customer portal, including the sign-in page and navigation. |
 | **Accent Color** | A second color for your brand. If you don't set one, the brand color is used. |
-| **Rail Style** | The background of the customer portal's navigation rail: **None**, **Primary**, **Accent**, or **Primary to Accent** (a gradient). |
+| **Rail Style** | The background of the customer portal's navigation rail, which can be **None**, **Primary**, **Accent**, or **Primary to Accent** (a gradient). |
 | **Reverse Direction** | Only shown for **Primary to Accent**. Flips the gradient to run from accent to primary. |
 
 Type a hex value, use the color swatch, or click **Pick from screen** to grab a color from anything on your display. Bold, saturated colors work best, since the brand color appears as text on both light and dark backgrounds.
@@ -56,6 +58,6 @@ Looking for the registration page headline, banner text, or consent links? They'
 
 ## Related guides
 
-<Card title="Customizing the customer portal" icon="palette" href="/guides/customizing-the-portal" horizontal>
+<Card title="Customizing the customer portal" icon={<HugeIcon name="paint-board" card />} href="/guides/customizing-the-portal" horizontal>
   Apply your brand (logos, colors, favicon, and footer) across the customer portal.
 </Card>

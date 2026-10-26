@@ -11,16 +11,16 @@ For the metric definitions themselves, see the [Location analytics feature page]
 
 - A role that can view analytics. If the **Locations** group isn't in your sidebar, ask an admin on your account.
 - At least a few weeks of lead and bid history. The metrics need volume to be meaningful, so fresh workspaces will see mostly zeros.
-- (Optional) A specific question you're trying to answer: "Where are we underpriced?", "Which states have unmet demand?", "Do any counties have bids but no leads?"
+- (Optional) A specific question you're trying to answer, like "Where are we underpriced?", "Which states have unmet demand?", or "Do any counties have bids but no leads?"
 
-## Step 1: Open the Locations views
+## 1. Open the Locations views
 
-In the sidebar, find the **Locations** group. It has three pages:
+In the sidebar, find the **Locations** group. It has three pages.
 
 | View | What it lists | Best for |
 |------|---------------|----------|
-| **Counties** | Every county (or your country's equivalent) across your operating countries. | Hyper-local analysis: "where exactly is demand concentrated?" |
-| **States** | Every state or territory. | Mid-level territory planning: "which states are underserved?" |
+| **Counties** | Every county (or your country's equivalent) across your operating countries. | Hyper-local analysis, like "where exactly is demand concentrated?" |
+| **States** | Every state or territory. | Mid-level territory planning, like "which states are underserved?" |
 | **Countries** | Every country your workspace operates in. | Multi-country workspaces rolling up national demand. |
 
 Single-country workspaces see that country's own terms automatically. Multi-country workspaces see combined labels such as **States / Territories** and **Counties / Postcodes**.
@@ -32,16 +32,16 @@ Click **Counties** (or whichever level fits your question). The table loads with
   <img className="hidden dark:block" src="/images/tenant/locations/counties-dark.webp" alt="Counties list with demand and lead value columns for each county" />
 </Frame>
 
-## Step 2: Read the two sides of the table
+## 2. Read the two sides of the table
 
-### Bids: the demand side
+### Bids (the demand side)
 
 | Column | What it tells you |
 |--------|-------------------|
-| **Active** | Count of fully operating bids set at this level: customers who are *ready to buy right now*. Paused, capped-out, or out-of-budget bids aren't counted. On States and Countries, only state-wide and nationwide bids count. |
+| **Active** | Count of fully operating bids set at this level, meaning customers who are *ready to buy right now*. Paused, capped-out, or out-of-budget bids aren't counted. On States and Countries, only state-wide and nationwide bids count. |
 | **Top Bid** | Highest current bid amount in the location. Tells you the ceiling someone is willing to pay. |
 
-### Leads: the supply side
+### Leads (the supply side)
 
 | Column | What it tells you |
 |--------|-------------------|
@@ -53,12 +53,12 @@ Click **Counties** (or whichever level fits your question). The table loads with
 The gap between **Active** and **Received** is the headline signal. Many active bids but few received leads means unmet demand, which usually means ad spend or source partnerships belong here. Few bids but many leads means oversupply, which usually means you should recruit more buyers or lower prices.
 
 <Tip>
-Sort by **Active** descending to find your hottest territories. Then scan **Received** next to each: if it drops off sharply, you've found a supply gap.
+Sort by **Active** descending to find your hottest territories. Then scan **Received** next to each. If it drops off sharply, you've found a supply gap.
 </Tip>
 
-## Step 3: Pick a timeframe and filter by lead type
+## 3. Pick a timeframe and filter by lead type
 
-The lead columns cover the timeframe in the top-right of the page: **Billing period**, **Today**, **7D**, **4W**, **3M**, **12M**, **MTD**, **Last month**, **YTD**, **All**, or a **Custom** range. The bid columns always reflect your bids as they are today.
+The lead columns cover the timeframe picked in the top-right of the page (**Billing period**, **Today**, **7D**, **4W**, **3M**, **12M**, **MTD**, **Last month**, **YTD**, **All**, or a **Custom** range). The bid columns always reflect your bids as they are today.
 
 <Frame>
   <img className="block dark:hidden" src="/images/tenant/overview/timeframe-picker-light.webp" alt="Timeframe picker open with preset ranges and a Custom option" />
@@ -67,14 +67,14 @@ The lead columns cover the timeframe in the top-right of the page: **Billing per
 
 Then click **Filters** and use **Lead types** to narrow the view to one or more lead types. Every column recomputes against just that slice.
 
-This is where the analysis gets actionable:
+This is where the analysis gets actionable.
 
 - **Unfiltered view** gives you the aggregate picture, useful for territory strategy.
-- **Filtered to one lead type** surfaces product-specific gaps: "we have 40 bids on this lead type in Texas but only 12 leads landed last month."
+- **Filtered to one lead type** surfaces product-specific gaps, like "we have 40 bids on this lead type in Texas but only 12 leads landed last month."
 
 The Counties view adds a **State** filter, plus **Country** for multi-country workspaces, so you can narrow to a region before exploring counties. Filters live in the page URL, so you can bookmark a view you check often.
 
-## Step 4: Drill into a specific location
+## 4. Drill into a specific location
 
 Click any row to open the location's page.
 
@@ -85,18 +85,18 @@ Click any row to open the location's page.
 
 ### Overview tiles
 
-- **Active Bids** — Bids ready to receive leads here.
-- **Interested Customers** — Distinct customers with *any* bid on this location, including paused or underfunded ones. The gap between Active Bids and Interested Customers is latent demand: customers who've expressed interest but aren't currently buying. When you re-activate them (fund wallets, lift caps), that demand becomes real.
-- **Top Bid** — Highest current bid amount.
+- **Active Bids** are bids ready to receive leads here.
+- **Interested Customers** counts distinct customers with *any* bid on this location, including paused or underfunded ones. The gap between Active Bids and Interested Customers is latent demand, meaning customers who've expressed interest but aren't currently buying. When you re-activate them (fund wallets, lift caps), that demand becomes real.
+- **Top Bid** is the highest current bid amount.
 
 ### Values
 
-Four more tiles for the selected timeframe (the last 30 days unless you've picked another), each compared with the previous period of the same length:
+Four more tiles cover the selected timeframe (the last 30 days unless you've picked another), each compared with the previous period of the same length.
 
 - **Leads assigned**, with a sparkline.
 - **Minimum / Maximum / Average Value**.
 
-Rising values mean the market is heating up here; falling values mean it's cooling. Combine with the Active Bids count: rising values plus plenty of bids means double down; falling values plus few bids means reconsider your investment.
+Rising values mean the market is heating up here, and falling values mean it's cooling. Combine them with the Active Bids count. Rising values plus plenty of bids means double down, while falling values plus few bids means reconsider your investment.
 
 ### Bids
 
@@ -104,59 +104,59 @@ A table of the bids set at exactly this level (county bids on a county, state-wi
 
 ### Child locations
 
-The sidebar lists what's inside the location as plain text: a county shows its postal codes, a state shows its counties. Country pages don't list children; go to **States** and filter instead.
+The sidebar lists what's inside the location as plain text, so a county shows its postal codes and a state shows its counties. Country pages don't list children, so go to **States** and filter instead.
 
 <Frame>
   <img className="block dark:hidden" src="/images/tenant/locations/countries-light.webp" alt="Countries list showing nationwide demand and lead values per country" />
   <img className="hidden dark:block" src="/images/tenant/locations/countries-dark.webp" alt="Countries list showing nationwide demand and lead values per country" />
 </Frame>
 
-## Step 5: Export counties to CSV (optional)
+## 5. Export counties to CSV (optional)
 
-The Counties page has an **Export** button in the top-right. The other views don't: counties are the most granular level, so that's where exports are most useful.
+The Counties page has an **Export** button in the top-right. The other views don't. Counties are the most granular level, so that's where exports are most useful.
 
 Click **Export**. Your lead type and location filters are respected, but the timeframe isn't. The file is built in the background, and a **County export complete** notification lands in the [notification bell](/features/dashboard#notifications) with a download link when it's ready.
 
-Use the CSV for:
+Use the CSV for things like these.
 
-- Ad-spend allocation models: pull it into a spreadsheet, overlay cost data, and compute cost per assigned lead by county.
-- Source-partnership pitches: show a partner the specific counties where you have demand but no supply.
+- Ad-spend allocation models. Pull it into a spreadsheet, overlay cost data, and compute cost per assigned lead by county.
+- Source-partnership pitches. Show a partner the specific counties where you have demand but no supply.
 - Territory reviews in quarterly business reviews.
 
 <Note>
 States and Countries don't have an export. If you need a state-level roll-up, export counties and pivot by state in your spreadsheet.
 </Note>
 
-## Step 6: Act on the patterns you find
+## 6. Act on the patterns you find
 
-The analytics views are only useful if they change what you do. A few common patterns and the actions they imply:
+The analytics views are only useful if they change what you do. Here are a few common patterns and the actions they imply.
 
-**Pattern: Many active bids, few leads received**
-- High demand, low supply — close the gap.
-- Actions: recruit new sources for that region, increase ad spend on geo-targeted campaigns, or onboard a partner with supply there ([Adding a partner](/guides/adding-a-partner)).
+**Many active bids, few leads received**
+- High demand and low supply, so close the gap.
+- Act by recruiting new sources for that region, increasing ad spend on geo-targeted campaigns, or onboarding a partner with supply there ([Adding a partner](/guides/adding-a-partner)).
 
-**Pattern: Few active bids, many leads received**
-- Oversupply — not enough buyers, or prices are wrong.
-- Actions: recruit more customers in that region, run a marketing campaign targeting those customers, or revisit pricing (see [Bidding](/features/bidding)).
+**Few active bids, many leads received**
+- Oversupply, meaning not enough buyers or prices are wrong.
+- Act by recruiting more customers in that region, running a marketing campaign targeting those customers, or revisiting pricing (see [Bidding](/features/bidding)).
 
-**Pattern: High Top Bid, low Avg Value**
-- Customers are willing to pay a lot, but auctions are clearing low — likely thin competition.
-- Actions: tell existing customers about the territory (notifications, banners — see [Publishing a banner](/guides/publishing-a-banner)), or raise the minimum bid on the lead type's bidding scopes (see [Setting up bidding](/guides/setting-up-bidding)).
+**High Top Bid, low Avg Value**
+- Customers are willing to pay a lot, but auctions are clearing low, which likely means thin competition.
+- Act by telling existing customers about the territory (through notifications or banners, as in [Publishing a banner](/guides/publishing-a-banner)), or by raising the minimum bid on the lead type's bidding scopes (see [Setting up bidding](/guides/setting-up-bidding)).
 
-**Pattern: High Interested Customers, low Active Bids**
+**High Interested Customers, low Active Bids**
 - Lots of paused or underfunded bids. The demand is latent.
-- Actions: nudge customers to re-fund wallets (auto-recharge, [Managing customer finances](/guides/managing-customer-finances)), or diagnose why they paused — caps hit, too expensive, churned.
+- Act by nudging customers to re-fund wallets (auto-recharge, [Managing customer finances](/guides/managing-customer-finances)), or by diagnosing why they paused (caps hit, too expensive, churned).
 
-**Pattern: Values falling against the previous period**
+**Values falling against the previous period**
 - The market is cooling here. Budget attention elsewhere.
 
 ## What happens next
 
-With a regular rhythm of reading location analytics:
+Here's what a regular rhythm of reading location analytics looks like.
 
-- **Weekly scan** — sort Counties by Active, scan the Received column, flag any wide gaps for the supply team.
-- **Monthly CSV exports** — feed into a P&L-by-geography dashboard so finance and ops share the same map.
-- **Quarterly territory review** — compare this quarter's top-demand counties to last quarter's. Customer behavior shifts; your sourcing should track it.
-- **Ad-hoc checks** — whenever a customer asks "why am I not getting leads in X?", open X's location page to see exactly how many bids compete there and what top-bid you're up against.
+- In a **weekly scan**, sort Counties by Active, scan the Received column, and flag any wide gaps for the supply team.
+- With **monthly CSV exports**, feed a P&L-by-geography dashboard so finance and ops share the same map.
+- In a **quarterly territory review**, compare this quarter's top-demand counties to last quarter's. Customer behavior shifts, and your sourcing should track it.
+- For **ad-hoc checks**, whenever a customer asks "why am I not getting leads in X?", open X's location page to see exactly how many bids compete there and what top-bid you're up against.
 
 Location analytics is a reference surface, not a dashboard you stare at all day. Build the habit of opening it with a specific question, and it'll pay for itself every time you spot a gap before the customer does.

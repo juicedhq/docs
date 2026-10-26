@@ -5,64 +5,64 @@ description: Spending limits and lead volume limits that govern what customers c
 
 Budgets and caps are the governors that keep lead flow inside the boundaries a customer (or you) has agreed to. Caps limit **how many** leads can be bought; budgets limit **how much** can be spent. Both are evaluated continuously, and a bid is only eligible to win a lead when every applicable limit has headroom.
 
-## Two levels: customer and bid
+## Customer and bid levels
 
-Limits exist at two scopes:
+Limits exist at two scopes.
 
-- **Customer-level** — Applies across all of a customer's bidding activity. Useful for account-wide guardrails (e.g., "this customer can spend at most $10,000 per month").
-- **Bid-level** — Applies only to a specific bid (one lead type in one location). Useful for fine-grained control (e.g., "cap this auto-insurance bid at 50 leads per day").
+- **Customer-level** limits apply across all of a customer's bidding activity. They're useful for account-wide guardrails (e.g., "this customer can spend at most $10,000 per month").
+- **Bid-level** limits apply only to a specific bid (one lead type in one location). They're useful for fine-grained control (e.g., "cap this auto-insurance bid at 50 leads per day").
 
 A bid has to clear **both** its own limits and its customer's limits to win a lead. Whichever is most restrictive wins.
 
 ## Turning limits on
 
-Every limit is off until you enable it. Open **Settings → Application → Bidding** and use the switches under **Lead Cap Settings** and **Budget Settings**. There are twelve in total: **Bid** and **Account** versions of daily, weekly, and monthly caps and budgets. Save with the floating save bar.
+Every limit is off until you enable it. Open **Settings → Application → Bidding** and use the switches under **Lead Cap Settings** and **Budget Settings**. There are twelve in total, covering **Bid** and **Account** versions of daily, weekly, and monthly caps and budgets. Save with the floating save bar.
 
 <Frame>
   <img className="block dark:hidden" src="/images/tenant/settings/bidding-light.webp" alt="Bidding settings page with Global Bid Settings, Customer Bidding Access, and Lead Cap Settings and Budget Settings switches for bid-level and account-level daily, weekly, and monthly limits" />
   <img className="hidden dark:block" src="/images/tenant/settings/bidding-dark.webp" alt="Bidding settings page with Global Bid Settings, Customer Bidding Access, and Lead Cap Settings and Budget Settings switches for bid-level and account-level daily, weekly, and monthly limits" />
 </Frame>
 
-Each switch controls one field:
+Each switch controls one field.
 
 - **Account** switches add that field to the **Bidding Limits** section when you [create or edit a customer](/features/customers#creating-and-editing-a-customer), and to the customer's own [bidding limits](/customer-portal/bidding-limits) page in their portal. With no Account switches on, the section is hidden entirely.
 - **Bid** switches add that field to a bid's **Bidding limits** section, and the matching **Caps** and **Budgets** columns to the customer's bid list. Bid-level limits only appear when editing an existing bid, not when creating one.
 
 <Note>
-Turning a switch off doesn't just hide the field: limits of that kind stop being enforced, even if customers had values saved. Turn it back on and the saved values apply again.
+Turning a switch off doesn't just hide the field. Limits of that kind stop being enforced, even if customers had values saved. Turn it back on and the saved values apply again.
 </Note>
 
-## Two dimensions: caps vs. budgets
+## Caps vs. budgets
 
 | | Counts | Useful for |
 |-|--------|------------|
 | **Lead cap** | Number of leads assigned | Volume governance ("no more than 100 leads this month") |
 | **Budget** | Dollars spent on assigned leads | Cost governance ("no more than $2,000 this month") |
 
-Both dimensions come in three interval flavors: **daily**, **weekly**, and **monthly**. You can configure any combination, including all six at once.
+Both dimensions come in three interval flavors (**daily**, **weekly**, and **monthly**). You can configure any combination, including all six at once.
 
 ## Evaluating limits at once
 
-Every limit you configure is checked simultaneously on every auction. A lead only flows to a customer when:
+Every limit you configure is checked simultaneously on every auction. A lead only flows to a customer when all of these are true.
 
 - The customer's daily, weekly, and monthly lead caps all have room for one more lead
 - The customer's daily, weekly, and monthly budgets can all cover the bid amount
 - The bid's daily, weekly, and monthly lead caps all have room
 - The bid's daily, weekly, and monthly budgets can all cover the bid amount
 
-The first limit to exhaust wins. If a bid has a daily cap of 10 and a daily budget of $500 with bids at $40 each, the cap trips first (10 leads × $40 = $400, under budget). If the bid was $80, the budget would trip first (6 × $80 = $480, under cap; 7th lead would push past $500).
+The first limit to exhaust wins. If a bid has a daily cap of 10 and a daily budget of \$500 with bids at \$40 each, the cap trips first (10 leads × \$40 = \$400, under budget). If the bid was \$80, the budget would trip first (6 × \$80 = \$480, under cap; 7th lead would push past \$500).
 
 ## Reset intervals
 
-- **Daily** — Resets at midnight UTC
-- **Weekly** — Resets at the start of the UTC week (Monday 00:00 UTC)
-- **Monthly** — Resets at the start of the UTC month
+- **Daily** limits reset at midnight UTC.
+- **Weekly** limits reset at the start of the UTC week (Monday 00:00 UTC).
+- **Monthly** limits reset at the start of the UTC month.
 
 Resets are calendar-based, not rolling. A lead assigned at 23:59 UTC counts against the daily cap for one minute before the counter clears.
 
 ## What counts toward caps and budgets
 
-Caps and budgets only count **leads assigned through bidding**. Leads a customer purchases directly from the [marketplace](/features/marketplace) don't count—that's why these are sometimes called "bidding limits." The marketplace is a separate purchase channel that draws from the same wallet but doesn't flow through the bidding system.
+Caps and budgets only count **leads assigned through bidding**. Leads a customer purchases directly from the [marketplace](/features/marketplace) don't count, which is why these are sometimes called "bidding limits." The marketplace is a separate purchase channel that draws from the same wallet but doesn't flow through the bidding system.
 
 Returned leads stop counting. Once a lead is assigned it counts against caps and budgets, but if it's [returned](/features/returns#returning-leads), it no longer counts toward the customer's or bid's lead caps or budget spend, so the headroom comes back.
 
@@ -74,17 +74,17 @@ Limits roll up into the statuses that drive whether a bid or customer is competi
 
 | Underlying status | Triggered when | Displays as |
 |-------------------|----------------|-------------|
-| **Cap: Exhausted** | Any of the bid's or customer's lead caps has been reached | **Capped** |
-| **Budget: Limited** | The remaining budget is below the full bid amount but above zero | **Limited** (bid still participates at the reduced amount) |
-| **Budget: Exhausted** | Any of the bid's or customer's budgets has been fully consumed | **Exhausted** |
+| **Cap** is Exhausted | Any of the bid's or customer's lead caps has been reached | <span className="tone-badge tone-danger">Exhausted</span> |
+| **Budget** is Limited | The remaining budget is below the full bid amount but above zero | <span className="tone-badge tone-sky">Limited</span> (bid still participates at the reduced amount) |
+| **Budget** is Exhausted | Any of the bid's or customer's budgets has been fully consumed | <span className="tone-badge tone-danger">Exhausted</span> |
 
 See [Bidding → Bid statuses](/features/bidding#bid-statuses) for the full display-status breakdown.
 
 ### Customer status impact
 
-Caps and budgets **do not** change a customer's display status. The customer's display status reflects operational state and wallet funding only. When a customer hits a cap or budget, the effect shows up on each of their **bids**—every bid flips to **Capped** or **Exhausted** and stops competing. The customer themselves can still show as **Active**; they're just not receiving leads until the constraint resets.
+Caps and budgets **do not** change a customer's display status. The customer's display status reflects operational state and wallet funding only. When a customer hits a cap or budget, the effect shows up on each of their **bids**. Every bid flips to <span className="tone-badge tone-danger">Exhausted</span> and stops competing. The customer themselves can still show as <span className="tone-badge tone-success">Active</span>. They're just not receiving leads until the constraint resets.
 
-If you're trying to diagnose why a customer isn't getting leads despite showing Active, check the bid list for Capped or Exhausted rows.
+If you're trying to diagnose why a customer isn't getting leads despite showing Active, check the bid list for <span className="tone-badge tone-danger">Exhausted</span> rows.
 
 ## Leaving a limit blank
 
@@ -92,10 +92,10 @@ Every limit is optional. Leaving a field blank means "no limit" for that dimensi
 
 ## Recovering from exhausted state
 
-Exhausted bids and customers recover automatically:
+Exhausted bids and customers recover automatically.
 
 - **Cap exhaustion** resolves when the interval resets.
 - **Budget exhaustion** resolves when the interval resets.
-- **Funding exhaustion** (separate from budgets—see [Bidding → Bid statuses](/features/bidding#bid-statuses)) resolves when the customer's wallet is topped up.
+- **Funding exhaustion** (separate from budgets, as covered in [Bidding → Bid statuses](/features/bidding#bid-statuses)) resolves when the customer's wallet is topped up.
 
 No manual intervention is required to bring a bid back online once the underlying condition clears.

@@ -3,16 +3,18 @@ title: Marketplace
 description: Sell overflow and aged leads through your own private reverse-auction marketplace.
 ---
 
-The marketplace is where leads go when they need a second chance. Maybe no bids came in during initial routing. Maybe you've got aging inventory you'd rather sell at a discount than let expire. Either way, the marketplace lets your customers browse available leads and buy them on demand—or place orders to snag them automatically when the price drops.
+import { HugeIcon } from '/snippets/hugeicon.jsx';
+
+The marketplace is where leads go when they need a second chance. Maybe no bids came in during initial routing. Maybe you've got aging inventory you'd rather sell at a discount than let expire. Either way, the marketplace lets your customers browse available leads and buy them on demand, or place orders to snag them automatically when the price drops.
 
 Think of it as a clearance rack, but for leads. And instead of prices going up over time like a regular auction, they go *down*. Customers can wait for a better deal or buy now before someone else does.
 
 ## Turning on the marketplace
 
-There's no account-wide switch. A lead lands on the marketplace when two things are true:
+There's no account-wide switch. A lead lands on the marketplace when two things are true.
 
 1. **Its lead type has the marketplace enabled**, with auction pricing configured (see below).
-2. **It reaches a Marketplace stage** in your [distribution stages](/features/distribution). Add one from **Distribution Stages** in the sidebar if you don't have one yet; you can move or pause it like any other stage.
+2. **It reaches a Marketplace stage** in your [distribution stages](/features/distribution). Add one from **Distribution Stages** in the sidebar if you don't have one yet. You can move or pause it like any other stage.
 
 If the lead type doesn't have the marketplace enabled, the Marketplace stage passes and the lead moves on to the next stage.
 
@@ -27,7 +29,7 @@ To see which leads are on the marketplace right now, open **Leads** and pick the
 
 Want to let potential customers browse your marketplace before they sign up? Turn on **Enable public marketplace** under **Settings → Account → Domains & Links** (in the **Public Marketplace** section). It creates a publicly accessible version of your marketplace at `/marketplace`.
 
-When enabled:
+When it's enabled, here's what changes.
 
 - Visitors can view available leads without logging in
 - Lead information is displayed the same as the regular marketplace (location, lead type, pricing, and so on)
@@ -38,7 +40,7 @@ When enabled:
   <img className="hidden dark:block" src="/images/portal/marketplace/public-marketplace-dark.webp" alt="Public marketplace with live auctions, a Create Free Account banner, and Sign up to purchase buttons in place of buy buttons" />
 </Frame>
 
-This is useful for showcasing your inventory to prospective customers. They can see what's available and how your reverse auction pricing works before committing to an account. The same settings page also lets you choose what unauthenticated visitors see when they follow a customer-facing link: the public marketplace or the sign-in page. See [Domains](/features/domains).
+This is useful for showcasing your inventory to prospective customers. They can see what's available and how your reverse auction pricing works before committing to an account. The same settings page also lets you choose what unauthenticated visitors see when they follow a customer-facing link, either the public marketplace or the sign-in page. See [Domains](/features/domains).
 
 ## Configuring lead types for the marketplace
 
@@ -55,12 +57,12 @@ Each lead type that should sell on the marketplace needs its own auction setting
 
 | Setting | What it does |
 |---------|--------------|
-| **First Price** | Where the auction starts—the highest price customers will see |
-| **Last Price** | Where the auction ends—the floor price before the auction closes unsold |
+| **First Price** | Where the auction starts, which is the highest price customers will see |
+| **Last Price** | Where the auction ends, which is the floor price before the auction closes unsold |
 | **Increment** | How much the price drops each time |
 | **Interval** | How often the price drops, in minutes |
 
-As you adjust these settings, a plain-English summary shows what your auction will look like. For example: *"Your auction will start at &#36;75.00 and end at &#36;15.00. The price will drop by &#36;5.00 every 120 minutes. The auction will last for a total of 1560 minutes."*
+As you adjust these settings, a plain-English summary shows what your auction will look like. For example, *"Your auction will start at &#36;75.00 and end at &#36;15.00. The price will drop by &#36;5.00 every 120 minutes. The auction will last for a total of 1560 minutes."*
 
 <Note>
 For [ping-post](/features/ping-post) traffic, a Marketplace stage only accepts a ping when the source has a **fallback price** for that lead type. Set it on the source's **Pricing** tab. See [Source pricing](/features/sources#source-pricing) for details.
@@ -70,7 +72,7 @@ For [ping-post](/features/ping-post) traffic, a Marketplace stage only accepts a
 
 When a lead enters the marketplace, a countdown begins. The lead starts at your **first price** and drops by the **increment** every **interval** until it either sells or hits the **last price**.
 
-This creates urgency without requiring customers to actively bid against each other. They can either:
+This creates urgency without requiring customers to actively bid against each other. They have two options.
 
 - **Buy now** at the current price
 - **Wait** and hope the price drops before someone else grabs it
@@ -79,41 +81,41 @@ The tension between "get a deal" and "lose the lead" is what makes it work.
 
 ### How the floor moves with buy orders
 
-The floor is the lowest price the auction will reach—but it isn't fixed. If nobody has placed a buy order, the floor equals your configured **last price**. As soon as a customer places a buy order, their bid becomes the effective floor (assuming it's higher than the last price), and the auction will stop dropping once it reaches that amount. A higher buy order raises the floor further.
+The floor is the lowest price the auction will reach, but it isn't fixed. If nobody has placed a buy order, the floor equals your configured **last price**. As soon as a customer places a buy order, their bid becomes the effective floor (assuming it's higher than the last price), and the auction will stop dropping once it reaches that amount. A higher buy order raises the floor further.
 
-This also affects when the auction *ends*. The visible countdown reflects the number of price drops remaining before the current floor is reached—not the full schedule down to the last price. Place a buy order high in the range and the auction wraps up sooner; cancel it and the auction resumes dropping until it either sells or hits another floor.
+This also affects when the auction *ends*. The visible countdown reflects the number of price drops remaining before the current floor is reached, not the full schedule down to the last price. Place a buy order high in the range and the auction wraps up sooner. Cancel it and the auction resumes dropping until it either sells or hits another floor.
 
 ### Auction lifecycle
 
-A reverse auction is in one of three states at any given time:
+A reverse auction is in one of three states at any given time.
 
-- **Active** — Still counting down and accepting purchases
-- **Sold** — A buy now, buy order, or floor-triggered sale completed
-- **Unsold** — The auction reached its floor without selling
+- **Active** auctions are still counting down and accepting purchases
+- **Sold** means a buy now, buy order, or floor-triggered sale completed
+- **Unsold** means the auction reached its floor without selling
 
 When an auction ends unsold, the lead picks up where it left off in your distribution stages, so a later stage (a [Club](/features/club) stage or a partner, for example) still gets a crack at it. Sold and unsold auctions are kept for 90 days and then pruned automatically.
 
 ## What customers see
 
-The marketplace intentionally shows limited information about each lead—just enough to make a purchasing decision without enabling cherry-picking:
+The marketplace intentionally shows limited information about each lead, just enough to make a purchasing decision without enabling cherry-picking.
 
-- **Location** — The county and state where the lead originated
-- **Lead type** — What kind of lead it is
-- **Received** — When the lead came in
-- **Ends in** — When the auction ends
-- **Current price** — What they'd pay if they buy right now
-- **Next drop** — When the price drops next, and to what
-- **Floor** — The lowest the price will go
+- **Location** is the county and state where the lead originated
+- **Lead type** is what kind of lead it is
+- **Received** is when the lead came in
+- **Ends in** is when the auction ends
+- **Current price** is what they'd pay if they buy right now
+- **Next drop** is when the price drops next, and to what
+- **Floor** is the lowest the price will go
 
-No contact details, no personal information—just location and lead type. Customers can filter by location and lead type, buy one lead or several at once, and pay from their wallet balance. See the customer-side walkthrough in [Marketplace](/customer-portal/marketplace).
+There are no contact details and no personal information, just location and lead type. Customers can filter by location and lead type, buy one lead or several at once, and pay from their wallet balance. See the customer-side walkthrough in [Marketplace](/customer-portal/marketplace).
 
 ## Buy orders
 
 Sometimes customers don't want to babysit the marketplace waiting for a good price. Buy orders let them set it and forget it.
 
-A buy order says: *"I'll pay up to &#36;X for this lead. If the price drops to my number, buy it automatically."*
+A buy order says, *"I'll pay up to &#36;X for this lead. If the price drops to my number, buy it automatically."*
 
-Here's how it works:
+Here's how it works.
 
 1. Customer places a buy order at their target price
 2. The buy order amount is **withdrawn from their wallet** immediately
@@ -122,16 +124,16 @@ Here's how it works:
 
 ### Competing buy orders
 
-When a customer places a buy order, it effectively raises the floor for that lead. A new buy order has to be higher than the current leading one. The floor badge color tells customers exactly where they stand:
+When a customer places a buy order, it effectively raises the floor for that lead. A new buy order has to be higher than the current leading one. The floor badge color tells customers exactly where they stand.
 
 | Floor color | What it means |
 |-------------|---------------|
-| **Gray** | No buy orders on this lead |
-| **Blue** | Someone else has a buy order, but you don't |
-| **Green** | You have the leading buy order |
-| **Red** | You have a buy order, but someone else is winning |
+| <span className="tone-badge tone-neutral">Gray</span> | No buy orders on this lead |
+| <span className="tone-badge tone-info">Blue</span> | Someone else has a buy order, but you don't |
+| <span className="tone-badge tone-success">Green</span> | You have the leading buy order |
+| <span className="tone-badge tone-danger">Red</span> | You have a buy order, but someone else is winning |
 
-If another customer places a higher buy order, the original customer gets notified (notifications are enabled by default but can be disabled in contact preferences). They then have two choices:
+If another customer places a higher buy order, the original customer gets notified (notifications are enabled by default but can be disabled in contact preferences). They then have two choices.
 
 1. **Increase their buy order** to stay competitive
 2. **Cancel** and get their funds back right away
@@ -140,12 +142,12 @@ Buy orders can be cancelled at any time before the lead sells, and the amount re
 
 ### Wallet integration
 
-All marketplace purchases—whether instant buys or buy orders—draw from the customer's wallet. No wallet balance, no purchasing. This keeps things simple and ensures customers can only buy what they can actually pay for.
+All marketplace purchases, whether instant buys or buy orders, draw from the customer's wallet. No wallet balance, no purchasing. This keeps things simple and ensures customers can only buy what they can actually pay for.
 
 A buy order's amount leaves the wallet the moment the order is placed, so it can't be spent twice. It shows in the customer's [transactions](/features/transactions) as **Placed Buy Order**. Later, the amount comes back as either **Canceled Buy Order** (the customer cancelled) or **Released Buy Order** (the auction ended, or the order won). When an order wins, the lead's purchase is then recorded as a regular lead charge at the buy order price.
 
 ## Related guides
 
-<Card title="Setting up the marketplace" icon="store" href="/guides/setting-up-the-marketplace" horizontal>
+<Card title="Setting up the marketplace" icon={<HugeIcon name="store-01" card />} href="/guides/setting-up-the-marketplace" horizontal>
   Configure reverse-auction pricing, add a Marketplace stage, and set fallback prices.
 </Card>

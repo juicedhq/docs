@@ -3,7 +3,7 @@ title: Bids
 description: Create and manage the bids that win you leads by location and lead type.
 ---
 
-A bid tells your provider: "Send me this type of lead from this place, and here's what I'll pay." Each bid covers one lead type in one location (a county, a state, or a whole country) and competes with other buyers' bids for leads that come in there. The Bids page is where you create, adjust, pause, and remove them.
+A bid tells your provider, "Send me this type of lead from this place, and here's what I'll pay." Each bid covers one lead type in one location (a county, a state, or a whole country) and competes with other buyers' bids for leads that come in there. The Bids page is where you create, adjust, pause, and remove them.
 
 <Frame>
   <img className="block dark:hidden" src="/images/portal/bids/bids-list-light.webp" alt="Bids table with All, Active, Limited, and Inactive tabs and columns for bid, my bid, top bid, position, lead type, and status" />
@@ -12,12 +12,12 @@ A bid tells your provider: "Send me this type of lead from this place, and here'
 
 ## The bids table
 
-Tabs across the top sort your bids by whether they can win leads, with a count on each:
+Tabs across the top sort your bids by whether they can win leads, with a count on each.
 
-- **All**: every bid you have.
-- **Active**: bids that can win leads right now.
-- **Limited**: bids that are still competing but are being held back by your wallet balance or a budget.
-- **Inactive**: bids that can't win leads right now, because they're paused, out of funds, or have hit a cap or budget (on the bid or on your whole account).
+- **All** shows every bid you have.
+- **Active** shows bids that can win leads right now.
+- **Limited** shows bids that are still competing but are being held back by your wallet balance or a budget.
+- **Inactive** shows bids that can't win leads right now, because they're paused, out of funds, or have hit a cap or budget (on the bid or on your whole account).
 
 Use **Search bids** and the **Filters** menu (**Lead type** and **Scope**) to narrow the list.
 
@@ -30,9 +30,9 @@ Use **Search bids** and the **Filters** menu (**Lead type** and **Scope**) to na
 | **Lead Type** | The lead type. Hover it for a description, if your provider wrote one. |
 | **Status** | Whether the bid can win leads. See [Bid statuses](#bid-statuses). |
 
-Use the **Columns** menu to show extra columns: **County**, **State**, and **Country** (handy for sorting), plus **Caps** and **Budgets** when your provider lets you set limits on individual bids.
+Use the **Columns** menu to show the extra **County**, **State**, and **Country** columns (handy for sorting), plus **Caps** and **Budgets** when your provider lets you set limits on individual bids.
 
-Each row has three actions at the end:
+Each row has three actions at the end.
 
 - **Pause bid** / **Resume bid** stops or restarts that one bid without deleting it.
 - **Edit bid** opens the bid editor for that location.
@@ -46,10 +46,10 @@ If your provider has locked bidding, the pause and resume buttons are disabled. 
 
 | Position | What it means |
 |----------|---------------|
-| **Top** | You're the highest bidder for that lead type and location |
-| **Tied** | You're tied with one or more bidders at the top amount. Leads are shared among the tied bidders. |
-| **Under** | Someone is bidding more than you |
-| **Out** | Your bid isn't competing right now, usually because it's paused or out of funds |
+| <span className="tone-badge tone-success">Top</span> | You're the highest bidder for that lead type and location |
+| <span className="tone-badge tone-warning">Tied</span> | You're tied with one or more bidders at the top amount. Leads are shared among the tied bidders. |
+| <span className="tone-badge tone-caution">Under</span> | Someone is bidding more than you |
+| <span className="tone-badge tone-danger">Out</span> | Your bid isn't competing right now, usually because it's paused or out of funds |
 
 Being on top only wins you the lead if your bid can actually take it, so keep an eye on your status too.
 
@@ -57,11 +57,11 @@ Being on top only wins you the lead if your bid can actually take it, so keep an
 
 | Status | What it means |
 |--------|---------------|
-| **Active** | Competing for leads normally |
-| **Limited** | Still competing, but your wallet balance or a remaining budget is lower than the bid amount, so the bid competes at that lower amount. Add funds or raise the budget to get back to full strength. |
-| **Exhausted** | Out of service until something changes: your wallet can't cover the minimum, or a cap or budget has been used up for the period |
-| **Paused** | Paused by you or your provider |
-| **Archived** | No longer in use |
+| <span className="tone-badge tone-success">Active</span> | Competing for leads normally |
+| <span className="tone-badge tone-info">Limited</span> | Still competing, but your wallet balance or a remaining budget is lower than the bid amount, so the bid competes at that lower amount. Add funds or raise the budget to get back to full strength. |
+| <span className="tone-badge tone-danger">Exhausted</span> | Out of service until something changes, because your wallet can't cover the minimum or a cap or budget has been used up for the period |
+| <span className="tone-badge tone-warning">Paused</span> | Paused by you or your provider |
+| <span className="tone-badge tone-neutral">Archived</span> | No longer in use |
 
 The [wallet chip](/customer-portal/getting-around#wallet) in the sidebar gives you the same funding signal at a glance.
 
@@ -94,18 +94,18 @@ Once you've picked a location, you'll see every lead type you can bid on there.
   <img className="hidden dark:block" src="/images/portal/bids/bid-modal-location-dark.webp" alt="New bid dialog with a location selected, listing lead types with minimum and top bids and a button to bid the minimum" />
 </Frame>
 
-Each lead type shows its **Min** (the lowest allowed bid) and **Top** (the current highest bid, with the number of bids tied there). To bid:
+Each lead type shows its **Min** (the lowest allowed bid) and **Top** (the current highest bid, with the number of bids tied there). Here's how to bid.
 
 1. Click **Bid $X** to start at the minimum.
 2. Use the left and right arrows to step your bid down or up, or click the amount to pick from a list of every allowed amount.
-3. Watch the badge next to the amount: **TOP**, **TIED**, or **UNDER** tells you where that amount would land you before you commit.
+3. Watch the badge next to the amount. <span className="tone-badge tone-success">TOP</span>, <span className="tone-badge tone-warning">TIED</span>, or <span className="tone-badge tone-caution">UNDER</span> tells you where that amount would land you before you commit.
 
 Some lead types have a single fixed price, so there's only one amount to choose.
 
-Next to the amount you'll find:
+Next to the amount you'll find two more controls.
 
-- **Limits** (when your provider allows them): set a daily, weekly, or monthly lead cap or budget for just this bid. The bid pauses itself once a limit is reached. Leave a field blank for no limit.
-- **Clear bid** (the **×**): remove that lead type from what you're about to save.
+- **Limits** (when your provider allows them) let you set a daily, weekly, or monthly lead cap or budget for just this bid. The bid pauses itself once a limit is reached. Leave a field blank for no limit.
+- **Clear bid** (the **×**) removes that lead type from what you're about to save.
 
 You can bid on as many lead types at the location as you like. If you already have a bid for a lead type there, you'll see "You already have a bid for this lead type and location" instead; use **Edit bid** to change it.
 
@@ -123,6 +123,6 @@ To stop bidding on a lead type entirely, use **Delete bid** on its row in the ta
 
 You don't always pay your full bid. When you win a lead, Juiced charges you the lowest allowed amount that still beats the next-highest bidder, so you pay just enough to win.
 
-**Example:** The minimum bid is &#36;10 and bids go up in &#36;10 steps. You bid &#36;100 and the next-highest bidder is at &#36;10. When you win, you pay &#36;20, not &#36;100.
+For example, say the minimum bid is &#36;10 and bids go up in &#36;10 steps. You bid &#36;100 and the next-highest bidder is at &#36;10. When you win, you pay &#36;20, not &#36;100.
 
 So bid what a lead is genuinely worth to you. Competition sets the price; your bid just sets the ceiling.

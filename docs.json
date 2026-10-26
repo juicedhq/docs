@@ -46,12 +46,12 @@
           },
           {
             "group": "Ingesting & Classifying Leads",
-            "icon": "filter",
+            "icon": "/images/icons/folder-tree.svg",
             "pages": ["features/leads", "features/lead-categories", "features/lead-types", "features/sources"]
           },
           {
             "group": "Selling Leads",
-            "icon": "gavel",
+            "icon": "/images/icons/hold-01.svg",
             "pages": [
               "features/ping-post",
               "features/bidding",
@@ -64,17 +64,17 @@
           },
           {
             "group": "People",
-            "icon": "users",
+            "icon": "/images/icons/user-multiple.svg",
             "pages": ["features/customers", "features/partners"]
           },
           {
             "group": "Money & Limits",
-            "icon": "wallet",
+            "icon": "/images/icons/wallet-01.svg",
             "pages": ["features/budgets-and-caps", "features/transactions", "features/payments-and-deposits"]
           },
           {
             "group": "Quality & Validation",
-            "icon": "shield-check",
+            "icon": "/images/icons/security-check.svg",
             "pages": [
               "features/duplicate-detection",
               "features/submissions",
@@ -85,17 +85,17 @@
           },
           {
             "group": "Events & Messaging",
-            "icon": "bell",
+            "icon": "/images/icons/notification-03.svg",
             "pages": ["features/notifications", "features/banners", "features/webhooks"]
           },
           {
             "group": "Observability",
-            "icon": "chart-line",
+            "icon": "/images/icons/workflow-square-10.svg",
             "pages": ["features/location-analytics"]
           },
           {
             "group": "Account Management",
-            "icon": "user",
+            "icon": "/images/icons/building.svg",
             "pages": [
               "features/company-profile",
               "features/branding",
@@ -119,7 +119,7 @@
           },
           {
             "group": "Ingesting & Classifying Leads",
-            "icon": "filter",
+            "icon": "/images/icons/folder-tree.svg",
             "pages": [
               "guides/adding-fields-to-a-lead-category",
               "guides/defining-lead-types",
@@ -129,7 +129,7 @@
           },
           {
             "group": "Selling Leads",
-            "icon": "gavel",
+            "icon": "/images/icons/hold-01.svg",
             "pages": [
               "guides/configuring-distribution-stages",
               "guides/setting-up-bidding",
@@ -138,7 +138,7 @@
           },
           {
             "group": "People",
-            "icon": "users",
+            "icon": "/images/icons/user-multiple.svg",
             "pages": [
               "guides/onboarding-customers",
               "guides/managing-customer-finances",
@@ -148,12 +148,12 @@
           },
           {
             "group": "Quality & Validation",
-            "icon": "shield-check",
+            "icon": "/images/icons/security-check.svg",
             "pages": ["guides/configuring-return-tiers"]
           },
           {
             "group": "Events & Messaging",
-            "icon": "bell",
+            "icon": "/images/icons/notification-03.svg",
             "pages": [
               "guides/customizing-notification-templates",
               "guides/sending-events-to-your-webhook",
@@ -162,7 +162,7 @@
           },
           {
             "group": "Observability",
-            "icon": "chart-line",
+            "icon": "/images/icons/workflow-square-10.svg",
             "pages": [
               "guides/reading-location-analytics",
               "guides/reading-distribution-logs"
@@ -170,7 +170,7 @@
           },
           {
             "group": "Account Management",
-            "icon": "user",
+            "icon": "/images/icons/building.svg",
             "pages": [
               "guides/customizing-the-portal",
               "guides/adding-a-custom-domain",
@@ -264,6 +264,12 @@
     }
   ],
   "navbar": {
+    "links": [
+      {
+        "label": "Community",
+        "href": "https://www.skool.com/that-agency-group"
+      }
+    ],
     "primary": {
       "type": "button",
       "label": "Start Squeezing",
