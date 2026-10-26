@@ -7,7 +7,7 @@ The Juiced API lets you submit leads programmatically, check pricing before comm
 
 ## Base URL
 
-All API requests are made to:
+All API requests go to this base URL.
 
 ```
 https://usejuiced.com/api
@@ -15,7 +15,7 @@ https://usejuiced.com/api
 
 ## Headers
 
-All requests must include these headers:
+All requests must include these headers.
 
 ```
 Accept: application/json
@@ -24,17 +24,17 @@ Content-Type: application/json
 
 ### Partner attribution
 
-If you're integrating on behalf of a partner, include their public ID in the `X-Partner-Id` header. This attributes the submission to that partner even if the request uses different credentials:
+If you're integrating on behalf of a partner, include their public ID in the `X-Partner-Id` header. This attributes the submission to that partner even if the request uses different credentials.
 
 ```
 X-Partner-Id: partner_01arz3ndektsv4rrffq69g5fav
 ```
 
-The header is optional—requests without it still succeed—but including it is strongly recommended for any partner-mediated integration.
+The header is optional (requests without it still succeed), but including it is strongly recommended for any partner-mediated integration.
 
 ## Authentication
 
-The API supports two authentication methods:
+The API supports two authentication methods.
 
 ### Basic Authentication
 
@@ -71,10 +71,10 @@ You can find your API credentials in your source settings within Juiced.
 
 ## Ping-post workflow
 
-The typical integration flow uses both endpoints:
+The typical integration flow uses both endpoints.
 
-1. **Ping** — Send partial lead data (at minimum, a zip code) to check for matching bids and get pricing
-2. **Post** — If the price is acceptable, submit the full lead with the `ping_id` from step 1
+1. **Ping** with partial lead data (at minimum, a zip code) to check for matching bids and get pricing.
+2. **Post** the full lead with the `ping_id` from step 1 if the price is acceptable.
 
 This two-step process lets you make informed decisions about which leads to sell and at what price before committing.
 
@@ -82,7 +82,7 @@ You can also skip the ping and instead post the lead directly if you don't need 
 
 ## Source-specific fields
 
-The exact fields available—and which ones are required—depend on your source and lead category configuration. The documentation here covers the standard fields, but your source may have additional requirements.
+The exact fields available (and which ones are required) depend on your source and lead category configuration. The documentation here covers the standard fields, but your source may have additional requirements.
 
 <Note>
 For the exact API spec tailored to your source (including your credentials and all configured fields), visit **Sources → [Your Source] → View API Spec** in your Juiced admin dashboard.
@@ -90,7 +90,7 @@ For the exact API spec tailored to your source (including your credentials and a
 
 ## Error handling
 
-The API returns standard HTTP status codes:
+The API returns standard HTTP status codes.
 
 | Code | Description |
 |------|-------------|
@@ -99,7 +99,7 @@ The API returns standard HTTP status codes:
 | `401` | Authentication failed |
 | `422` | Validation error (check the `errors` object for details) |
 
-Validation errors include detailed messages for each field that failed:
+Validation errors include detailed messages for each field that failed.
 
 ```json
 {

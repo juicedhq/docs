@@ -3,7 +3,9 @@ title: Quickstart
 description: Everything you need to stand up a new Juiced tenant and start selling leads.
 ---
 
-Welcome to Juiced. This guide takes you from a blank browser tab to a tenant capable of ingesting leads and routing them to a paying customer. It's longer than a typical "quickstart" because there are genuinely a handful of moving parts you need to configure before anything can flow—but each step is short, and we'll link out to the full reference docs wherever you want to go deeper.
+import CommunityCards from '/snippets/community-cards.mdx';
+
+Welcome to Juiced. This guide takes you from a blank browser tab to a tenant capable of ingesting leads and routing them to a paying customer. It's longer than a typical "quickstart" because there are genuinely a handful of moving parts you need to configure before anything can flow. Each step is short, though, and we'll link out to the full reference docs wherever you want to go deeper.
 
 <Tip>
 You can do most of this in under an hour if you have your Stripe account ready and know what kind of leads you sell. Grab coffee, settle in.
@@ -11,115 +13,141 @@ You can do most of this in under an hour if you have your Stripe account ready a
 
 ## What you're building
 
-Before diving in, it helps to understand the shape of what you're assembling. A working tenant has:
+Before diving in, it helps to understand the shape of what you're assembling. A working tenant has seven pieces.
 
-1. **An account, a subscription, and a Stripe connection** — so you can operate and collect payment from customers.
-2. **A lead category** — the schema for the leads you sell (auto insurance, solar, home insurance, etc.).
-3. **Lead types** within that category — pricing tiers, optionally with conditions that refine which leads qualify.
-4. **Bidding settings** on each lead type — the geographic scope, price range, and increments customers use to bid.
-5. **A distribution plan** — the pipeline leads flow through. A sensible default is created for you; you'll review it.
-6. **At least one customer with a funded wallet** — someone to buy leads.
-7. **At least one source** — the API endpoint where leads arrive.
+1. **An account, a subscription, and your operating countries**, plus a Stripe connection if you want to collect payment from customers.
+2. **A lead category**, which is the schema for the leads you sell (auto insurance, solar, home insurance, etc.).
+3. **Lead types** within that category. These are pricing tiers, optionally with conditions that refine which leads qualify.
+4. **Bidding settings** on each lead type, which set the geographic scope, price range, and increments customers use to bid.
+5. **A distribution plan**, the pipeline leads flow through. A sensible default is created for you, and you'll review it.
+6. **At least one customer with a funded wallet** to buy leads.
+7. **At least one source**, the API endpoint where leads arrive.
 
 With all of that in place, a lead submitted to your API flows through the pipeline, auctions off to the highest bidder, and charges the winning customer's wallet.
 
 Let's build it.
 
-## Step 1: Create your account
+## 1. Create your account
 
-Head to [usejuiced.com/register](https://usejuiced.com/register) and fill out the registration form. You'll provide:
+Head to [usejuiced.com/register](https://usejuiced.com/register) and fill out the registration form. You'll provide four things.
 
-- **Personal info** — Name, email, phone, and a password for your login
-- **Company info** — Business name, email, phone, and billing address
-- **Billing country** — Choose a supported country where your business is billed. US, Canadian, and Australian registrations use a required state/province/territory selector; other supported countries accept an optional region.
-- **Subdomain** — Where your tenant lives, e.g. `yourcompany.usejuiced.com`. Pick something you won't regret; it appears in URLs your customers see.
+- **Personal info** covers your name, email, phone, and a password for your login.
+- **Company info** covers the business name, email, phone, and billing address.
+- **Billing country** is where your business is billed (choose a supported country). US, Canadian, and Australian registrations use a required state/province/territory selector, and other supported countries accept an optional region.
+- **Subdomain** is where your tenant lives, e.g. `yourcompany.usejuiced.com`. Pick something you won't regret, because it appears in URLs your customers see.
 
-Submit, and Juiced provisions your tenant and drops you at your dashboard on your subdomain.
-
-## Step 2: Pick a subscription
-
-Right after registration you'll be prompted to pick a [subscription plan](/features/billing). Plans scale by monthly revenue and lead volume, from **Juicy Start** up to **Exotic Extracts**. Pick the one that matches your expected operation—you can upgrade later, and [auto-upgrade](/features/billing#auto-upgrade) is available if you don't want to babysit.
-
-## Step 3: Connect Stripe
-
-Juiced uses [Stripe Connect](/features/integrations#stripe) to charge your customers. Walk through the Stripe onboarding from the **Integrations** page. Once Stripe reports your account as charge-ready, you'll be able to accept deposits from customers and route payouts back to your own bank.
+Submit, and Juiced provisions your tenant and sends you to your new subdomain. Before you can go any further, open the verification link Juiced emails you. Lost it? The **Verify your email address** screen has a **Resend verification email** button.
 
 <Note>
-You can do most of the rest of the setup without Stripe, but customers can't fund their wallets (and therefore can't buy leads) until this step is complete.
+Your billing country is just where your business is billed. The countries you sell leads in are chosen separately in Step 2.
 </Note>
 
-## Step 4: Create your first lead category
+## 2. Finish setup
 
-[Lead categories](/features/lead-categories) define the schema for the leads you sell. Navigate to **Lead Categories → New lead category** and give it a name (e.g. "Auto Insurance"). Every new category automatically includes ten basic fields: first name, last name, email, phone, address, city, state, ZIP, address 2, and county.
+Once your email is verified, Juiced shows a **Finish setup** page with three steps. Your workspace unlocks as soon as you have a subscription and at least one operating country.
 
-If your leads carry extra data—vehicle year, coverage amount, roof age, whatever—add [custom fields](/guides/adding-fields-to-a-lead-category). You can always add more later; start with what you know you need.
+<Steps>
+  <Step title="Choose Subscription">
+    Click **Manage billing** and pick a [subscription plan](/features/billing). Plans scale by monthly revenue and lead volume, from **Juicy Start** up to **Exotic Extracts**. Pick the one that matches your expected operation; you can change plans later, and [auto-upgrade](/features/billing#auto-upgrade) is available if you don't want to babysit.
+  </Step>
+  <Step title="Connect to Stripe (optional)">
+    Juiced uses [Stripe Connect](/features/integrations#stripe) to charge your customers. Click **Connect Stripe** to open Stripe's onboarding in a new tab, then come back and click **Check connection**. If you're not ready, click **Skip for now** and connect later from **Settings → Payments & Deposits**. The skip only lasts for your current session, so you'll see this step again next time you sign in until Stripe is connected.
+  </Step>
+  <Step title="Select Countries">
+    Choose the countries you operate in (the **United States**, **Australia**, or both) and click **Save countries and continue**. These are the countries you accept and distribute leads in. You can change them later in [Company Profile](/features/company-profile#operating-countries).
+  </Step>
+</Steps>
 
-## Step 5: Define lead types
+<Note>
+You can set up everything else without Stripe, but customers can't add funds to their wallets with a card (and therefore can't buy leads on their own) until Stripe is connected. You can still add funds for them manually.
+</Note>
 
-Every lead category starts with one [lead type](/features/lead-types): a fallback. The fallback catches every lead that doesn't match a more specific type. Most operations want at least one more—for example, a "High Intent" type that commands a higher price.
+Once you're in, take a minute with [Finding your way around](/get-started/finding-your-way-around) to learn the sidebar, the command palette, and where settings live.
 
-From the category's page, create additional lead types and set their priority. When a lead arrives, Juiced evaluates non-fallback types in priority order; the first one whose conditions match wins.
+## 3. Create your first lead category
+
+[Lead categories](/features/lead-categories) define the schema for the leads you sell. Navigate to **Lead Categories → New lead category** and give it a name (e.g. "Auto Insurance"). Every new category automatically includes ten basic fields (first name, last name, email, phone, address, city, state, ZIP, address 2, and county).
+
+If your leads carry extra data (vehicle year, coverage amount, roof age, whatever), add [custom fields](/guides/adding-fields-to-a-lead-category). You can always add more later; start with what you know you need.
+
+## 4. Define lead types
+
+Every lead category starts with one [lead type](/features/lead-types), a fallback. The fallback catches every lead that doesn't match a more specific type. Most operations want at least one more, for example a "High Intent" type that commands a higher price.
+
+Open **Lead Types → New lead type**, pick the category, and set the type's priority. When a lead arrives, Juiced evaluates non-fallback types in priority order; the first one whose conditions match wins.
 
 ### Add conditions (optional but usually necessary)
 
-Conditions tell a lead type which leads qualify for it. Without conditions, a non-fallback lead type matches nothing. Open the lead type's **Conditions** section and add rules against fields in your category—for example, `age > 25 AND violations = 0` to define a premium tier. See [Lead Types → Conditions](/features/lead-types#conditions) for the full operator list.
+Conditions tell a lead type which leads qualify for it. Without conditions, a non-fallback lead type matches nothing. In the lead type form's **Conditions** section, add rules against fields in your category, for example `age > 25 AND violations = 0` to define a premium tier. See [Lead Types → Conditions](/features/lead-types#conditions) for the full operator list.
 
-## Step 6: Configure bidding settings
+## 5. Configure bidding settings
 
-Each lead type needs [bidding settings](/features/lead-types#bidding-scopes) before customers can bid on it. On the lead type page, you'll configure one or more **bidding scopes**:
+Each lead type needs [bidding settings](/features/lead-types#bidding-scopes) before customers can bid on it. Open the lead type, switch to its **Bidding** tab, and click **New bidding scope** to configure one or more scopes.
 
-- **Geographic level** — County, state, or nationwide
-- **Fixed price or range** — A single price, or a min/max with an increment
-- **Min / max / increment** — The range and granularity of allowed bid amounts
+- **Geographic level** is county, state, or nationwide.
+- **Fixed price or range** is a single price, or a min/max with an increment.
+- **Min / max / increment** sets the range and granularity of allowed bid amounts.
 
 Enable at least one scope per lead type. Without an enabled scope, customers can't place bids on leads of that type.
 
-## Step 7: Review your distribution plan
+## 6. Review your distribution plan
 
-Every new tenant gets a default [distribution plan](/features/distribution) with two stages: a **Bidding** stage (Highest Price method, customer bids enabled) followed by a **Marketplace** stage as a fallback. The marketplace is enabled by default, so you get both stages out of the box. If you disable the marketplace before your tenant is provisioned, only the Bidding stage is seeded.
+Every new tenant gets a default [distribution plan](/features/distribution) with two stages, a **Bidding** stage (Highest Price method, customer bids enabled) followed by a **Marketplace** stage as a fallback. The marketplace is enabled by default, so you get both stages out of the box. If you disable the marketplace before your tenant is provisioned, only the Bidding stage is seeded.
 
-<Note>
-The distribution features only appear in your navigation once the Distribution Stages flag is enabled on your account. If you don't see **Stages** and **Logs** under **Entries**, reach out and we'll turn it on.
-</Note>
+Open **Distribution Stages** in the sidebar to see it.
 
-For most operations the default is exactly right for launch: bidding runs, and unsold leads optionally cascade to the marketplace. If you need partner ping-post, tiered partner rotations, or enrichment, add stages from **Distribution Stages → New stage**.
+For most operations the default is exactly right for launch. Bidding runs, and unsold leads optionally cascade to the marketplace. If you need partner ping-post, tiered partner rotations, or enrichment, add stages from **Distribution Stages → New stage**.
 
-## Step 8: Create a customer and fund their wallet
+## 7. Create a customer and fund their wallet
 
-Leads go nowhere without a buyer, so you'll need at least one [customer](/features/customers). From **Customers → Create Customer**, fill in the business name, email, and any default caps or budgets you want in place. Alternatively, invite the customer to self-register through their portal.
+Leads go nowhere without a buyer, so you'll need at least one [customer](/features/customers). Open **Customers** and click **New customer**. Fill in the business name, email, phone, and address (street, city, state, and ZIP are required), then click **Create customer**. Alternatively, let the customer register themselves through their portal.
 
-Once the customer exists, open their record and click **Add Funds** to deposit a starting balance to their wallet. You can do this manually (for credits, onboarding deposits, or reconciliation) or leave it to the customer to fund through their own [Billing](/customer-portal/billing) page once they log in.
+<Frame>
+  <img className="block dark:hidden" src="/images/tenant/customers/customer-create-light.webp" alt="New customer form with Basic Info and Address sections, followed by Toggles" />
+  <img className="hidden dark:block" src="/images/tenant/customers/customer-create-dark.webp" alt="New customer form with Basic Info and Address sections, followed by Toggles" />
+</Frame>
 
-## Step 9: Place at least one bid
+Two things trip people up here.
 
-From the customer's **Bids** tab, create a bid for one of your lead types. Pick:
+- **Can Access Bidding** starts switched off. Turn it on in the **Toggles** section if this customer should place bids from their own portal.
+- The **Bidding Limits** section (default caps and budgets) only appears once you've enabled customer-level limits in **Settings → Bidding**. See [Budgets and caps](/features/budgets-and-caps).
 
-- The lead type
-- A scope and location (e.g., California at the state level)
+Once the customer exists, open their record, click the **More actions** menu (⋯) and choose **Add funds** to deposit a starting balance to their wallet. You can do this manually (for credits, onboarding deposits, or reconciliation) or leave it to the customer to fund through their own [Billing](/customer-portal/billing) page once they log in.
+
+## 8. Place at least one bid
+
+From the customer's **Bids** tab, click **New bid** and create a bid for one of your lead types by picking three things.
+
+- A location (one search box finds counties, states, and countries, e.g., California)
+- The lead type (only types with bidding enabled for that location's level are offered)
 - An amount within the configured min/max range
 
 Without at least one active bid, no leads will auction off to anyone. A single bid is enough to test the flow end-to-end.
 
-## Step 10: Set up a source
+## 9. Set up a source
 
 Navigate to **Sources → New source** and create a [source](/features/sources) tied to your lead category. Juiced generates an API key and secret automatically; click the **Authentication** tab to grab them, or generate a bearer token instead.
 
 Share those credentials (or the **View API Spec** link) with whoever's integrating on the supply side. See [Setting Up a Source and Its Attributes](/guides/setting-up-a-source-and-its-attributes) for a walkthrough with field mapping.
 
-## Step 11: Send a test lead
+## 10. Send a test lead
 
-Before pointing real traffic at your new tenant, verify the pipeline works. The simplest way is to enable [test mode](/features/sources#test-mode) on the source and submit a lead with ZIP `00001`—this forces a successful assignment regardless of actual bid coverage. Check the lead appears under **Leads**, check the distribution [log](/features/distribution#distribution-flows-and-the-log) to see the stages that ran, and check the customer's wallet was charged the expected amount.
+Before pointing real traffic at your new tenant, verify the pipeline works. The simplest way is to enable [test mode](/features/sources#test-mode) on the source and submit a lead with ZIP `00001`, which forces a successful assignment regardless of actual bid coverage. Check the lead appears under **Leads**, check **Entries → Incoming logs** (the [distribution log](/features/distribution#distribution-flows-and-the-log)) to see the stages that ran, and check the customer's wallet was charged the expected amount.
 
 If that works, disable test mode and you're ready for production traffic.
 
 ## What to do next
 
-You've got the core pipeline running. From here, you might want to:
+You've got the core pipeline running. Here are a few things you might want to do next.
 
 - Add [custom fields](/guides/adding-fields-to-a-lead-category) to your lead category for additional data capture
 - Set up [duplicate detection](/features/duplicate-detection) so you don't sell the same lead twice
 - Configure [notifications](/features/notifications) and [webhooks](/features/webhooks) so customers and your own systems get pinged on key events
 - Invite additional [users](/features/users) to your tenant with the right [roles](/features/roles)
 - Configure your [company profile](/features/company-profile) and [branding](/features/branding) so the customer portal looks like yours
+
+Stuck on something, or want someone to look over your setup? Come find us on Skool.
+
+<CommunityCards />
 
 Welcome to Juiced. Time to squeeze some value out of those leads.

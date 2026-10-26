@@ -1,0 +1,96 @@
+---
+title: Webhooks
+description: Send every new lead straight to your CRM or another system, test the connection, and monitor deliveries.
+---
+
+A webhook sends each lead to a URL you choose the moment it's assigned to you, whether you won it with a bid, bought it in the [Marketplace](/customer-portal/marketplace), or claimed it from the [Club](/customer-portal/club). Point it at your CRM, a Zapier or Make hook, or your own system, and leads arrive there fresh-squeezed without anyone copying and pasting.
+
+Find webhooks under **Notifications** → **Webhooks** in the sidebar.
+
+<Frame>
+  <img className="block dark:hidden" src="/images/portal/notifications/webhooks-light.webp" alt="Webhooks table listing each webhook's name, URL, method, status, and last delivery" />
+  <img className="hidden dark:block" src="/images/portal/notifications/webhooks-dark.webp" alt="Webhooks table listing each webhook's name, URL, method, status, and last delivery" />
+</Frame>
+
+The table shows each webhook's **Name**, **URL**, **Method**, **Status** (Active or Paused), and the result of its **Last delivery**. Click a row to see its deliveries, or use the row actions to **Pause webhook** / **Enable webhook**, **Edit webhook**, or **Delete webhook**.
+
+## Creating a webhook
+
+Click **New webhook**.
+
+<Frame>
+  <img className="block dark:hidden" src="/images/portal/notifications/webhook-create-light.webp" alt="New webhook form with Destination, Advanced settings, and Payload sections" />
+  <img className="hidden dark:block" src="/images/portal/notifications/webhook-create-dark.webp" alt="New webhook form with Destination, Advanced settings, and Payload sections" />
+</Frame>
+
+### Destination
+
+- **Name** (optional) helps you tell webhooks apart, for example "CRM production".
+- **URL** is where the lead data is sent.
+
+### Advanced settings
+
+The defaults (no authentication, POST, JSON, 10-second timeout, no extra headers) suit most CRMs. Expand **Advanced settings** if your endpoint needs something different.
+
+| Setting | Options |
+|---------|---------|
+| **Authentication** | **None**, **Basic Auth** (username and password), or **Bearer Token** |
+| **Method** | **POST**, **PUT**, or **GET** |
+| **Format** | **JSON**, or **Form** (URL-encoded) |
+| **Timeout** | Seconds to wait for your endpoint to respond |
+| **Headers** | Extra HTTP headers to send with each request |
+
+Saved passwords and tokens stay hidden. To change one, type a new value.
+
+### Payload
+
+Choose what the request contains.
+
+- **Default payload** sends every field available for your leads in a standard shape. It's the quickest way to get started.
+- **Custom payload** lets you choose fields, rename keys, and add fixed values, so the data matches what your system expects. Use **Paste JSON** to start from an example of the shape your system wants, or **Load default mapping** to start from the default and edit it.
+
+With the default payload, each request includes the price you paid (`charged_amount`), the `scope` you won it at, when you received it (`received_on`), the `lead_type`, and all the lead's deliverable fields, such as name, email, phone, and address. Fields your provider adds later are included automatically.
+
+Click **Create & continue to testing**. Your webhook is saved and switched on straight away, and you land on its edit page to send a test.
+
+## Testing a webhook
+
+Open a webhook's edit page (**Edit webhook**) and scroll to **Testing**.
+
+<Frame>
+  <img className="block dark:hidden" src="/images/portal/notifications/webhook-edit-light.webp" alt="Webhook edit page with Destination, Advanced settings summary, Payload choice, and Testing options" />
+  <img className="hidden dark:block" src="/images/portal/notifications/webhook-edit-dark.webp" alt="Webhook edit page with Destination, Advanced settings summary, Payload choice, and Testing options" />
+</Frame>
+
+Pick the data to test with.
+
+- **Test with a real lead** searches your leads by ID, name, email, or phone and sends exactly what that lead would send.
+- **Generate sample data** fills every mapped field with fake but realistic values, which is handy before you've received any leads.
+- **Add test data manually** lets you build the payload one field at a time.
+
+Then click **Run Webhook Test**. Juiced sends the request and shows whether your endpoint **Accepted** or **Rejected** it, along with the details of the request and your endpoint's response, so you can see what went wrong.
+
+Test deliveries don't count as real lead deliveries. They're kept on a separate **Tests** tab in the delivery history.
+
+<Tip>
+Since new webhooks start active, run a test right after creating one. If your endpoint isn't ready yet, click **Pause** so real leads aren't sent to it until it is.
+</Tip>
+
+## Monitoring deliveries
+
+Click a webhook in the table to open its overview.
+
+<Frame>
+  <img className="block dark:hidden" src="/images/portal/notifications/webhook-detail-light.webp" alt="Webhook overview with delivery stats, a delivery history table with response codes and durations, and the webhook's details" />
+  <img className="hidden dark:block" src="/images/portal/notifications/webhook-detail-dark.webp" alt="Webhook overview with delivery stats, a delivery history table with response codes and durations, and the webhook's details" />
+</Frame>
+
+- **Stats** cover the last 30 days, with **Total deliveries**, **Success rate**, **Failed**, **Average duration**, and **Last delivery**.
+- **Deliveries** lists every attempt, with **Live** and **Tests** tabs. Each row shows when it was sent, the lead, the result and response code with how long it took, and a delivery ID. Filter by **Result** or **Delivery date**, and click a row to see the full request and response, including headers and body.
+- **Details** shows the endpoint, method, format, trigger (**Lead assigned**), and webhook ID.
+
+Use **Pause** / **Enable** and **Edit** at the top of the page to change the webhook.
+
+### Re-sending a delivery
+
+If a delivery failed (say your CRM was down), click **Redeliver** on that row to send the lead again. Juiced uses the webhook's current settings, so if you fixed the URL, authentication, or payload since, the re-send uses the fixed version.

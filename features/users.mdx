@@ -1,48 +1,77 @@
 ---
 title: Users
-description: Manage your team members and their access to the tenant portal.
+description: Manage your team members, their roles, and how they sign in to the tenant panel.
 ---
 
-Your Juiced tenant can have multiple users, each with their own login and role. Manage your team by selecting **Users** from the tenant menu.
+Your Juiced tenant can have multiple users, each with their own login and [role](/features/roles). To manage your team, click the gear in the rail and choose **Users** under **Account**.
+
+<Frame>
+  <img className="block dark:hidden" src="/images/tenant/settings/users-light.webp" alt="Users settings page listing team members with name, email, role, authentication method, and joined date, with an Invite user button" />
+  <img className="hidden dark:block" src="/images/tenant/settings/users-dark.webp" alt="Users settings page listing team members with name, email, role, authentication method, and joined date, with an Invite user button" />
+</Frame>
+
+The list shows each person's **Name**, **Email**, **Role**, the sign-in methods they use (**Authentication**), and when they **Joined on**.
 
 ## Inviting users
 
-To add someone to your team:
+Tenant admins can add someone to the team.
 
-1. Click the **Invite User** button
-2. Enter their email address
-3. Select a [role](/features/roles) for them
-4. Send the invite
+1. Click **Invite user**.
+2. Enter their **Email**.
+3. Pick a **Role** (Admin, Customer Support, Sales, or Data Validation). It defaults to Customer Support.
+4. Click **Send invitation**.
 
-The invitee will receive an email with a link to accept the invitation and create their account.
+<Frame>
+  <img className="block dark:hidden" src="/images/tenant/settings/users-invite-light.webp" alt="Invite user dialog with Email and Role fields and a Send invitation button" />
+  <img className="hidden dark:block" src="/images/tenant/settings/users-invite-dark.webp" alt="Invite user dialog with Email and Role fields and a Send invitation button" />
+</Frame>
+
+The invitee receives an email with a link to accept the invitation and create their account.
 
 ## Pending invites
 
-Invitations that haven't been accepted yet appear in the **Pending Invites** section. From here you can:
+Invitations that haven't been accepted yet appear in the same list with a <span className="tone-badge tone-warning">Pending</span> badge. Each one has two actions.
 
-- See which invites are still outstanding
-- Revoke invites that are no longer needed
-
-Revoked invites become invalid immediately—if someone tries to use a revoked invite link, they'll be turned away.
+- **Resend invite** sends the email again
+- **Revoke invite** cancels it. Revoked invites stop working immediately, so anyone who tries the old link is turned away.
 
 ## Managing existing users
 
-For each user in your organization, you can:
+Each user's row has three actions.
 
-- **Edit their role** — Change what they can access and do
-- **Remove them** — Revoke their access entirely
+- **Edit role** changes what they can access and do
+- **Remove** takes away their access to your tenant
+- **Reset 2FA and passkeys** helps someone who's lost their authenticator app or passkey. You'll be asked to confirm your password.
 
-Removing a user is immediate. They'll be logged out and won't be able to access your tenant.
+To change several people's roles at once, tick their checkboxes and click **Change role**.
+
+You can't edit your own role or remove yourself, so there are no actions on your own row. Ask another admin if you need a change.
+
+Removing a user takes them off your tenant and its roles straight away, and disconnects any [AI assistants](/features/ai-assistants) they had connected.
+
+## Your own profile
+
+Open the user menu at the bottom of the sidebar and choose **Profile** to manage your own account.
+
+- **Profile information** holds your name, email, and phone. Your role is shown here but can only be changed by an admin.
+- **Update password**
+- Under **Sign-in methods**, email codes protect your account by default. Add a **Passkey** or an **Authenticator app** (with recovery codes) for stronger, faster sign-in.
+- **Sessions** shows where you're signed in. Use **Sign out other sessions** to sign out every other browser and device.
+
+<Frame>
+  <img className="block dark:hidden" src="/images/tenant/settings/profile-light.webp" alt="Profile page with Profile information, Update password, Sign-in methods for passkeys, authenticator app, and email codes, and Sessions sections" />
+  <img className="hidden dark:block" src="/images/tenant/settings/profile-dark.webp" alt="Profile page with Profile information, Update password, Sign-in methods for passkeys, authenticator app, and email codes, and Sessions sections" />
+</Frame>
 
 ## Roles
 
-Roles determine what a user can see and do within your tenant. Juiced comes with four built-in roles:
+Roles determine what a user can see and do within your tenant. Juiced comes with four built-in roles.
 
 | Role | Description |
 |------|-------------|
-| **Admin** | Full access to everything. Can manage users, billing, settings, and all platform features. |
-| **Customer Support** | Can view and manage customers, leads, bids, and transactions. Ideal for support staff. |
-| **Sales** | Read access to leads and customers, plus the ability to send invites. Built for your sales team. |
-| **Data Validation** | Limited to viewing and updating leads. Perfect for QA or data review tasks. |
+| <span className="tone-badge tone-info">Admin</span> | Full access to everything. Can manage users, billing, settings, and all platform features. |
+| <span className="tone-badge tone-info">Customer Support</span> | Can view and manage customers, leads, bids, and transactions. Ideal for support staff. |
+| <span className="tone-badge tone-info">Sales</span> | Read access to leads and customers, plus the ability to send invites. Built for your sales team. |
+| <span className="tone-badge tone-info">Data Validation</span> | Limited to viewing and updating leads. Perfect for QA or data review tasks. |
 
 For a detailed breakdown of what each role can do, see [Roles & Permissions](/features/roles).

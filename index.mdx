@@ -4,13 +4,16 @@ sidebarTitle: "Home"
 description: "The lead distribution platform that helps you squeeze more revenue from every lead."
 ---
 
+import CommunityCards from '/snippets/community-cards.mdx';
+import { HugeIcon } from '/snippets/hugeicon.jsx';
+
 ## Get started
 
 New to Juiced? Start here.
 
 <Card
   title="Quickstart"
-  icon="rocket"
+  icon={<HugeIcon name="rocket-01" card />}
   href="/get-started/quickstart"
   horizontal
 >
@@ -24,47 +27,53 @@ Understand how Juiced works and what you can do with it.
 <Columns cols={2}>
   <Card
     title="Features overview"
-    icon="grid-2"
+    icon={<HugeIcon name="grid-view" card />}
     href="/features"
   >
     See everything Juiced can do at a glance.
   </Card>
   <Card
     title="Leads & lead types"
-    icon="filter"
+    icon={<HugeIcon name="filter-horizontal" card />}
     href="/features/leads"
   >
     How leads flow in, get classified, and find their buyers.
   </Card>
   <Card
     title="Bidding & distribution"
-    icon="gavel"
+    icon={<HugeIcon name="auction" card />}
     href="/features/bidding"
   >
     Real-time auctions that match leads to the highest bidder.
   </Card>
   <Card
     title="Marketplace"
-    icon="store"
+    icon={<HugeIcon name="store-01" card />}
     href="/features/marketplace"
   >
     A second chance for leads that don't sell through bidding.
   </Card>
 </Columns>
 
+## Learn from other operators
+
+Juiced is the software. The people who use it to sell leads every day hang out on Skool, and you're invited.
+
+<CommunityCards />
+
 ## For different audiences
 
 <Columns cols={2}>
   <Card
     title="Customer portal"
-    icon="users"
+    icon={<HugeIcon name="user-multiple" card />}
     href="/customer-portal"
   >
     Documentation for lead buyers using the customer-facing app.
   </Card>
   <Card
     title="API reference"
-    icon="code"
+    icon={<HugeIcon name="source-code" card />}
     href="/api-reference/introduction"
   >
     Integrate with Juiced programmatically.

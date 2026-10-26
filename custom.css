@@ -9,3 +9,99 @@
   background-color: #7c3aed;
   color: #ffffff;
 }
+
+/* App badges. Mirrors resources/js/components/tone-badge.tsx: tinted 500 border and
+   background, 700 text in light mode and 400 text in dark mode. Usage in MDX:
+   <span className="tone-badge tone-success">Assigned</span> */
+.tone-success { --tone-500: 34 197 94; --tone-700: #15803d; --tone-400: #4ade80; }
+.tone-warning { --tone-500: 234 179 8; --tone-700: #a16207; --tone-400: #facc15; }
+.tone-caution { --tone-500: 249 115 22; --tone-700: #c2410c; --tone-400: #fb923c; }
+.tone-danger { --tone-500: 239 68 68; --tone-700: #b91c1c; --tone-400: #f87171; }
+.tone-info { --tone-500: 59 130 246; --tone-700: #1d4ed8; --tone-400: #60a5fa; }
+.tone-sky { --tone-500: 14 165 233; --tone-700: #0369a1; --tone-400: #38bdf8; }
+.tone-purple { --tone-500: 168 85 247; --tone-700: #7e22ce; --tone-400: #c084fc; }
+.tone-lime { --tone-500: 132 204 22; --tone-700: #4d7c0f; --tone-400: #a3e635; }
+.tone-fuchsia { --tone-500: 217 70 239; --tone-700: #a21caf; --tone-400: #e879f9; }
+.tone-amber { --tone-500: 245 158 11; --tone-700: #b45309; --tone-400: #fbbf24; }
+.tone-neutral { --tone-500: 107 114 128; --tone-700: #374151; --tone-400: #9ca3af; }
+
+.tone-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  vertical-align: middle;
+  margin-block: 0.125rem;
+  padding: 0.0625rem 0.375rem;
+  border: 1px solid rgb(var(--tone-500, 107 114 128) / 0.2);
+  border-radius: 0.25rem;
+  background-color: rgb(var(--tone-500, 107 114 128) / 0.1);
+  color: var(--tone-700, #374151);
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  font-size: 0.75rem;
+  font-weight: 400;
+  line-height: 1.25rem;
+  white-space: nowrap;
+}
+
+.dark .tone-badge { color: var(--tone-400, #9ca3af); }
+
+/* Wallet chip, mirroring the customer portal's WalletWidget tones (Tailwind 500 tint, 700 text, 400 text in dark) */
+.wallet-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  padding: 0.125rem 0.5rem;
+  border: 1px solid;
+  border-radius: 0.375rem;
+  font-size: 0.75rem;
+  font-weight: 500;
+  font-variant-numeric: tabular-nums;
+  line-height: 1.25rem;
+  white-space: nowrap;
+}
+
+.wallet-chip::before {
+  content: "";
+  width: 0.75rem;
+  height: 0.75rem;
+  background-color: currentColor;
+  -webkit-mask: url("/images/icons/wallet-01.svg") center / contain no-repeat;
+  mask: url("/images/icons/wallet-01.svg") center / contain no-repeat;
+}
+
+.wallet-chip--success { border-color: rgb(34 197 94 / 0.2); background-color: rgb(34 197 94 / 0.1); color: #15803d; }
+.wallet-chip--warning { border-color: rgb(234 179 8 / 0.2); background-color: rgb(234 179 8 / 0.1); color: #a16207; }
+.wallet-chip--danger { border-color: rgb(239 68 68 / 0.2); background-color: rgb(239 68 68 / 0.1); color: #b91c1c; }
+.wallet-chip--neutral { border-color: rgb(107 114 128 / 0.2); background-color: rgb(107 114 128 / 0.1); color: #4b5563; }
+
+.dark .wallet-chip--success { color: #4ade80; }
+.dark .wallet-chip--warning { color: #facc15; }
+.dark .wallet-chip--danger { color: #f87171; }
+.dark .wallet-chip--neutral { color: #9ca3af; }
+
+/* Hugeicons rendered by snippets/hugeicon.jsx inherit the text color. Add this class to use
+   the docs accent color, matching how Mintlify colors its built-in icons. */
+.hugeicon-accent { color: rgb(var(--primary)); }
+.dark .hugeicon-accent { color: rgb(var(--primary-light)); }
+
+/* Hugeicons sidebar group icons (generated) */
+/* Mintlify renders file-based nav icons as plain <img>, which can't follow the theme. Collapse the
+   image and paint its padding box with the text color through a mask of the same SVG, the way
+   Mintlify draws its built-in icons. */
+img.sidebar-group-icon[src^="/images/icons/"] {
+  box-sizing: content-box;
+  width: 0;
+  height: 0;
+  padding: 0.4375rem;
+  background-color: currentColor !important;
+  -webkit-mask: var(--nav-icon) center / contain no-repeat;
+  mask: var(--nav-icon) center / contain no-repeat;
+}
+img.sidebar-group-icon[src="/images/icons/folder-tree.svg"] { --nav-icon: url("/images/icons/folder-tree.svg"); }
+img.sidebar-group-icon[src="/images/icons/hold-01.svg"] { --nav-icon: url("/images/icons/hold-01.svg"); }
+img.sidebar-group-icon[src="/images/icons/user-multiple.svg"] { --nav-icon: url("/images/icons/user-multiple.svg"); }
+img.sidebar-group-icon[src="/images/icons/wallet-01.svg"] { --nav-icon: url("/images/icons/wallet-01.svg"); }
+img.sidebar-group-icon[src="/images/icons/security-check.svg"] { --nav-icon: url("/images/icons/security-check.svg"); }
+img.sidebar-group-icon[src="/images/icons/notification-03.svg"] { --nav-icon: url("/images/icons/notification-03.svg"); }
+img.sidebar-group-icon[src="/images/icons/workflow-square-10.svg"] { --nav-icon: url("/images/icons/workflow-square-10.svg"); }
+img.sidebar-group-icon[src="/images/icons/building.svg"] { --nav-icon: url("/images/icons/building.svg"); }

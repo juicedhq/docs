@@ -1,0 +1,91 @@
+---
+title: Setting Up Partner Ping/Post
+description: Connect a buyer partner's ping and post endpoints, map the payload, read their responses, test, and watch the deliveries.
+---
+
+Ping/post lets you sell leads to an outside buyer in real time. Juiced pings the partner with a preview of the lead and asks what they'll pay; if their offer wins, Juiced posts the full lead to them. This guide connects both endpoints for one partner. For the partner record itself, see [Partners](/features/partners).
+
+## Prerequisites
+
+- The **Admin** [role](/features/roles).
+- A [partner](/guides/adding-a-partner) to connect.
+- The partner's integration spec, covering ping and post URLs, method, authentication, the fields they expect, and what their responses look like for accepted, rejected, and duplicate leads.
+
+## 1. Configure the ping
+
+Open the partner, stay on the **Overview** tab, and in the **Ping/Post** tab click **Configure Ping**.
+
+<Frame>
+  <img className="block dark:hidden" src="/images/tenant/partners/partner-ping-config-light.webp" alt="Edit Ping page with Destination URL, collapsed Advanced settings showing no auth, POST, JSON, 10s timeout, and one header, a Payload mapping, and the start of the Response section" />
+  <img className="hidden dark:block" src="/images/tenant/partners/partner-ping-config-dark.webp" alt="Edit Ping page with Destination URL, collapsed Advanced settings showing no auth, POST, JSON, 10s timeout, and one header, a Payload mapping, and the start of the Response section" />
+</Frame>
+
+1. Under **Destination**, enter the partner's ping **URL**.
+2. Expand **Advanced settings** if the partner needs something other than the defaults. Set the **Method** (POST, PUT, or GET), **Authentication** (None, Basic Auth, or Bearer Token), **Format** (JSON or Form), **Timeout** in seconds, and any extra **Headers**. Saved passwords and tokens stay hidden after you save.
+
+## 2. Map the payload
+
+Nothing is sent until you map it, so add every field the partner expects.
+
+- **Load default mapping** fills in the standard set of fields. It replaces whatever you've mapped so far, so start with it.
+- **Paste JSON** takes a sample from the partner's spec. Values that match your lead fields become linked field pills.
+- **Add row** adds a single key. Use dot notation in keys for nested JSON (`contact.first_name`), and click a field pill to chain transformers, for example to reformat a phone number.
+
+<Tip>
+Pings usually carry less than posts. If the partner's spec leaves out contact details for the ping, leave them out of your ping mapping too.
+</Tip>
+
+## 3. Tell Juiced how to read the response
+
+Under **Response**, use dot notation for nested paths (like `data.offer.price`) to fill in these fields.
+
+| Field | What to enter |
+|-------|---------------|
+| **Price path** | Where the partner's price or payout sits in the response |
+| **Message path** | Where a message or rejection reason sits |
+| **Success Condition** | Required. How Juiced knows the partner accepted. Choose **HTTP Status Code** (like `200`), **Key Equals** or **Key Contains** (a key and value, like `status` equals `accepted`), or **Response Contains** (text anywhere in the response). |
+| **Duplicate Condition** | Optional. How Juiced recognizes the partner saying they already have this lead, for example **Response Contains** `duplicate`. |
+
+Click **Create & continue to testing**.
+
+## 4. Test it
+
+The page reopens with a **Testing** section. Choose how to build the test.
+
+- **Test with a real lead** searches your leads and sends exactly what this partner would receive.
+- **Generate sample data** fills every mapped field with fake but realistic values.
+- **Add test data manually** lets you build the payload one field at a time.
+
+Click **Run Webhook Test**. The result shows whether the response was **Accepted** or **Rejected**, the status code and time taken, the parsed **Price** and **Message**, and the full **Request** and **Response**. If the price or message is missing, adjust the paths in **Response**, save with the floating save bar, and test again.
+
+## 5. Configure the post
+
+Back on the partner, click **Configure Post** and repeat Steps 1 to 4 with the partner's post URL and the full set of lead fields they need.
+
+<Frame>
+  <img className="block dark:hidden" src="/images/tenant/partners/partner-post-config-light.webp" alt="Edit Post page for a partner with the post Destination URL, Advanced settings, and Payload mapping" />
+  <img className="hidden dark:block" src="/images/tenant/partners/partner-post-config-dark.webp" alt="Edit Post page for a partner with the post Destination URL, Advanced settings, and Payload mapping" />
+</Frame>
+
+## 6. Turn on partners in distribution
+
+Endpoints only get called when the partner can compete for a lead. In a [distribution stage](/features/distribution), turn on **Enable Partners** and include this partner. The partner's [lead eligibility](/features/partners#lead-eligibility), quotas, and duplicate checks all apply.
+
+## 7. Watch the deliveries
+
+On the **Ping/Post** tab, click the ping or post row to open its deliveries page.
+
+<Frame>
+  <img className="block dark:hidden" src="/images/tenant/partners/partner-deliveries-light.webp" alt="Partner endpoint deliveries page with total deliveries, success rate, failed, average duration, and last delivery stats, a list of live deliveries, and the endpoint details" />
+  <img className="hidden dark:block" src="/images/tenant/partners/partner-deliveries-dark.webp" alt="Partner endpoint deliveries page with total deliveries, success rate, failed, average duration, and last delivery stats, a list of live deliveries, and the endpoint details" />
+</Frame>
+
+Watch **Success rate** and **Failed** for the first few hours. Filter by **Result** to find failures, click one to see the request and response, and use **Redeliver** once the problem is fixed. For a wider view of every attempt to this partner, use the partner's **Outgoing logs** tab.
+
+## Pausing an endpoint
+
+If the partner asks you to stop, use the pause action on the endpoint's row, or **Pause ping** / **Pause post** in the header of its deliveries page. Paused endpoints aren't called until you enable them again. To cap volume instead of stopping it, set a [lead quota](/features/partners#lead-quotas).
+
+<Tip>
+  Want a hand wiring up your first ping/post partner? Bring it to a live call in the [Hybrid Agency Mastermind](https://www.skool.com/hybrid-agency-mastermind), where our in-house team helps you implement it.
+</Tip>

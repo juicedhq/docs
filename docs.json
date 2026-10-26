@@ -30,6 +30,7 @@
               "index",
               "get-started/introduction",
               "get-started/core-concepts",
+              "get-started/finding-your-way-around",
               "get-started/quickstart",
               "get-started/next-steps"
             ]
@@ -41,52 +42,68 @@
         "groups": [
           {
             "group": "Features",
-            "pages": ["features/index"]
+            "pages": ["features/index", "features/dashboard"]
           },
           {
             "group": "Ingesting & Classifying Leads",
-            "icon": "filter",
+            "icon": "/images/icons/folder-tree.svg",
             "pages": ["features/leads", "features/lead-categories", "features/lead-types", "features/sources"]
           },
           {
             "group": "Selling Leads",
-            "icon": "gavel",
-            "pages": ["features/ping-post", "features/bidding", "features/distribution", "features/marketplace", "features/club"]
+            "icon": "/images/icons/hold-01.svg",
+            "pages": [
+              "features/ping-post",
+              "features/bidding",
+              "features/distribution",
+              "features/marketplace",
+              "features/club",
+              "features/subscription-products",
+              "features/checkout-pages"
+            ]
           },
           {
             "group": "People",
-            "icon": "users",
+            "icon": "/images/icons/user-multiple.svg",
             "pages": ["features/customers", "features/partners"]
           },
           {
             "group": "Money & Limits",
-            "icon": "wallet",
+            "icon": "/images/icons/wallet-01.svg",
             "pages": ["features/budgets-and-caps", "features/transactions", "features/payments-and-deposits"]
           },
           {
             "group": "Quality & Validation",
-            "icon": "shield-check",
-            "pages": ["features/duplicate-detection", "features/submissions", "features/audits", "features/returns"]
+            "icon": "/images/icons/security-check.svg",
+            "pages": [
+              "features/duplicate-detection",
+              "features/submissions",
+              "features/logs",
+              "features/audits",
+              "features/returns"
+            ]
           },
           {
             "group": "Events & Messaging",
-            "icon": "bell",
-            "pages": ["features/notifications", "features/webhooks"]
+            "icon": "/images/icons/notification-03.svg",
+            "pages": ["features/notifications", "features/banners", "features/webhooks"]
           },
           {
             "group": "Observability",
-            "icon": "chart-line",
+            "icon": "/images/icons/workflow-square-10.svg",
             "pages": ["features/location-analytics"]
           },
           {
             "group": "Account Management",
-            "icon": "user",
+            "icon": "/images/icons/building.svg",
             "pages": [
               "features/company-profile",
               "features/branding",
               "features/billing",
               "features/domains",
+              "features/registration-and-login",
               "features/integrations",
+              "features/ai-assistants",
               "features/users",
               "features/roles"
             ]
@@ -102,7 +119,7 @@
           },
           {
             "group": "Ingesting & Classifying Leads",
-            "icon": "filter",
+            "icon": "/images/icons/folder-tree.svg",
             "pages": [
               "guides/adding-fields-to-a-lead-category",
               "guides/defining-lead-types",
@@ -112,7 +129,7 @@
           },
           {
             "group": "Selling Leads",
-            "icon": "gavel",
+            "icon": "/images/icons/hold-01.svg",
             "pages": [
               "guides/configuring-distribution-stages",
               "guides/setting-up-bidding",
@@ -121,21 +138,22 @@
           },
           {
             "group": "People",
-            "icon": "users",
+            "icon": "/images/icons/user-multiple.svg",
             "pages": [
               "guides/onboarding-customers",
               "guides/managing-customer-finances",
-              "guides/adding-a-partner"
+              "guides/adding-a-partner",
+              "guides/setting-up-partner-ping-post"
             ]
           },
           {
             "group": "Quality & Validation",
-            "icon": "shield-check",
+            "icon": "/images/icons/security-check.svg",
             "pages": ["guides/configuring-return-tiers"]
           },
           {
             "group": "Events & Messaging",
-            "icon": "bell",
+            "icon": "/images/icons/notification-03.svg",
             "pages": [
               "guides/customizing-notification-templates",
               "guides/sending-events-to-your-webhook",
@@ -144,7 +162,7 @@
           },
           {
             "group": "Observability",
-            "icon": "chart-line",
+            "icon": "/images/icons/workflow-square-10.svg",
             "pages": [
               "guides/reading-location-analytics",
               "guides/reading-distribution-logs"
@@ -152,7 +170,7 @@
           },
           {
             "group": "Account Management",
-            "icon": "user",
+            "icon": "/images/icons/building.svg",
             "pages": [
               "guides/customizing-the-portal",
               "guides/adding-a-custom-domain",
@@ -181,13 +199,21 @@
             "group": "Customer Portal",
             "pages": [
               "customer-portal/index",
+              "customer-portal/getting-around",
+              "customer-portal/signing-up-and-logging-in",
+              "customer-portal/dashboard",
               "customer-portal/leads",
               "customer-portal/bids",
+              "customer-portal/locations",
               "customer-portal/marketplace",
               "customer-portal/club",
               "customer-portal/notifications",
+              "customer-portal/webhooks",
               "customer-portal/billing",
+              "customer-portal/subscription",
               "customer-portal/bidding-limits",
+              "customer-portal/returns",
+              "customer-portal/account-settings",
               "customer-portal/company-profile"
             ]
           }
@@ -238,6 +264,12 @@
     }
   ],
   "navbar": {
+    "links": [
+      {
+        "label": "Community",
+        "href": "https://www.skool.com/that-agency-group"
+      }
+    ],
     "primary": {
       "type": "button",
       "label": "Start Squeezing",

@@ -3,15 +3,37 @@ title: Lead Types
 description: How leads are categorized and routed using conditions.
 ---
 
+import { HugeIcon } from '/snippets/hugeicon.jsx';
+
 Lead types are a refinement of a [lead category](/features/lead-categories) that provide additional classification. While lead categories define who a person is and what they want, lead types help identify their level of intent and value.
+
+You'll find them under **Ingest → Lead Types** in the sidebar. The list shows each lead type's name and category, its **Priority**, which **Bidding Scopes** are set up, and whether it's a **Fallback** or has the **Marketplace** turned on. Filter by Fallback or Marketplace, or use **Archived lead types** to include or show only archived ones.
+
+<Frame>
+  <img className="block dark:hidden" src="/images/tenant/ingest/lead-types-light.webp" alt="Lead Types list with Name, Priority, Bidding Scopes, Fallback, and Marketplace columns" />
+  <img className="hidden dark:block" src="/images/tenant/ingest/lead-types-dark.webp" alt="Lead Types list with Name, Priority, Bidding Scopes, Fallback, and Marketplace columns" />
+</Frame>
+
+## The lead type page
+
+Click a lead type to open it. The **Overview**, **Bidding**, and **Marketplace** tabs run along the top.
+
+**Overview** shows **Leads received**, **Leads assigned**, and **Revenue** for the selected timeframe, a **Details** sidebar, and a **Bids** table listing every customer bid on this lead type with its location, status, and amount. Filter the bids by **Status** or **Scope**, search by customer or location, and click **Export** to download them as a CSV. The export arrives in your [notification bell](/features/dashboard#notifications) when it's ready.
+
+<Frame>
+  <img className="block dark:hidden" src="/images/tenant/ingest/lead-type-detail-light.webp" alt="Lead type Overview tab with Leads received, Leads assigned, and Revenue stats, a Bids table with Export, and a Details sidebar" />
+  <img className="hidden dark:block" src="/images/tenant/ingest/lead-type-detail-dark.webp" alt="Lead type Overview tab with Leads received, Leads assigned, and Revenue stats, a Bids table with Export, and a Details sidebar" />
+</Frame>
+
+The header has the timeframe picker, **Edit**, and **Archive**. Archiving a lead type also archives all of its bids.
 
 ## Conditions
 
-Each lead type has conditions that determine which leads it matches. Conditions use fields from the parent lead category to evaluate incoming leads.
+Each lead type has conditions that determine which leads it matches. A condition can check any of your lead fields, or the lead's **Source**.
 
-To create a condition, you:
+To create a condition, follow these steps.
 
-1. Select a field from the lead category
+1. Select a property (a field, or **Source** under Metadata)
 2. Choose an operator (options vary based on the field's data type)
 3. Enter a value to check against
 
@@ -19,44 +41,44 @@ You can add as many conditions as needed.
 
 ### Available operators
 
-The operators available depend on the field type you select. On date fields, some operators display with date-friendly labels—"Before," "After," and "On" instead of "Less than," "Greater than," and "Equals."
+The operators available depend on the field type you select.
 
-| Operator | Date-field label | Available for | Description |
-|----------|------------------|---------------|-------------|
-| Equals | On | All field types | Exact match |
-| Does not equal | Not on | All field types | Does not match |
-| Contains | — | Text fields | Value contains the specified text |
-| Does not contain | — | Text fields | Value does not contain the specified text |
-| Less than | Before | Numeric, date fields | Value is less than (or before) |
-| Less than or equal | Before or on | Numeric, date fields | Value is less than or equal to (or on or before) |
-| Greater than | After | Numeric, date fields | Value is greater than (or after) |
-| Greater than or equal | After or on | Numeric, date fields | Value is greater than or equal to (or on or after) |
-| Between | — | Numeric, date fields | Value falls within a range |
-| Within the past N days | — | Date fields | Date is within the specified number of days from today |
-| Older than N days | — | Date fields | Date is more than the specified number of days ago |
-| Any | — | List of Values fields | At least one of the specified values is present |
-| All | — | List of Values fields | All specified values are present |
-| None | — | List of Values fields | None of the specified values are present |
+| Operator | Available for | Description |
+|----------|---------------|-------------|
+| Equals | All field types | Exact match |
+| Does not equal | All field types | Does not match |
+| Contains | Text fields | Value contains the specified text |
+| Does not contain | Text fields | Value does not contain the specified text |
+| Less than | Numeric, date fields | Value is less than (or before) |
+| Less than or equal | Numeric, date fields | Value is less than or equal to (or on or before) |
+| Greater than | Numeric, date fields | Value is greater than (or after) |
+| Greater than or equal | Numeric, date fields | Value is greater than or equal to (or on or after) |
+| Between | Numeric, date fields | Value falls within a range |
+| Within past days | Date fields | Date is within the specified number of days from today |
+| Older than days | Date fields | Date is more than the specified number of days ago |
+| Any of | List of Values fields | At least one of the specified values is present |
+| All of | List of Values fields | All specified values are present |
+| None of | List of Values fields | None of the specified values are present |
 
 <Tip>
-The relative date operators—**Within the past N days** and **Older than N days**—are useful for time-sensitive routing. For example, you could create a lead type that only matches leads where a quote was requested within the past 7 days.
+The relative date operators (**Within past days** and **Older than days**) are useful for time-sensitive routing. For example, you could create a lead type that only matches leads where a quote was requested within the past 7 days.
 </Tip>
 
 ### Condition logic
 
-Conditions are organized into groups with the following logic:
+Conditions are organized into groups.
 
-- **Within a group**: Conditions are combined with AND (all must be true)
-- **Between groups**: Groups are combined with OR (any group can match)
+- **Within a group**, conditions are combined with AND (all must be true).
+- **Between groups**, groups are combined with OR (any group can match).
 
-<Accordion title="Example: Home insurance leads">
-Say you want to create a lead type for high-value home insurance leads. You might set up conditions like:
+<Accordion title="Example for home insurance leads">
+Say you want to create a lead type for high-value home insurance leads. You might set up conditions like these.
 
-**Group 1** (homeowners with high property values):
+**Group 1** (homeowners with high property values)
 - `property_type` equals `single_family` AND
 - `estimated_value` greater than `500000`
 
-**Group 2** (new construction):
+**Group 2** (new construction)
 - `year_built` greater than `2020` AND
 - `square_footage` greater than `2500`
 
@@ -65,25 +87,25 @@ A lead matches this lead type if it satisfies all conditions in Group 1 OR all c
 
 ## Fallback lead types
 
-A fallback lead type catches any lead that doesn't match other lead types within the same lead category. When you create a lead category, a lead type is automatically generated and configured as the fallback.
+A fallback lead type catches any lead that doesn't match other lead types within the same lead category. When you create a lead category, a lead type with the same name is automatically created and configured as the fallback. Each category can have only one.
 
-When the fallback option is enabled:
+When the fallback option is enabled, two things change.
 - Conditions are hidden (since fallback matches everything that didn't match elsewhere)
 - Priority is automatically set to the lowest
 
-To add conditions to a fallback lead type, you must first uncheck the fallback option.
+To add conditions to a fallback lead type, you must first turn off **Fallback Lead Type**.
 
 ## Priority
 
 Priority determines the order in which lead types are evaluated when a lead could match multiple lead types.
 
-If your lead types have non-overlapping conditions, priority doesn't matter—each lead will only ever match one lead type. But if a lead could qualify for multiple lead types, the one with the highest priority wins.
+If your lead types have non-overlapping conditions, priority doesn't matter, because each lead will only ever match one lead type. But if a lead could qualify for multiple lead types, the one with the highest priority wins. Lower numbers mean higher priority, so priority `1` beats priority `2`.
 
-<Accordion title="Example: Overlapping lead types">
-Imagine you have two lead types for auto insurance leads:
+<Accordion title="Example for overlapping lead types">
+Imagine you have two lead types for auto insurance leads.
 
-- **Premium Drivers** (priority 1): `age` greater than `25` AND `violations` equals `0`
-- **Standard Drivers** (priority 2): `age` greater than `25`
+- **Premium Drivers** (priority 1) matches `age` greater than `25` AND `violations` equals `0`
+- **Standard Drivers** (priority 2) matches `age` greater than `25`
 
 A 30-year-old with no violations matches both lead types. Because Premium Drivers has a higher priority, they're placed there instead of Standard Drivers.
 </Accordion>
@@ -94,11 +116,11 @@ Priority only applies to non-fallback lead types. Fallback lead types are always
 
 ## Bidding scopes
 
-Bidding scopes define how customers can bid on leads within a lead type. You create them by configuring:
+Bidding scopes define how customers can bid on leads within a lead type. Set them up on the lead type's **Bidding** tab with **New bidding scope**. Each scope has these settings.
 
 | Setting | Description |
 |---------|-------------|
-| Scope | The geographic level at which bids are placed: county, state, or nationwide |
+| Scope | The geographic level at which bids are placed (county, state, or nationwide) |
 | Enabled | Toggle to activate or deactivate the scope |
 | Fixed Price | When enabled, customers pay a single set price instead of bidding within a range |
 | Minimum | The lowest bid a customer can place. Relabels to **Price** when Fixed Price is enabled. |
@@ -106,17 +128,24 @@ Bidding scopes define how customers can bid on leads within a lead type. You cre
 | Step | The amount by which bids increase between minimum and maximum (hidden when Fixed Price is enabled) |
 
 <Tip>
-Use **Fixed Price** when you want all customers to pay the same amount for leads—no bidding, no competition on price. This is ideal for flat-rate pricing models.
+Use **Fixed Price** when you want all customers to pay the same amount for leads, with no bidding and no competition on price. This is ideal for flat-rate pricing models.
 </Tip>
+
+Each scope can only be added once per lead type. The maximum must be at least the minimum, and the step can't be larger than the maximum.
+
+<Frame>
+  <img className="block dark:hidden" src="/images/tenant/ingest/lead-type-bidding-light.webp" alt="Lead type Bidding tab with a Bidding Scopes table showing Scope, Enabled, Fixed, Minimum, Maximum, and Step" />
+  <img className="hidden dark:block" src="/images/tenant/ingest/lead-type-bidding-dark.webp" alt="Lead type Bidding tab with a Bidding Scopes table showing Scope, Enabled, Fixed, Minimum, Maximum, and Step" />
+</Frame>
 
 Until at least one bidding scope is enabled for a lead type, customers won't see any bidding options when they try to place a bid.
 
 ## Marketplace settings
 
-Lead types also control marketplace behavior for leads that go unsold through normal distribution. See [Marketplace](/features/marketplace) for details on configuring these settings.
+The lead type's **Marketplace** tab controls whether its leads can be listed on your marketplace and how the reverse auction runs, including the starting and ending price, how much it drops, and how often. See [Marketplace](/features/marketplace) for details.
 
 ## Related guides
 
-<Card title="Defining lead types" icon="split" href="/guides/defining-lead-types" horizontal>
+<Card title="Defining lead types" icon={<HugeIcon name="tags" card />} href="/guides/defining-lead-types" horizontal>
   Create a lead type, write conditions, set priority, and configure bidding behavior.
 </Card>

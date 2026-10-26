@@ -1,94 +1,62 @@
 ---
 title: Notifications
-description: Configure contacts and control how you receive alerts.
+description: Add email and text contacts and choose which alerts each one receives.
 ---
 
-The Notifications section lets you manage who receives alerts when events occur—like when you receive a new lead or get outbid on a buy order.
+Notification contacts are the email addresses and phone numbers that hear about what's happening on your account, such as a new lead, an outbid, or a paused account. Set them up so the right people get the right alerts, like new-lead texts going to your sales team's phones and account alerts going to the office inbox.
 
-## Adding contacts
-
-Add phone numbers or email addresses to receive notifications. The available contact types depend on what your provider has enabled:
-
-- **Email** — Receive notifications via email
-- **Phone** — Receive notifications via text message (if texting is enabled)
-
-## Managing notifications
-
-Click on any contact to see its notification settings. From there, you can toggle individual notification types on or off for that contact.
-
-This lets you control exactly who gets notified about what—send lead alerts to your sales team's phones while keeping billing notifications in your inbox.
-
-## Webhooks
-
-The Webhooks tab lets you send lead data to external systems whenever a lead is assigned to you.
-
-### Creating a webhook
-
-1. Click **New Webhook**
-2. Give it a recognizable name and enter the URL where lead data should be sent
-3. Choose the HTTP method, request format, timeout, and any headers your endpoint requires
-4. Choose authentication if needed: none, Basic Auth, or bearer token
-5. Optionally customize the payload template
-
-New webhooks start paused. Send a test first, confirm that your endpoint accepts the payload, then enable the webhook to receive real lead deliveries.
-
-### Payload format
-
-Webhooks always send JSON. By default, the payload includes the lead's charged amount, scope, lead type, and all deliverable fields for the lead category. The default template looks like this:
-
-```json
-{
-  "charged_amount": "{{ charged_amount }}",
-  "scope": "{{ scope }}",
-  "lead_type": "{{ lead_type }}",
-  {{ deliverable_fields }}
-}
-```
-
-If you need to remap or restructure the data, use the payload template field to define a custom format.
-
-### Template variables
-
-Payload templates support merge fields using double curly braces: `{{ variable_name }}`.
-
-| Variable | Description |
-|----------|-------------|
-| `{{ charged_amount }}` | The amount charged for the lead |
-| `{{ scope }}` | The geographic scope of the assignment (e.g., county) |
-| `{{ lead_type }}` | The name of the lead type |
-| `{{ lead_category }}` | The name of the lead category |
-| `{{ buyer.customer_public_id }}` | Your stable public identifier (e.g., `cus_01arz3ndektsv4rrffq69g5fav`) |
-| `{{ buyer.phone }}` | Your phone number on file |
-| `{{ deliverable_fields }}` | Expands to all deliverable fields for the lead category as JSON key-value pairs |
+Find them under **Notifications** → **Contacts** in the sidebar. To send lead data into your CRM or another system instead, use [Webhooks](/customer-portal/webhooks).
 
 <Note>
-  The `{{ deliverable_fields }}` variable is special—it expands to raw JSON key-value pairs rather than a single value. Place it inside your JSON object and it will insert all deliverable fields (like name, email, phone, etc.) directly into the payload.
+Contacts get emails and texts. The [notifications bell](/customer-portal/getting-around#notifications-bell) in the portal is separate. Everyone who can log in to your business sees in-app versions of the same alerts there (new leads, outbids, approved returns and so on), plus your lead export results. Contact settings don't change what appears in the bell.
 </Note>
 
-### Lead fields
+<Frame>
+  <img className="block dark:hidden" src="/images/portal/notifications/contacts-light.webp" alt="Contacts table listing email and phone contacts with their type and name" />
+  <img className="hidden dark:block" src="/images/portal/notifications/contacts-dark.webp" alt="Contacts table listing email and phone contacts with their type and name" />
+</Frame>
 
-Lead fields are available in two formats:
+The table shows each contact's **Value** (the email address or phone number), **Type** (**Email** or **Phone**), and **Name**. Search or filter by type to find one. Each row has **Edit contact** and **Delete contact** actions, and you can tick several rows and use **Delete** to remove them together.
 
-- **Flat**: `{{ first_name }}`, `{{ last_name }}`, `{{ email }}`, `{{ phone }}`
-- **Nested**: `{{ lead.first_name }}`, `{{ lead.last_name }}`, `{{ lead.email }}`, `{{ lead.phone }}`
+## Adding a contact
 
-Both formats work identically. The nested format can be useful when you need to distinguish lead fields from other data in complex templates, or when integrating with systems that expect a specific payload structure.
+1. Click **New contact**.
+2. Choose **Email** or **Phone** as the **Type**. You'll only see the types your provider has set up, and phone contacts receive text messages.
+3. Enter the **Email address** or **Phone number**, and optionally a **Name** so you remember whose it is.
+4. Check **Consent** to confirm you authorize your provider to send notifications to this contact.
+5. Click **Create contact**.
 
-Custom fields from the lead category are accessible via `{{ lead.details.field_name }}` or directly by name if using `{{ deliverable_fields }}`.
+<Frame>
+  <img className="block dark:hidden" src="/images/portal/notifications/contact-create-light.webp" alt="New contact form with Type, Email address, optional Name, and a Consent checkbox" />
+  <img className="hidden dark:block" src="/images/portal/notifications/contact-create-dark.webp" alt="New contact form with Type, Email address, optional Name, and a Consent checkbox" />
+</Frame>
 
-You can also use `{{ lead.public_id }}` to include the lead's unique identifier (e.g., `lead_01arz3ndektsv4rrffq69g5fav`) in your webhook payload.
+If you see **Contacts can't be added yet** instead, either your provider hasn't turned on email or text notifications for your account, or your account is archived. Contact your provider to get notifications enabled.
 
-### Managing webhooks
+## Choosing what each contact receives
 
-You can enable or disable a webhook at any time without deleting it. The webhook detail page also keeps a delivery history with each attempt's result, response status, duration, request payload, and response body. Use it to diagnose an integration before asking your engineering team to summon a larger hammer.
+Click **Edit contact** on a row to open the contact. Below its details is a switch for every notification type, so each contact can get exactly the alerts it needs. Click **Save contact** when you're done.
 
-### Testing webhooks
+<Frame>
+  <img className="block dark:hidden" src="/images/portal/notifications/contact-edit-light.webp" alt="Contact edit page with the email address and name, then switches for Lead assigned, Return approved, Outbid, Bid matched, and Under funded notifications" />
+  <img className="hidden dark:block" src="/images/portal/notifications/contact-edit-dark.webp" alt="Contact edit page with the email address and name, then switches for Lead assigned, Return approved, Outbid, Bid matched, and Under funded notifications" />
+</Frame>
 
-Before going live, test your webhook to verify your endpoint receives data correctly. You have two options:
+| Group | Notification | Sent when |
+|-------|--------------|-----------|
+| **Leads** | **Lead assigned** | A lead is assigned to you |
+| | **Return approved** | A lead you returned is approved |
+| **Bids** | **Outbid** | Another customer sets a higher bid |
+| | **Bid matched** | Another bidder ties you as top bidder |
+| | **Under funded** | Your wallet falls below an active bid amount |
+| **Account status** | **Account paused** | Your account is paused |
+| | **Account unpaused** | Your account is unpaused |
+| | **Return tier updated** | Your return tier (badge) changes |
+| **Marketplace** | **Buy order exceeded** | Someone places a higher buy order than yours |
+| | **Buy order reinstated** | Your buy order becomes the highest again |
 
-- **Use an existing lead** — Select a lead from your history to test with real data. Search by lead ID, name, email, or phone to find a specific lead.
-- **Generate sample data** — Create fake data based on a lead type. Useful when you don't have leads yet or want to test without using real information.
+The **Marketplace** group appears only if your provider has a [marketplace](/customer-portal/marketplace). Your provider can also switch off individual notification types for everyone, so you may see fewer switches.
 
-Either option sends a test payload to your endpoint so you can confirm it's working before enabling the webhook.
-
-If a real delivery needs another attempt, open it from the delivery history and re-send it. Juiced uses the webhook's current URL, authentication, headers, and payload template for the re-send.
+<Tip>
+Not sure which to turn on? **Lead assigned** and **Under funded** are the two that keep leads flowing. One tells you a fresh lead has arrived, and the other warns you before your bids run dry.
+</Tip>

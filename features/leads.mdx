@@ -1,182 +1,234 @@
 ---
 title: Leads
-description: The central entity in Juiced—what they are, their statuses, and lifecycle.
+description: The central entity in Juiced, covering what leads are, their statuses, and everything you can do with one.
 ---
 
 Leads are the fruit of your labor. Literally everything in Juiced exists to get leads from point A (your sources) to point B (your customers) while making sure you get paid along the way.
 
-A lead is a person who's expressed interest in something—a quote, a service, a product. Your job is to connect that person with a customer who can help them. Juiced handles the messy middle: validation, routing, bidding, delivery, and the occasional dispute.
+A lead is a person who's expressed interest in something, like a quote, a service, or a product. Your job is to connect that person with a customer who can help them. Juiced handles the messy middle, including validation, routing, bidding, delivery, and the occasional dispute.
 
 ## Lead statuses
 
-Every lead has a status that tells you where it is in its journey. Here's what each one means:
+Every lead has a status that tells you where it is in its journey. Here's what each one means.
 
 | Status | What it means |
 |--------|---------------|
-| **Pending** | Just arrived. Waiting to be matched with a customer. |
-| **Processing** | Actively moving through the distribution pipeline. |
-| **Assigned** | Given to a customer. They've got it, whether or not the transaction is complete. |
-| **Posted** | Sent out of the system to a partner via an external post. |
-| **Duplicate** | Matched an existing lead. Rejected to avoid double-selling. |
-| **Returned** | Customer returned it. Maybe the phone number was fake, maybe the lead wasn't what they expected. |
-| **Unassigned** | Couldn't find a buyer. No matching bids, or everyone's out of budget. |
-| **Withheld** | On hold because you've hit your [subscription threshold](/features/billing#what-happens-at-100). Will process automatically once capacity frees up. |
-| **Marketplace** | Available for customers to claim rather than being pushed to a specific buyer. |
-| **Audit** | Flagged for manual review based on your audit conditions, or submitted as test data. |
-| **Uncategorized** | Doesn't match any lead type, and no fallback was configured to catch it. |
-| **Distribution Error** | Something went wrong during distribution. The lead can be reprocessed once the issue is resolved. |
+| <span className="tone-badge tone-sky">Pending</span> | Just arrived. Waiting to be matched with a customer. |
+| <span className="tone-badge tone-info">Processing</span> | Actively moving through your [distribution stages](/features/distribution). |
+| <span className="tone-badge tone-success">Assigned</span> | Delivered to a customer or partner. |
+| <span className="tone-badge tone-amber">Posted</span> | Sent out of the system to a partner via an external post. |
+| <span className="tone-badge tone-warning">Duplicate</span> | Matched an existing lead. Rejected to avoid double-selling. |
+| <span className="tone-badge tone-purple">Returned</span> | Returned for a refund. Maybe the phone number was fake, maybe the lead wasn't what the customer expected. |
+| <span className="tone-badge tone-caution">Unassigned</span> | Couldn't find a buyer. No matching bids, or everyone's out of budget. |
+| <span className="tone-badge tone-danger">Withheld</span> | On hold because you've hit your [plan's lead limit](/features/billing). Will process automatically once capacity frees up. |
+| <span className="tone-badge tone-lime">Marketplace</span> | Available for customers to claim on the [marketplace](/features/marketplace) rather than being pushed to a specific buyer. |
+| <span className="tone-badge tone-purple">Club</span> | Available for subscribed customers to claim through your [Club](/features/club). |
+| <span className="tone-badge tone-fuchsia">Audit</span> | Held for manual review by an [Audit stage](/features/audits), or submitted as test data. |
+| <span className="tone-badge tone-neutral">Uncategorized</span> | Doesn't match any lead type, and no fallback was configured to catch it. |
+| <span className="tone-badge tone-danger">Distribution Error</span> | Something went wrong during distribution. The lead can be reprocessed once the issue is resolved. |
 
-A lead is considered "sold" if it's Assigned, Posted, or Returned. Yes, even returned leads count as sold—you delivered them, and the customer chose to return them afterward.
+A lead is considered "sold" if it's Assigned, Posted, or Returned. Yes, even returned leads count as sold. You delivered them, and the customer chose to return them afterward.
 
-## Viewing leads
+## Browsing leads
 
-Tenants can view leads assigned to any customer. The lead detail page shows:
+Open **Leads** under **Entries** in the sidebar to see every lead in your workspace, newest first, 50 to a page.
 
-- **Public ID** — The unique identifier for the lead (e.g., `lead_01arz3ndektsv4rrffq69g5fav`)
-- **Basic contact information** — Name, email, phone, etc.
-- **Metadata** — Source, timestamps, assignment info, charged amount
-- **Details** — Custom fields defined by the lead category or source
-- **Enriched Data** — Property and owner information from third-party enrichment services (when configured)
+<Frame>
+  <img className="block dark:hidden" src="/images/tenant/leads/leads-list-light.webp" alt="Leads list with status tabs and counts, a search box, Filters and Columns buttons, and an Export button in the header" />
+  <img className="hidden dark:block" src="/images/tenant/leads/leads-list-dark.webp" alt="Leads list with status tabs and counts, a search box, Filters and Columns buttons, and an Export button in the header" />
+</Frame>
 
-### Enriched data
+### Status tabs
 
-If your distribution plan includes a [Real Estate API](/features/integrations#real-estate-api) enrichment stage, successfully enriched leads display an "Enriched Data" section below the property details. This section shows:
+The tabs across the top slice the list by status (**All**, **Assigned**, **Unassigned**, **Duplicates**, **Returned**, **Withheld**, **Pending**, **Marketplace**, **Club**, **Audit**, and **Uncategorized**). Each tab shows a count that respects your current search and filters, so the number tells you exactly how many rows you'll get when you click it. Tabs with nothing in them slide to the end of the row so the statuses that matter stay in view. Hover a tab for a one-line description of what it holds.
 
-- **Property Information**:
-  - Value, type, bedrooms, bathrooms
-  - Square footage, lot size, year built
-  - Sale history, assessed value, and annual tax
-- **Owner Information**:
-  - Name, phone, and email
-  - Owner-occupied status and age
-  - Mailing address
+<Frame>
+  <img className="block dark:hidden" src="/images/tenant/leads/leads-list-marketplace-light.webp" alt="Leads list on the Marketplace tab, showing only leads waiting on the marketplace" />
+  <img className="hidden dark:block" src="/images/tenant/leads/leads-list-marketplace-dark.webp" alt="Leads list on the Marketplace tab, showing only leads waiting on the marketplace" />
+</Frame>
 
-Only fields with values appear—empty fields are hidden. If no enrichment data exists for a lead (e.g., it was submitted before enrichment was configured, or the API returned no results), the section won't appear at all.
+### Searching and filtering
+
+The **Search leads** box matches names, lead IDs, emails, phone numbers, addresses, customers, states, postal codes, and statuses.
+
+Click **Filters** to narrow things down further. You can filter by any of these.
+
+- **Lead types**, **States**, and **Counties** (multi-country workspaces see their regional labels instead)
+- **Sources**, **Customers**, and **Partners**
+- **Assigned scope** (County, State, Nationwide, Marketplace, or Posted)
+- **Test mode** (real leads by default, or test leads only)
+- **Value** range and **Created** date range
+
+<Frame>
+  <img className="block dark:hidden" src="/images/tenant/leads/leads-filters-light.webp" alt="Filters popover on the Leads list with lead type, location, source, customer, partner, scope, test mode, value, and created date filters" />
+  <img className="hidden dark:block" src="/images/tenant/leads/leads-filters-dark.webp" alt="Filters popover on the Leads list with lead type, location, source, customer, partner, scope, test mode, value, and created date filters" />
+</Frame>
+
+### Choosing columns
+
+Name is always shown. Use **Columns** to show or hide **Status**, **Address**, **Assigned To**, **Deliveries**, **Sold For**, **Source**, and **Date**. Your choice is remembered in this browser. You can sort by Name, Sold For, and Date. When a customer won a lead at a discount, **Sold For** shows an "off" badge with the discount amount.
+
+<Frame>
+  <img className="block dark:hidden" src="/images/tenant/leads/leads-columns-light.webp" alt="Columns menu on the Leads list with toggles for each optional column" />
+  <img className="hidden dark:block" src="/images/tenant/leads/leads-columns-dark.webp" alt="Columns menu on the Leads list with toggles for each optional column" />
+</Frame>
+
+## Viewing a lead
+
+Click any row to open the lead. The header shows the lead's name (or "No name provided"), its status, and a <span className="tone-badge tone-warning">Test Mode</span> badge for test leads.
+
+<Frame>
+  <img className="block dark:hidden" src="/images/tenant/leads/lead-detail-light.webp" alt="Lead page with a Contact section and map, a Lead Details grid, and a sidebar showing Details and one delivery to a customer" />
+  <img className="hidden dark:block" src="/images/tenant/leads/lead-detail-dark.webp" alt="Lead page with a Contact section and map, a Lead Details grid, and a sidebar showing Details and one delivery to a customer" />
+</Frame>
+
+- **Contact** shows phone, email, and address with one-click call, email, copy, and **Open in Maps** buttons. A map preview appears next to the address when your workspace has maps configured.
+- **Lead Details** lists every custom field collected for the lead.
+- **Details** (sidebar) shows the lead type, source, when it was received, and the lead ID (e.g., `lead_01arz3ndektsv4rrffq69g5fav`).
+- **Deliveries** (sidebar) lists each customer or partner who received the lead, with the amount charged, the delivery's status, the scope it was won at (County, State, and so on), and the payout owed to the source. Returned deliveries show the amount struck through. If nobody has received it yet, you'll see "This lead hasn't been delivered to anyone yet."
+
+<Frame>
+  <img className="block dark:hidden" src="/images/tenant/leads/lead-detail-returned-light.webp" alt="Returned lead with a Returned badge and a delivery whose charged amount is struck through" />
+  <img className="hidden dark:block" src="/images/tenant/leads/lead-detail-returned-dark.webp" alt="Returned lead with a Returned badge and a delivery whose charged amount is struck through" />
+</Frame>
 
 ### Field visibility
 
-Not all fields are visible to everyone:
+Not all fields are visible to everyone.
 
-- **Tenants** see all fields on a lead
-- **Customers** only see fields marked as "deliverable" in the lead category configuration
+- **You** see all fields on a lead
+- **Customers** only see fields marked as "deliverable" in the [lead category](/features/lead-categories) configuration
 
 This lets you collect data for your own purposes (like tracking or analytics) without exposing it to buyers.
 
-### Related records
-
-If the lead was generated through ping-post, you'll see links to view:
-
-- **The ping** — The initial request that triggered the auction
-- **The post** — The follow-up request that delivered the full lead data
-
-These links only appear when the related records exist.
-
 ## Lead actions
+
+Everything you can do with a lead lives in the **More actions** (⋯) menu in the lead's header, plus an **Edit** button when the lead can still be edited. You'll only see the actions your role allows and that make sense for the lead.
+
+<Frame>
+  <img className="block dark:hidden" src="/images/tenant/leads/lead-actions-menu-light.webp" alt="More actions menu open on a lead, listing History, View Log, View Ping, View Post, Process, Trigger Webhook, Return, and Delete" />
+  <img className="hidden dark:block" src="/images/tenant/leads/lead-actions-menu-dark.webp" alt="More actions menu open on a lead, listing History, View Log, View Ping, View Post, Process, Trigger Webhook, Return, and Delete" />
+</Frame>
+
+| Action | What it does |
+|--------|--------------|
+| **History** | Opens a panel with the lead's activity, including status changes, edits, and who made them. |
+| **View Log** | Opens the lead's [incoming log](/features/logs#incoming-logs), showing every stage it went through. |
+| **View Ping** / **View Post** | Opens the [ping or post](/features/logs#ping-and-post-inspectors) that created the lead. Only shown for leads that came in that way. |
+| **Process** | Runs the lead back through your distribution stages. See [Reprocessing leads](#reprocessing-leads). |
+| **Trigger Webhook** | Resends the lead to the customer's configured webhook endpoints. Assigned leads only. |
+| **Return** | Returns the lead and refunds the customer. See [Returning leads](#returning-leads). |
+| **Delete** | Permanently deletes the lead. |
+
+### Viewing history
+
+**History** opens a side panel with the lead's activity log, newest first, including field-level changes and who made them. Long histories load in pages with a **Load older** button.
+
+<Frame>
+  <img className="block dark:hidden" src="/images/tenant/leads/lead-history-light.webp" alt="History panel listing a lead's activity with timestamps and the user who made each change" />
+  <img className="hidden dark:block" src="/images/tenant/leads/lead-history-dark.webp" alt="History panel listing a lead's activity with timestamps and the user who made each change" />
+</Frame>
 
 ### Returning leads
 
-Tenants can return leads on behalf of customers. When a lead is returned:
+You can return a lead on a customer's behalf. When you confirm the **Return lead** dialog, four things happen.
 
-- The customer's wallet is credited with the charged amount
-- The lead no longer counts against bidding limits
+- The customer is refunded the charged amount
+- The lead no longer counts against the customer's lead cap
 - The customer retains access to the lead data
 - The lead status changes to "Returned"
 
+<Frame>
+  <img className="block dark:hidden" src="/images/tenant/leads/lead-return-dialog-light.webp" alt="Return lead confirmation dialog explaining that the customer will be refunded" />
+  <img className="hidden dark:block" src="/images/tenant/leads/lead-return-dialog-dark.webp" alt="Return lead confirmation dialog explaining that the customer will be refunded" />
+</Frame>
+
+Returns your customers request themselves follow your [return tiers](/features/returns).
+
+### Triggering the customer's webhook
+
+If a customer's system missed a lead (their endpoint was down, say), **Trigger Webhook** resends the lead to the customer's webhook endpoints. It's only available on assigned leads, and you can trigger it once per minute per lead.
+
 ### Editing leads
 
-Tenants can edit **unassigned** leads to correct data or add missing information. When editing:
+You can edit a lead that hasn't been assigned yet to correct data or fill in missing information. Click **Edit** in the lead's header. The edit page has three sections.
 
-- **Lead data** can be changed (contact info, custom fields)
-- **Metadata** cannot be changed (source, timestamps, etc.)
-- **Details** can be added if needed
+- **Contact Information** covers name, email, and phone.
+- **Address** covers street, city, state, and postal code.
+- **Details** holds the lead's custom field values.
 
-When you save an edited lead, it gets reclassified into the appropriate lead category and lead type based on the updated data.
+Metadata like the source and timestamps can't be changed. Save with the bar that appears at the bottom of the page. When you save, Juiced reclassifies the lead into the right lead type based on the updated data.
 
 ### Reclassifying leads
 
-This is useful when:
+Reclassifying re-runs lead type matching against the lead's current data. It's useful when a lead type's conditions have changed, or when you're troubleshooting classification rules and want to test against real lead data.
 
-- A lead type's conditions have changed
-- You're troubleshooting classification rules and want to test against real lead data
-
-To reclassify a lead, open it for editing and select **Reclassify** from the **More Actions** menu. If the lead type changes, you'll see a notification with the old and new classifications. If the lead is already correctly classified, you'll be notified that no change was needed.
+Open the lead's edit page and click **Reclassify**, then confirm the **Re-run Classification** dialog. If the lead type changes, you'll see the old and new lead types. If it's already correctly classified, you'll be told no change was needed.
 
 ### Reprocessing leads
 
-Tenants can reprocess leads to run them back through the distribution engine. This is useful when:
+Reprocessing runs leads back through your [distribution stages](/features/distribution). This is useful in situations like these.
 
 - A lead failed to assign due to temporary issues (distribution errors, no available bids)
 - Lead data was corrected and needs to be re-evaluated
+- A lead is being held by an [Audit stage](/features/audits) and you've reviewed it
 - You want to retry distribution from a specific stage
 
-#### Single lead reprocessing
+Every reprocess asks for a **Starting stage**. The list shows your own stages by name, in order. The lead runs that stage and continues through every stage after it.
 
-After editing a lead, you can choose to reprocess it immediately. Select which stage of the distribution plan to start from—useful if you want to skip steps that have already been attempted or start fresh from the beginning.
+#### Single lead
+
+Choose **Process** from a lead's **More actions** menu. This works for a lead in any status, including one flagged as a duplicate at intake. The one exception is a lead that's already been delivered. It must be returned first, so the recipient is refunded before the lead goes anywhere else.
 
 #### Bulk reprocessing
 
-Select multiple leads from the leads table and use the **Process** bulk action to requeue them all at once. You'll see a breakdown of which leads are eligible and which aren't before confirming.
+Select leads in the list and click **Process** in the bar that appears. Pick a starting stage and confirm. Bulk reprocessing only picks up leads in these statuses, and skips any that have been delivered.
 
-Only leads with certain statuses can be reprocessed:
-
-| Status | Can reprocess? |
+| Status | Can bulk reprocess? |
 |--------|----------------|
-| **Unassigned** | Yes |
-| **Uncategorized** | Yes |
-| **Pending** | Yes |
-| **Distribution Error** | Yes |
+| <span className="tone-badge tone-caution">Unassigned</span> | Yes |
+| <span className="tone-badge tone-neutral">Uncategorized</span> | Yes |
+| <span className="tone-badge tone-sky">Pending</span> | Yes |
+| <span className="tone-badge tone-danger">Distribution Error</span> | Yes |
 | All other statuses | No |
 
-When bulk reprocessing, you can choose where to start:
-
-- **Bidding** — Run leads through the full distribution process from the beginning
-- **Trigger Ping/Post** — Start at the ping/post stage
-- **Marketplace** — Send leads directly to the marketplace
-- **Trigger Post Marketplace Direct Post** — Execute direct post delivery
+When it's done, you'll see how many leads were queued.
 
 <Note>
-Bulk reprocessing requires the **leads.reprocess** permission. By default, only Admin users have this permission.
+Reprocessing requires the **leads.reprocess** permission, at least one distribution stage, and a workspace that isn't restricted.
 </Note>
 
 ### Deleting leads
 
-Tenants can delete leads entirely. This removes the lead from the system. Use this for test data or leads that should never have entered the system in the first place.
+**Delete** removes a lead entirely. Use this for test data or leads that should never have entered the system in the first place. Deleting can't be undone.
 
-When you delete a lead, any associated distribution flows are preserved for historical reference. The distribution flow's timeline will show when the lead was deleted, and the Lead column will display "Deleted" instead of the lead's name.
+The lead's incoming log is preserved for historical reference. In the logs, the lead column shows a **Deleted** badge instead of the lead's name.
 
-### Exporting leads
+## Exporting leads
 
-Tenants can export leads from a customer's lead list. This generates a downloadable file of the lead data—useful for reporting, backups, or moving data to external systems.
+Click **Export** in the Leads header to download leads as a CSV. You can choose between two options.
 
-Tenant exports include **all** custom fields from the lead, regardless of whether they're marked as deliverable. This gives you full access to any data you've collected—including internal tracking fields not visible to customers.
+- **Export filtered leads** uses your current status tab, search, and filters. It's disabled until you've applied at least one.
+- **Export all leads** ignores the table filters and exports everything.
 
-### Importing leads
+You can also select rows in the list and click **Export** in the bulk actions bar to export just those leads.
 
-Tenants can import leads on behalf of a customer. Imported leads create **reverse auctions** on the marketplace, where sources can bid to fulfill them. This flips the typical flow—instead of leads coming in and customers bidding on them, the customer is saying "I want leads matching these criteria" and sources compete to provide them.
+<Frame>
+  <img className="block dark:hidden" src="/images/tenant/leads/leads-export-light.webp" alt="Export leads dialog with options to export filtered leads or all leads" />
+  <img className="hidden dark:block" src="/images/tenant/leads/leads-export-dark.webp" alt="Export leads dialog with options to export filtered leads or all leads" />
+</Frame>
 
-When importing, you'll select a [lead category](/features/lead-categories). The import form automatically shows all fields from that category—both standard fields (name, email, phone, address) and any custom fields you've configured. Map your CSV columns to the appropriate fields.
+Exports include at most the 10,000 most recent matching leads. The file is built in the background; when it's ready, a **Lead export ready** notification lands in the [notification bell](/features/dashboard#notifications) with a download link.
 
-Validation rules are pulled from your [lead category configuration](/features/lead-categories). Fields marked as required in the lead category will be required during import. This keeps your imported leads consistent with leads that come in through the API.
-
-### Enriching leads
-
-If you have a [Real Estate API integration](/features/integrations#real-estate-api) configured, you can enrich leads with additional property and owner data. The **Enrich with Real Estate API** button appears in the lead edit page header.
-
-When enriching:
-
-1. Select which data endpoints to query (property details, skip-trace, etc.)
-2. Choose whether to only fill empty fields or overwrite existing data
-3. The lead is updated with any new information returned by the API
-
-Enrichment requires the lead to have complete address information—street address, city, state, and ZIP code. If any of these are missing, you'll see an error explaining which fields need to be populated first.
+Exports include **all** of your custom fields, regardless of whether they're marked as deliverable. That gives you full access to any data you've collected, including internal tracking fields customers never see.
 
 ## Test leads
 
-Leads submitted through a source with [test mode](/features/sources#test-mode) enabled are marked as test data. These leads:
+Leads submitted through a source with [test mode](/features/sources#test-mode) enabled are marked as test data.
 
-- Are hidden from lead lists by default
-- Can be viewed using the **Test Mode** filter toggle
-- Display a "Test Mode" badge on the lead detail page
+- They're hidden from the Leads list by default.
+- You can view them by setting the **Test mode** filter to test leads only.
+- They display a <span className="tone-badge tone-warning">Test Mode</span> badge on the lead page.
 
 [Deterministic test zips](/features/sources#testing-with-zip-codes) produce specific statuses depending on the zip code used. Leads submitted with any other zip code are forced to **Audit** status to prevent distribution.
 

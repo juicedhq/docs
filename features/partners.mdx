@@ -1,89 +1,182 @@
 ---
 title: Partners
-description: Manage lead suppliers—users, invites, and source assignments.
+description: Manage the outside businesses that send you leads or buy them by ping/post, with their sources, payouts, eligibility, and users.
 ---
 
-Partners are the businesses supplying leads to you. While [customers](/features/customers) buy your leads, partners are on the supply side—they're vendors, affiliates, or other sources sending leads into your system.
+import { HugeIcon } from '/snippets/hugeicon.jsx';
+
+Partners are the businesses you trade leads with outside your own customer base. A partner can be on the supply side (affiliates and vendors whose [sources](/features/sources) send you leads), on the buy side (a lead buyer you ping for a price and post leads to), or both. Customers buy through your portal; partners plug in over the wire.
 
 ## Partners vs. sources
 
-A quick clarification on the relationship:
-
 | Concept | What it represents | Example |
 |---------|-------------------|---------|
-| **Partner** | A business entity that supplies leads | "Acme Lead Gen Inc." |
+| **Partner** | A business you trade leads with | "Acme Lead Gen Inc." |
 | **Source** | A technical endpoint that receives leads | "Acme - Auto Insurance Form" |
 
-A single partner can have multiple sources (one for each form, campaign, or integration they run), and each source tracks its own API credentials, field mappings, and performance metrics. Partners let you manage the business relationship; sources handle the technical details.
+A partner can have several sources, one for each form, campaign, or integration they run. The partner holds the business relationship; sources handle the technical details.
 
 ## The partner list
 
-Navigate to **Partners** in your tenant dashboard to see all your lead suppliers. Click any partner to view their details and manage related data.
+Click **Partners** in the sidebar.
 
-## Partner overview
+<Frame>
+  <img className="block dark:hidden" src="/images/tenant/partners/partners-list-light.webp" alt="Partners list with Net Revenue, Payout, Contribution Margin, and Rev / Received stats above a daily revenue chart, and a table of partners showing leads and whether ping and post are configured" />
+  <img className="hidden dark:block" src="/images/tenant/partners/partners-list-dark.webp" alt="Partners list with Net Revenue, Payout, Contribution Margin, and Rev / Received stats above a daily revenue chart, and a table of partners showing leads and whether ping and post are configured" />
+</Frame>
 
-Click on a partner to see their overview page. This shows basic information about the partner along with navigation to manage related data:
+If your role can see analytics, the top of the page shows partner performance for the selected **Timeframe**. Hover the info icon on each stat for its exact definition.
 
-- **Overview** — Partner details and basic information
-- **Sources** — Which sources are assigned to this partner
-- **Users** — People who can log into this partner account
-- **Invites** — Pending invitations for new users
+| Stat | What it shows |
+|------|---------------|
+| **Net Revenue** | What customers were charged for partner-sourced leads, net of discounts, excluding returned deliveries and free Club claims |
+| **Payout** | What you owe partners for accepted leads, honoring each partner's **Exclude Returned Leads from Payout** setting |
+| **Contribution Margin** | Net revenue minus payouts, with the share of revenue you keep as a percentage |
+| **Rev / Received** | Net revenue divided by every submission partners sent, rejected ones included |
 
-## Managing sources
+The table lists each partner's **Leads** and whether a **Ping** and **Post** are configured. Search by name, or use **Filters** to include archived partners.
 
-The **Sources** tab shows all sources assigned to this partner. From here you can:
+## Creating and editing a partner
 
-- **Assign sources** — Connect existing sources to this partner
-- **Unassign sources** — Remove the association between a source and partner
+Click **New partner**, fill in the form, and click **Create partner**. To change a partner later, open it and click **Edit**.
 
-Assigning sources to partners helps you organize your lead supply by business relationship rather than just technical endpoint.
+<Frame>
+  <img className="block dark:hidden" src="/images/tenant/partners/partner-create-light.webp" alt="New partner form with Basic Info, Duplicate checks, Lead Quotas, and Toggles sections" />
+  <img className="hidden dark:block" src="/images/tenant/partners/partner-create-dark.webp" alt="New partner form with Basic Info, Duplicate checks, Lead Quotas, and Toggles sections" />
+</Frame>
 
-## Lead quotas
+| Section | Fields |
+|---------|--------|
+| **Basic Info** | **Name**, and an optional **Offer Penalty** (0 to 100%). The penalty lowers the partner's offer score when they compete for a lead, without changing what they're charged. Leave it empty for no penalty. |
+| **Duplicate checks** | **Use tenant default**, **Disabled**, or **Custom**. See [Duplicate checks](#duplicate-checks) below. |
+| **Lead Quotas** | Daily, weekly, and monthly limits on **Lead Count** and **Revenue**. See [Lead quotas](#lead-quotas). |
+| **Toggles** | **Show Returned Status in Portal** lets the partner see when a lead was returned. **Exclude Returned Leads from Payout** leaves returned leads out of the payout total shown to the partner. |
 
-Use **Lead Quotas** on a partner to limit outbound delivery to that partner. You can set daily, weekly, or monthly limits for lead count and revenue; leave any field empty for no limit.
+### Duplicate checks
 
-When a partner reaches any configured quota, Juiced removes the partner from highest-price and round-robin selection and checks the limit again before sending an outbound ping or post. Existing delivery paths can continue to other eligible partners, marketplace, or fallback stages.
+Duplicate checks stop you from sending a partner a lead they've already received. They compare against the partner's own delivery history. The window starts when a lead is delivered, returned deliveries and Club claims count, and pending reservations don't.
 
-## Managing users
+- **Use tenant default** follows the partner default under **Ingest → Duplicate Checks**.
+- **Disabled** turns checks off for this partner.
+- **Custom** replaces the default with this partner's own **History window**, **Field matching** (all or any of the selected fields), **Fields**, and **Matching options** (case sensitivity and punctuation). You can also choose whether a lead skipped as a duplicate can still go to the **Marketplace** or **Club** immediately, never, or after a number of days.
 
-Partners can have their own users who log in to view their performance and manage their account. The **Users** tab shows everyone with access to this partner.
+See [Duplicate detection](/features/duplicate-detection) for how duplicate checks work across Juiced.
 
-### Partner roles
+### Lead quotas
 
-Partner users have their own set of roles, separate from your tenant's internal roles:
+Lead quotas cap what you send to a partner. Set daily, weekly, and monthly limits for lead count and revenue; leave any field blank for no limit. Limits use totals so far, so the final lead can take the revenue total over the limit.
 
-| Role | Description |
-|------|-------------|
-| **Partner Admin** | Full access to the partner account |
-| **Partner User** | Standard access for day-to-day operations |
+Once a partner reaches any quota, Juiced stops sending them new pings and posts. They drop out of highest-price and round-robin selection, and the limit is checked again right before each outbound ping or post. Leads keep flowing to other eligible partners, the marketplace, or fallback stages. Quotas reset each day, week, or month.
 
-### Removing users
+## The partner record
 
-If someone should no longer have access to a partner account, click **Remove** to detach them. This is immediate—they'll lose access right away.
+Open a partner to see its record. The tabs across the top are **Overview**, **Payouts** (for roles that can see analytics), **Lead Eligibility**, **Sources**, and **Users**.
 
-## Inviting users
+<Frame>
+  <img className="block dark:hidden" src="/images/tenant/partners/partner-overview-light.webp" alt="Partner overview with Pings, Posts, Leads, and Payout stats, a Ping/Post table listing a ping and a post endpoint, and a Details panel with Offer Penalty, Show Returned Status, Exclude Returned from Payout, and Created" />
+  <img className="hidden dark:block" src="/images/tenant/partners/partner-overview-dark.webp" alt="Partner overview with Pings, Posts, Leads, and Payout stats, a Ping/Post table listing a ping and a post endpoint, and a Details panel with Offer Penalty, Show Returned Status, Exclude Returned from Payout, and Created" />
+</Frame>
 
-To add someone to a partner account:
+The **Overview** shows **Pings**, **Posts**, **Leads**, and **Payout** for the timeframe you pick in the header, plus a **Details** panel with the partner's settings and any quotas. Below that are three tabs.
 
-1. Go to the partner's **Invites** tab
-2. Click **Invite User**
-3. Enter their email address
-4. Select a partner role
-5. Send the invite
+- **Ping/Post** lists the partner's ping and post endpoints. See [Ping/post endpoints](#pingpost-endpoints).
+- **Leads** lists leads assigned to this partner, with **Status**, **Payout**, and **Date**. Filter by status.
+- **Outgoing logs** lists every ping and post attempt sent to this partner, with its result and price. Click a row for the full request and response.
 
-The invitee receives an email with a link to accept the invitation and create their account.
+### Archiving and deleting
 
-### Pending invites
+Both of these actions live in the page header.
 
-Invitations that haven't been accepted appear in the **Invites** tab. From here you can:
+- **Archive** removes the partner from active lists and lead distribution. Existing leads keep the partner's name for reference, and you can bring it back with **Restore**.
+- **Delete permanently** is only offered for archived partners. It can't be undone. The partner is removed, detached from its leads and invites, and its offers are deleted.
 
-- **Resend** — Send the invitation email again
-- **Revoke** — Cancel the invitation
+## Ping/post endpoints
+
+To sell leads to a partner, give them a ping, a post, or both.
+
+- A **ping** runs before a lead is posted. It asks the partner for a price and whether they want the lead.
+- A **post** delivers the lead to the partner once they win it.
+
+On the **Ping/Post** tab, click **Configure Ping** or **Configure Post**. Each partner has at most one of each, so the button disappears once that endpoint exists.
+
+<Frame>
+  <img className="block dark:hidden" src="/images/tenant/partners/partner-ping-config-light.webp" alt="Edit Ping page with Destination URL, collapsed Advanced settings showing no auth, POST, JSON, 10s timeout, and one header, a Payload mapping, and the start of the Response section" />
+  <img className="hidden dark:block" src="/images/tenant/partners/partner-ping-config-dark.webp" alt="Edit Ping page with Destination URL, collapsed Advanced settings showing no auth, POST, JSON, 10s timeout, and one header, a Payload mapping, and the start of the Response section" />
+</Frame>
+
+| Section | What you set |
+|---------|--------------|
+| **Destination** | The **URL** the ping or post is sent to |
+| **Advanced settings** | **Method** (POST, PUT, or GET), **Authentication** (None, Basic Auth, or Bearer Token), **Format** (JSON or Form), **Timeout** in seconds, and extra **Headers**. The defaults suit most endpoints. |
+| **Payload** | The fields sent. Use **Load default mapping** for the standard shape, build rows yourself, or **Paste JSON** from the partner's spec. Keys use dot notation for nesting, and you can click a field to chain transformers. |
+| **Response** | How to read the partner's reply. **Price path** and **Message path** point to the price and any message or rejection reason (dot notation, like `data.offer.price`). A **Success Condition** is required; a **Duplicate Condition** is optional. Conditions can check the **HTTP Status Code**, whether a key equals or contains a value (**Key Equals**, **Key Contains**), or whether the response contains some text (**Response Contains**). |
+
+A new endpoint is saved with **Create & continue to testing**, which takes you to the edit page with a **Testing** section. Send a test using **Generate sample data**, **Add test data manually**, or **Test with a real lead**, and check the request, response, parsed price, and message before going live. Save later changes with the floating save bar.
+
+<Frame>
+  <img className="block dark:hidden" src="/images/tenant/partners/partner-post-config-light.webp" alt="Edit Post page for a partner with the post Destination URL, Advanced settings, and Payload mapping" />
+  <img className="hidden dark:block" src="/images/tenant/partners/partner-post-config-dark.webp" alt="Edit Post page for a partner with the post Destination URL, Advanced settings, and Payload mapping" />
+</Frame>
+
+Back on the **Ping/Post** tab, each endpoint's row shows its URL, method, format, and whether it's **Active** or **Paused**. Row actions let you pause or enable it, **Edit** it, or **Delete** it. A paused endpoint isn't called.
+
+### Deliveries
+
+Click an endpoint's row to open its deliveries page.
+
+<Frame>
+  <img className="block dark:hidden" src="/images/tenant/partners/partner-deliveries-light.webp" alt="Partner endpoint deliveries page with total deliveries, success rate, failed, average duration, and last delivery stats, a list of live deliveries, and the endpoint details" />
+  <img className="hidden dark:block" src="/images/tenant/partners/partner-deliveries-dark.webp" alt="Partner endpoint deliveries page with total deliveries, success rate, failed, average duration, and last delivery stats, a list of live deliveries, and the endpoint details" />
+</Frame>
+
+The stats show **Total deliveries**, **Success rate**, **Failed**, **Average duration**, and **Last delivery**. The list switches between **Live** deliveries and **Tests**, and filters by **Result** and **Delivery date**. Click a delivery to see its request and response, open the lead, or **Redeliver** it. Use **Edit** in the header to change the endpoint, or **More actions** to pause or enable it.
+
+## Payouts
+
+The **Payouts** tab helps you check what you owe a partner before you pay. Pick a timeframe in the header to see **Payout Owed** (for accepted leads, honoring the exclude-returned setting) and **Expected Revenue** (what customers were charged for the same leads), then a line-by-line list of leads with **Received**, **Status**, **Payout**, and **Revenue**. Everything is counted by the date each lead was received.
+
+<Frame>
+  <img className="block dark:hidden" src="/images/tenant/partners/partner-payouts-light.webp" alt="Partner Payouts tab with Payout Owed and Expected Revenue stats and a list of leads with received date, status, payout, and revenue" />
+  <img className="hidden dark:block" src="/images/tenant/partners/partner-payouts-dark.webp" alt="Partner Payouts tab with Payout Owed and Expected Revenue stats and a list of leads with received date, status, payout, and revenue" />
+</Frame>
+
+## Lead eligibility
+
+The **Lead Eligibility** tab sets conditions a lead must meet before this partner can receive it. A partner with no conditions is eligible for every lead. Build condition groups from lead fields, then click **Save conditions**.
+
+<Frame>
+  <img className="block dark:hidden" src="/images/tenant/partners/partner-eligibility-light.webp" alt="Partner Lead Eligibility tab with the Lead Eligibility Conditions builder" />
+  <img className="hidden dark:block" src="/images/tenant/partners/partner-eligibility-dark.webp" alt="Partner Lead Eligibility tab with the Lead Eligibility Conditions builder" />
+</Frame>
+
+## Sources
+
+The **Sources** tab lists the sources assigned to this partner, with each one's **Type**, **Lead Category**, **Test Mode**, and **Payout %**. Click **Assign source** to attach one; only sources not already assigned to a partner are offered. Use **Unassign** on a row to detach it.
+
+<Frame>
+  <img className="block dark:hidden" src="/images/tenant/partners/partner-sources-light.webp" alt="Partner Sources tab listing assigned sources with type, lead category, test mode, and payout percentage" />
+  <img className="hidden dark:block" src="/images/tenant/partners/partner-sources-dark.webp" alt="Partner Sources tab listing assigned sources with type, lead category, test mode, and payout percentage" />
+</Frame>
+
+## Users
+
+Partners can have their own users who sign in to the partner portal to see their leads and performance. The **Users** tab lists them with **Email**, **Authentication**, and **Joined on**.
+
+<Frame>
+  <img className="block dark:hidden" src="/images/tenant/partners/partner-users-light.webp" alt="Partner Users tab listing partner users with email, authentication method, and joined date, and an Invite user button" />
+  <img className="hidden dark:block" src="/images/tenant/partners/partner-users-dark.webp" alt="Partner Users tab listing partner users with email, authentication method, and joined date, and an Invite user button" />
+</Frame>
+
+- **Invite user** sends an invite to the email you enter. The invitee gets an email to accept and create their account, and joins as a partner admin with full access to the partner account.
+- **Pending** invites show in the same list with **Resend invite** and **Revoke invite**. A revoked invite stops working immediately.
+- **Reset 2FA and passkeys** helps a partner user who's lost their authenticator app or passkey.
+- **Remove** takes away their access right away.
 
 ## Related guides
 
-<Card title="Adding a partner" icon="handshake" href="/guides/adding-a-partner" horizontal>
+<Card title="Adding a partner" icon={<HugeIcon name="handshake" card />} href="/guides/adding-a-partner" horizontal>
   Create a partner record, attach sources, define eligibility, and invite their team.
 </Card>
-
-Revoked invites become invalid immediately.
+<Card title="Setting up partner ping/post" icon={<HugeIcon name="radar-01" card />} href="/guides/setting-up-partner-ping-post" horizontal>
+  Configure a buyer's ping and post endpoints, test them, and watch the deliveries.
+</Card>

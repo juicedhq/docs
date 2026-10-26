@@ -3,6 +3,8 @@ title: Lead Categories
 description: Schemas that define the structure and required fields for your leads.
 ---
 
+import { HugeIcon } from '/snippets/hugeicon.jsx';
+
 Lead categories and [lead types](/features/lead-types) are classification concepts unique to Juiced. Together, they help you categorize leads based on who they are and what they're worth.
 
 - **Lead category** represents who the person is and what they want to do
@@ -10,15 +12,39 @@ Lead categories and [lead types](/features/lead-types) are classification concep
 
 Think of lead categories as the "what" and lead types as the "how much."
 
+You'll find them under **Ingest → Lead Categories** in the sidebar. The list shows each category's name, description, its lead types, and whether it has a fallback lead type.
+
+<Frame>
+  <img className="block dark:hidden" src="/images/tenant/ingest/lead-categories-light.webp" alt="Lead Categories list with Name, Description, Lead Types, and Has Fallback columns" />
+  <img className="hidden dark:block" src="/images/tenant/ingest/lead-categories-dark.webp" alt="Lead Categories list with Name, Description, Lead Types, and Has Fallback columns" />
+</Frame>
+
 ## Start from a template or from scratch
 
-When you create a lead category, choose **Start from a template** to begin with a market-specific field set, or **Start from scratch** to configure the schema yourself. Templates are a starting point: review the included fields, required settings, and deliverable settings before you connect a source.
+Click **New lead category**. When templates are available, you'll choose **Start from a template** to begin with a market-specific field set, or **Start from scratch** to name the category and add your own fields. The template list is searchable and shows how many fields each template adds. Templates are a starting point, so review the included fields, required settings, and deliverable settings before you connect a source.
 
 Creating a category from a template copies its fields into the new category. Later template changes do not rewrite categories you already created, so your existing schemas stay yours to control.
 
+Every new category, template or not, also gets a [fallback lead type](/features/lead-types#fallback-lead-types) with the same name, so leads in the category always have somewhere to land.
+
+## The lead category page
+
+Click a category to open it. The top of the page shows **Leads received**, **Leads assigned**, and **Revenue** for the selected timeframe (the last 30 days by default), each compared with the previous period. Below that are three tabs.
+
+- **Lead Types** lists the category's lead types, with the fallback marked.
+- **Sources** lists the sources that send leads into this category.
+- **Fields** holds the category's schema. This is where you add and configure fields.
+
+<Frame>
+  <img className="block dark:hidden" src="/images/tenant/ingest/lead-category-detail-light.webp" alt="Lead category page with Leads received, Leads assigned, and Revenue stats, Lead Types, Sources, and Fields tabs, and a Details sidebar" />
+  <img className="hidden dark:block" src="/images/tenant/ingest/lead-category-detail-dark.webp" alt="Lead category page with Leads received, Leads assigned, and Revenue stats, Lead Types, Sources, and Fields tabs, and a Details sidebar" />
+</Frame>
+
+**Edit** in the header changes the category's name and description. **Delete** removes the category, but only once no sources use it.
+
 ## Basic fields
 
-Every lead category comes with a set of basic fields automatically attached when you create it:
+Every lead category comes with a set of basic fields automatically attached when you create it.
 
 - First name
 - Last name
@@ -31,11 +57,11 @@ Every lead category comes with a set of basic fields automatically attached when
 - ZIP
 - County
 
-You can't remove these fields, but you can configure their properties and add custom fields on top of them.
+They're marked with a <span className="tone-badge tone-neutral">System</span> badge in the Fields tab. You can't rename or remove them, but you can configure their properties and add custom fields on top of them.
 
 ## Field properties
 
-Each field has three important properties that control how it behaves during the lead lifecycle:
+Each field has four important properties that control how it behaves during the lead lifecycle.
 
 ### Required for post
 
@@ -55,26 +81,34 @@ If a field is used in a condition to determine lead type but isn't included in t
 
 Deliverable fields are visible to customers. They appear in the customer portal and are included when lead data is sent via webhooks.
 
+### Hidden from API spec
+
+Hidden fields don't appear on the API specification page you share with your sources. Use this for internal tracking fields you don't want vendors to see or send.
+
+You can flip any of these four properties straight from the switches in the **Fields** table, without opening the field.
+
 <Note>
-The entire system is geographically based, so ZIP code is always required. If you're generating leads at a state or national level only, you can pre-fill a valid ZIP code within the target state—or any valid US postal code for national campaigns.
+The entire system is geographically based, so ZIP code is always required. If you're generating leads at a state or national level only, you can pre-fill a valid ZIP code within the target state, or any valid US postal code for national campaigns.
 </Note>
 
 ## Creating custom fields
 
-When creating a new field, you'll need to provide:
+When creating a new field, you'll provide the following.
 
 | Property | Required | Description |
 |----------|----------|-------------|
-| Title | Yes | The field identifier. Must start with a letter or underscore and can only contain letters, numbers, underscores, and dashes. |
+| Title | Yes | The field identifier. Must start with a letter or underscore and can only contain letters, numbers, and underscores (no dashes or spaces). Must be unique within the category. |
 | Type | Yes | The data type and validation format. See [field types](#field-types) below. |
 | Description | No | Optional explanation of what this field captures. |
 | Required for post | No | Whether the field must be present when creating a lead. |
 | Required for ping | No | Whether the field must be present during pings. |
 | Deliverable | No | Whether the field is visible to customers. |
+| Hidden from API spec | No | Whether the field is left off your public API specification. |
+| Values | List of Values only | The allowed values, separated by commas. |
 
 ## Field types
 
-Field types determine what kind of data a field accepts and how it's validated. Choose the type that matches your data format—the system will reject values that don't match.
+Field types determine what kind of data a field accepts and how it's validated. Choose the type that matches your data format, because the system will reject values that don't match.
 
 ### Text and numeric
 
@@ -103,9 +137,11 @@ Phone fields validate against actual carrier patterns, not just digit counts. A 
 |------|-------|--------|---------|
 | `zip` | Postal Codes | 5-digit US ZIP (also validates Canadian and Australian postal codes for tenants operating in those countries) | `90210` |
 | `state` | States | 2-letter US state abbreviation | `CA` |
+| `county` | Counties | County name as text | `San Francisco County` |
+| `country` | Countries | Country code as text | `US` |
 
 <Note>
-ZIP and state fields cannot be marked as required for post or required for ping—these are handled at the system level since all routing is geographically based.
+The ZIP field's required-for-post and required-for-ping settings can't be changed, and neither can its type. ZIP is handled at the system level since all routing is geographically based.
 </Note>
 
 ### URLs and network
@@ -120,17 +156,17 @@ ZIP and state fields cannot be marked as required for post or required for ping�
 
 | Type | Label | Format | Example |
 |------|-------|--------|---------|
-| `ymd` | Date (YYYY-MM-DD) | ISO date format | `2024-01-31` |
-| `mdy` | Date (MM/DD/YYYY) | US date format | `01/31/2024` |
-| `dmy` | Date (DD/MM/YYYY) | European date format | `31/01/2024` |
+| `ymd` | Dates (YYYY-MM-DD) | ISO date format | `2024-01-31` |
+| `mdy` | Dates (MM/DD/YYYY) | US date format | `01/31/2024` |
+| `dmy` | Dates (DD/MM/YYYY) | European date format | `31/01/2024` |
 
 ### Date and time
 
 | Type | Label | Format | Example |
 |------|-------|--------|---------|
-| `ymd-his` | DateTime (YYYY-MM-DD HH:MM:SS) | ISO datetime | `2024-01-31 14:30:00` |
-| `mdy-his` | DateTime (MM/DD/YYYY HH:MM:SS) | US datetime | `01/31/2024 14:30:00` |
-| `dmy-his` | DateTime (DD/MM/YYYY HH:MM:SS) | European datetime | `31/01/2024 14:30:00` |
+| `ymd-his` | Date & Time (YYYY-MM-DD HH:MM:SS) | ISO datetime | `2024-01-31 14:30:00` |
+| `mdy-his` | Date & Time (MM/DD/YYYY HH:MM:SS) | US datetime | `01/31/2024 14:30:00` |
+| `dmy-his` | Date & Time (DD/MM/YYYY HH:MM:SS) | European datetime | `31/01/2024 14:30:00` |
 
 ### Identifiers
 
@@ -155,6 +191,6 @@ When using `list-of-values`, you'll define the allowed options as a comma-separa
 
 ## Related guides
 
-<Card title="Adding fields to a lead category" icon="list-plus" href="/guides/adding-fields-to-a-lead-category" horizontal>
+<Card title="Adding fields to a lead category" icon={<HugeIcon name="folder-tree" card />} href="/guides/adding-fields-to-a-lead-category" horizontal>
   Extend a category's schema with custom fields beyond the basics.
 </Card>

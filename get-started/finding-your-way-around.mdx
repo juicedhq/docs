@@ -1,0 +1,165 @@
+---
+title: Finding your way around
+description: A tour of the tenant panel's command palette, rail, sidebar, settings, and the patterns every page shares.
+---
+
+import { HugeIcon } from '/snippets/hugeicon.jsx';
+
+The tenant panel is where you run your whole operation, so it's worth five minutes to learn the layout. Once you know where the rail, the sidebar, and the settings live, every other page in these docs will make a lot more sense.
+
+Panel addresses look like `yourcompany.usejuiced.com/tenants/{workspace id}/...`. You rarely need to type them, because everything below is a click (or a keystroke) away.
+
+<Tip>
+  If you only learn one thing on this page, make it <kbd>⌘</kbd> <kbd>K</kbd> (<kbd>Ctrl</kbd> <kbd>K</kbd> on Windows and Linux). It opens the [command palette](#the-command-palette), which gets you to any page, setting, customer, or lead in a few keystrokes.
+</Tip>
+
+<Frame>
+  <img className="block dark:hidden" src="/images/tenant/overview/dashboard-light.webp" alt="Tenant dashboard with the icon rail on the far left, the sidebar with Dashboard, Customers, Partners, Distribution Stages and grouped links, and revenue stats with a daily revenue chart" />
+  <img className="hidden dark:block" src="/images/tenant/overview/dashboard-dark.webp" alt="Tenant dashboard with the icon rail on the far left, the sidebar with Dashboard, Customers, Partners, Distribution Stages and grouped links, and revenue stats with a daily revenue chart" />
+</Frame>
+
+## Signing in
+
+Sign in at `/tenants/login` on your subdomain or [custom domain](/features/domains) with your email address and password, or choose **Sign in with a passkey** if you've set one up. **Forgot password?** sends a reset link. Accounts that only use a passkey are asked to sign in with it instead of a password.
+
+<Frame>
+  <img className="block dark:hidden" src="/images/tenant/overview/login-light.webp" alt="Tenant login page with Email address and Password fields, a Remember me checkbox, a Log in button, and a Sign in with a passkey option" />
+  <img className="hidden dark:block" src="/images/tenant/overview/login-dark.webp" alt="Tenant login page with Email address and Password fields, a Remember me checkbox, a Log in button, and a Sign in with a passkey option" />
+</Frame>
+
+You need a verified email address to use the panel. If you haven't clicked the link in your verification email yet, you'll see **Verify your email address** with a **Resend verification email** button until you do.
+
+## The command palette
+
+The command palette is the panel's hidden superpower. Press <kbd>⌘</kbd> <kbd>K</kbd> (Mac) or <kbd>Ctrl</kbd> <kbd>K</kbd> (Windows and Linux) on any page, or click **Search tenant...** at the top of the sidebar. Start typing, use the arrow keys to pick a result, and press <kbd>Enter</kbd> to go there. Press the shortcut again or <kbd>Esc</kbd> to close it.
+
+<Frame>
+  <img className="block dark:hidden" src="/images/tenant/overview/command-palette-light.webp" alt="Command palette open over the dashboard, listing navigation shortcuts and actions under a search box" />
+  <img className="hidden dark:block" src="/images/tenant/overview/command-palette-dark.webp" alt="Command palette open over the dashboard, listing navigation shortcuts and actions under a search box" />
+</Frame>
+
+### Jump to any page
+
+Every page your role can open is in the palette, including settings pages that are a few clicks deep in the sidebar. You don't need the exact page name either, because the palette also matches what a page is for. Type what's on your mind and the right page comes up.
+
+| Type | And you get |
+|------|-------------|
+| `stripe` or `twilio` | Integrations |
+| `dns` or `domain` | Domains & Links |
+| `dedupe` | Duplicate Checks |
+| `fees` or `deposits` | Payments & Deposits |
+| `logo` or `colors` | Branding |
+| `consent` or `signup` | Registration & Login |
+| `caps` | Bidding Settings |
+| `webinar` | Checkout Pages |
+| `claude` or `mcp` | AI Assistants |
+| `team` or `invites` | Users |
+
+**Log Out** is in there too, for when you're done for the day.
+
+### Find any record
+
+Type two or more characters and the palette searches your data as well, grouping matches under each record type with up to five results per group. Pick one to open it.
+
+| Group | What it matches |
+|-------|-----------------|
+| **Customers** | Business name, business email, Stripe customer ID, or the name or email of any user on the account. Archived customers are included, and each result shows the customer's status. |
+| **Leads** | First name, last name, email, or lead ID |
+| **Sources**, **Lead Categories**, **Lead Types** | Name |
+| **Countries**, **States** | Name, within the countries you operate in |
+| **Counties** | County name, state name, or ZIP code |
+
+<Frame>
+  <img className="block dark:hidden" src="/images/tenant/overview/command-palette-search-light.webp" alt="Command palette searching for sage, showing the Usage page under Navigation, the customer Sage Path Wellness marked active, and several matching leads with their lead IDs" />
+  <img className="hidden dark:block" src="/images/tenant/overview/command-palette-search-dark.webp" alt="Command palette searching for sage, showing the Usage page under Navigation, the customer Sage Path Wellness marked active, and several matching leads with their lead IDs" />
+</Frame>
+
+This is where the palette really earns its keep. A few everyday examples follow.
+
+- A buyer emails about a lead. Paste the lead ID or the consumer's email and you're on the lead in one step.
+- Someone on a buyer's team calls in. Type their email and the palette finds the customer account they belong to, even if you don't know the business name.
+- Reconciling payments in Stripe? Paste the `cus_...` ID from Stripe to find the matching customer.
+- Wondering how a market is doing? Type a ZIP code to open its county's [location analytics](/features/location-analytics).
+
+If you type more than one word, a page only shows up when it matches every word. Like everything else in the panel, the palette only shows pages and records your [role](/features/roles) can access.
+
+Once it's in your fingers, you'll rarely touch the sidebar again.
+
+## The rail
+
+The narrow column on the far left is the rail. From top to bottom it holds these items.
+
+- **Your logo**
+- **Switch to the classic panel** returns you to the previous version of the panel if you need something that hasn't moved over yet.
+- **Settings** (gear) opens the first settings page your role can see.
+- **Notifications** (bell) shows your in-app notifications, such as a lead or bid export that's ready to download, with a red count for unread ones and **Mark all as read**.
+- **Documentation** (book) opens these docs.
+
+<Frame>
+  <img className="block dark:hidden" src="/images/tenant/overview/notifications-light.webp" alt="Notifications panel open from the bell in the rail, showing two unread items for lead and bid exports ready to download, a county export notice, and a Mark all as read button" />
+  <img className="hidden dark:block" src="/images/tenant/overview/notifications-dark.webp" alt="Notifications panel open from the bell in the rail, showing two unread items for lead and bid exports ready to download, a county export notice, and a Mark all as read button" />
+</Frame>
+
+## The sidebar
+
+The sidebar is where day-to-day work happens. At the top are the pages you'll visit most.
+
+- **Dashboard** shows revenue, ping/post/assigned counts, and your top customers and sources for the selected timeframe.
+- **Customers** are the businesses that buy your leads ([Customers](/features/customers)).
+- **Partners** are external buyers and suppliers ([Partners](/features/partners)).
+- **Distribution Stages** control how leads are routed ([Distribution](/features/distribution)).
+
+Below those, links are grouped. Click a group heading to collapse it, and the panel remembers your choice.
+
+| Group | Pages |
+|-------|-------|
+| **Locations** | Counties, States, Countries ([Location analytics](/features/location-analytics)) |
+| **Entries** | Leads, Incoming logs, Outgoing logs |
+| **Ingest** | Lead Categories, Lead Types, Sources, Duplicate Checks |
+| **Integrations** | Integrations, Webhooks |
+
+Your [role](/features/roles) decides which links appear. A Sales user, for example, won't see Partners or Distribution Stages at all.
+
+The footer of the sidebar shows who you're signed in as. Its menu has **Profile** (your name, password, passkeys and other sign-in methods), a **Theme** switch (Light, Dark, or System), and **Log out**.
+
+## Settings
+
+Click the gear in the rail to open Settings. The settings sidebar splits pages into two groups.
+
+<CardGroup cols={2}>
+  <Card title="Account" icon={<HugeIcon name="building" card />}>
+    You and your relationship with Juiced, covering [Company Profile](/features/company-profile), [Branding](/features/branding), [Domains & Links](/features/domains), [Users](/features/users), [AI Assistants](/features/ai-assistants), and [Usage & Billing](/features/billing).
+  </Card>
+  <Card title="Application" icon={<HugeIcon name="settings-01" card />}>
+    The product your customers experience, covering [Bidding](/features/bidding), [Payments & Deposits](/features/payments-and-deposits), [Subscription Products](/features/subscription-products), [Checkout Pages](/features/checkout-pages), [Registration & Login](/features/registration-and-login), [Returns](/features/returns), [Notification Templates](/features/notifications), and [Banners](/features/banners).
+  </Card>
+</CardGroup>
+
+Most settings pages are Admin-only. If a page is missing from your settings sidebar, your role doesn't include it. AI Assistants and Checkout Pages also only appear once Juiced has enabled them for your account.
+
+## Patterns you'll see everywhere
+
+A few conventions repeat on almost every page, so learning them once pays off everywhere.
+
+**Saving changes.** Edit forms and settings pages don't have a Save button sitting at the bottom. As soon as you change something, a floating bar appears at the bottom of the screen with **Unsaved changes**, a **Reset** button that throws away your edits, and **Save changes**. Forms that create something new use a plain **Cancel** and a submit button instead.
+
+**More actions.** Record pages (a customer, a partner, a lead) show their main action, usually **Edit**, as a button in the header. Everything else lives in the **More actions** menu (the ⋯ button) next to it, with things like adding funds, pausing, viewing the timeline, or archiving.
+
+**Record tabs.** Records with a lot going on have a row of tabs under the header. A customer, for example, has Overview, Bids, Lead Eligibility, Leads, Transactions, Payment Methods, Contacts, Webhooks, and Users.
+
+**Lists.** Lists share the same toolbar, with status tabs across the top, a search box, a **Filters** button, and pagination at the bottom. Pages with analytics also have a timeframe picker in the header.
+
+## When your subscription needs attention
+
+If there's a problem with your Juiced subscription, a yellow bar across the top of the panel reads "Your subscription requires attention. Some features are restricted." with a **Manage billing** link. If the subscription becomes inactive, a **Your subscription is inactive** dialog blocks the panel until billing is resolved. From it you can **Manage billing** or **Log Out**. See [Billing](/features/billing) for details.
+
+## Next steps
+
+<CardGroup cols={2}>
+  <Card title="Quickstart" icon={<HugeIcon name="rocket-01" card />} href="/get-started/quickstart">
+    Set up everything you need to sell your first lead.
+  </Card>
+  <Card title="Core concepts" icon={<HugeIcon name="book-open-01" card />} href="/get-started/core-concepts">
+    Learn the vocabulary you'll see on every page.
+  </Card>
+</CardGroup>

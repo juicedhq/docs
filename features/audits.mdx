@@ -1,33 +1,54 @@
 ---
 title: Audits
-description: Quality review queue and audit conditions.
+description: Hold leads for manual review with an Audit distribution stage.
 ---
 
-Audit conditions work similarly to [duplicate checks](/features/duplicate-detection), but instead of rejecting leads, they hold them for manual review before processing.
+Sometimes a lead needs a human squeeze before it goes anywhere. Maybe it came from a brand-new source you don't fully trust yet, or it's a high-value lead type you want to eyeball first. Audits let you pull those leads aside and review them before they're sold.
 
-## Creating audit conditions
+Audits are handled by a [distribution stage](/features/distribution) with the **Audit** method. When a lead reaches an Audit stage and matches its eligibility conditions, Juiced stops distributing it, sets the lead's status to **Audit**, and waits for you.
 
-When creating an audit condition, you configure:
+<Note>
+Audits used to be configured as separate "audit conditions." Those have been converted into Audit stages placed at the front of your stage list, so existing audit rules keep working.
+</Note>
 
-| Field | Required | Description |
-|-------|----------|-------------|
-| Name | Yes | A reference name for the condition |
-| Lead category | Yes | Which lead category this condition applies to |
-| Description | No | Optional notes about what this condition catches |
+## Creating an Audit stage
 
-## Conditions
+1. Open **Distribution Stages** in the sidebar and click **New stage**.
+2. Give the stage a **Name** (and optionally a **Description**) and set **Method** to **Audit**.
+3. Under **Eligibility Conditions**, describe the leads you want to hold. You can match on **Lead Category**, **Lead Type**, **Source**, or any of your lead fields, using AND conditions within a group and OR between groups.
+4. Click **Create stage**.
 
-You must add at least one condition for the audit to trigger. Conditions can check against:
+Audit stages have no other settings. The stage's whole job is the conditions.
 
-- **Metadata**: The lead type or source associated with the lead
-- **Lead data**: Any field values on the lead itself
+<Warning>
+An Audit stage with no eligibility conditions holds **every** lead that reaches it. Add at least one condition unless that's really what you want.
+</Warning>
+
+### Where to put it
+
+Stages run in order, and the first stage that takes a lead wins. Put your Audit stage **above** the stages that sell leads so it gets first look. Anything an earlier stage already sold never reaches it.
+
+Audit stages only act on full leads. They're skipped while Juiced answers a [ping](/features/ping-post), so pings are priced by your selling stages as usual.
 
 ## Working with audited leads
 
-When a lead is held in audit status, you can:
+Open **Leads** and click the **Audit** tab to see everything waiting for review. In the lead's [incoming log](/features/logs#incoming-logs), the stage shows as **Held for Audit**.
+
+For each held lead, you have a few options.
 
 - Review the lead data
-- Edit the lead if corrections are needed
-- Process the lead to release it from audit and continue through your lifecycle
+- **Edit** it if corrections are needed
+- **Process** it from the **More actions** menu to release it. Pick a starting stage **after** the Audit stage, or the lead will match the same conditions and be held again.
+- **Delete** it if it's junk
 
-See [Leads > Reprocessing leads](/features/leads#reprocessing-leads) for details on the available processing options.
+See [Reprocessing leads](/features/leads#reprocessing-leads) for details on processing.
+
+<Tip>
+Test leads that don't use one of the [deterministic test zips](/features/sources#testing-with-zip-codes) also land in **Audit** status, so they never reach a customer. You'll find them under the Audit tab with the **Test mode** filter set to test leads only.
+</Tip>
+
+## Related pages
+
+- [Distribution](/features/distribution)
+- [Configuring distribution stages](/guides/configuring-distribution-stages)
+- [Duplicate detection](/features/duplicate-detection)

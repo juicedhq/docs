@@ -1,39 +1,53 @@
 ---
 title: Payments & Deposits
-description: How customers fund their accounts and fee configuration.
+description: How customers fund their accounts, what fees apply, and the minimums you require.
 ---
 
-The payments and deposits settings let you control how customers fund their accounts, what fees apply, and what minimums are required.
+import { HugeIcon } from '/snippets/hugeicon.jsx';
 
-## When Stripe is not connected
+The **Payments & Deposits** settings control how customers fund their wallets, including whether they can pay by card at all, what fees you add on top, and the minimum amounts they can deposit. Find them under **Settings → Application → Payments & Deposits**. Like the rest of the billing settings, only Admins can change them.
 
-Stripe is optional for operations that do not collect customer payments. Without a connected Stripe account, customers use manual funds: you can adjust wallet balances, but customers cannot add cards, deposit funds, use auto-recharge, or start card-based subscriptions. Connect Stripe from **Payments & Deposits** when you are ready to enable those payment features.
+<Frame>
+  <img className="block dark:hidden" src="/images/tenant/settings/payments-light.webp" alt="Payments & Deposits settings page with Transaction Fee Percentage fields for Manual Deposit and Auto Recharge, fee waiver and payment method switches, and Minimum Deposit fields" />
+  <img className="hidden dark:block" src="/images/tenant/settings/payments-dark.webp" alt="Payments & Deposits settings page with Transaction Fee Percentage fields for Manual Deposit and Auto Recharge, fee waiver and payment method switches, and Minimum Deposit fields" />
+</Frame>
 
-## Transaction fees
+## Connecting Stripe
 
-You can apply a percentage fee to different types of charges:
+Customers pay you through [Stripe Connect](/features/integrations#stripe). Stripe is optional. If you don't collect payments from customers (for example, you bill them outside Juiced, or you only work with partners), you can skip it.
 
-| Setting | Description |
-|---------|-------------|
-| Manual payment fee | Percentage applied when customers manually deposit funds |
-| Auto-recharge fee | Percentage applied when accounts are automatically recharged |
+Without a connected Stripe account, the page shows a notice that reads "Stripe isn't connected, so customers can't add cards, deposit funds, or set up auto recharge." You can still adjust wallet balances by hand from each [customer's record](/features/customers#wallet-management). Admins see a **Connect Stripe** button in the notice, which takes you through Stripe's onboarding.
 
-These can be configured independently, so you could charge a fee on manual deposits but waive it for auto-recharges (or vice versa).
+## Transaction Fee Percentage
 
-### First transaction waiver
+You can add a percentage fee on top of customer deposits to help offset your platform subscription and Stripe fees. The fee is added to the amount charged, so a 1% fee on a \$100 deposit charges the customer \$101, and \$100 lands in their wallet.
 
-You can optionally waive fees on a customer's first transaction. This is useful for encouraging new customers to fund their accounts without the friction of an upfront fee.
+| Setting | When it applies |
+|---------|-----------------|
+| **Manual Deposit** | When a customer adds funds to their wallet themselves |
+| **Auto Recharge** | When a customer's [auto recharge](/features/customers#auto-recharge) is triggered |
 
-## Deposit minimums
+Set them independently, so you could charge a fee on manual deposits but waive it for auto recharges (or vice versa).
 
-Control the minimum amount customers can deposit for different transaction types. This helps ensure deposits are worthwhile after accounting for payment processing costs.
+Two switches round out the section.
 
-## Restricting payment methods
+- **Waive fees on first transaction** skips the fee on each customer's first transaction, which takes the sting out of funding a new account.
+- **Disable customer payment methods** stops customers from adding payment methods, adding funds, or setting up auto recharge. Use this if you handle billing outside Juiced; you'll need to update their balances by hand.
 
-If you want to prevent customers from adding payment methods entirely—for example, if you handle billing outside of Juiced—you can disable this functionality.
+## Minimum Deposit
+
+Require customers to deposit at least a minimum amount, so every deposit is worth the processing cost. Each minimum must be at least $1.
+
+| Setting | What it limits |
+|---------|----------------|
+| **Initial Deposit** | The minimum a customer can deposit when creating their account |
+| **Auto Recharge** | The minimum amount added each time auto recharge is triggered |
+| **Manual Deposit** | The minimum a customer can deposit when adding funds themselves |
+
+Save your changes with the floating save bar at the bottom of the page.
 
 ## Related guides
 
-<Card title="Managing customer finances" icon="wallet" href="/guides/managing-customer-finances" horizontal>
+<Card title="Managing customer finances" icon={<HugeIcon name="wallet-01" card />} href="/guides/managing-customer-finances" horizontal>
   Fund customer wallets manually and configure the auto-recharge flow.
 </Card>

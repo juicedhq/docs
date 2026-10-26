@@ -3,11 +3,11 @@ title: Billing
 description: Plans, pricing, and managing your Juiced subscription.
 ---
 
-Juiced uses volume-based pricing—the more you sell, the more you pay. No per-seat licenses, no surprise fees, no "contact us for pricing" runaround. Just straightforward tiers based on your monthly lead sales.
+Juiced uses volume-based pricing, so the more you sell, the more you pay. No per-seat licenses, no surprise fees, no "contact us for pricing" runaround. Just straightforward tiers based on your monthly lead sales.
 
 ## Plans
 
-Your plan is determined by your monthly lead sales volume (the total dollar value of leads you sell) and the number of leads you process. Hit either limit and it's time to move up a tier. Pick the tier that matches your operation:
+Your plan is determined by your monthly lead sales volume (the total dollar value of leads you sell) and the number of leads you process. Hit either limit and it's time to move up a tier. Pick the tier that matches your operation.
 
 | Plan | Monthly Lead Sales | Lead Limit | Price |
 |------|-------------------|------------|-------|
@@ -26,67 +26,80 @@ Doing more than &#36;2M/month? Get in touch and we'll squeeze out a custom plan 
 
 ## What's included
 
-Every plan includes the core Juiced feature set:
+Every plan includes the core Juiced feature set.
 
-- **Smart lead delivery** — Route leads to the right buyers automatically
-- **Client bidding system** — Let buyers compete for your leads
-- **Private marketplace** — Run your own in-house lead exchange
-- **CRM and multi-channel delivery** — Connect to your buyers however they need
-- **Custom filters and rules** — Fine-tune exactly who gets what
+- **Smart lead delivery** routes leads to the right buyers automatically.
+- **Client bidding system** lets buyers compete for your leads.
+- **Private marketplace** lets you run your own in-house lead exchange.
+- **CRM and multi-channel delivery** connects to your buyers however they need.
+- **Custom filters and rules** fine-tune exactly who gets what.
 
 ## Premium features
 
-Some features are available on higher-tier plans:
+Some features are available on higher-tier plans.
 
 | Feature | Available on |
 |---------|--------------|
-| [Custom domains](/features/domains) | Higher-tier plans |
-| [Remove "Powered by Juiced" branding](/features/branding#removing-juiced-branding) | Higher-tier plans |
+| [Custom domains](/features/domains#custom-domain) | Citrus Splash and up (&#36;500/mo or more) |
+| [Remove "Powered by Juiced" branding](/features/branding#footer) | Berry Boost and up (&#36;1,000/mo or more) |
 
-Check your plan details in the billing settings to see which features you have access to.
+Juiced can also enable either feature for your account by arrangement.
+
+## Usage & Billing
+
+Click the gear in the rail and choose **Usage & Billing** under **Account** to see where you stand this billing cycle. Only Admins can open it.
+
+<Frame>
+  <img className="block dark:hidden" src="/images/tenant/overview/usage-and-billing-light.webp" alt="Usage & Billing page with revenue and lead usage meters for the current cycle, an Auto-upgrade switch, and a Billing Portal card showing the current plan with Change plan, Payment methods, and Invoices & receipts links" />
+  <img className="hidden dark:block" src="/images/tenant/overview/usage-and-billing-dark.webp" alt="Usage & Billing page with revenue and lead usage meters for the current cycle, an Auto-upgrade switch, and a Billing Portal card showing the current plan with Change plan, Payment methods, and Invoices & receipts links" />
+</Frame>
+
+- **Usage This Cycle** shows two meters, one for your lead sales revenue against your plan's threshold and one for the number of leads processed against your lead limit.
+- **Auto-upgrade** turns [auto-upgrade](#auto-upgrade) on or off. It saves as soon as you flip it.
+- **Billing Portal** shows your current plan, its price, and when it renews, with links to **Change plan**, **Payment methods**, and **Invoices & receipts**. **Open billing portal** takes you to the secure billing portal where your Juiced subscription is managed.
 
 ## Lead limits
 
-Each plan includes a monthly lead limit—the maximum number of leads you can process per billing cycle.
+Each plan includes a monthly lead limit, which is the maximum number of leads you can process per billing cycle.
 
-When you reach your limit:
+When you reach your limit, here's what happens.
 
 1. New incoming leads are **withheld** (held in a queue)
 2. Withheld leads are not distributed to buyers
 3. Once you upgrade your plan, withheld leads are automatically released and processed in the order they were received
 
-This ensures you never lose leads—they just wait until you have capacity.
+This ensures you never lose leads. They just wait until you have capacity.
 
 ## Usage warnings
 
 Juiced keeps an eye on your usage and lets you know when you're approaching your plan's limits. You'll see a banner at the top of the screen when you hit certain thresholds.
 
-**Revenue threshold warnings:**
+**Revenue threshold warnings**
 
 | Usage | What happens |
 |-------|--------------|
 | 75% | A heads-up that you're getting close |
 | 90% | A stronger nudge to consider upgrading |
-| 100% | You've hit your limit—time to move up a tier (or auto-upgrade kicks in) |
+| 100% | You've hit your limit, so it's time to move up a tier (or auto-upgrade kicks in) |
 
-**Lead limit warnings:**
+**Lead limit warnings**
 
 | Usage | What happens |
 |-------|--------------|
 | 75% | A warning that you're approaching your lead limit |
 | 90% | A critical warning to upgrade soon |
-| 100% | You've hit your limit—new leads will be withheld |
+| 100% | You've hit your limit, and new leads will be withheld |
 
-These warnings link directly to your billing page so you can upgrade with one click. No surprises, no sudden service interruptions—just a friendly reminder to keep the juice flowing.
+These warnings link directly to your billing page so you can upgrade with one click. No surprises and no sudden service interruptions, just a friendly reminder to keep the juice flowing.
 
 ### What happens at 100%
 
-When you hit your threshold, Juiced doesn't just cut you off—it handles things gracefully:
+When you hit your threshold, Juiced doesn't just cut you off. It handles things gracefully.
 
-- **Internal sources**: Leads are still accepted but held in a "withheld" status. They won't be distributed until capacity frees up.
-- **Vendor sources**: Pings are automatically rejected so you don't pay for leads you can't distribute.
+- From **Internal sources**, leads are still accepted but held in a "withheld" status. They won't be distributed until capacity frees up.
+- From **Vendor sources**, pings are automatically rejected so you don't pay for leads you can't distribute.
 
-Once you upgrade your plan or your billing cycle resets, withheld leads are automatically reprocessed and distributed. No manual intervention required—they just pick up where they left off.
+Once you upgrade your plan or your billing cycle resets, withheld leads are automatically reprocessed and distributed. No manual intervention is required, because they just pick up where they left off.
 
 <Tip>
 If your distribution plan changed while leads were withheld, they'll use your current active plan when reprocessed, not the plan that was active when they originally came in.
@@ -98,7 +111,7 @@ Don't want to worry about hitting your ceiling mid-month? Enable auto-upgrade an
 
 ### How it works
 
-When auto-upgrade is enabled and you hit 100% of your plan limit:
+When auto-upgrade is enabled and you hit 100% of your plan limit, three things happen.
 
 1. Juiced automatically upgrades your subscription to the next tier
 2. You receive an email confirming the upgrade and your new limits
@@ -112,22 +125,13 @@ Auto-upgrade won't trigger if you're already on the highest plan tier (Exotic Ex
 
 ### Enabling auto-upgrade
 
-1. Click your profile in the top-right corner
-2. Select **Edit Profile**
-3. Scroll to the **Subscription** section
-4. Toggle **Auto-upgrade Subscription** on
-5. Save your changes
+Open **Settings → Account → Usage & Billing** and switch on **Auto-upgrade**. There's nothing else to save.
 
 Once enabled, you can sit back and let your business grow without worrying about service interruptions.
 
 ## Managing your subscription
 
-You can view and manage your subscription from the tenant portal:
-
-1. Click your profile in the top-right corner
-2. Select **Billing** from the menu
-
-From here you can:
+Open **Settings → Account → Usage & Billing** and use the **Billing Portal** card. From the billing portal you can do any of these.
 
 - Change your subscription plan
 - Manage payment methods
@@ -136,3 +140,9 @@ From here you can:
 - Cancel your subscription
 
 Changes to your plan take effect on your next billing cycle.
+
+## When your subscription needs attention
+
+If there's a problem with your subscription, such as a failed payment, a yellow bar appears across the top of the panel that reads "Your subscription requires attention. Some features are restricted." Click **Manage billing** to fix it.
+
+If your subscription becomes inactive, a **Your subscription is inactive** dialog blocks the panel with the message "Access to this tenant panel is paused until billing is resolved." From there you can **Manage billing** to reactivate, or **Log Out**.

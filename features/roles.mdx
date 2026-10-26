@@ -9,14 +9,14 @@ Roles control what users can see and do within your Juiced tenant. Each user is 
 
 | Role | Best for | Access level |
 |------|----------|--------------|
-| **Admin** | Owners, operators | Full access |
-| **Customer Support** | Support staff | Customer and lead management |
-| **Sales** | Sales team | Read access + invite management |
-| **Data Validation** | QA, data review | Lead viewing and updates only |
+| <span className="tone-badge tone-info">Admin</span> | Owners, operators | Full access |
+| <span className="tone-badge tone-info">Customer Support</span> | Support staff | Customer and lead management |
+| <span className="tone-badge tone-info">Sales</span> | Sales team | Read access + invite management |
+| <span className="tone-badge tone-info">Data Validation</span> | QA, data review | Lead viewing and updates only |
 
 ## Admin
 
-Admins have unrestricted access to your tenant. They can do everything, including:
+Admins have unrestricted access to your tenant. They can do everything, including the following.
 
 - Manage all platform features (leads, customers, bids, sources, lead types, etc.)
 - Invite users and manage roles (including changing other admins' roles)
@@ -30,30 +30,31 @@ Use this role for business owners and trusted operators who need full control.
 
 ## Customer Support
 
-Customer Support users can manage day-to-day customer operations without access to sensitive settings. They can:
+Customer Support users can manage day-to-day customer operations without access to sensitive settings.
 
 <Tabs>
   <Tab title="Can do">
-    - View and edit customers, leads, bids, and transactions
-    - Create and manage customer contacts
+    - Create, view, and edit customers, leads, and bids, and view transactions
+    - Create and manage customer contacts and customer webhooks
     - Add and remove customer funds
-    - Manage payment methods
-    - View and revoke invites
+    - Make a card the default or remove it
+    - Invite customer users, and resend or revoke invites
     - Access analytics
     - View the marketplace
+    - Connect an [AI assistant](/features/ai-assistants), when your account has it
   </Tab>
   <Tab title="Cannot do">
     - Manage tenant users or roles
     - Access billing or subscription settings
     - Change company profile or compliance settings
     - Delete most records permanently
-    - Configure sources, lead types, or routing rules
+    - Configure sources, lead types, partners, or distribution stages
   </Tab>
 </Tabs>
 
 ## Sales
 
-Sales users have read-heavy access designed for prospecting and customer acquisition. They can:
+Sales users have read-heavy access designed for prospecting and customer acquisition.
 
 <Tabs>
   <Tab title="Can do">
@@ -73,7 +74,7 @@ Sales users have read-heavy access designed for prospecting and customer acquisi
 
 ## Data Validation
 
-Data Validation is the most restricted role, focused purely on lead quality review. They can:
+Data Validation is the most restricted role, focused purely on lead quality review.
 
 <Tabs>
   <Tab title="Can do">
@@ -90,43 +91,53 @@ Data Validation is the most restricted role, focused purely on lead quality revi
 
 ## Permission reference
 
-For a complete breakdown, here's what each role can access:
+For a complete breakdown, here's what each role can access.
 
 ### Platform features
 
 | Feature | Admin | Customer Support | Sales | Data Validation |
 |---------|:-----:|:----------------:|:-----:|:---------------:|
 | Leads | Full | Full | View | View + Edit |
-| Customers | Full | Full | View | — |
-| Bids | Full | Full | View | — |
-| Transactions | Full | View | View | — |
-| Sources | Full | — | — | — |
-| Lead Types | Full | — | — | — |
-| Workflows | Full | — | — | — |
-| Integrations | Full | — | — | — |
+| Customers | Full | Full | View | No |
+| Bids | Full | Full | View | No |
+| Transactions | Full | View | View | No |
+| Sources | Full | No | No | No |
+| Lead Types | Full | No | No | No |
+| Partners | Full | No | No | No |
+| Distribution Stages | Full | No | No | No |
+| Webhooks | Full | No | No | No |
+| Integrations | Full | No | No | No |
 
 ### Account & settings
 
 | Feature | Admin | Customer Support | Sales | Data Validation |
 |---------|:-----:|:----------------:|:-----:|:---------------:|
-| User management | Full | — | — | — |
-| Company profile | Full | — | — | — |
-| Billing | Full | — | — | — |
-| Domains | Full | — | — | — |
-| Analytics | Full | View | View | — |
-| Marketplace | Full | View | View | — |
+| User management | Full | No | No | No |
+| Company profile | Full | No | No | No |
+| Billing | Full | No | No | No |
+| Domains | Full | No | No | No |
+| Bidding, payments, returns, and registration settings | Full | No | No | No |
+| Subscription products and checkout pages | Full | No | No | No |
+| Notification templates and banners | Full | No | No | No |
+| AI assistants | Full | Connect own | No | No |
+| Analytics | Full | View | View | No |
+| Marketplace | Full | View | View | No |
 
 ### Lead operations
 
 | Action | Admin | Customer Support | Sales | Data Validation |
 |--------|:-----:|:----------------:|:-----:|:---------------:|
-| Reprocess leads | Yes | — | — | — |
+| Reprocess leads | Yes | No | No | No |
 
 ### Customer operations
 
 | Action | Admin | Customer Support | Sales | Data Validation |
 |--------|:-----:|:----------------:|:-----:|:---------------:|
-| Add/remove funds | Yes | Yes | — | — |
-| Manage payment methods | Yes | Yes | — | — |
-| Send invites | Yes | Yes | Yes | — |
-| Revoke invites | Yes | Yes | Yes | — |
+| Add/remove funds | Yes | Yes | No | No |
+| Manage payment methods | Yes | Yes | No | No |
+| Send invites | Yes | Yes | Yes | No |
+| Revoke invites | Yes | Yes | Yes | No |
+
+<Note>
+Your role decides which links appear in the sidebar and the settings menu. If a page is missing for someone, check their role first.
+</Note>

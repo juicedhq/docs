@@ -3,53 +3,58 @@ title: Club
 description: Offer a subscription-gated pool of claimable leads to your customers.
 ---
 
-Club is a customer-facing pool of leads that eligible customers can claim for free. It gives you a flexible fallback for leads that are not a fit for your usual auction, round-robin, or marketplace path—without turning your distribution plan into a fruit salad.
+import { HugeIcon } from '/snippets/hugeicon.jsx';
+
+Club is a customer-facing pool of leads that eligible customers can claim for free. It gives you a flexible fallback for leads that are not a fit for your usual auction, round-robin, or marketplace path, without turning your distribution plan into a fruit salad.
 
 A Club lead can be claimed by more than one customer up to the claim cap you set. A customer can only claim a given source lead once.
 
 ## Before you start
 
-To offer a Club subscription, you need:
+To offer a Club subscription, you need three things in place.
 
-- Club enabled in **Subscription Products**.
 - A fully onboarded connected Stripe account.
-- A subscription product with at least one active tier that grants Club access.
+- A [subscription product](/features/subscription-products) with at least one offered tier that grants Club access.
+- The Club switched on (see below).
 
 You can also grant Club access manually to a customer when you need to make an exception or are setting up the feature.
 
-## Set up your Club
+## Turn the Club on
 
-Open **Subscription Products** in your tenant dashboard. The page has two related areas:
+Open **Settings → Application → Subscription Products** and scroll to the **Club** card. Your Club is named after your subscription product, so if the product is "Fresh Squeeze Club", that's what customers see.
 
-1. **Subscription Product and Tiers** — Create the product customers subscribe to, then add one or more monthly tiers. Each tier can grant Club access. The product and prices are created in your connected Stripe account; changing a tier's price creates a new price for new subscribers while existing subscribers keep their current price.
-2. **Club** — Enable Club, choose its customer-facing URL, and write the heading and description customers see before they subscribe.
-
-<Note>
-When Club is disabled, customers cannot access it and tiers that only grant Club access are not offered. The default `/club` address continues to work if you later change the custom Club URL, but changing the custom URL can break bookmarks and shared links.
-</Note>
-
-### Manage tiers and subscribers
-
-The tiers table shows whether each tier is offered to new subscribers and how many customers are currently billed on it. When you need to stop selling a tier without disrupting current members, hide it. Hidden tiers are unavailable for new signups, while existing subscribers keep their price and allowance. You can offer a hidden tier again later, or archive it when you will not offer it again.
-
-To move subscribers to a different offered tier, choose the source tier and preview the move first. You can move one customer, selected customers, or all eligible customers. Juiced schedules approved moves for each customer's next renewal without proration; the existing card and compatible discount continue. Customers who are incomplete, past due, canceling, ended, paused, or have an incompatible discount are shown as ineligible and are not moved.
+| Setting | What it does |
+|---------|--------------|
+| **Accept leads into _your Club_** | Lets distribution stages and lead imports place leads in the Club. Turn this on before showing the Club so you can fill the pool ahead of launch. |
+| **Show _your Club_ to customers** | Customers with Club access can see, browse, and claim Club leads. While the Club is hidden, tiers that only grant Club access aren't offered to customers. |
+| **Club URL** | The Club's address in the customer portal. |
+| **Pitch heading** and **Pitch description** | What customers who haven't subscribed yet see alongside the option to subscribe. Leave them blank to use the defaults ("Join" or "Subscribe to claim free leads from" followed by your Club's name). |
 
 <Note>
-Scheduling a tier move does not notify the customer automatically. The move is not an immediate price change and cannot be scheduled for an arbitrary future date.
+Changing the Club URL breaks bookmarks and previously shared links, but the default `/club` address always keeps working.
 </Note>
+
+Tiers, prices, claim limits, and moving subscribers between tiers are all covered in [Subscription products](/features/subscription-products).
 
 ## Add leads to Club
 
-You can place leads into Club in two ways:
+You can place leads into Club in two ways.
 
-- Add a **Club** stage to a [distribution flow](/features/distribution). Configure the default number of customers who may claim each lead routed through that stage.
+- Add a stage with the **Club** method to your [distribution plan](/features/distribution). Under **Method settings**, either turn on **Unlimited claims** or set a **Default claim cap**, which is how many customers can claim each lead routed through that stage.
 - Use the tenant bulk-upload flow to place leads directly into Club and set the claim cap for that upload.
+
+<Frame>
+  <img className="block dark:hidden" src="/images/tenant/distribution/stage-club-light.webp" alt="Distribution stage edit page using the Club method, with an Unlimited claims switch, a Default claim cap of 3, and an Eligibility Conditions section" />
+  <img className="hidden dark:block" src="/images/tenant/distribution/stage-club-dark.webp" alt="Distribution stage edit page using the Club method, with an Unlimited claims switch, a Default claim cap of 3, and an Eligibility Conditions section" />
+</Frame>
+
+Leads only land in the Club while **Accept leads into _your Club_** is on.
 
 A lead remains available until its claim cap is reached. A lead with no cap can stay available indefinitely. Club leads and their claimed copies do not count toward your tenant plan usage.
 
 ## What happens when a customer claims a lead
 
-When an eligible customer claims a Club lead:
+When an eligible customer claims a Club lead, a few things happen.
 
 - The claim does not deduct from the customer's wallet.
 - The lead is delivered to the customer's normal lead list.
@@ -59,21 +64,46 @@ When an eligible customer claims a Club lead:
 
 Club claims are not exclusive purchases. If you set a claim cap above one, other eligible customers can claim the same source lead until the cap is reached.
 
+A customer's [Lead Eligibility](/features/customers#lead-eligibility) conditions don't apply to Club claims; they only filter bidding and round robin.
+
+## Claim limits
+
+There are two separate limits, and both apply.
+
+- **Per lead** is the claim cap on the lead itself (from the Club stage or the upload), which limits how many customers can claim that lead.
+- **Per customer** is the **Claim limit** on the customer's subscription tier, which limits how many Club leads they can claim each billing period. Customers with **Manual Club Access** get an unlimited personal allowance instead, even if they also have a tier.
+
 ## Customer access and subscriptions
 
 Customers with access can browse available Club leads and claim them. Customers without access see the Club pitch and a subscription option when your tenant offers one.
 
 Subscriptions are billed monthly to the customer's saved card through your connected Stripe account. A customer retains Club access through the current paid period after canceling. If a payment fails, access can remain during a short grace period before it is revoked.
 
-When you view a customer in the tenant dashboard, the Club section shows their access source, subscription tier, billing status, renewal or end date, claim allowance, and any pending tier move. Manual access remains separate from subscription access.
+Grant manual access with the **Manual Club Access** toggle when you [edit a customer](/features/customers#creating-and-editing-a-customer). An active subscription grants access automatically, independent of this toggle.
+
+When you open a customer, the **Club** panel on their Overview shows their membership details.
+
+- **Access**, which is Manual, Subscription, Manual + subscription, or No access
+- Their **Tier**, **Price**, any **Discount**, and **Billing** status
+- When the subscription **Renews** or **Ends**, and any scheduled **Tier change**
+- **Claims this period**, e.g. "4 used · 6 of 10 left"
+
+Admins can also **Change tier at renewal** or **Withdraw tier change** from that panel, and cancel the subscription from the customer's **More actions** menu. See [Subscription products](/features/subscription-products#cancelling-a-customers-subscription).
+
+<Tip>
+  Want help designing tiers members actually stick with? In the [Hybrid Agency Mastermind](https://www.skool.com/hybrid-agency-mastermind), our paid coaching group, you work through your real numbers with our team on live calls.
+</Tip>
 
 ## Related pages
 
 <CardGroup cols={2}>
-  <Card title="Distribution" icon="route" href="/features/distribution">
+  <Card title="Subscription products" icon={<HugeIcon name="repeat" card />} href="/features/subscription-products">
+    Set up the tiers that unlock the Club.
+  </Card>
+  <Card title="Distribution" icon={<HugeIcon name="left-to-right-list-number" card />} href="/features/distribution">
     Learn how Club fits into a lead-routing flow.
   </Card>
-  <Card title="Customer portal: Club" icon="ticket" href="/customer-portal/club">
+  <Card title="Club in the customer portal" icon={<HugeIcon name="ticket-01" card />} href="/customer-portal/club">
     Share the buyer-facing guide with your customers.
   </Card>
 </CardGroup>

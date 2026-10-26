@@ -82,6 +82,32 @@ Rules for adding entries:
 - Include both basic and advanced use cases
 - Language tags on all code blocks
 - Alt text on all images
+- No em dashes anywhere, including alt text, descriptions and the changelog. Rephrase with a comma, a period, or parentheses instead of swapping in another dash
+- Escape dollar signs as `\$` in body text whenever a paragraph has more than one amount (`\$100 deposit charges \$101`). Mintlify renders text between two `$` signs as a math formula. Leave them alone in code, frontmatter and HTML attributes
+- Keep colons to a minimum. Write bold-label list items as sentences (`**Label** does X.`), end list lead-ins with a period, and number procedural headings as `## 1. Do the thing`. Colons in code, URLs, times and the changelog's `**Breaking:**` prefix are fine
+
+## App badges
+
+When a page names a status or badge the app shows as a colored badge (lead statuses, bid statuses and positions, customer statuses, payment method statuses, log results, roles), render it with the shared badge styles in `custom.css` so the docs match the app in light and dark mode.
+
+- Use `<span className="tone-badge tone-success">Assigned</span>`. Tones mirror the app's `ToneBadge` (`neutral`, `success`, `warning`, `caution`, `danger`, `info`, `sky`, `purple`, `lime`, `fuchsia`, `amber`).
+- Take the tone from the app, never from the word. Status enums carry it (`getTone()` via `App\Enums\Traits\HasTone`), and some React pages map it locally, so the same label can differ by panel. Bid **Limited** is `sky` in the tenant panel and `info` in the customer portal.
+- Only badge values the app actually renders as badges. Filter options, timeline events (dots) and notification names stay plain text.
+- The customer portal's wallet chip has its own `wallet-chip` classes.
+
+## Icons
+
+The docs use Hugeicons, the same free icon set as the app, so every icon should be the one the app shows for that concept. Look it up in the app's `resources/js/components/tenant/tenant-app-sidebar.tsx`, `customer/customer-app-sidebar.tsx`, and `tenant/tenant-command-palette.tsx` (which also gives settings pages their icons). Only reach for a new icon when the app has none for the concept, and never reuse an app icon for a different concept.
+
+- Card icons use the shared snippet. Import it once after the frontmatter with `import { HugeIcon } from '/snippets/hugeicon.jsx';` and write `<Card title="Bids" icon={<HugeIcon name="auction" card />}>`. The `card` prop sizes it like Mintlify's own icons and colors it with the docs accent in both themes. Never use a string `icon="..."` on a Card.
+- Names are kebab-case versions of the package's export (`Wallet01Icon` becomes `wallet-01`). To add one, copy its `[tag, attributes]` array from `https://cdn.jsdelivr.net/npm/@hugeicons/core-free-icons@4.3.5/dist/esm/Wallet01Icon.js` into the registry in `snippets/hugeicon.jsx`, dropping the `key` attribute (the component sets keys and stroke width itself).
+- Keep `snippets/hugeicon.jsx` a single export. Mintlify evaluates each snippet export on its own, so one export can't call another.
+- Sidebar group icons in `docs.json` are SVG files in `/images/icons/` (download the icon's SVG from hugeicons.com, free set, stroke 1.5). Mintlify renders a file icon as a plain `<img>`, so `custom.css` masks it to follow the text color. When you add a new file, add its line to the "Hugeicons sidebar group icons" block in `custom.css` or it shows black in dark mode.
+
+## Community pitches
+- Where it fits naturally, point readers to our Skool communities. That Agency Group (https://www.skool.com/that-agency-group) is free and suits strategy questions like pricing, finding buyers and return policies. The Hybrid Agency Mastermind (https://www.skool.com/hybrid-agency-mastermind) is paid, hands-on coaching and implementation help on live calls
+- Hub pages use the shared `<CommunityCards />` snippet (`/snippets/community-cards.mdx`). Guides and feature pages use a short `<Tip>` tailored to the page, usually just before "What happens next" or "Related pages"
+- At most one pitch per page, and never on customer portal or API reference pages
 - Relative paths for internal links
 
 ## Git workflow

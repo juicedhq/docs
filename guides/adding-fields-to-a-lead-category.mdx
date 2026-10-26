@@ -3,79 +3,78 @@ title: Adding Fields to a Lead Category
 description: How to add custom fields to a lead category so your schema captures exactly the data you need.
 ---
 
-Every lead category starts with a set of [basic fields](/features/lead-categories#basic-fields)—name, email, phone, address, and so on. But your leads almost certainly carry more information than that. A home insurance lead might include property type and current coverage amount. A solar lead might include roof age and electric bill.
+Every lead category starts with a set of [basic fields](/features/lead-categories#basic-fields), like name, email, phone, address, and so on. But your leads almost certainly carry more information than that. A home insurance lead might include property type and current coverage amount. A solar lead might include roof age and electric bill.
 
 Custom fields let you extend a lead category's schema so you can capture, validate, and deliver that extra data.
 
 ## Prerequisites
 
-- You need an existing lead category. If you don't have one yet, create one from **Lead Categories** → **New lead category**, or use a template.
-- Admin role access to your tenant.
+- An existing lead category. If you don't have one yet, open **Lead Categories** and click **New lead category**. Starting from a template gives you a market-specific set of fields to build on.
+- A role that can update lead categories.
 
-## Step 1: Open the lead category
+## 1. Open the lead category's Fields tab
 
-Navigate to **Lead Categories** in the left sidebar (under the **Ingest** group) and click **Edit** on the lead category you want to add fields to.
+Open **Lead Categories** in the sidebar (under the **Ingest** group) and click the lead category you want to add fields to. Then click the **Fields** tab.
 
-The edit page shows the category's name and description at the top, and the **Fields** table below it. You'll see the 10 default fields already attached—first\_name, last\_name, email, and so on. These appear in gray because they're locked and can't be renamed or deleted.
+<Frame>
+  <img className="block dark:hidden" src="/images/tenant/ingest/lead-category-detail-light.webp" alt="Lead category page with stats at the top and Lead Types, Sources, and Fields tabs" />
+  <img className="hidden dark:block" src="/images/tenant/ingest/lead-category-detail-dark.webp" alt="Lead category page with stats at the top and Lead Types, Sources, and Fields tabs" />
+</Frame>
 
-## Step 2: Click New field
+The Fields table lists every field with its **Title**, **Type**, plus four switches for **Required (post)**, **Required (ping)**, **Deliverable**, and **Hidden from spec**. The 10 default fields (first\_name, last\_name, email, and so on) carry a **System** badge, which means they can't be renamed or deleted.
 
-Click the **New field** button in the top-right corner of the Fields section. This opens the Create Field modal.
+## 2. Click New field
 
-## Step 3: Fill in the field details
+Click **New field** above the table. This opens the **New field** dialog.
 
-The modal has two required fields and several optional settings:
+## 3. Fill in the field details
 
 ### Title
 
-Enter a name for your field. This is the identifier that sources will use when submitting lead data via the API, so keep it machine-friendly:
+Enter a name for your field. This is the identifier sources use when submitting lead data through the API, so keep it machine-friendly.
 
 - Must start with a letter or underscore
-- Can only contain letters, numbers, underscores, and dashes
+- Can only contain letters, numbers, and underscores (no dashes or spaces)
 - Must be unique within this lead category
 
-Good examples: `property_type`, `coverage_amount`, `roof_age`, `electric_bill`
+Good examples include `property_type`, `coverage_amount`, `roof_age`, and `electric_bill`.
 
 ### Type
 
-Select the data type from the dropdown. Types are organized into searchable groups—you can type to filter. The type you choose determines how the field's value is validated when leads are submitted. See [field types](/features/lead-categories#field-types) for the full list.
+Select the data type from the dropdown. The type you choose determines how the field's value is validated when leads are submitted. See [field types](/features/lead-categories#field-types) for the full list.
 
 <Tip>
-Choose your type carefully—it affects validation. A field typed as **Phone (US)** will reject values that don't match actual US phone number patterns, not just any 10-digit string.
+Choose your type carefully, because it affects validation. A field typed as **Phone (US)** will reject values that don't match actual US phone number patterns, not just any 10-digit string.
 </Tip>
-
-### Toggle settings
-
-Four toggles control how the field behaves across the system:
-
-| Toggle | What it does |
-|--------|-------------|
-| **Required for post** | The field must be present when a lead is submitted via the API. Missing it returns a `422` error. |
-| **Required for ping** | The field must be present during the [ping phase](/features/ping-post) of ping-post. |
-| **Deliverable** | The field is included in lead data sent to customers—visible in the customer portal and included in webhook payloads. |
-| **Hidden from api spec** | The field won't appear on your public API specification page. Useful for internal tracking fields you don't want sources to see. |
 
 ### Values (List of Values type only)
 
-If you selected **List of Values** as the type, a **Values** input appears. Type each allowed value and press Enter to add it as a tag. Any submitted value not in this list will fail validation.
+If you selected **List of Values**, a **Values** box appears. Enter the allowed values separated by commas, like `single_family, condo, townhouse`. Any submitted value not in this list will fail validation.
+
+### Toggle settings
+
+Four switches control how the field behaves across the system.
+
+| Toggle | What it does |
+|--------|-------------|
+| **Required for post** | The field must be present when a lead is submitted through the API. Missing it returns a `422` error. |
+| **Required for ping** | The field must be present when a source checks for buyers during the [ping phase](/features/ping-post). |
+| **Deliverable** | The field is included in lead data sent to customers, so it's visible in the customer portal and included in webhook payloads. |
+| **Hidden from API spec** | The field won't appear on your public API specification page. Useful for internal tracking fields you don't want sources to see. |
 
 ### Description
 
-An optional text description of what this field captures. This is for your own reference—it appears in the fields table to help your team understand what each field is for.
+An optional description of what this field captures. It's for your team's reference.
 
-## Step 4: Create the field
+## 4. Create the field
 
-Click **Create** to add the field and close the modal. If you have several fields to add, click **Create & create another** instead—it saves the current field and immediately reopens a fresh form.
-
-A green **Created** notification confirms the field was added successfully.
-
-Your new field now appears at the bottom of the fields table. Unlike the locked default fields, custom fields show **Edit** and **Delete** actions on hover.
+Click **Create field**. You'll see a "Field created." confirmation, and your new field appears in the Fields table. Repeat from Step 2 for each field you need.
 
 ## Editing and deleting custom fields
 
-You can update a custom field's properties at any time by clicking **Edit** on its row. The same modal opens with the current values pre-filled.
+Open a field's row actions and choose **Edit** to change its properties. The same dialog opens with the current values filled in; click **Save field** when you're done.
 
-To remove a field, click **Delete**. If the field is used in an operator condition (for example, in a lead type or distribution rule), deletion will fail with an error message explaining the dependency. You'll need to remove the field from those conditions first.
+To remove a custom field, choose **Delete** from its row actions and confirm. If the field is used in a condition (for example, in a lead type or a distribution stage), deletion fails with an error explaining that the field is in use. Remove the field from those conditions first.
 
 <Warning>
 Deleting a field is permanent. Any historical lead data for that field is preserved, but the field will no longer appear in the schema or be validated on new submissions.
@@ -83,17 +82,17 @@ Deleting a field is permanent. Any historical lead data for that field is preser
 
 ## Quick-toggling field properties
 
-You don't always need to open the edit modal. The **Required for post**, **Required for ping**, **Deliverable**, and **Hidden from api spec** columns in the fields table are all toggle switches. Click any of them to flip the value instantly—no modal, no save button needed.
+You don't need to open the dialog to change a field's switches. The **Required (post)**, **Required (ping)**, **Deliverable**, and **Hidden from spec** columns in the Fields table are live switches. Click one to flip it, and it saves immediately.
 
 <Note>
-The **Required for post** and **Required for ping** toggles are disabled for the **zip** field. ZIP code is always required at the system level because all routing is geographically based.
+The required switches are disabled for the **zip** field. ZIP code is always required at the system level because all routing is geographically based.
 </Note>
 
 ## What happens next
 
-Once a field is added to a lead category, it immediately takes effect:
+Once a field is added to a lead category, it takes effect immediately.
 
 - **API validation** starts enforcing the field's type and required rules on new submissions
 - **Deliverable fields** start appearing in the customer portal and webhook payloads
-- **Lead type conditions** can now use the field to route leads to more specific types
-- **Sources** should be updated to include the new field in their submissions—especially if you marked it as required for post
+- **Lead type conditions** can now use the field to route leads to more specific types (see [Defining lead types](/guides/defining-lead-types))
+- **Sources** should be updated to include the new field in their submissions, especially if you marked it as required for post. Share the source's updated API specification with them (see [Sending leads to Juiced](/guides/sending-leads-to-juiced)).
