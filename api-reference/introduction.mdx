@@ -123,15 +123,15 @@ The API accepts up to 240 requests a minute, counting pings and leads together. 
 
 Turn on test mode from the source's edit form to try your integration. While it's on, these zip codes return fixed outcomes on both pings and posts.
 
-| Zip | Ping | Lead `status` (v1, default mapping) | Lead status in Juiced |
+| Zip | Ping `status` | Lead `status` | Lead in Juiced |
 |-----|------|-----------|-------------|
-| `00001` | `matched`, price 25 | `accepted`, price 25 | Assigned |
+| `00001` | `matched` | `accepted` | Assigned |
 | `00002` | `duplicate` | `duplicate` | Duplicate |
 | `00003` | `rejected` | `rejected` | Audit |
 | `00004` | `no_match` | `rejected` | Unassigned |
-| `00005` | `matched`, price 15 | `accepted`, price 15 | Marketplace |
+| `00005` | `matched` | `accepted` | Marketplace |
 
-Vendor sources get the ping price as `price`. Other sources get a single bid named `Test Mode` at that price on `00001` and `00005`, and an empty `bids` list on the other zips.
+`00001` is priced at 25 dollars and `00005` at 15, on both the ping and the lead. The other zips are priced at 0. Vendor sources get the ping price as `price`. Other sources get a single bid named `Test Mode` at that price on `00001` and `00005`, and an empty `bids` list on the other zips. Lead statuses assume the source's default [status responses](/features/sources#status-responses) mapping.
 
 With any other zip, pings are matched as usual (including pings to your partners), and leads are marked as test data and never distributed. Those leads are moved to Audit unless they're duplicates or can't be categorized. Stick to the zips above while you build, and turn test mode off before going live.
 
