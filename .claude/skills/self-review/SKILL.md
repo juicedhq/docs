@@ -1,11 +1,11 @@
 ---
 name: self-review
-description: Use ONLY when the user explicitly asks for a full self-review of the current docs branch (e.g. runs /self-review), or as the review stage of a start-ticket run the user invoked. Do NOT invoke proactively — it dispatches 5 review subagents and is slow and token-intensive.
+description: Use ONLY when the user explicitly asks for a full self-review of the current docs branch (e.g. runs /self-review), or as the review stage of a start-ticket run the user invoked. Do NOT invoke proactively — it dispatches 5 review subagents (6 when the branch touches the API reference) and is slow and token-intensive.
 ---
 
 # Self Review
 
-> **Cost gate — do not run casually.** This skill dispatches **5 review subagents** over the full branch diff. Run it ONLY on an explicit request to self-review the branch (or `/self-review`). If you reached here proactively, **STOP and ask the user to confirm** first. The exception is `start-ticket`: invoking it is the explicit request for its review stage.
+> **Cost gate — do not run casually.** This skill dispatches **5 review subagents** over the full branch diff, plus a sixth (the OpenAPI audit) when the branch touches `api-reference/`. Run it ONLY on an explicit request to self-review the branch (or `/self-review`). If you reached here proactively, **STOP and ask the user to confirm** first. The exception is `start-ticket`: invoking it is the explicit request for its review stage.
 
 Multi-agent review of the current docs branch: a broad consensus pass, focused single-concern passes, and an accuracy audit against the app code, reconciled into prioritized, actionable findings.
 
@@ -40,9 +40,15 @@ Its ONLY job is checking what the docs say against what the app does. Give it th
 
 This is a separate agent because it works from a checklist with a clear completion condition, and docs errors are almost always facts that read plausibly but drifted from the code.
 
-## 5. Synthesize
+## 5. OpenAPI audit (only when the branch touches the API reference)
 
-Merge into one prioritized report. Wrong or not-shipped claims are the highest severity: a reader acts on them. Then broken rendering and navigation, then convention violations, then polish. For each finding: severity, `file:line`, why it matters, and a concrete fix (the corrected wording where possible). Drop duplicates and known-intentional decisions. Include the full claims table.
+When `git diff --name-only origin/main...HEAD` lists anything under `api-reference/` (the spec or its pages), dispatch one more agent in parallel with the others, named `review: openapi audit`. Tell it to read `.claude/skills/audit-openapi/SKILL.md` and follow it through §4 (the report), skipping §5's next steps, against the branch's working tree. Skip this agent otherwise.
+
+The accuracy agent only checks claims the diff makes. The audit starts from the app's routes and compares the whole spec, so it also catches drift in lines the branch didn't touch, endpoints the spec never mentions, and an invalid spec file. Where the two overlap, keep the finding once.
+
+## 6. Synthesize
+
+Merge into one prioritized report. Wrong or not-shipped claims are the highest severity: a reader acts on them. Then broken rendering and navigation, then convention violations, then polish. For each finding: severity, `file:line`, why it matters, and a concrete fix (the corrected wording where possible). Drop duplicates and known-intentional decisions. Include the full claims table, and the audit's drift table when it ran.
 
 ## Common mistakes
 
