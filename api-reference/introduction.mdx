@@ -101,14 +101,14 @@ You can also skip the ping and instead post the lead directly if you don't need 
 The exact fields available (and which ones are required) depend on your source and lead category configuration. The documentation here covers the standard fields, but your source may have additional requirements.
 
 <Note>
-For the exact API spec tailored to your source (including your credentials and all configured fields), visit **Sources → [Your Source] → View API Spec** in your Juiced admin dashboard.
+For the exact API spec tailored to your source (including your credentials and all configured fields), visit **Sources → [Your Source] → View API Spec** in your Juiced admin dashboard. If it still shows `/api/ping` or `/api/leads`, use the `/api/v1/` paths instead.
 </Note>
 
 ## Safe retries
 
 Network hiccups happen, and a lead you can't confirm is a lead you're tempted to send twice. Add a `transaction_id` to each lead post (your own order or lead number works well, up to 255 characters) and retries become safe. Transaction IDs are scoped to the source sending them, and test-mode posts are tracked separately from live ones.
 
-- **Same `transaction_id`, same payload** returns the original response again, byte for byte, without creating another lead.
+- **Same `transaction_id`, same payload** returns the original status and body again, without creating another lead.
 - **Same `transaction_id`, different payload** returns `409` (`idempotency_conflict` on v1).
 - **The first attempt is still processing** returns `409` with a `Retry-After` header (`idempotency_in_progress` on v1). Wait and send the same request again.
 - **The outcome couldn't be confirmed** returns `409` (`idempotency_reserved` on v1). The lead may already have been delivered, so don't resubmit it. It's held for review.
@@ -131,13 +131,13 @@ Turn on test mode from the source's edit form to try your integration. While it'
 | `00004` | `no_match` | `rejected` | Unassigned |
 | `00005` | `matched`, price 15 | `accepted`, price 15 | Marketplace |
 
-Vendor sources get the ping price as `price`. Other sources get it as a single bid named `Test Mode`.
+Vendor sources get the ping price as `price`. Other sources get a single bid named `Test Mode` at that price on `00001` and `00005`, and an empty `bids` list on the other zips.
 
 With any other zip, pings are matched as usual (including pings to your partners), and leads are marked as test data and never distributed. Those leads are moved to Audit unless they're duplicates or can't be categorized. Stick to the zips above while you build, and turn test mode off before going live.
 
 ## Errors
 
-The API uses standard HTTP status codes. A ping that passes validation returns `200`, and a lead that passes validation returns `201` (unless it doesn't match its ping), whatever the outcome. Check the `status` in the body too.
+The API uses standard HTTP status codes. A ping that passes validation always returns `200`. A lead that passes validation returns `201` whatever its outcome, unless it doesn't match its ping (`422`). Check the `status` in the body for the outcome.
 
 Every v1 error uses the same envelope. Branch on `error.code`, which is stable, rather than on `message`.
 
@@ -166,7 +166,7 @@ Every v1 error uses the same envelope. Branch on `error.code`, which is stable, 
 | `409` | `idempotency_reserved` | The outcome couldn't be confirmed. Don't resubmit. |
 | `409` | `idempotency_version_mismatch` | The `transaction_id` was first used on the legacy API. `error.lead_id` names the lead it created. |
 | `422` | `validation_failed` | The request failed validation. `error.errors` lists the messages by field. |
-| `422` | `quota_reached` | The source has reached one of its lead quotas. |
+| `422` | `quota_reached` | The source has reached one of its lead quotas. Lead posts only, since a ping over quota returns `no_match`. |
 | `422` | `ping_mismatch` | The lead's data doesn't match the ping it references. |
 | `429` | `rate_limited` | Too many requests. Retry after `Retry-After` seconds. |
 | `500` and other `5xx` | `server_error` | Something went wrong on our side. |
@@ -191,7 +191,7 @@ Link: <https://usejuiced.com/api/v1/ping>; rel="successor-version"
 ### Moving from legacy to v1
 
 1. Change the path from `/api/ping` to `/api/v1/ping` and from `/api/leads` to `/api/v1/leads`. Credentials and field names stay the same, but ID values change (steps 2 and 4).
-2. Read results from `data`. A ping's `ping_id` and `message` become `data.id` and `data.status`, and a lead's `lead_public_id` and `status` become `data.id` and `data.status`. Each bid's `id`, `customer_id` and `partner_id` become public IDs, and `lead_uuid` is gone.
+2. Read results from `data`. A ping's `ping_id` and `message` become `data.id` and `data.status`, and its `price` (vendors) or `bids` move under `data` too. A lead's `lead_public_id` and `status` become `data.id` and `data.status`, and `lead_uuid` is gone. Each bid's `id`, `customer_id` and `partner_id` become public IDs.
 3. Update the values you compare against. Ping messages become `matched`, `no_match`, `duplicate` and `rejected`, and the lead status `success` becomes `accepted`.
 4. Send the v1 ping's `data.id` as `ping_id` on the lead and, if you echo a bid, its `bids[].id` as `bid_id`. v1 rejects the UUIDs the legacy API returns, so post a legacy ping's lead to the legacy API.
 5. Handle errors by `error.code` rather than by message.

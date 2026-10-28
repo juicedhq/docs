@@ -37,13 +37,13 @@
                 "$ref": "#/components/schemas/PingRequest"
               },
               "examples": {
-                "minimal": {
+                "Minimal ping (zip only)": {
                   "summary": "Minimal ping (zip only)",
                   "value": {
                     "zip": "90210"
                   }
                 },
-                "detailed": {
+                "Ping with more fields": {
                   "summary": "Ping with more fields",
                   "value": {
                     "zip": "33139",
@@ -67,7 +67,7 @@
                   "$ref": "#/components/schemas/PingResponseV1"
                 },
                 "examples": {
-                  "matched": {
+                  "Matched with bids": {
                     "summary": "Matched with bids",
                     "value": {
                       "data": {
@@ -91,7 +91,7 @@
                       "version": "v1"
                     }
                   },
-                  "matchedVendor": {
+                  "Matched (vendor source)": {
                     "summary": "Matched (vendor source)",
                     "value": {
                       "data": {
@@ -102,7 +102,7 @@
                       "version": "v1"
                     }
                   },
-                  "matchedWithoutBidder": {
+                  "Matched with no bidder (marketplace or Club)": {
                     "summary": "Matched with no bidder (marketplace or Club)",
                     "value": {
                       "data": {
@@ -119,7 +119,7 @@
                       "version": "v1"
                     }
                   },
-                  "noMatch": {
+                  "No match": {
                     "summary": "No match",
                     "value": {
                       "data": {
@@ -130,7 +130,7 @@
                       "version": "v1"
                     }
                   },
-                  "duplicate": {
+                  "Duplicate": {
                     "summary": "Duplicate",
                     "value": {
                       "data": {
@@ -141,7 +141,7 @@
                       "version": "v1"
                     }
                   },
-                  "loopRejected": {
+                  "Rejected by the loop guard": {
                     "summary": "Rejected by the loop guard",
                     "value": {
                       "data": {
@@ -171,7 +171,7 @@
                   "$ref": "#/components/schemas/ErrorV1"
                 },
                 "examples": {
-                  "validationFailed": {
+                  "Validation failed": {
                     "summary": "Validation failed",
                     "value": {
                       "error": {
@@ -201,7 +201,7 @@
       "post": {
         "operationId": "createLeadV1",
         "summary": "Submit a lead",
-        "description": "Submits a complete lead for processing. The lead is validated, checked for duplicates, matched to a lead type, and distributed to a buyer (or placed in the marketplace or Club).\n\nIf you pinged first, include the ping's `id` as `ping_id`. You can also echo the `bids[].id` you chose as `bid_id`; it is checked but doesn't change who gets the lead.\n\nSend a `transaction_id` so a retry can never create a second lead. One `transaction_id` is one lead on either API version.",
+        "description": "Submits a complete lead for processing. The lead is validated, checked for duplicates, matched to a lead type, and distributed to a buyer (or placed in the marketplace or Club).\n\nIf you pinged first, include the ping's `id` as `ping_id`. You can also echo the `bids[].id` you chose as `bid_id`. It's checked, but it doesn't change who gets the lead.\n\nSend a `transaction_id` so a retry can never create a second lead. One `transaction_id` is one lead on either API version.",
         "tags": ["v1"],
         "requestBody": {
           "required": true,
@@ -211,7 +211,7 @@
                 "$ref": "#/components/schemas/LeadRequestV1"
               },
               "examples": {
-                "basic": {
+                "Basic lead": {
                   "summary": "Basic lead",
                   "value": {
                     "transaction_id": "order-10482",
@@ -225,7 +225,7 @@
                     "zip": "33139"
                   }
                 },
-                "afterPing": {
+                "Lead after a ping": {
                   "summary": "Lead after a ping",
                   "value": {
                     "transaction_id": "order-10483",
@@ -257,7 +257,7 @@
                   "$ref": "#/components/schemas/LeadResponseV1"
                 },
                 "examples": {
-                  "accepted": {
+                  "Accepted": {
                     "summary": "Accepted",
                     "value": {
                       "data": {
@@ -268,7 +268,7 @@
                       "version": "v1"
                     }
                   },
-                  "rejected": {
+                  "Rejected": {
                     "summary": "Rejected",
                     "value": {
                       "data": {
@@ -279,7 +279,7 @@
                       "version": "v1"
                     }
                   },
-                  "duplicate": {
+                  "Duplicate": {
                     "summary": "Duplicate",
                     "value": {
                       "data": {
@@ -312,7 +312,7 @@
                   "$ref": "#/components/schemas/ErrorV1"
                 },
                 "examples": {
-                  "idempotencyConflict": {
+                  "Same transaction_id, different payload": {
                     "summary": "Same transaction_id, different payload",
                     "value": {
                       "error": {
@@ -322,7 +322,7 @@
                       "version": "v1"
                     }
                   },
-                  "idempotencyInProgress": {
+                  "First attempt still processing": {
                     "summary": "First attempt still processing",
                     "value": {
                       "error": {
@@ -332,7 +332,7 @@
                       "version": "v1"
                     }
                   },
-                  "idempotencyReserved": {
+                  "Outcome unconfirmed, do not resubmit": {
                     "summary": "Outcome unconfirmed, do not resubmit",
                     "value": {
                       "error": {
@@ -342,7 +342,7 @@
                       "version": "v1"
                     }
                   },
-                  "idempotencyVersionMismatch": {
+                  "transaction_id first used on the legacy API": {
                     "summary": "transaction_id first used on the legacy API",
                     "value": {
                       "error": {
@@ -368,7 +368,7 @@
                   "$ref": "#/components/schemas/ErrorV1"
                 },
                 "examples": {
-                  "validationFailed": {
+                  "Validation failed": {
                     "summary": "Validation failed",
                     "value": {
                       "error": {
@@ -382,7 +382,7 @@
                       "version": "v1"
                     }
                   },
-                  "pingNotFound": {
+                  "Ping not found": {
                     "summary": "Ping not found",
                     "value": {
                       "error": {
@@ -395,7 +395,7 @@
                       "version": "v1"
                     }
                   },
-                  "legacyPingId": {
+                  "Legacy ping UUID sent as ping_id": {
                     "summary": "Legacy ping UUID sent as ping_id",
                     "value": {
                       "error": {
@@ -408,7 +408,7 @@
                       "version": "v1"
                     }
                   },
-                  "pingUsed": {
+                  "Ping already used": {
                     "summary": "Ping already used",
                     "value": {
                       "error": {
@@ -421,7 +421,7 @@
                       "version": "v1"
                     }
                   },
-                  "quotaReached": {
+                  "Source lead quota reached": {
                     "summary": "Source lead quota reached",
                     "value": {
                       "error": {
@@ -431,7 +431,7 @@
                       "version": "v1"
                     }
                   },
-                  "pingMismatch": {
+                  "Lead doesn't match its ping": {
                     "summary": "Lead doesn't match its ping",
                     "value": {
                       "error": {
@@ -472,13 +472,13 @@
                 "$ref": "#/components/schemas/PingRequest"
               },
               "examples": {
-                "minimal": {
+                "Minimal ping (zip only)": {
                   "summary": "Minimal ping (zip only)",
                   "value": {
                     "zip": "90210"
                   }
                 },
-                "detailed": {
+                "Ping with more fields": {
                   "summary": "Ping with more fields",
                   "value": {
                     "zip": "33139",
@@ -510,7 +510,7 @@
                   ]
                 },
                 "examples": {
-                  "matchFound": {
+                  "Match found (bids)": {
                     "summary": "Match found (bids)",
                     "value": {
                       "ping_id": "f47ac10b-58cc-4372-a567-0e02b2c3d479",
@@ -531,7 +531,7 @@
                       ]
                     }
                   },
-                  "matchFoundVendor": {
+                  "Match found (vendor source)": {
                     "summary": "Match found (vendor source)",
                     "value": {
                       "message": "Match found",
@@ -539,7 +539,7 @@
                       "ping_id": "f47ac10b-58cc-4372-a567-0e02b2c3d479"
                     }
                   },
-                  "noMatch": {
+                  "No match found": {
                     "summary": "No match found",
                     "value": {
                       "ping_id": "f47ac10b-58cc-4372-a567-0e02b2c3d479",
@@ -547,7 +547,7 @@
                       "bids": []
                     }
                   },
-                  "duplicate": {
+                  "Duplicate": {
                     "summary": "Duplicate",
                     "value": {
                       "message": "Duplicate",
@@ -555,7 +555,7 @@
                       "ping_id": "f47ac10b-58cc-4372-a567-0e02b2c3d479"
                     }
                   },
-                  "loopRejected": {
+                  "Rejected by the loop guard": {
                     "summary": "Rejected by the loop guard",
                     "value": {
                       "message": "Rejected",
@@ -595,7 +595,7 @@
                 "$ref": "#/components/schemas/LegacyLeadRequest"
               },
               "examples": {
-                "basic": {
+                "Basic lead": {
                   "summary": "Basic lead",
                   "value": {
                     "transaction_id": "order-10482",
@@ -609,7 +609,7 @@
                     "zip": "33139"
                   }
                 },
-                "afterPing": {
+                "Lead after a ping": {
                   "summary": "Lead after a ping",
                   "value": {
                     "transaction_id": "order-10483",
@@ -641,7 +641,7 @@
                   "$ref": "#/components/schemas/LegacyLeadResponse"
                 },
                 "examples": {
-                  "success": {
+                  "Success": {
                     "summary": "Success",
                     "value": {
                       "lead_uuid": "f47ac10b-58cc-4372-a567-0e02b2c3d479",
@@ -650,7 +650,7 @@
                       "price": 45
                     }
                   },
-                  "rejected": {
+                  "Rejected": {
                     "summary": "Rejected",
                     "value": {
                       "lead_uuid": "f47ac10b-58cc-4372-a567-0e02b2c3d479",
@@ -659,7 +659,7 @@
                       "price": 0
                     }
                   },
-                  "duplicate": {
+                  "Duplicate": {
                     "summary": "Duplicate",
                     "value": {
                       "lead_uuid": "f47ac10b-58cc-4372-a567-0e02b2c3d479",
@@ -691,25 +691,25 @@
                   "$ref": "#/components/schemas/LegacyError"
                 },
                 "examples": {
-                  "differentPayload": {
+                  "Same transaction_id, different payload": {
                     "summary": "Same transaction_id, different payload",
                     "value": {
                       "error": "This transaction_id was already used with a different payload."
                     }
                   },
-                  "inProgress": {
+                  "First attempt still processing": {
                     "summary": "First attempt still processing",
                     "value": {
                       "error": "This transaction_id is already processing. Retry the same request later."
                     }
                   },
-                  "reserved": {
+                  "Outcome unconfirmed, do not resubmit": {
                     "summary": "Outcome unconfirmed, do not resubmit",
                     "value": {
                       "error": "This transaction was accepted but its outcome could not be confirmed. It is reserved for review; do not resubmit it."
                     }
                   },
-                  "versionMismatch": {
+                  "transaction_id first used on v1": {
                     "summary": "transaction_id first used on v1",
                     "value": {
                       "error": "This transaction_id was already used on the v1 API. Retry it on the same API version."
@@ -738,7 +738,7 @@
                   ]
                 },
                 "examples": {
-                  "validationError": {
+                  "Validation error": {
                     "summary": "Validation error",
                     "value": {
                       "message": "The email field must be a valid email address. (and 1 more error)",
@@ -748,7 +748,7 @@
                       }
                     }
                   },
-                  "pingNotFound": {
+                  "Ping not found": {
                     "summary": "Ping not found",
                     "value": {
                       "message": "The ping could not be found.",
@@ -757,7 +757,7 @@
                       }
                     }
                   },
-                  "pingUsed": {
+                  "Ping already used": {
                     "summary": "Ping already used",
                     "value": {
                       "message": "This ping has already been used.",
@@ -766,7 +766,7 @@
                       }
                     }
                   },
-                  "pingDataMismatch": {
+                  "Post data doesn't match the ping": {
                     "summary": "Post data doesn't match the ping",
                     "value": {
                       "message": "The post data does not match the ping data.",
@@ -775,7 +775,7 @@
                       }
                     }
                   },
-                  "quotaReached": {
+                  "Source lead quota reached": {
                     "summary": "Source lead quota reached",
                     "value": {
                       "message": "This source has reached one of its lead quotas.",
@@ -784,7 +784,7 @@
                       }
                     }
                   },
-                  "distributionMismatch": {
+                  "Lead doesn't match its ping during distribution": {
                     "summary": "Lead doesn't match its ping during distribution",
                     "value": {
                       "error": "Lead data does not match ping data"
@@ -1347,13 +1347,13 @@
               "$ref": "#/components/schemas/LegacyMessage"
             },
             "examples": {
-              "unauthorized": {
+              "Missing header or wrong Basic credentials": {
                 "summary": "Missing header or wrong Basic credentials",
                 "value": {
                   "message": "Unauthorized"
                 }
               },
-              "unauthenticated": {
+              "Rejected bearer token": {
                 "summary": "Rejected bearer token",
                 "value": {
                   "message": "Unauthenticated."
