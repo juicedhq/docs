@@ -1,0 +1,63 @@
+#!/usr/bin/env bash
+# Single-screen overview of all open docs worktrees and their state. Spots
+# abandoned worktrees and drift (e.g. a missing proxy) from partial
+# creates/removes.
+
+set -euo pipefail
+source "$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)/worktree-common"
+
+printf '%-26s %-40s %-7s %-6s %-9s %-7s %s\n' NAME BRANCH STATUS PORT PROXY SERVER PATH
+
+found=0
+# `herd proxies` returns the full table regardless of arguments — fetch it once
+# instead of per row.
+herd_proxies=""
+command -v herd >/dev/null 2>&1 && herd_proxies=$(herd proxies 2>/dev/null || true)
+
+while IFS= read -r path; do
+    [[ "$path" == "$MAIN_ROOT" ]] && continue
+    found=1
+    name="${path##*/}"
+    if [[ -d "$path" ]]; then
+        # `|| true` guards: bare var=$(failing-cmd) aborts under set -e.
+        branch=$(git -C "$path" branch --show-current 2>/dev/null || true)
+        [[ -z "$branch" ]] && branch="(detached)"
+        status=clean
+        dirty=$(git -C "$path" status --porcelain 2>/dev/null || true)
+        [[ -n "$dirty" ]] && status=dirty
+    else
+        # Directory deleted manually — git still lists it (prunable).
+        branch="(prunable)"
+        status="GONE"
+    fi
+    branch="${branch:0:39}"
+    port=$(wt_port "$name")
+    proxy="missing!"
+    wt_herd_proxy_exists "$(wt_proxy_name "$name")" "$herd_proxies" && proxy="ok"
+    server="stopped"
+    lsof -iTCP:"$port" -sTCP:LISTEN -P >/dev/null 2>&1 && server="running"
+    printf '%-26s %-40s %-7s %-6s %-9s %-7s %s\n' \
+        "$name" "$branch" "$status" "$port" "$proxy" "$server" "$path"
+done < <(git -C "$MAIN_ROOT" worktree list --porcelain | awk '/^worktree /{print substr($0, 10)}')
+
+if [[ "$found" -eq 0 ]]; then
+    echo "(no worktrees)"
+fi
+
+# The table walks registered worktrees and reports what's missing. The reverse —
+# a proxy or directory with no worktree behind it — is invisible there.
+orphan_proxies=$(wt_orphan_proxies "$herd_proxies" | cut -f1 || true)
+orphan_directories=$(wt_orphan_directories || true)
+
+orphan_line() {
+    local label="$1" body="$2"
+    [[ -z "$body" ]] && return 0
+    printf '  %-18s %s\n' "$label" "$(printf '%s\n' "$body" | paste -sd, - | sed 's/,/, /g')"
+}
+
+if [[ -n "$orphan_proxies$orphan_directories" ]]; then
+    echo
+    echo "Orphaned resources (no worktree behind them) — reclaim with worktree-prune:"
+    orphan_line "Herd proxies" "$orphan_proxies"
+    orphan_line "Directories" "$orphan_directories"
+fi

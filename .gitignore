@@ -1,2 +1,5 @@
 .DS_Store
 .screenshots/
+.claude/worktrees/
+.claude/settings.local.json
+__pycache__/

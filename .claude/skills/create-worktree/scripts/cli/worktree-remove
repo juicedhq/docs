@@ -1,0 +1,168 @@
+#!/usr/bin/env bash
+# Idempotent worktree teardown — every step skips-if-absent, so this also
+# cleans up partial state after a failed worktree-create.
+# Usage: .claude/skills/create-worktree/scripts/cli/worktree-remove <name> [--yes] [--force] [--eject]
+#   --yes    answer confirmation prompts (does NOT bypass safety guards)
+#   --force  bypass dirty/unpushed guards and delete unmerged branches
+#   --eject  never block: auto-save a dirty tree as a WIP commit, always tear
+#            down the worktree and proxy, and delete the branch unless it still
+#            holds commits that exist nowhere else. Implies --yes. This is the
+#            path the native ExitWorktree hook calls.
+
+set -euo pipefail
+source "$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)/worktree-common"
+
+NAME="" YES=0 FORCE=0 EJECT=0
+for arg in "$@"; do
+    case "$arg" in
+        --yes) YES=1 ;;
+        --force) FORCE=1 ;;
+        --eject) EJECT=1; YES=1 ;;
+        -*) echo "Unknown option: $arg" >&2; exit 1 ;;
+        *) NAME="$arg" ;;
+    esac
+done
+[[ -z "$NAME" ]] && { echo "Usage: .claude/skills/create-worktree/scripts/cli/worktree-remove <name> [--yes] [--force] [--eject]" >&2; exit 1; }
+wt_validate_name "$NAME"
+
+# The WorktreeRemove hook calls this non-interactively with a name derived from
+# a payload. Only act on a name this toolchain could have created (`jui-`), or
+# on a worktree of this repo that is actually registered under that name.
+if ! wt_is_removable_name "$NAME" && ! wt_is_registered_name "$NAME"; then
+    echo "Refusing: '$NAME' is not a worktree of this repo (expected jui-…)." >&2
+    exit 1
+fi
+# The main checkout answers to its own directory name.
+if [[ "$NAME" == "${MAIN_ROOT##*/}" ]]; then
+    echo "Refusing: '$NAME' is the main checkout." >&2
+    exit 1
+fi
+
+PROXY_NAME=$(wt_proxy_name "$NAME")
+WT_PATH=$(wt_find_worktree "$NAME" || true)
+if [[ "$WT_PATH" == "$MAIN_ROOT" ]]; then
+    echo "Refusing: '$NAME' resolves to the main checkout." >&2
+    exit 1
+fi
+BRANCH=""
+# Set by the guard below when it computes one, and reused by the branch step so
+# a single teardown never asks GitHub the same question twice.
+UNSAVED_COUNT=""
+
+# Guards — only when a live worktree exists.
+if [[ -n "$WT_PATH" && -d "$WT_PATH" ]]; then
+    BRANCH=$(git -C "$WT_PATH" branch --show-current 2>/dev/null || true)
+    if [[ "$EJECT" -eq 1 ]]; then
+        # Eject never aborts. Preserve a dirty tree as a WIP commit on the branch
+        # so removing the directory can't lose uncommitted edits; unpushed commits
+        # are protected later by the keep-check. Only commit when on a branch — a
+        # detached HEAD would orphan the commit once the worktree is gone.
+        if [[ -n "$BRANCH" && -n $(git -C "$WT_PATH" status --porcelain 2>/dev/null) ]]; then
+            git -C "$WT_PATH" add -A
+            if git -C "$WT_PATH" commit -m "WIP: auto-saved on eject" >&2; then
+                echo "Auto-saved uncommitted changes as a WIP commit on $BRANCH" >&2
+            else
+                echo "warning: failed to auto-save uncommitted changes on $BRANCH" >&2
+            fi
+        fi
+    elif [[ "$FORCE" -ne 1 ]]; then
+        if [[ -n $(git -C "$WT_PATH" status --porcelain 2>/dev/null) ]]; then
+            echo "Refusing: uncommitted changes in $WT_PATH (use --force to override)" >&2
+            exit 1
+        fi
+        # Commits that removal would actually lose — reachable from no remote,
+        # no other local branch, and not already landed by a merged PR.
+        if [[ -n "$BRANCH" ]]; then
+            UNSAVED_COUNT=$(wt_branch_unsaved_commit_count "$BRANCH")
+            unique="$UNSAVED_COUNT"
+        else
+            unique=$(git -C "$WT_PATH" rev-list --count HEAD --not --remotes --branches 2>/dev/null || echo 0)
+        fi
+        if [[ "$unique" -gt 0 ]]; then
+            echo "Refusing: $unique commit(s) exist only in this worktree (use --force to override)" >&2
+            exit 1
+        fi
+    fi
+fi
+
+# Prunable worktree (dir deleted manually): the registry still records the
+# branch — recover it so branch teardown happens even without a live dir.
+if [[ -z "$BRANCH" && -n "$WT_PATH" ]]; then
+    BRANCH=$(git -C "$MAIN_ROOT" worktree list --porcelain |
+        awk -v p="$WT_PATH" '/^worktree /{f=(substr($0, 10)==p)} f && /^branch /{sub(/^refs\/heads\//,"",$2); print $2; exit}' || true)
+fi
+
+if [[ "$YES" -ne 1 ]]; then
+    # `|| answer=""` so EOF on stdin aborts with the message, not a bare set -e exit.
+    read -r -p "Remove worktree '$NAME' (directory, branch, Herd proxy)? [y/N] " answer || answer=""
+    [[ "$answer" =~ ^[Yy]$ ]] || { echo "Aborted." >&2; exit 1; }
+fi
+
+# Destructive steps report failure explicitly — this script is the recovery
+# path after failed creates and a non-interactive hook callee.
+
+# 1. Herd proxy.
+if command -v herd >/dev/null 2>&1 && wt_herd_proxy_exists "$PROXY_NAME"; then
+    if herd unproxy "$PROXY_NAME" >/dev/null 2>&1; then
+        echo "Removed Herd proxy $PROXY_NAME" >&2
+    else
+        echo "warning: failed to remove Herd proxy $PROXY_NAME" >&2
+    fi
+fi
+
+# 2. A mint dev server still running in the worktree would hold its port and
+# keep serving a deleted directory. Only processes whose cwd is inside it.
+if [[ -n "$WT_PATH" && -d "$WT_PATH" ]]; then
+    while IFS= read -r pid; do
+        [[ -z "$pid" ]] && continue
+        cwd=$(lsof -a -p "$pid" -d cwd -Fn 2>/dev/null | sed -n 's/^n//p' | head -1)
+        if [[ -n "$cwd" ]] && wt_dir_contains_cwd "$WT_PATH" "$cwd"; then
+            kill "$pid" 2>/dev/null && echo "Stopped mint dev (pid $pid) running in the worktree" >&2
+        fi
+    done < <(pgrep -f 'mint dev' 2>/dev/null || true)
+fi
+
+# 3. Git worktree + registry. When git bails part-way (typically "directory not
+# empty") it still drops the admin entry and the .git stub, leaving a plain
+# directory. Finish the job here, where WT_PATH is a resolved worktree of this
+# repo and the guards above have passed.
+if [[ -n "$WT_PATH" && -d "$WT_PATH" ]]; then
+    if git -C "$MAIN_ROOT" worktree remove --force "$WT_PATH"; then
+        echo "Removed worktree $WT_PATH" >&2
+    elif rm -rf "$WT_PATH"; then
+        echo "Removed worktree $WT_PATH (git declined; removed directly)" >&2
+    else
+        echo "warning: failed to remove worktree $WT_PATH" >&2
+    fi
+fi
+git -C "$MAIN_ROOT" worktree prune
+
+# 4. Branch — deleted unless it holds commits that exist nowhere else; --force
+# deletes regardless. `git branch -d` is deliberately NOT used: it reports a
+# squash-merged branch as unmerged, while wt_branch_disposition recognises the
+# landing through the merged PR. The eject path's WIP commit is covered by the
+# same count.
+if [[ -n "$BRANCH" ]] && git -C "$MAIN_ROOT" show-ref --verify --quiet "refs/heads/$BRANCH"; then
+    read -r verb reason <<<"$(wt_branch_disposition "$BRANCH" "$FORCE" "$UNSAVED_COUNT")" || true
+    if [[ "$verb" == "delete" ]]; then
+        git -C "$MAIN_ROOT" branch -D "$BRANCH" >&2 &&
+            echo "Deleted branch $BRANCH ($reason)" >&2
+    else
+        echo "Branch '$BRANCH' kept ($reason) — use --force to delete" >&2
+    fi
+fi
+
+# 5. Leftover directory (e.g. after a failed create before git registered it).
+# Gated by the same abandonment proof worktree-prune uses.
+leftover="$CLAUDE_WORKTREES/$NAME"
+if [[ -d "$leftover" ]]; then
+    if ! wt_is_reclaimable_dir "$leftover"; then
+        echo "warning: $leftover is not an abandoned worktree of this repo — left in place" >&2
+    elif rm -rf "$leftover"; then
+        echo "Removed leftover directory $leftover" >&2
+    else
+        echo "warning: failed to remove leftover directory $leftover" >&2
+    fi
+fi
+
+echo "Done: '$NAME' torn down." >&2

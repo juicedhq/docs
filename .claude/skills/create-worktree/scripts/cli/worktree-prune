@@ -1,0 +1,119 @@
+#!/usr/bin/env bash
+# Reclaim resources left behind by worktrees that were removed by other means:
+# `git worktree remove` by hand, `rm -rf` of the directory, a worktree-create
+# that failed part-way, or an ExitWorktree whose hook teardown didn't run.
+#
+# Usage: .claude/skills/create-worktree/scripts/cli/worktree-prune [--dry-run] [--yes]
+#   --dry-run  report what would be removed and exit; never prompts, never writes
+#   --yes      skip the confirmation prompt (for non-interactive callers)
+#
+# Discovery and the safety rules live in worktree-common (wt_orphan_*); this
+# script decides nothing, it only reports and actuates.
+
+set -euo pipefail
+source "$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)/worktree-common"
+
+DRY_RUN=0 YES=0
+for arg in "$@"; do
+    case "$arg" in
+        --dry-run) DRY_RUN=1 ;;
+        --yes) YES=1 ;;
+        *)
+            echo "Unknown option: $arg" >&2
+            echo "Usage: .claude/skills/create-worktree/scripts/cli/worktree-prune [--dry-run] [--yes]" >&2
+            exit 1
+            ;;
+    esac
+done
+
+CWD=$(pwd -P)
+
+# Resolved physical path, so the cwd comparison isn't defeated by a symlinked
+# parent. Falls back to the literal path for a directory that can't be entered.
+resolve_dir() {
+    (cd "$1" 2>/dev/null && pwd -P) || printf '%s' "$1"
+}
+
+# Collect everything before touching anything, so the plan is shown in full.
+PRUNABLE=$(git -C "$MAIN_ROOT" worktree list --porcelain | grep -c '^prunable' || true)
+HERD_PROXIES=""
+command -v herd >/dev/null 2>&1 && HERD_PROXIES=$(herd proxies 2>/dev/null || true)
+PROXIES=$(wt_orphan_proxies "$HERD_PROXIES" || true)
+DIRECTORIES=$(wt_orphan_directories || true)
+
+report_section() {
+    local title="$1" body="$2"
+    [[ -z "$body" ]] && return 0
+    echo "$title"
+    printf '%s\n' "$body" | sed 's/^/  /'
+    echo
+}
+
+if [[ -z "$PROXIES$DIRECTORIES" && "${PRUNABLE:-0}" -eq 0 ]]; then
+    echo "Nothing to clean."
+    exit 0
+fi
+
+echo "Orphaned worktree resources (no worktree behind them):"
+echo
+report_section "Herd proxies" "$(printf '%s\n' "$PROXIES" | sed 's/\t/  ->  /')"
+report_section "Directories" "$DIRECTORIES"
+if [[ "${PRUNABLE:-0}" -gt 0 ]]; then
+    echo "Git registrations"
+    echo "  $PRUNABLE prunable worktree registration(s)"
+    echo
+fi
+
+if [[ "$DRY_RUN" -eq 1 ]]; then
+    echo "Dry run — nothing removed."
+    exit 0
+fi
+
+# Standing inside a worktree the sweep would reclaim aborts the whole run.
+segment=$(wt_worktree_segment "$CWD" "$CLAUDE_WORKTREES" || true)
+if [[ -n "$segment" ]] && wt_is_reclaimable_dir "$CLAUDE_WORKTREES/$segment"; then
+    echo "Refusing: the current directory is inside $CLAUDE_WORKTREES/$segment, which this sweep would reclaim." >&2
+    echo "          Re-run from the main checkout ($MAIN_ROOT)." >&2
+    exit 1
+fi
+
+if [[ "$YES" -ne 1 ]]; then
+    read -r -p "Remove all of the above? [y/N] " answer || answer=""
+    [[ "$answer" =~ ^[Yy]$ ]] || { echo "Aborted." >&2; exit 1; }
+fi
+
+# The plan was computed before the prompt, which blocks indefinitely. A
+# worktree-create can complete in that window, so every step re-asserts its item
+# is still an orphan rather than trusting the plan.
+WT_REGISTERED_LOADED=0
+
+while IFS=$'\t' read -r site host; do
+    [[ -z "$site" ]] && continue
+    if wt_is_registered_name "${site#"$WT_PROXY_PREFIX"}"; then
+        echo "warning: Herd proxy $site is no longer orphaned — left in place" >&2
+        continue
+    fi
+    if herd unproxy "$site" >/dev/null 2>&1; then
+        echo "Removed Herd proxy $site" >&2
+    else
+        echo "warning: failed to remove Herd proxy $site" >&2
+    fi
+done < <(printf '%s\n' "$PROXIES")
+
+# Re-check immediately before deleting: this is the rm -rf.
+while IFS= read -r dir; do
+    [[ -z "$dir" ]] && continue
+    if ! wt_is_reclaimable_dir "$dir"; then
+        echo "warning: $dir is no longer reclaimable — left in place" >&2
+    elif wt_dir_contains_cwd "$(resolve_dir "$dir")" "$CWD"; then
+        echo "warning: $dir holds the current working directory — left in place" >&2
+    elif rm -rf "$dir"; then
+        echo "Removed leftover directory $dir" >&2
+    else
+        echo "warning: failed to remove leftover directory $dir" >&2
+    fi
+done < <(printf '%s\n' "$DIRECTORIES")
+
+git -C "$MAIN_ROOT" worktree prune
+
+echo "Done: orphaned resources reclaimed." >&2
