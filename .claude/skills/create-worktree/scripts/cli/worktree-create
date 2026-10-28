@@ -1,0 +1,120 @@
+#!/usr/bin/env bash
+# Create a docs worktree: its own branch, the main checkout's local Claude config,
+# and a Herd proxy (https://juiced-docs-<name>.test) to its own mint dev port so
+# several branches can be previewed side by side. The single source of truth —
+# used by humans, any agent, and the Claude Code WorktreeCreate hook.
+# Usage: .claude/skills/create-worktree/scripts/cli/worktree-create <name> [branch] [--dir <parent>] [--base <ref>] [--no-proxy]
+#   branch      defaults to docs/<name> (docs/jui-1369-v1-lead-api)
+#   --dir       parent directory (default .claude/worktrees in the main checkout)
+#   --base      ref to branch from when the branch is new (default origin/main)
+#   --no-proxy  skip the Herd proxy
+# Contract: provisioning output goes to stderr; the LAST STDOUT LINE is the
+# absolute worktree path (consumed by the WorktreeCreate hook).
+
+set -euo pipefail
+source "$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)/worktree-common"
+
+USAGE="Usage: .claude/skills/create-worktree/scripts/cli/worktree-create <name> [branch] [--dir <parent>] [--base <ref>] [--no-proxy]"
+NAME="" BRANCH="" PARENT="$CLAUDE_WORKTREES" BASE="origin/main" PROXY=1
+positional=0
+while [[ $# -gt 0 ]]; do
+    case "$1" in
+        --dir) [[ $# -ge 2 ]] || { echo "--dir requires a value" >&2; exit 1; }; PARENT="$2"; shift 2 ;;
+        --base) [[ $# -ge 2 ]] || { echo "--base requires a value" >&2; exit 1; }; BASE="$2"; shift 2 ;;
+        --no-proxy) PROXY=0; shift ;;
+        -*) echo "Unknown option: $1" >&2; exit 1 ;;
+        *)
+            if [[ $positional -eq 0 ]]; then NAME="$1"; else BRANCH="$1"; fi
+            positional=$((positional + 1)); shift ;;
+    esac
+done
+[[ -z "$NAME" ]] && { echo "$USAGE" >&2; exit 1; }
+wt_validate_name "$NAME"
+# The docs repo's branches are `docs/jui-NNNN-<slug>`. The ticket key in the
+# branch is what makes Linear link the PR, and the hook only receives a name, so
+# the branch is derived from it.
+[[ -z "$BRANCH" ]] && BRANCH="docs/$NAME"
+
+mkdir -p "$PARENT"
+PARENT=$(cd "$PARENT" && pwd)
+WT_PATH="$PARENT/$NAME"
+PORT=$(wt_port "$NAME")
+PROXY_NAME=$(wt_proxy_name "$NAME")
+URL=$(wt_url "$NAME")
+
+# ---- Guards: refuse anything that already exists -------------------------
+fail() { echo "$1 Run .claude/skills/create-worktree/scripts/cli/worktree-list to inspect." >&2; exit 1; }
+[[ -d "$WT_PATH" ]] && fail "Refusing: directory $WT_PATH already exists."
+existing=$(wt_find_worktree "$NAME" || true)
+[[ -n "$existing" ]] && fail "Refusing: worktree '$NAME' already exists at $existing."
+if [[ "$PROXY" -eq 1 ]] && command -v herd >/dev/null 2>&1 && wt_herd_proxy_exists "$PROXY_NAME"; then
+    fail "Refusing: Herd proxy '$PROXY_NAME' already exists."
+fi
+# A branch checked out elsewhere can't be added to a second worktree.
+if git -C "$MAIN_ROOT" worktree list --porcelain | grep -qxF "branch refs/heads/$BRANCH"; then
+    fail "Refusing: branch $BRANCH is already checked out in another worktree or the main checkout."
+fi
+
+provision() {
+    echo "==> Creating worktree $WT_PATH on branch $BRANCH"
+    git -C "$MAIN_ROOT" fetch origin
+    if git -C "$MAIN_ROOT" show-ref --verify --quiet "refs/heads/$BRANCH"; then
+        git -C "$MAIN_ROOT" worktree add "$WT_PATH" "$BRANCH"
+    elif git -C "$MAIN_ROOT" show-ref --verify --quiet "refs/remotes/origin/$BRANCH"; then
+        git -C "$MAIN_ROOT" worktree add --track -b "$BRANCH" "$WT_PATH" "origin/$BRANCH"
+    else
+        git -C "$MAIN_ROOT" worktree add --no-track -b "$BRANCH" "$WT_PATH" "$BASE"
+    fi
+
+    # .claude/ is only partly tracked, so `git worktree add` leaves out the local
+    # per-project agent config (settings.local.json, permissions). Copy it over.
+    #   worktrees/        holds the worktrees themselves; copying is recursive.
+    #   --ignore-existing never overwrites the tracked files (skills/,
+    #                     settings.json) the branch just checked out, which may
+    #                     differ from whatever branch the main checkout is on.
+    if [[ -d "$MAIN_ROOT/.claude" ]]; then
+        echo "==> Copying local Claude config (.claude/) into the worktree"
+        rsync -a --ignore-existing \
+            --exclude 'worktrees/' \
+            --exclude '.DS_Store' \
+            "$MAIN_ROOT/.claude/" "$WT_PATH/.claude/"
+    fi
+
+    # direnv config is tracked, but its allow-list is per path: without this the
+    # worktree's .envrc (GH_TOKEN for gh) is blocked until someone runs it.
+    if [[ -f "$WT_PATH/.envrc" ]] && command -v direnv >/dev/null 2>&1; then
+        direnv allow "$WT_PATH" >/dev/null 2>&1 || true
+    fi
+
+    if [[ "$PROXY" -eq 1 ]]; then
+        if command -v herd >/dev/null 2>&1; then
+            # mint dev binds to localhost on IPv6 only, so the upstream is [::1]
+            # (127.0.0.1 gives a 502).
+            echo "==> Proxying $URL to mint dev on port $PORT"
+            herd proxy "$PROXY_NAME" "http://[::1]:$PORT" --secure
+        else
+            echo "WARNING: herd not found — skipping the preview proxy (use http://localhost:$PORT)" >&2
+        fi
+    fi
+
+    cat <<SUMMARY
+
+Worktree ready.
+  Path:     $WT_PATH
+  Branch:   $BRANCH
+  Preview:  cd $WT_PATH && mint dev --port $PORT --no-open
+  URL:      $URL (once mint dev is running)
+  Claude:   copied .claude/ (local agent config) from the main checkout
+  Teardown when merged/abandoned: .claude/skills/create-worktree/scripts/cli/worktree-remove $NAME
+SUMMARY
+}
+
+# NOTE: do not wrap provision in `if !` — bash disables errexit inside
+# functions called in condition contexts, which would let failed steps keep
+# running. set -E + an ERR trap preserves fail-fast and still prints guidance.
+set -E
+trap 'echo "FAILED — partial state may remain. Run: .claude/skills/create-worktree/scripts/cli/worktree-remove $NAME --yes" >&2' ERR
+provision 1>&2
+
+# Hook contract: last stdout line is the worktree path.
+echo "$WT_PATH"

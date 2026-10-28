@@ -9,6 +9,10 @@ The docs run on Mintlify's dev server (`mint dev`). Herd proxies `https://juiced
 
 ## 1. Start the preview
 
+**In a worktree** (from the `create-worktree` skill), use the worktree's own port and proxy instead of 3333 and `https://juiced-docs.test`: `worktree-create` printed them, and `.claude/skills/create-worktree/scripts/cli/worktree-list` shows them again. Run `mint dev --port <port> --no-open` from the worktree root and check `https://juiced-docs-<name>.test`. Everything below otherwise applies as written.
+
+In the main checkout:
+
 ```bash
 command -v mint || npm i -g mint
 herd proxies | grep -q juiced-docs || herd proxy juiced-docs 'http://[::1]:3333' --secure
@@ -21,7 +25,7 @@ If nothing is listening, start it from the repo root in the background (it dies 
 mint dev --port 3333 --no-open
 ```
 
-`mint dev` binds to `localhost` on IPv6 only, which is why the proxy points at `[::1]` rather than `127.0.0.1` (that gives a 502). It reloads on file changes. If the preview looks stale or broken, run `mint update` and restart it.
+`mint dev` binds to `localhost` on IPv6 only, which is why the proxy points at `[::1]` rather than `127.0.0.1` (that gives a 502). It reloads on MDX changes but not on `api-reference/openapi.json` edits, so restart it after changing the spec. If the preview looks stale or broken, run `mint update` and restart it.
 
 Confirm `curl -sk -o /dev/null -w '%{http_code}' https://juiced-docs.test/` prints `200`.
 

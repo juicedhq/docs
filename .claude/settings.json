@@ -1,0 +1,34 @@
+{
+  "hooks": {
+    "WorktreeCreate": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash -c 'f=\"$CLAUDE_PROJECT_DIR/.claude/skills/create-worktree/scripts/hooks/worktree-create-hook.py\"; [ -f \"$f\" ] || exit 0; exec /usr/bin/python3 \"$f\"'"
+          }
+        ]
+      }
+    ],
+    "WorktreeRemove": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash -c 'f=\"$CLAUDE_PROJECT_DIR/.claude/skills/create-worktree/scripts/hooks/worktree-remove-hook.py\"; [ -f \"$f\" ] || exit 0; exec /usr/bin/python3 \"$f\"'"
+          }
+        ]
+      }
+    ],
+    "SessionStart": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash -c 'f=\"$CLAUDE_PROJECT_DIR/.claude/skills/create-worktree/scripts/hooks/worktree-reentry-guard.py\"; [ -f \"$f\" ] || exit 0; exec /usr/bin/python3 \"$f\"'"
+          }
+        ]
+      }
+    ]
+  }
+}

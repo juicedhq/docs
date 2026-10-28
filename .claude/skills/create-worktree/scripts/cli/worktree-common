@@ -1,0 +1,324 @@
+#!/usr/bin/env bash
+# Shared helpers for scripts/cli/worktree-*. Source this file; do not execute it.
+# Option-neutral: sourcing must not mutate the caller's shell options —
+# each executable sets its own `set -euo pipefail`.
+#
+# Adapted from the app repo's create-worktree skill. The docs have no database,
+# Redis, .env or dependencies to provision, so what a docs worktree owns is:
+# the git worktree, its branch, and a Herd proxy (`juiced-docs-<name>.test`) to
+# its own `mint dev` port.
+
+# Resolve the MAIN checkout root even when invoked from inside a worktree:
+# --git-common-dir always points at the main checkout's .git directory.
+wt_main_root() {
+    dirname "$(git rev-parse --path-format=absolute --git-common-dir)"
+}
+
+MAIN_ROOT=$(wt_main_root)
+# Fail fast outside a git repo — otherwise MAIN_ROOT silently degrades to "."
+# and every derived path resolves relative to the caller's cwd.
+[[ -n "$MAIN_ROOT" && "$MAIN_ROOT" != "." ]] || {
+    echo "worktree-common: not inside a git repository" >&2
+    return 1 2>/dev/null || exit 1
+}
+# Worktrees live inside the main checkout, not beside it: the app repo already
+# puts its `jui-NNNN` worktrees in the shared parent directory, so a sibling docs
+# worktree for the same ticket would collide. `.claude/` is in .mintignore, so the
+# main checkout's `mint dev` never scans them, and .gitignore keeps them out of git.
+CLAUDE_WORKTREES="$MAIN_ROOT/.claude/worktrees"
+
+# Herd proxy names are prefixed so they can't collide with the app's sites, and
+# the main checkout's own proxy (`juiced-docs`) is never a worktree's.
+WT_PROXY_PREFIX="juiced-docs-"
+MAIN_PROXY="juiced-docs"
+
+wt_validate_name() {
+    [[ "$1" =~ ^[a-z0-9-]+$ ]] || {
+        echo "Invalid worktree name '$1' — allowed: lowercase letters, digits, hyphens (e.g. jui-1369, jui-1369-v1-lead-api, jui-nav-cleanup)" >&2
+        return 1
+    }
+}
+
+# True when NAME is one worktree-remove will act on when given it explicitly —
+# this repo's `jui-` prefix. Anything else must at least be a registered
+# worktree of this repo.
+wt_is_removable_name() {
+    [[ "$1" =~ ^jui-[a-z0-9-]+$ ]]
+}
+
+# True when NAME is one that discovery may DELETE without being told it: the
+# prefix followed immediately by a ticket number (`jui-1369`,
+# `jui-1369-v1-lead-api`). A Herd proxy has no file behind it to inspect, so its
+# name is the only evidence of ownership, and `jui-<slug>` is too easy to collide
+# with. Slug worktrees stay removable by name with `worktree-remove <name>`.
+wt_is_sweepable_name() {
+    [[ "$1" =~ ^jui-[0-9]+(-[a-z0-9-]+)?$ ]]
+}
+
+# Echo the first path segment of CWD beneath PARENT — the worktree a path sits
+# in, at any depth. Exits 1 when CWD is not under PARENT.
+wt_worktree_segment() {
+    local cwd="$1" parent="$2" rest
+    [[ "$cwd" == "$parent"/* ]] || return 1
+    rest="${cwd#"$parent"/}"
+    printf '%s' "${rest%%/*}"
+}
+
+# Deterministic mint dev port: 3334 + (cksum(name) mod 600). The main checkout's
+# preview owns 3333 (see the preview-docs skill), so the range starts above it.
+wt_port() {
+    local sum
+    sum=$(printf '%s' "$1" | cksum | cut -d' ' -f1)
+    echo $((3334 + sum % 600))
+}
+
+wt_proxy_name() {
+    printf '%s%s' "$WT_PROXY_PREFIX" "$1"
+}
+
+wt_url() {
+    printf 'https://%s.test' "$(wt_proxy_name "$1")"
+}
+
+# Herd's proxy table as `site<TAB>host`, one row per proxy. `herd proxies`
+# draws an ASCII grid, so drop the borders and the header. Accepts a pre-fetched
+# table so callers that already ran `herd proxies` don't pay for it twice.
+wt_herd_proxy_rows() {
+    { [[ $# -gt 0 ]] && printf '%s\n' "$1" || herd proxies 2>/dev/null; } | awk -F'|' '
+        NF >= 5 {
+            site = $2; host = $5
+            gsub(/^[ \t]+|[ \t]+$/, "", site)
+            gsub(/^[ \t]+|[ \t]+$/, "", host)
+            if (site == "" || site == "Site" || host == "") next
+            print site "\t" host
+        }'
+}
+
+# Exact site match (`grep -w` would treat `-` as a word boundary).
+wt_herd_proxy_exists() {
+    local site="$1" row_site host
+    while IFS=$'\t' read -r row_site host; do
+        [[ "$row_site" == "$site" ]] && return 0
+    done < <(wt_herd_proxy_rows "${@:2}")
+    return 1
+}
+
+# Echo the head SHA GitHub recorded for BRANCH's most recently merged PR, or
+# nothing when there is none (or gh is unavailable/offline). A squash or rebase
+# merge rewrites the commits it lands, so this SHA is the only pointer back to
+# the branch commits that made it into the base.
+#
+# The result is used as a git revision, so it is checked to be a 40-hex object
+# name. GitHub's headRefOid always is one; the check keeps anything option- or
+# ref-shaped from reaching `rev-list` as a bare argument.
+wt_branch_merged_pr_head_sha() {
+    local branch="$1" sha
+    [[ -n "$branch" ]] || return 0
+    command -v gh >/dev/null 2>&1 || return 0
+    sha=$( (cd "$MAIN_ROOT" && gh pr list --head "$branch" --state merged \
+        --json headRefOid,mergedAt --jq 'sort_by(.mergedAt) | last | .headRefOid // empty') 2>/dev/null || true)
+    [[ "$sha" =~ ^[0-9a-f]{40}$ ]] || return 0
+    printf '%s' "$sha"
+}
+
+# Count commits that would be lost with BRANCH: reachable from nowhere else —
+# no remote, no other local branch — AND not already carried into the base by a
+# merged PR. Echoes a single non-negative integer.
+#
+# The merged-PR arm is what makes this correct after a squash merge: the rewrite
+# leaves the branch's own commits unreachable from the base, and GitHub deletes
+# the remote branch on merge, so reachability alone reports every landed branch
+# as holding unsaved work. The local count runs first because the merged SHA can
+# only lower the result, so ordinary teardowns never make the network call.
+#
+# An unreadable count means "cannot prove this is safe": it resolves to 1 so the
+# caller keeps the branch. This is the one signal standing between teardown and
+# `git branch -D`, so it fails closed.
+wt_branch_unsaved_commit_count() {
+    local branch="$1" merged_sha count
+    [[ -n "$branch" ]] || { echo 1; return; }
+    count=$(git -C "$MAIN_ROOT" rev-list --count "refs/heads/$branch" --not --remotes --exclude="$branch" --branches 2>/dev/null) || count=""
+    if [[ "$count" =~ ^[0-9]+$ ]] && [[ "$count" -eq 0 ]]; then
+        echo 0
+        return
+    fi
+    merged_sha=$(wt_branch_merged_pr_head_sha "$branch")
+    if [[ -n "$merged_sha" ]] && git -C "$MAIN_ROOT" rev-parse --verify --quiet "${merged_sha}^{commit}" >/dev/null; then
+        count=$(git -C "$MAIN_ROOT" rev-list --count "refs/heads/$branch" --not --remotes --exclude="$branch" --branches "$merged_sha" 2>/dev/null) || count=""
+    fi
+    [[ "$count" =~ ^[0-9]+$ ]] || count=1
+    printf '%s' "$count"
+}
+
+# Decide a branch's fate during teardown. Echoes "<verb> <reason>" where verb is
+# delete or keep. FORCE (arg 2, default 0) short-circuits to delete. COUNT
+# (arg 3) reuses an already-computed wt_branch_unsaved_commit_count so the guard
+# and this verdict can't disagree. Only a commit that exists nowhere else (not
+# on a remote, not landed through a merged PR) keeps the branch.
+wt_branch_disposition() {
+    local branch="$1" force="${2:-0}" unsaved="${3:-}"
+    if [[ "$force" -eq 1 ]]; then
+        echo "delete forced"
+        return
+    fi
+    [[ "$unsaved" =~ ^[0-9]+$ ]] || unsaved=$(wt_branch_unsaved_commit_count "$branch")
+    if [[ "$unsaved" -gt 0 ]]; then
+        echo "keep $unsaved commit(s) exist only here"
+    else
+        echo "delete fully pushed or landed"
+    fi
+}
+
+# Echo the worktree's path if a worktree with this name exists. Exit 0 only
+# when found, 1 when not — usable as a predicate.
+wt_find_worktree() {
+    local name="$1" found
+    [[ -d "$CLAUDE_WORKTREES/$name" ]] && { echo "$CLAUDE_WORKTREES/$name"; return 0; }
+    # Fall back to git's registry (covers custom --dir parents).
+    found=$(wt_registered_paths | awk -v name="$name" '{ n = split($0, p, "/"); if (p[n] == name) { print; exit } }')
+    [[ -n "$found" ]] && { echo "$found"; return 0; }
+    return 1
+}
+
+# Paths of every worktree git still has registered, EXCLUDING prunable ones
+# (directory already gone). Records are parsed whole rather than with
+# `awk '{print $2}'`, which would truncate paths containing spaces.
+wt_registered_paths() {
+    git -C "$MAIN_ROOT" worktree list --porcelain | wt_parse_registered_paths
+}
+
+# The porcelain parser, split out so it can be exercised against fixture input.
+wt_parse_registered_paths() {
+    awk '
+        /^worktree /   { path = substr($0, 10); prunable = 0; next }
+        /^prunable/    { prunable = 1; next }
+        /^$/           { if (path != "" && !prunable) print path; path = ""; prunable = 0; next }
+        END            { if (path != "" && !prunable) print path }
+    '
+}
+
+WT_REGISTERED_NAMES=""
+WT_REGISTERED_LOADED=0
+
+# Load the registry, failing CLOSED — a worktree that reads as unregistered has
+# its proxy and directory reclaimed, so "I could not read the registry" must
+# never look like "nothing is registered". The main checkout is always
+# registered, so its absence from the parsed result means the read failed.
+wt_load_registered_names() {
+    [[ "$WT_REGISTERED_LOADED" -eq 1 ]] && return 0
+    local raw path seen_main=0
+    raw=$(wt_registered_paths 2>/dev/null) || return 1
+    [[ -n "$raw" ]] || return 1
+    WT_REGISTERED_NAMES=$'\n'
+    while IFS= read -r path; do
+        [[ -z "$path" ]] && continue
+        if [[ "$path" == "$MAIN_ROOT" ]]; then
+            seen_main=1
+            continue
+        fi
+        WT_REGISTERED_NAMES+="${path##*/}"$'\n'
+    done <<<"$raw"
+    [[ "$seen_main" -eq 1 ]] || return 1
+    WT_REGISTERED_LOADED=1
+    return 0
+}
+
+# Names of every registered worktree (the main checkout excluded).
+wt_registered_names() {
+    wt_load_registered_names || return 1
+    printf '%s' "$WT_REGISTERED_NAMES" | sed '/^$/d'
+}
+
+wt_is_registered_name() {
+    wt_load_registered_names || return 0 # unreadable registry: treat everything as registered
+    [[ "$WT_REGISTERED_NAMES" == *$'\n'"$1"$'\n'* ]]
+}
+
+# True when DIR is an ABANDONED worktree of this repo, or the empty shell a
+# failed create leaves behind. Being a worktree of this repo is not enough: a
+# live, registered worktree has the same `.git` stub. git keeps a per-worktree
+# admin directory at `$MAIN_ROOT/.git/worktrees/<name>` and removes it on prune,
+# so if that directory still exists the worktree is live and not ours to delete.
+wt_is_reclaimable_dir() {
+    local dir="$1" gitdir
+    # A symlink would be followed into whatever it points at.
+    if [[ "$dir" == "$MAIN_ROOT" || ! -d "$dir" || -L "$dir" ]]; then
+        return 1
+    fi
+    if [[ -f "$dir/.git" ]]; then
+        gitdir=$(sed -n 's/^gitdir: //p' "$dir/.git" 2>/dev/null)
+        [[ -z "$gitdir" || "$gitdir" == *$'\n'* ]] && return 1 # malformed stub
+        [[ "$gitdir" == "$MAIN_ROOT/.git/worktrees/"* ]] || return 1
+        [[ -d "$gitdir" ]] && return 1 # still registered
+        # A missing admin entry only proves `git worktree prune` ran — a moved
+        # worktree reaches this state with its files intact. Require the tree to
+        # be stripped to its stub; anything else may hold unrecoverable work.
+        wt_dir_entries "$dir" 1 ".git"
+        return $?
+    fi
+    [[ -e "$dir/.git" ]] && return 1 # a real repo, or something we can't read
+    wt_dir_entries "$dir" 0
+}
+
+# True when DIR contains exactly COUNT entries and they are the given names.
+# Globbing, not `ls -A`: an unreadable directory lists as empty and would
+# otherwise be deleted. Restores the caller's glob options.
+wt_dir_entries() {
+    local dir="$1" want="$2"
+    shift 2
+    [[ -r "$dir" && -x "$dir" ]] || return 1
+    local saved entry name want_name
+    saved=$(shopt -p nullglob dotglob)
+    shopt -s nullglob dotglob
+    local -a entries=("$dir"/*)
+    eval "$saved"
+    [[ ${#entries[@]} -eq "$want" ]] || return 1
+    for entry in ${entries+"${entries[@]}"}; do
+        name="${entry##*/}"
+        for want_name in "$@"; do
+            [[ "$name" == "$want_name" ]] && continue 2
+        done
+        return 1
+    done
+    return 0
+}
+
+# True when DIR is the current working directory or an ancestor of it. Both
+# paths must already be resolved.
+wt_dir_contains_cwd() {
+    local dir="$1" cwd="$2"
+    [[ "$cwd" == "$dir" || "$cwd" == "$dir"/* ]]
+}
+
+# Herd proxies with no worktree behind them: `juiced-docs-<ticket-shaped name>`
+# whose upstream is a worktree port, and whose name no registered worktree uses.
+wt_orphan_proxies() {
+    local site host name
+    wt_load_registered_names || return 0
+    while IFS=$'\t' read -r site host; do
+        [[ -z "$site" || "$site" == "$MAIN_PROXY" ]] && continue
+        [[ "$site" == "$WT_PROXY_PREFIX"* ]] || continue
+        name="${site#"$WT_PROXY_PREFIX"}"
+        wt_is_sweepable_name "$name" || continue
+        # Only a proxy pointing at the port this toolchain would have assigned:
+        # a hand-made proxy that happens to share the naming is not ours.
+        [[ "$host" == "http://[::1]:$(wt_port "$name")" ]] || continue
+        wt_is_registered_name "$name" && continue
+        printf '%s\t%s\n' "$site" "$host"
+    done < <(wt_herd_proxy_rows "$@")
+}
+
+# Worktree directories under .claude/worktrees that git no longer tracks.
+wt_orphan_directories() {
+    local dir name
+    wt_load_registered_names || return 0
+    [[ -d "$CLAUDE_WORKTREES" ]] || return 0
+    for dir in "$CLAUDE_WORKTREES"/*; do
+        [[ -d "$dir" ]] || continue
+        name="${dir##*/}"
+        wt_is_sweepable_name "$name" || continue
+        wt_is_registered_name "$name" && continue
+        wt_is_reclaimable_dir "$dir" || continue
+        echo "$dir"
+    done
+}
