@@ -31,6 +31,10 @@ Invoke `investigate-ticket` with `$ARGUMENTS` and produce its full analysis.
 
 Branch name: `docs/jui-NNNN-<short-slug>` (e.g. `docs/jui-1340-v3-69-0-release`), matching the repo's history. The ticket key in the branch is what makes Linear auto-link the PR.
 
+**Default: a worktree.** Invoke `create-worktree` with the name `jui-NNNN-<short-slug>`; its branch is `docs/jui-NNNN-<short-slug>`, so the name and the branch line up. Overrides: skip its "Gather" question (the ticket is known) and its confirmation (invoking this flow is the confirmation). Its Linear claim is step 3 below, so don't do it twice. From here on, every stage works in the worktree path, and `preview-docs` uses the worktree's port and `https://juiced-docs-<name>.test`.
+
+**In the main checkout** only when the user asks for it, or the worktree can't be created:
+
 1. `git status`. If there are uncommitted changes, ask once whether to carry, stash or stop; a "stop" is a hard stop.
 2. `git fetch origin && git switch -c <branch> origin/main` (or `git switch <branch>` if it already exists).
 3. Linear bookkeeping, best-effort (a Linear failure never blocks the work): move the ticket to In Progress if it is earlier in the workflow, and assign it to the current user if unassigned.
