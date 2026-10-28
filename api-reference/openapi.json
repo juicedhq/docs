@@ -24,7 +24,7 @@
       "post": {
         "operationId": "createPingV1",
         "summary": "Submit a ping",
-        "description": "Submits partial lead data to check for matching bids before sending the full lead. Use it to see pricing and availability before you commit to a full lead submission.\n\nThe response depends on your source type:\n- **Vendor sources** receive a single `price`, never the bids behind it.\n- **Every other source** receives the matching `bids`, each with the buyer's name for TCPA consent.\n\nEvery ping that passes validation returns `200`, whatever its `status`. Keep the returned `id` and send it as `ping_id` when you post the lead.",
+        "description": "Submits partial lead data to check for matching bids before sending the full lead. Use it to see pricing and availability before you commit to a full lead submission.\n\nThe response depends on your source type.\n- **Vendor sources** receive a single `price`, never the bids behind it.\n- **Every other source** receives the matching `bids`, each with the buyer's name for TCPA consent.\n\nEvery ping that passes validation returns `200`, whatever its `status`. Keep the returned `id` and send it as `ping_id` when you post the lead.",
         "tags": ["v1"],
         "parameters": [
           { "$ref": "#/components/parameters/PartnerIdHeader" }
@@ -203,9 +203,6 @@
         "summary": "Submit a lead",
         "description": "Submits a complete lead for processing. The lead is validated, checked for duplicates, matched to a lead type, and distributed to a buyer (or placed in the marketplace or Club).\n\nIf you pinged first, include the ping's `id` as `ping_id`. You can also echo the `bids[].id` you chose as `bid_id`; it is checked but doesn't change who gets the lead.\n\nSend a `transaction_id` so a retry can never create a second lead. One `transaction_id` is one lead on either API version.",
         "tags": ["v1"],
-        "parameters": [
-          { "$ref": "#/components/parameters/PartnerIdHeader" }
-        ],
         "requestBody": {
           "required": true,
           "content": {
@@ -398,6 +395,32 @@
                       "version": "v1"
                     }
                   },
+                  "legacyPingId": {
+                    "summary": "Legacy ping UUID sent as ping_id",
+                    "value": {
+                      "error": {
+                        "code": "validation_failed",
+                        "message": "The ping id must be the ping_… id returned by /api/v1/ping.",
+                        "errors": {
+                          "ping_id": ["The ping id must be the ping_… id returned by /api/v1/ping."]
+                        }
+                      },
+                      "version": "v1"
+                    }
+                  },
+                  "pingUsed": {
+                    "summary": "Ping already used",
+                    "value": {
+                      "error": {
+                        "code": "validation_failed",
+                        "message": "This ping has already been used.",
+                        "errors": {
+                          "ping_id": ["This ping has already been used."]
+                        }
+                      },
+                      "version": "v1"
+                    }
+                  },
                   "quotaReached": {
                     "summary": "Source lead quota reached",
                     "value": {
@@ -435,7 +458,7 @@
       "post": {
         "operationId": "createPing",
         "summary": "Submit a ping (legacy)",
-        "description": "**Deprecated.** This is the frozen legacy contract. Build new integrations on [`POST /v1/ping`](/api-reference/endpoint/v1/ping). Every response carries a `Deprecation` header and a `Link` header pointing to the v1 endpoint.\n\nThe response has one of two shapes:\n- **Bids**: `ping_id`, `message` and `bids`, for a non-vendor source whose ping went through matching.\n- **Price**: `message`, `price` and `ping_id`, for vendor sources, and for any ping answered before matching (duplicate, quota reached, or rejected).",
+        "description": "**Deprecated.** This is the frozen legacy contract. Build new integrations on [`POST /v1/ping`](/api-reference/endpoint/v1/ping). Every response carries a `Deprecation` header and a `Link` header pointing to the v1 endpoint.\n\nThe response has one of two shapes.\n- **Bids** has `ping_id`, `message` and `bids`. Non-vendor sources get it when the ping went through matching, and for test-mode zips.\n- **Price** has `message`, `price` and `ping_id`. Vendor sources always get it, and so does any ping answered before matching (duplicate, quota reached, or rejected).",
         "deprecated": true,
         "tags": ["Legacy"],
         "parameters": [
@@ -564,9 +587,6 @@
         "description": "**Deprecated.** This is the frozen legacy contract. Build new integrations on [`POST /v1/leads`](/api-reference/endpoint/v1/leads). Every response carries a `Deprecation` header and a `Link` header pointing to the v1 endpoint.\n\nIf you pinged first, include the ping's `ping_id`. Send a `transaction_id` so a retry can never create a second lead.",
         "deprecated": true,
         "tags": ["Legacy"],
-        "parameters": [
-          { "$ref": "#/components/parameters/PartnerIdHeader" }
-        ],
         "requestBody": {
           "required": true,
           "content": {
@@ -661,7 +681,9 @@
               "Retry-After": {
                 "description": "Sent when the first attempt is still processing. Seconds to wait before retrying the same request.",
                 "schema": { "type": "integer", "example": 5 }
-              }
+              },
+              "Deprecation": { "$ref": "#/components/headers/Deprecation" },
+              "Link": { "$ref": "#/components/headers/SuccessorLink" }
             },
             "content": {
               "application/json": {
@@ -699,6 +721,10 @@
           },
           "422": {
             "description": "The lead failed validation (including an unusable `ping_id` or a reached source quota), or the lead doesn't match its ping.",
+            "headers": {
+              "Deprecation": { "$ref": "#/components/headers/Deprecation" },
+              "Link": { "$ref": "#/components/headers/SuccessorLink" }
+            },
             "content": {
               "application/json": {
                 "schema": {
@@ -781,7 +807,7 @@
         "name": "X-Partner-Id",
         "in": "header",
         "required": false,
-        "description": "Public ID of the partner the submission is attributed to. Optional but recommended for any partner-mediated integration.",
+        "description": "Public ID of the partner you're pinging on behalf of. The ping is recorded against that partner when the partner is linked to the source whose credentials you use. Optional but recommended for any partner-mediated integration.",
         "schema": {
           "type": "string",
           "example": "prt_01h7x1a3c5e7g9j1k3m5n7q9sv"
@@ -890,7 +916,8 @@
           },
           "version": {
             "type": "string",
-            "const": "v1"
+            "enum": ["v1"],
+            "description": "Always `v1`."
           }
         }
       },
@@ -926,7 +953,7 @@
           "reason": {
             "type": "string",
             "enum": ["cycle_detected", "max_hops_exceeded"],
-            "description": "Only on a ping rejected by the distribution loop guard: the ping already passed through this account, or it exceeded the hop limit."
+            "description": "Only on a ping rejected by the distribution loop guard, because the ping already passed through this account or exceeded the hop limit."
           }
         }
       },
@@ -937,7 +964,7 @@
         "properties": {
           "id": {
             "type": "string",
-            "description": "The bid's ID: a `bid_…` for a customer bid, the partner's `prt_…` for a partner, or the ping's own `ping_…` when the match has no bidder behind it (marketplace or Club). Echo it as `bid_id` when you post the lead.",
+            "description": "The bid's ID. It's a `bid_…` for a customer bid, the partner's `prt_…` for a partner, or the ping's own `ping_…` when the match has no bidder behind it (marketplace or Club). Echo it as `bid_id` when you post the lead.",
             "example": "bid_01h9z3c5e7g9j1k3m5n7p9r1st"
           },
           "price": {
@@ -972,7 +999,8 @@
           },
           "version": {
             "type": "string",
-            "const": "v1"
+            "enum": ["v1"],
+            "description": "Always `v1`."
           }
         }
       },
@@ -1051,7 +1079,8 @@
           },
           "version": {
             "type": "string",
-            "const": "v1"
+            "enum": ["v1"],
+            "description": "Always `v1`."
           }
         }
       },
@@ -1063,7 +1092,7 @@
           "transaction_id": {
             "type": "string",
             "maxLength": 255,
-            "description": "Your own ID for this lead, such as an order or lead number. A retry with the same `transaction_id` and payload returns the original response instead of creating a second lead.",
+            "description": "Your own ID for this lead, such as an order or lead number. A retry with the same `transaction_id` and payload returns the original response instead of creating a second lead. Numbers are accepted and treated as strings.",
             "example": "order-10482"
           },
           "ping_id": {
@@ -1074,7 +1103,7 @@
           "bid_id": {
             "type": "string",
             "format": "uuid",
-            "description": "A bid `id` from the ping response. It doesn't change who gets the lead.",
+            "description": "A bid `id` from the ping response. It must be a UUID, so a partner's numeric bid `id` can't be echoed. It doesn't change who gets the lead.",
             "example": "7c9e6679-7425-40de-944b-e07fc1f90ae7"
           },
           "zip": {
@@ -1090,7 +1119,7 @@
       "LegacyPingResponseBids": {
         "title": "Bids",
         "type": "object",
-        "description": "Non-vendor sources, when the ping went through matching.",
+        "description": "Non-vendor sources, when the ping went through matching or used a test-mode zip.",
         "properties": {
           "ping_id": {
             "type": "string",
@@ -1100,8 +1129,8 @@
           },
           "message": {
             "type": "string",
-            "enum": ["Match found", "No match found"],
-            "description": "Result of the ping."
+            "enum": ["Match found", "No match found", "Duplicate", "Rejected"],
+            "description": "Result of the ping. `Duplicate` and `Rejected` only appear here for test-mode zips."
           },
           "bids": {
             "type": "array",
@@ -1308,6 +1337,10 @@
       },
       "LegacyUnauthorized": {
         "description": "Credentials are missing or invalid. A rejected bearer token returns `Unauthenticated.`; anything else returns `Unauthorized`.",
+        "headers": {
+          "Deprecation": { "$ref": "#/components/headers/Deprecation" },
+          "Link": { "$ref": "#/components/headers/SuccessorLink" }
+        },
         "content": {
           "application/json": {
             "schema": {
@@ -1332,6 +1365,10 @@
       },
       "LegacyValidationError": {
         "description": "The request failed validation.",
+        "headers": {
+          "Deprecation": { "$ref": "#/components/headers/Deprecation" },
+          "Link": { "$ref": "#/components/headers/SuccessorLink" }
+        },
         "content": {
           "application/json": {
             "schema": {
@@ -1349,7 +1386,9 @@
       "LegacyRateLimited": {
         "description": "Too many requests.",
         "headers": {
-          "Retry-After": { "$ref": "#/components/headers/RetryAfter" }
+          "Retry-After": { "$ref": "#/components/headers/RetryAfter" },
+          "Deprecation": { "$ref": "#/components/headers/Deprecation" },
+          "Link": { "$ref": "#/components/headers/SuccessorLink" }
         },
         "content": {
           "application/json": {

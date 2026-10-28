@@ -75,7 +75,7 @@ curl -X POST \
   https://usejuiced.com/api/v1/leads
 ```
 
-The `transaction_id` is optional but worth sending. It's your own ID for the lead, so if a request times out you can safely send it again without creating a second lead. See [Safe retries](/api-reference/introduction#safe-retries-with-transaction-id) for the details.
+The `transaction_id` is optional but worth sending. It's your own ID for the lead, so if a request times out you can safely send it again without creating a second lead. See [Safe retries](/api-reference/introduction#safe-retries) for the details.
 
 A submission that passes validation returns `201 Created` with a body like this one.
 
@@ -90,7 +90,7 @@ A submission that passes validation returns `201 Created` with a body like this 
 }
 ```
 
-`data.status` is one of three values, decided by the source's [status responses](/features/sources#status-responses) mapping.
+`data.status` is one of three values, decided by the source's [status responses](/features/sources#status-responses) mapping (`accepted` is the mapping's **Success** response).
 
 | Status | What it means (by default) |
 |--------|--------------|
@@ -101,7 +101,7 @@ A submission that passes validation returns `201 Created` with a body like this 
 If you've changed the source's status response mapping, the statuses behind each value change with it. Your own lead's actual status is always visible on its page in Juiced.
 
 <Warning>
-Validation failures return `422` with the error code `validation_failed` and an `errors` object keyed by field. Fix the payload and re-submit. The original submission is recorded as rejected and won't be retried automatically.
+Validation failures return `422` with the error code `validation_failed` and an `error.errors` object keyed by field. Fix the payload and re-submit. The original submission is recorded as rejected and won't be retried automatically.
 </Warning>
 
 <Note>
@@ -132,7 +132,7 @@ Test traffic is hidden by default. If the source is in test mode, set the **Test
 
 ## Testing without real data
 
-If your source is in **test mode** (switched on from the source's edit form), you can submit leads using test zip codes without touching production data.
+If your source is in **test mode** (switched on from the source's edit form), you can submit leads using test zip codes without touching production data. See [Test mode](/api-reference/introduction#test-mode) in the API reference for what pings return.
 
 | Zip | Response `data.status` (default mapping) | Lead status |
 |-----|----------|-------------|
@@ -141,7 +141,7 @@ If your source is in **test mode** (switched on from the source's edit form), yo
 | `00003` | `rejected` | Audit |
 | `00004` | `rejected` | Unassigned |
 | `00005` | `accepted` | Marketplace |
-| Any other zip | `rejected` | Marked as test data and moved to Audit |
+| Any other zip | `rejected` (or `duplicate`) | Marked as test data and moved to Audit (or Duplicate or Uncategorized), never distributed |
 
 <Tip>
 Test mode is the right tool for integration development and vendor sandboxing. Turn it off before going live, because leads posted while test mode is on won't be distributed to real customers.

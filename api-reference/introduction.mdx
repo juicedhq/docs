@@ -15,38 +15,17 @@ https://usejuiced.com/api
 
 ## Versioning
 
-Build on **v1**, the endpoints under `/api/v1`. The original unversioned endpoints (`/api/ping` and `/api/leads`) are now the **legacy** API. They keep working exactly as they do today, but they're frozen and deprecated, so new features and fixes land in v1 only.
+Build on **v1**, the endpoints under `/api/v1`. The original unversioned endpoints (`/api/ping` and `/api/leads`) are now the **legacy** API. They keep working, but they're frozen and deprecated, so new features and fixes land in v1 only.
 
 | | v1 | Legacy |
 |---|---|---|
 | Endpoints | `POST /v1/ping`, `POST /v1/leads` | `POST /ping`, `POST /leads` |
-| IDs | Public IDs only (`ping_…`, `lead_…`, `bid_…`, `cus_…`, `prt_…`) | UUIDs and numeric IDs |
+| IDs | Public IDs only (`ping_…`, `lead_…`, `bid_…`, `cus_…`, `prt_…`) | UUIDs and numeric IDs (plus `lead_public_id` on leads) |
 | Success body | `{"data": {...}, "version": "v1"}` | Flat object |
 | Errors | One envelope with a stable `code` (see [Errors](#errors)) | Mixed shapes |
 | Request ID | `X-Request-Id` on every response | None |
 
-### Deprecation headers
-
-Every legacy ping and lead response carries two headers that announce its replacement.
-
-```http
-Deprecation: @1792627200
-Link: <https://usejuiced.com/api/v1/ping>; rel="successor-version"
-```
-
-`Deprecation` is the date the legacy API was deprecated, as `@` plus a Unix timestamp ([RFC 9745](https://www.rfc-editor.org/rfc/rfc9745)). `Link` points to the v1 endpoint that replaces the one you called. There's no `Sunset` header yet, which means no shutdown date has been set.
-
-### Moving from legacy to v1
-
-1. Change the path from `/api/ping` to `/api/v1/ping` and from `/api/leads` to `/api/v1/leads`. Credentials and request fields stay the same.
-2. Read results from `data`. A ping's `ping_id` and `message` become `data.id` and `data.status`, and a lead's `lead_public_id` and `status` become `data.id` and `data.status`.
-3. Update the values you compare against. Ping messages become `matched`, `no_match`, `duplicate` and `rejected`, and the lead status `success` becomes `accepted`.
-4. Send the v1 ping's `data.id` as `ping_id` on the lead. v1 only accepts `ping_…` IDs, so a ping sent to the legacy API has to be posted to the legacy API.
-5. Handle errors by `error.code` rather than by message.
-
-<Warning>
-One `transaction_id` is one lead, whichever version it arrives on. If you retry a lead on the other version than you first sent it to, Juiced won't create a second lead. You get a `409` instead (`idempotency_version_mismatch` on v1), and v1 names the original lead in `error.lead_id`. Finish in-flight retries on the version they started on.
-</Warning>
+Already integrated with the legacy endpoints? See [Migrating from the legacy API](#migrating-from-the-legacy-api).
 
 ## Headers
 
@@ -59,7 +38,7 @@ Content-Type: application/json
 
 ### Partner attribution
 
-If you're integrating on behalf of a partner, include their public ID in the `X-Partner-Id` header. This attributes the submission to that partner even if the request uses different credentials.
+If you're integrating on behalf of a partner, include their public ID in the `X-Partner-Id` header on pings. Juiced records the ping against that partner when the partner is linked to the source whose credentials you use, so it shows up in their ping logs. Lead posts ignore the header.
 
 ```http
 X-Partner-Id: prt_01h7x1a3c5e7g9j1k3m5n7q9sv
@@ -125,24 +104,24 @@ The exact fields available (and which ones are required) depend on your source a
 For the exact API spec tailored to your source (including your credentials and all configured fields), visit **Sources → [Your Source] → View API Spec** in your Juiced admin dashboard.
 </Note>
 
-## Safe retries with transaction_id
+## Safe retries
 
-Network hiccups happen, and a lead you can't confirm is a lead you're tempted to send twice. Add a `transaction_id` to each lead post (your own order or lead number works well, up to 255 characters) and retries become safe.
+Network hiccups happen, and a lead you can't confirm is a lead you're tempted to send twice. Add a `transaction_id` to each lead post (your own order or lead number works well, up to 255 characters) and retries become safe. Transaction IDs are scoped to the source sending them, and test-mode posts are tracked separately from live ones.
 
 - **Same `transaction_id`, same payload** returns the original response again, byte for byte, without creating another lead.
 - **Same `transaction_id`, different payload** returns `409` (`idempotency_conflict` on v1).
 - **The first attempt is still processing** returns `409` with a `Retry-After` header (`idempotency_in_progress` on v1). Wait and send the same request again.
-- **The outcome couldn't be confirmed** returns `409` (`idempotency_reserved` on v1). The lead may already have been delivered, so don't resubmit it. Contact support instead.
+- **The outcome couldn't be confirmed** returns `409` (`idempotency_reserved` on v1). The lead may already have been delivered, so don't resubmit it. It's held for review.
 
-A post that failed validation doesn't use up its `transaction_id`, so you can fix the payload and send it again with the same ID.
+A post that didn't create a lead (it failed validation, hit a lead quota, or failed on our side) doesn't use up its `transaction_id`, so you can fix the payload and send it again with the same ID. A lead rejected for not matching its ping was still recorded, so its `transaction_id` stays taken.
 
 ## Rate limits
 
-The API accepts up to 240 requests a minute. Past that, it returns `429` with a `Retry-After` header giving the seconds to wait (`rate_limited` on v1).
+The API accepts up to 240 requests a minute, counting pings and leads together. Past that, it returns `429` with a `Retry-After` header giving the seconds to wait (`rate_limited` on v1).
 
 ## Test mode
 
-Turn on test mode from the source's edit form to try your integration without touching real buyers. While it's on, these zip codes return fixed outcomes on both pings and posts.
+Turn on test mode from the source's edit form to try your integration. While it's on, these zip codes return fixed outcomes on both pings and posts.
 
 | Zip | Ping | Lead `status` (v1, default mapping) | Lead status in Juiced |
 |-----|------|-----------|-------------|
@@ -152,11 +131,13 @@ Turn on test mode from the source's edit form to try your integration without to
 | `00004` | `no_match` | `rejected` | Unassigned |
 | `00005` | `matched`, price 15 | `accepted`, price 15 | Marketplace |
 
-Any other zip goes through normal validation, and the lead is marked as test data and moved to Audit instead of being distributed. Turn test mode off before going live.
+Vendor sources get the ping price as `price`. Other sources get it as a single bid named `Test Mode`.
+
+With any other zip, pings are matched as usual (including pings to your partners), and leads are marked as test data and never distributed. Those leads are moved to Audit unless they're duplicates or can't be categorized. Stick to the zips above while you build, and turn test mode off before going live.
 
 ## Errors
 
-The API uses standard HTTP status codes. A ping that passes validation returns `200` and a lead that passes validation returns `201`, whatever the outcome, so check the `status` in the body too.
+The API uses standard HTTP status codes. A ping that passes validation returns `200`, and a lead that passes validation returns `201` (unless it doesn't match its ping), whatever the outcome. Check the `status` in the body too.
 
 Every v1 error uses the same envelope. Branch on `error.code`, which is stable, rather than on `message`.
 
@@ -194,6 +175,31 @@ Every v1 error uses the same envelope. Branch on `error.code`, which is stable, 
 
 Every v1 response, errors included, carries an `X-Request-Id` header such as `req_01jbx8k6y3a5c7e9g1j3m5p7rt`. Log it with your request, and quote it when you contact support so we can find the exact request.
 
+## Migrating from the legacy API
+
+### Deprecation headers
+
+Every legacy ping and lead response carries two headers that announce its replacement.
+
+```http
+Deprecation: @1792627200
+Link: <https://usejuiced.com/api/v1/ping>; rel="successor-version"
+```
+
+`Deprecation` is the date the legacy API was deprecated, as `@` plus a Unix timestamp ([RFC 9745](https://www.rfc-editor.org/rfc/rfc9745)). `Link` points to the v1 endpoint that replaces the one you called. There's no `Sunset` header yet, which means no shutdown date has been set.
+
+### Moving from legacy to v1
+
+1. Change the path from `/api/ping` to `/api/v1/ping` and from `/api/leads` to `/api/v1/leads`. Credentials and field names stay the same, but ID values change (steps 2 and 4).
+2. Read results from `data`. A ping's `ping_id` and `message` become `data.id` and `data.status`, and a lead's `lead_public_id` and `status` become `data.id` and `data.status`. Each bid's `id`, `customer_id` and `partner_id` become public IDs, and `lead_uuid` is gone.
+3. Update the values you compare against. Ping messages become `matched`, `no_match`, `duplicate` and `rejected`, and the lead status `success` becomes `accepted`.
+4. Send the v1 ping's `data.id` as `ping_id` on the lead and, if you echo a bid, its `bids[].id` as `bid_id`. v1 rejects the UUIDs the legacy API returns, so post a legacy ping's lead to the legacy API.
+5. Handle errors by `error.code` rather than by message.
+
+<Warning>
+One `transaction_id` is one lead, whichever version it arrives on. If you retry a lead on a different version from the one you first sent it to, Juiced won't create a second lead. You get a `409` instead (`idempotency_version_mismatch` on v1), and v1 names the original lead in `error.lead_id`. Finish in-flight retries on the version they started on.
+</Warning>
+
 ### Legacy errors
 
-The legacy endpoints keep their original error bodies. Validation errors return `422` with a `message` and an `errors` object keyed by field, a `401` or `429` returns a `message`, and other errors return a single `error` string. See [Submit a Lead (legacy)](/api-reference/endpoint/leads) for every legacy response.
+The legacy endpoints keep their original error bodies. Validation errors return `422` with a `message` and an `errors` object keyed by field. Transaction conflicts (`409`) and a lead that doesn't match its ping return a single `error` string. Everything else returns a `message`. See [Submit a Lead (Legacy)](/api-reference/endpoint/leads) for every legacy response.

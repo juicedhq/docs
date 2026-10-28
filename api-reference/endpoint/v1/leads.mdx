@@ -3,3 +3,7 @@ title: Submit a Lead
 description: Submit a complete lead for validation, distribution, and assignment.
 openapi: POST /v1/leads
 ---
+
+If you pinged first, send the ping's `id` as `ping_id`. You can also echo the `bids[].id` you chose as `bid_id`. It's checked, but it doesn't change who gets the lead.
+
+Send a `transaction_id` so a retry can never create a second lead. See [Safe retries](/api-reference/introduction#safe-retries) for how retries are answered.

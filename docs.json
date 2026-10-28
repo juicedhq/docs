@@ -187,11 +187,11 @@
             "pages": ["api-reference/introduction"]
           },
           {
-            "group": "v1 endpoints",
+            "group": "v1 Endpoints",
             "pages": ["api-reference/endpoint/v1/ping", "api-reference/endpoint/v1/leads"]
           },
           {
-            "group": "Legacy endpoints (deprecated)",
+            "group": "Legacy Endpoints (Deprecated)",
             "pages": ["api-reference/endpoint/ping", "api-reference/endpoint/leads"]
           }
         ]
