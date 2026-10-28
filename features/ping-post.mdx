@@ -15,6 +15,34 @@ This workflow lets you validate leads and get competitive bids before committing
 
 The ping contains minimal information to protect the lead's value until a buyer commits. The post delivers everything needed to contact and convert the lead.
 
+## Pinging Juiced from your sources
+
+Your [sources](/features/sources) run ping-post against Juiced with the v1 API. They ping `POST /api/v1/ping` with the fields marked required for ping, and get back the outcome and, for non-vendor sources, the bids.
+
+```json
+{
+  "data": {
+    "id": "ping_01jbx8k6y2m4n7p9q3r5s8t0vw",
+    "status": "matched",
+    "bids": [
+      {
+        "id": "bid_01h9z3c5e7g9j1k3m5n7p9r1st",
+        "price": 45,
+        "tcpa_name": "Nectarflix Entertainment",
+        "customer_id": "cus_01h8y2b4d6f8h0j2k4m6p8r0tv"
+      }
+    ]
+  },
+  "version": "v1"
+}
+```
+
+Vendor sources get a single `price` instead of `bids`. To post the lead, the source sends the full lead to `POST /api/v1/leads` with the ping's `id` as `ping_id`. See [Submit a Ping](/api-reference/endpoint/v1/ping) and [Submit a Lead](/api-reference/endpoint/v1/leads) for every field and response.
+
+<Note>
+Sources still pinging `/api/ping` are on the deprecated legacy API, which answers with a UUID `ping_id` and a `message` such as `Match found`. It keeps working, but new integrations should use v1. See [Moving from legacy to v1](/api-reference/introduction#moving-from-legacy-to-v1).
+</Note>
+
 ## Partner integrations
 
 Partners are external systems that receive your leads. When you configure a partner integration, you set up both ping and post configurations to match their API requirements.
