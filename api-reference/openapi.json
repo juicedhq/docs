@@ -2,7 +2,7 @@
   "openapi": "3.1.0",
   "info": {
     "title": "Juiced API",
-    "description": "API for submitting and managing leads in Juiced.",
+    "description": "API for submitting pings and leads to Juiced. Build on the v1 endpoints under `/v1`. The unversioned `/ping` and `/leads` endpoints are the frozen legacy contract and are deprecated.",
     "version": "1.0.0"
   },
   "servers": [
@@ -20,12 +20,12 @@
     }
   ],
   "paths": {
-    "/ping": {
+    "/v1/ping": {
       "post": {
-        "operationId": "createPing",
+        "operationId": "createPingV1",
         "summary": "Submit a ping",
-        "description": "Submits partial lead data to check for matching bids before sending the full lead. Use this to determine pricing and availability before committing to a full lead submission.\n\nThe response varies based on your source type:\n- **Internal sources** receive a list of matching bids with customer details\n- **Vendor sources** receive a single aggregated price",
-        "tags": ["Ping"],
+        "description": "Submits partial lead data to check for matching bids before sending the full lead. Use it to see pricing and availability before you commit to a full lead submission.\n\nThe response depends on your source type.\n- **Vendor sources** receive a single `price`, never the bids behind it.\n- **Every other source** receives the matching `bids`, each with the buyer's name for TCPA consent.\n\nEvery ping that passes validation returns `200`, whatever its `status`. Keep the returned `id` and send it as `ping_id` when you post the lead.",
+        "tags": ["v1"],
         "parameters": [
           { "$ref": "#/components/parameters/PartnerIdHeader" }
         ],
@@ -37,33 +37,18 @@
                 "$ref": "#/components/schemas/PingRequest"
               },
               "examples": {
-                "minimal": {
+                "Minimal ping (zip only)": {
                   "summary": "Minimal ping (zip only)",
                   "value": {
                     "zip": "90210"
                   }
                 },
-                "withState": {
-                  "summary": "Ping with state",
-                  "value": {
-                    "zip": "90210",
-                    "state": "CA"
-                  }
-                },
-                "detailed": {
-                  "summary": "Detailed ping",
+                "Ping with more fields": {
+                  "summary": "Ping with more fields",
                   "value": {
                     "zip": "33139",
                     "state": "FL",
-                    "urgency": "high",
-                    "intent": "purchase"
-                  }
-                },
-                "testPing": {
-                  "summary": "Test ping",
-                  "value": {
-                    "is_test": true,
-                    "zip": "00002"
+                    "urgency": "high"
                   }
                 }
               }
@@ -72,63 +57,100 @@
         },
         "responses": {
           "200": {
-            "description": "Ping processed successfully",
+            "description": "Ping evaluated. Check `data.status` for the outcome.",
+            "headers": {
+              "X-Request-Id": { "$ref": "#/components/headers/XRequestId" }
+            },
             "content": {
               "application/json": {
                 "schema": {
-                  "oneOf": [
-                    {
-                      "$ref": "#/components/schemas/PingResponseInternal"
-                    },
-                    {
-                      "$ref": "#/components/schemas/PingResponseVendor"
-                    }
-                  ]
+                  "$ref": "#/components/schemas/PingResponseV1"
                 },
                 "examples": {
-                  "matchFound": {
-                    "summary": "Match found (internal source)",
+                  "Matched with bids": {
+                    "summary": "Matched with bids",
                     "value": {
-                      "ping_id": "f47ac10b-58cc-4372-a567-0e02b2c3d479",
-                      "message": "Match found",
-                      "bids": [
-                        {
-                          "id": "7c9e6679-7425-40de-944b-e07fc1f90ae7",
-                          "price": 45.0,
-                          "tcpa_name": "Nectarflix Entertainment",
-                          "customer_id": 123
-                        },
-                        {
-                          "id": "a3bb189e-8bf9-3888-9912-ace4e6543002",
-                          "price": 38.5,
-                          "tcpa_name": "The Mangolorian Security",
-                          "customer_id": 456
-                        }
-                      ]
+                      "data": {
+                        "id": "ping_01jbx8k6y2m4n7p9q3r5s8t0vw",
+                        "status": "matched",
+                        "bids": [
+                          {
+                            "id": "bid_01h9z3c5e7g9j1k3m5n7p9r1st",
+                            "price": 45,
+                            "tcpa_name": "Nectarflix Entertainment",
+                            "customer_id": "cus_01h8y2b4d6f8h0j2k4m6p8r0tv"
+                          },
+                          {
+                            "id": "prt_01h7x1a3c5e7g9j1k3m5n7q9sv",
+                            "price": 38.5,
+                            "tcpa_name": "The Mangolorian Security",
+                            "partner_id": "prt_01h7x1a3c5e7g9j1k3m5n7q9sv"
+                          }
+                        ]
+                      },
+                      "version": "v1"
                     }
                   },
-                  "matchFoundVendor": {
-                    "summary": "Match found (vendor source)",
+                  "Matched (vendor source)": {
+                    "summary": "Matched (vendor source)",
                     "value": {
-                      "ping_id": "f47ac10b-58cc-4372-a567-0e02b2c3d479",
-                      "message": "Match found",
-                      "price": 45.0
+                      "data": {
+                        "id": "ping_01jbx8k6y2m4n7p9q3r5s8t0vw",
+                        "status": "matched",
+                        "price": 45
+                      },
+                      "version": "v1"
                     }
                   },
-                  "noMatch": {
-                    "summary": "No match found",
+                  "Matched with no bidder (marketplace or Club)": {
+                    "summary": "Matched with no bidder (marketplace or Club)",
                     "value": {
-                      "ping_id": "f47ac10b-58cc-4372-a567-0e02b2c3d479",
-                      "message": "No match found",
-                      "bids": []
+                      "data": {
+                        "id": "ping_01jbx8k6y2m4n7p9q3r5s8t0vw",
+                        "status": "matched",
+                        "bids": [
+                          {
+                            "id": "ping_01jbx8k6y2m4n7p9q3r5s8t0vw",
+                            "price": 75,
+                            "tcpa_name": "Juiceversal Pictures"
+                          }
+                        ]
+                      },
+                      "version": "v1"
                     }
                   },
-                  "duplicate": {
-                    "summary": "Duplicate detected",
+                  "No match": {
+                    "summary": "No match",
                     "value": {
-                      "ping_id": "f47ac10b-58cc-4372-a567-0e02b2c3d479",
-                      "message": "Duplicate",
-                      "bids": []
+                      "data": {
+                        "id": "ping_01jbx8k6y2m4n7p9q3r5s8t0vw",
+                        "status": "no_match",
+                        "bids": []
+                      },
+                      "version": "v1"
+                    }
+                  },
+                  "Duplicate": {
+                    "summary": "Duplicate",
+                    "value": {
+                      "data": {
+                        "id": "ping_01jbx8k6y2m4n7p9q3r5s8t0vw",
+                        "status": "duplicate",
+                        "bids": []
+                      },
+                      "version": "v1"
+                    }
+                  },
+                  "Rejected by the loop guard": {
+                    "summary": "Rejected by the loop guard",
+                    "value": {
+                      "data": {
+                        "id": "ping_01jbx8k6y2m4n7p9q3r5s8t0vw",
+                        "status": "rejected",
+                        "bids": [],
+                        "reason": "cycle_detected"
+                      },
+                      "version": "v1"
                     }
                   }
                 }
@@ -136,34 +158,63 @@
             }
           },
           "401": {
-            "$ref": "#/components/responses/Unauthorized"
+            "$ref": "#/components/responses/UnauthenticatedV1"
           },
           "422": {
-            "$ref": "#/components/responses/ValidationError"
+            "description": "The ping failed validation.",
+            "headers": {
+              "X-Request-Id": { "$ref": "#/components/headers/XRequestId" }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorV1"
+                },
+                "examples": {
+                  "Validation failed": {
+                    "summary": "Validation failed",
+                    "value": {
+                      "error": {
+                        "code": "validation_failed",
+                        "message": "The zip field is required.",
+                        "errors": {
+                          "zip": ["The zip field is required."]
+                        }
+                      },
+                      "version": "v1"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "429": {
+            "$ref": "#/components/responses/RateLimitedV1"
+          },
+          "500": {
+            "$ref": "#/components/responses/ServerErrorV1"
           }
         }
       }
     },
-    "/leads": {
+    "/v1/leads": {
       "post": {
-        "operationId": "createLead",
+        "operationId": "createLeadV1",
         "summary": "Submit a lead",
-        "description": "Submits a complete lead for processing and assignment. The lead will be validated, checked for duplicates, matched to a lead type, and assigned to a customer (or placed in the marketplace).\n\nIf you previously submitted a ping, include the `ping_id` and optionally a `bid_id` to reference that ping's pricing.",
-        "tags": ["Leads"],
-        "parameters": [
-          { "$ref": "#/components/parameters/PartnerIdHeader" }
-        ],
+        "description": "Submits a complete lead for processing. The lead is validated, checked for duplicates, matched to a lead type, and distributed to a buyer (or placed in the marketplace or Club).\n\nIf you pinged first, include the ping's `id` as `ping_id`. You can also echo the `bids[].id` you chose as `bid_id`. It's checked, but it doesn't change who gets the lead.\n\nSend a `transaction_id` so a retry can never create a second lead. One `transaction_id` is one lead on either API version.",
+        "tags": ["v1"],
         "requestBody": {
           "required": true,
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/LeadRequest"
+                "$ref": "#/components/schemas/LeadRequestV1"
               },
               "examples": {
-                "basic": {
-                  "summary": "Basic lead submission",
+                "Basic lead": {
+                  "summary": "Basic lead",
                   "value": {
+                    "transaction_id": "order-10482",
                     "first_name": "Katy",
                     "last_name": "Berry",
                     "email": "katy.berry@thirstyleads.com",
@@ -174,11 +225,12 @@
                     "zip": "33139"
                   }
                 },
-                "withPingId": {
-                  "summary": "Lead with ping reference",
+                "Lead after a ping": {
+                  "summary": "Lead after a ping",
                   "value": {
-                    "ping_id": "f47ac10b-58cc-4372-a567-0e02b2c3d479",
-                    "bid_id": "7c9e6679-7425-40de-944b-e07fc1f90ae7",
+                    "transaction_id": "order-10483",
+                    "ping_id": "ping_01jbx8k6y2m4n7p9q3r5s8t0vw",
+                    "bid_id": "bid_01h9z3c5e7g9j1k3m5n7p9r1st",
                     "first_name": "Brad",
                     "last_name": "Pit",
                     "email": "brad.pit@juiceboxoffice.com",
@@ -188,34 +240,388 @@
                     "state": "CA",
                     "zip": "90210"
                   }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Lead received. Check `data.status` for the outcome. A retry with the same `transaction_id` and payload returns this same response again.",
+            "headers": {
+              "X-Request-Id": { "$ref": "#/components/headers/XRequestId" }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/LeadResponseV1"
                 },
-                "complete": {
-                  "summary": "Complete lead with all fields",
+                "examples": {
+                  "Accepted": {
+                    "summary": "Accepted",
+                    "value": {
+                      "data": {
+                        "id": "lead_01jbx8m2d4f6g8h0j2k4m6n8pq",
+                        "status": "accepted",
+                        "price": 45
+                      },
+                      "version": "v1"
+                    }
+                  },
+                  "Rejected": {
+                    "summary": "Rejected",
+                    "value": {
+                      "data": {
+                        "id": "lead_01jbx8m2d4f6g8h0j2k4m6n8pq",
+                        "status": "rejected",
+                        "price": 0
+                      },
+                      "version": "v1"
+                    }
+                  },
+                  "Duplicate": {
+                    "summary": "Duplicate",
+                    "value": {
+                      "data": {
+                        "id": "lead_01jbx8m2d4f6g8h0j2k4m6n8pq",
+                        "status": "duplicate",
+                        "price": 0
+                      },
+                      "version": "v1"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/UnauthenticatedV1"
+          },
+          "409": {
+            "description": "The `transaction_id` was already used and this request can't be replayed.",
+            "headers": {
+              "X-Request-Id": { "$ref": "#/components/headers/XRequestId" },
+              "Retry-After": {
+                "description": "Sent with `idempotency_in_progress` only. Seconds to wait before retrying the same request.",
+                "schema": { "type": "integer", "example": 5 }
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorV1"
+                },
+                "examples": {
+                  "Same transaction_id, different payload": {
+                    "summary": "Same transaction_id, different payload",
+                    "value": {
+                      "error": {
+                        "code": "idempotency_conflict",
+                        "message": "This transaction_id was already used with a different payload."
+                      },
+                      "version": "v1"
+                    }
+                  },
+                  "First attempt still processing": {
+                    "summary": "First attempt still processing",
+                    "value": {
+                      "error": {
+                        "code": "idempotency_in_progress",
+                        "message": "This transaction_id is already processing. Retry the same request later."
+                      },
+                      "version": "v1"
+                    }
+                  },
+                  "Outcome unconfirmed, do not resubmit": {
+                    "summary": "Outcome unconfirmed, do not resubmit",
+                    "value": {
+                      "error": {
+                        "code": "idempotency_reserved",
+                        "message": "This transaction was accepted but its outcome could not be confirmed. It is reserved for review; do not resubmit it."
+                      },
+                      "version": "v1"
+                    }
+                  },
+                  "transaction_id first used on the legacy API": {
+                    "summary": "transaction_id first used on the legacy API",
+                    "value": {
+                      "error": {
+                        "code": "idempotency_version_mismatch",
+                        "message": "This transaction_id was already used on the legacy API. Retry it on the same API version.",
+                        "lead_id": "lead_01jbx8m2d4f6g8h0j2k4m6n8pq"
+                      },
+                      "version": "v1"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "The lead failed validation, the source reached a lead quota, or the lead doesn't match its ping.",
+            "headers": {
+              "X-Request-Id": { "$ref": "#/components/headers/XRequestId" }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorV1"
+                },
+                "examples": {
+                  "Validation failed": {
+                    "summary": "Validation failed",
+                    "value": {
+                      "error": {
+                        "code": "validation_failed",
+                        "message": "The email field must be a valid email address. (and 1 more error)",
+                        "errors": {
+                          "email": ["The email field must be a valid email address."],
+                          "zip": ["The postal code is not valid for this account's operating countries."]
+                        }
+                      },
+                      "version": "v1"
+                    }
+                  },
+                  "Ping not found": {
+                    "summary": "Ping not found",
+                    "value": {
+                      "error": {
+                        "code": "validation_failed",
+                        "message": "The ping could not be found.",
+                        "errors": {
+                          "ping_id": ["The ping could not be found."]
+                        }
+                      },
+                      "version": "v1"
+                    }
+                  },
+                  "Legacy ping UUID sent as ping_id": {
+                    "summary": "Legacy ping UUID sent as ping_id",
+                    "value": {
+                      "error": {
+                        "code": "validation_failed",
+                        "message": "The ping id must be the ping_… id returned by /api/v1/ping.",
+                        "errors": {
+                          "ping_id": ["The ping id must be the ping_… id returned by /api/v1/ping."]
+                        }
+                      },
+                      "version": "v1"
+                    }
+                  },
+                  "Ping already used": {
+                    "summary": "Ping already used",
+                    "value": {
+                      "error": {
+                        "code": "validation_failed",
+                        "message": "This ping has already been used.",
+                        "errors": {
+                          "ping_id": ["This ping has already been used."]
+                        }
+                      },
+                      "version": "v1"
+                    }
+                  },
+                  "Source lead quota reached": {
+                    "summary": "Source lead quota reached",
+                    "value": {
+                      "error": {
+                        "code": "quota_reached",
+                        "message": "This source has reached one of its lead quotas."
+                      },
+                      "version": "v1"
+                    }
+                  },
+                  "Lead doesn't match its ping": {
+                    "summary": "Lead doesn't match its ping",
+                    "value": {
+                      "error": {
+                        "code": "ping_mismatch",
+                        "message": "Lead data does not match ping data."
+                      },
+                      "version": "v1"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "429": {
+            "$ref": "#/components/responses/RateLimitedV1"
+          },
+          "500": {
+            "$ref": "#/components/responses/ServerErrorV1"
+          }
+        }
+      }
+    },
+    "/ping": {
+      "post": {
+        "operationId": "createPing",
+        "summary": "Submit a ping (legacy)",
+        "description": "**Deprecated.** This is the frozen legacy contract. Build new integrations on [`POST /v1/ping`](/api-reference/endpoint/v1/ping). Every response carries a `Deprecation` header and a `Link` header pointing to the v1 endpoint.\n\nThe response has one of two shapes.\n- **Bids** has `ping_id`, `message` and `bids`. Non-vendor sources get it when the ping went through matching, and for test-mode zips.\n- **Price** has `message`, `price` and `ping_id`. Vendor sources always get it, and so does any ping answered before matching (duplicate, quota reached, or rejected).",
+        "deprecated": true,
+        "tags": ["Legacy"],
+        "parameters": [
+          { "$ref": "#/components/parameters/PartnerIdHeader" }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PingRequest"
+              },
+              "examples": {
+                "Minimal ping (zip only)": {
+                  "summary": "Minimal ping (zip only)",
                   "value": {
-                    "first_name": "John",
-                    "last_name": "Lemon",
-                    "email": "john.lemon@zestforsuccess.com",
-                    "phone": "555-246-8135",
-                    "address_1": "55 Squeeze Street",
-                    "address_2": "Suite 12",
-                    "city": "Pulp City",
-                    "state": "FL",
-                    "zip": "33101",
-                    "county": "Miami-Dade"
+                    "zip": "90210"
                   }
                 },
-                "testLead": {
-                  "summary": "Test lead submission",
+                "Ping with more fields": {
+                  "summary": "Ping with more fields",
                   "value": {
-                    "is_test": true,
-                    "first_name": "Test",
-                    "last_name": "User",
-                    "email": "test@example.com",
-                    "phone": "555-000-0000",
-                    "address_1": "123 Test Street",
-                    "city": "Test City",
+                    "zip": "33139",
                     "state": "FL",
-                    "zip": "00002"
+                    "urgency": "high"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Ping evaluated. Check `message` for the outcome.",
+            "headers": {
+              "Deprecation": { "$ref": "#/components/headers/Deprecation" },
+              "Link": { "$ref": "#/components/headers/SuccessorLink" }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/LegacyPingResponseBids"
+                    },
+                    {
+                      "$ref": "#/components/schemas/LegacyPingResponsePrice"
+                    }
+                  ]
+                },
+                "examples": {
+                  "Match found (bids)": {
+                    "summary": "Match found (bids)",
+                    "value": {
+                      "ping_id": "f47ac10b-58cc-4372-a567-0e02b2c3d479",
+                      "message": "Match found",
+                      "bids": [
+                        {
+                          "id": "7c9e6679-7425-40de-944b-e07fc1f90ae7",
+                          "price": 45,
+                          "tcpa_name": "Nectarflix Entertainment",
+                          "customer_id": 123
+                        },
+                        {
+                          "id": 42,
+                          "price": 38.5,
+                          "tcpa_name": "The Mangolorian Security",
+                          "partner_id": 42
+                        }
+                      ]
+                    }
+                  },
+                  "Match found (vendor source)": {
+                    "summary": "Match found (vendor source)",
+                    "value": {
+                      "message": "Match found",
+                      "price": 45,
+                      "ping_id": "f47ac10b-58cc-4372-a567-0e02b2c3d479"
+                    }
+                  },
+                  "No match found": {
+                    "summary": "No match found",
+                    "value": {
+                      "ping_id": "f47ac10b-58cc-4372-a567-0e02b2c3d479",
+                      "message": "No match found",
+                      "bids": []
+                    }
+                  },
+                  "Duplicate": {
+                    "summary": "Duplicate",
+                    "value": {
+                      "message": "Duplicate",
+                      "price": 0,
+                      "ping_id": "f47ac10b-58cc-4372-a567-0e02b2c3d479"
+                    }
+                  },
+                  "Rejected by the loop guard": {
+                    "summary": "Rejected by the loop guard",
+                    "value": {
+                      "message": "Rejected",
+                      "price": 0,
+                      "ping_id": "f47ac10b-58cc-4372-a567-0e02b2c3d479",
+                      "reason": "cycle_detected"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/LegacyUnauthorized"
+          },
+          "422": {
+            "$ref": "#/components/responses/LegacyValidationError"
+          },
+          "429": {
+            "$ref": "#/components/responses/LegacyRateLimited"
+          }
+        }
+      }
+    },
+    "/leads": {
+      "post": {
+        "operationId": "createLead",
+        "summary": "Submit a lead (legacy)",
+        "description": "**Deprecated.** This is the frozen legacy contract. Build new integrations on [`POST /v1/leads`](/api-reference/endpoint/v1/leads). Every response carries a `Deprecation` header and a `Link` header pointing to the v1 endpoint.\n\nIf you pinged first, include the ping's `ping_id`. Send a `transaction_id` so a retry can never create a second lead.",
+        "deprecated": true,
+        "tags": ["Legacy"],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/LegacyLeadRequest"
+              },
+              "examples": {
+                "Basic lead": {
+                  "summary": "Basic lead",
+                  "value": {
+                    "transaction_id": "order-10482",
+                    "first_name": "Katy",
+                    "last_name": "Berry",
+                    "email": "katy.berry@thirstyleads.com",
+                    "phone": "555-123-4567",
+                    "address_1": "742 Orchard Lane",
+                    "city": "Paradise Bay",
+                    "state": "FL",
+                    "zip": "33139"
+                  }
+                },
+                "Lead after a ping": {
+                  "summary": "Lead after a ping",
+                  "value": {
+                    "transaction_id": "order-10483",
+                    "ping_id": "f47ac10b-58cc-4372-a567-0e02b2c3d479",
+                    "first_name": "Brad",
+                    "last_name": "Pit",
+                    "email": "brad.pit@juiceboxoffice.com",
+                    "phone": "555-987-6543",
+                    "address_1": "100 Citrus Grove Dr",
+                    "city": "Tropicana",
+                    "state": "CA",
+                    "zip": "90210"
                   }
                 }
               }
@@ -224,64 +630,42 @@
         },
         "responses": {
           "201": {
-            "description": "Lead created successfully",
+            "description": "Lead received. Check `status` for the outcome.",
+            "headers": {
+              "Deprecation": { "$ref": "#/components/headers/Deprecation" },
+              "Link": { "$ref": "#/components/headers/SuccessorLink" }
+            },
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/LeadResponse"
+                  "$ref": "#/components/schemas/LegacyLeadResponse"
                 },
                 "examples": {
-                  "assigned": {
-                    "summary": "Lead assigned to customer",
+                  "Success": {
+                    "summary": "Success",
                     "value": {
                       "lead_uuid": "f47ac10b-58cc-4372-a567-0e02b2c3d479",
                       "lead_public_id": "lead_01arz3ndektsv4rrffq69g5fav",
-                      "status": "assigned",
-                      "price": 45.0
+                      "status": "success",
+                      "price": 45
                     }
                   },
-                  "duplicate": {
-                    "summary": "Lead is a duplicate",
+                  "Rejected": {
+                    "summary": "Rejected",
+                    "value": {
+                      "lead_uuid": "f47ac10b-58cc-4372-a567-0e02b2c3d479",
+                      "lead_public_id": "lead_01arz3ndektsv4rrffq69g5fav",
+                      "status": "rejected",
+                      "price": 0
+                    }
+                  },
+                  "Duplicate": {
+                    "summary": "Duplicate",
                     "value": {
                       "lead_uuid": "f47ac10b-58cc-4372-a567-0e02b2c3d479",
                       "lead_public_id": "lead_01arz3ndektsv4rrffq69g5fav",
                       "status": "duplicate",
-                      "price": 0.0
-                    }
-                  },
-                  "unassigned": {
-                    "summary": "Lead unassigned (no matching buyers)",
-                    "value": {
-                      "lead_uuid": "f47ac10b-58cc-4372-a567-0e02b2c3d479",
-                      "lead_public_id": "lead_01arz3ndektsv4rrffq69g5fav",
-                      "status": "unassigned",
-                      "price": 0.0
-                    }
-                  },
-                  "marketplace": {
-                    "summary": "Lead placed in marketplace",
-                    "value": {
-                      "lead_uuid": "f47ac10b-58cc-4372-a567-0e02b2c3d479",
-                      "lead_public_id": "lead_01arz3ndektsv4rrffq69g5fav",
-                      "status": "marketplace",
-                      "price": 0.0
-                    }
-                  },
-                  "pending": {
-                    "summary": "Lead pending assignment",
-                    "value": {
-                      "lead_uuid": "f47ac10b-58cc-4372-a567-0e02b2c3d479",
-                      "lead_public_id": "lead_01arz3ndektsv4rrffq69g5fav",
-                      "status": "pending",
-                      "price": 0.0
-                    }
-                  },
-                  "audit": {
-                    "summary": "Test lead moved to audit",
-                    "value": {
-                      "lead_uuid": "f47ac10b-58cc-4372-a567-0e02b2c3d479",
-                      "status": "audit",
-                      "price": 0.0
+                      "price": 0
                     }
                   }
                 }
@@ -289,47 +673,119 @@
             }
           },
           "401": {
-            "$ref": "#/components/responses/Unauthorized"
+            "$ref": "#/components/responses/LegacyUnauthorized"
+          },
+          "409": {
+            "description": "The `transaction_id` was already used and this request can't be replayed.",
+            "headers": {
+              "Retry-After": {
+                "description": "Sent when the first attempt is still processing. Seconds to wait before retrying the same request.",
+                "schema": { "type": "integer", "example": 5 }
+              },
+              "Deprecation": { "$ref": "#/components/headers/Deprecation" },
+              "Link": { "$ref": "#/components/headers/SuccessorLink" }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/LegacyError"
+                },
+                "examples": {
+                  "Same transaction_id, different payload": {
+                    "summary": "Same transaction_id, different payload",
+                    "value": {
+                      "error": "This transaction_id was already used with a different payload."
+                    }
+                  },
+                  "First attempt still processing": {
+                    "summary": "First attempt still processing",
+                    "value": {
+                      "error": "This transaction_id is already processing. Retry the same request later."
+                    }
+                  },
+                  "Outcome unconfirmed, do not resubmit": {
+                    "summary": "Outcome unconfirmed, do not resubmit",
+                    "value": {
+                      "error": "This transaction was accepted but its outcome could not be confirmed. It is reserved for review; do not resubmit it."
+                    }
+                  },
+                  "transaction_id first used on v1": {
+                    "summary": "transaction_id first used on v1",
+                    "value": {
+                      "error": "This transaction_id was already used on the v1 API. Retry it on the same API version."
+                    }
+                  }
+                }
+              }
+            }
           },
           "422": {
-            "description": "Validation error or ping reference error",
+            "description": "The lead failed validation (including an unusable `ping_id` or a reached source quota), or the lead doesn't match its ping.",
+            "headers": {
+              "Deprecation": { "$ref": "#/components/headers/Deprecation" },
+              "Link": { "$ref": "#/components/headers/SuccessorLink" }
+            },
             "content": {
               "application/json": {
                 "schema": {
                   "oneOf": [
                     {
-                      "$ref": "#/components/schemas/ValidationError"
+                      "$ref": "#/components/schemas/LegacyValidationError"
                     },
                     {
-                      "$ref": "#/components/schemas/PingReferenceError"
+                      "$ref": "#/components/schemas/LegacyError"
                     }
                   ]
                 },
                 "examples": {
-                  "validationError": {
+                  "Validation error": {
                     "summary": "Validation error",
                     "value": {
-                      "message": "The given data was invalid.",
+                      "message": "The email field must be a valid email address. (and 1 more error)",
                       "errors": {
                         "email": ["The email field must be a valid email address."],
                         "zip": ["The postal code is not valid for this account's operating countries."]
                       }
                     }
                   },
-                  "pingNotFound": {
+                  "Ping not found": {
                     "summary": "Ping not found",
                     "value": {
-                      "error": "Ping could not be found with the provided ping ID"
+                      "message": "The ping could not be found.",
+                      "errors": {
+                        "ping_id": ["The ping could not be found."]
+                      }
                     }
                   },
-                  "pingExpired": {
-                    "summary": "Ping expired",
+                  "Ping already used": {
+                    "summary": "Ping already used",
                     "value": {
-                      "error": "Ping ID has expired"
+                      "message": "This ping has already been used.",
+                      "errors": {
+                        "ping_id": ["This ping has already been used."]
+                      }
                     }
                   },
-                  "dataMismatch": {
-                    "summary": "Data mismatch",
+                  "Post data doesn't match the ping": {
+                    "summary": "Post data doesn't match the ping",
+                    "value": {
+                      "message": "The post data does not match the ping data.",
+                      "errors": {
+                        "ping_id": ["The post data does not match the ping data."]
+                      }
+                    }
+                  },
+                  "Source lead quota reached": {
+                    "summary": "Source lead quota reached",
+                    "value": {
+                      "message": "This source has reached one of its lead quotas.",
+                      "errors": {
+                        "source": ["This source has reached one of its lead quotas."]
+                      }
+                    }
+                  },
+                  "Lead doesn't match its ping during distribution": {
+                    "summary": "Lead doesn't match its ping during distribution",
                     "value": {
                       "error": "Lead data does not match ping data"
                     }
@@ -337,6 +793,9 @@
                 }
               }
             }
+          },
+          "429": {
+            "$ref": "#/components/responses/LegacyRateLimited"
           }
         }
       }
@@ -348,10 +807,41 @@
         "name": "X-Partner-Id",
         "in": "header",
         "required": false,
-        "description": "Public ID of the partner the submission is attributed to. Optional but recommended for any partner-mediated integration.",
+        "description": "Public ID of the partner you're pinging on behalf of. The ping is recorded against that partner when the partner is linked to the source whose credentials you use. Optional but recommended for any partner-mediated integration.",
         "schema": {
           "type": "string",
-          "example": "partner_01arz3ndektsv4rrffq69g5fav"
+          "example": "prt_01h7x1a3c5e7g9j1k3m5n7q9sv"
+        }
+      }
+    },
+    "headers": {
+      "XRequestId": {
+        "description": "Unique ID for this request, sent on every v1 response (errors included). Quote it when contacting support.",
+        "schema": {
+          "type": "string",
+          "pattern": "^req_[0-9a-z]{26}$",
+          "example": "req_01jbx8k6y3a5c7e9g1j3m5p7rt"
+        }
+      },
+      "Deprecation": {
+        "description": "Marks the legacy endpoint as deprecated (RFC 9745). The value is `@` followed by the Unix timestamp of the deprecation date.",
+        "schema": {
+          "type": "string",
+          "example": "@1792627200"
+        }
+      },
+      "SuccessorLink": {
+        "description": "Points to the v1 endpoint that replaces this one.",
+        "schema": {
+          "type": "string",
+          "example": "<https://usejuiced.com/api/v1/ping>; rel=\"successor-version\""
+        }
+      },
+      "RetryAfter": {
+        "description": "Seconds to wait before retrying.",
+        "schema": {
+          "type": "integer",
+          "example": 30
         }
       }
     },
@@ -375,167 +865,379 @@
         "properties": {
           "zip": {
             "type": "string",
-            "description": "Postal code. Must be valid for your account's operating countries.",
+            "description": "Postal code. Must be valid for your account's operating countries. With the source in test mode, zips `00001` to `00005` return fixed outcomes.",
             "example": "90210"
-          },
-          "is_test": {
-            "type": "boolean",
-            "description": "Mark this ping as test data. Test pings won't affect production metrics and return deterministic responses based on zip code. Only works when test mode is enabled on the source.",
-            "default": false,
-            "example": true
           }
         },
         "additionalProperties": {
-          "description": "Additional fields as configured for your source and lead type."
+          "description": "Additional fields as configured for your source and lead category. Only fields marked required for ping must be sent."
         }
       },
-      "PingResponseInternal": {
-        "title": "Internal",
-        "type": "object",
-        "description": "Response for internal source types",
-        "properties": {
-          "ping_id": {
-            "type": "string",
-            "description": "Unique identifier for this ping. Use this when submitting the full lead.",
-            "example": "f47ac10b-58cc-4372-a567-0e02b2c3d479"
-          },
-          "message": {
-            "type": "string",
-            "enum": ["Match found", "No match found", "Duplicate", "Rejected"],
-            "description": "Result of the ping request."
-          },
-          "bids": {
-            "type": "array",
-            "description": "Available bids for this lead. Empty if no match or duplicate.",
-            "items": {
-              "$ref": "#/components/schemas/Bid"
-            }
-          }
-        }
-      },
-      "PingResponseVendor": {
-        "title": "Vendor",
-        "type": "object",
-        "description": "Response for vendor source types",
-        "properties": {
-          "ping_id": {
-            "type": "string",
-            "description": "Unique identifier for this ping. Use this when submitting the full lead.",
-            "example": "f47ac10b-58cc-4372-a567-0e02b2c3d479"
-          },
-          "message": {
-            "type": "string",
-            "enum": ["Match found", "No match found", "Duplicate", "Rejected"],
-            "description": "Result of the ping request."
-          },
-          "price": {
-            "type": "number",
-            "format": "float",
-            "description": "Aggregated price offered for this lead.",
-            "example": 45.0
-          }
-        }
-      },
-      "Bid": {
-        "title": "Bid",
-        "type": "object",
-        "properties": {
-          "id": {
-            "type": "string",
-            "description": "Unique identifier for this bid. Include as `bid_id` when submitting the lead to select this specific buyer.",
-            "example": "7c9e6679-7425-40de-944b-e07fc1f90ae7"
-          },
-          "price": {
-            "type": "number",
-            "format": "float",
-            "description": "Price offered for this lead.",
-            "example": 45.0
-          },
-          "tcpa_name": {
-            "type": "string",
-            "description": "Customer name for TCPA consent language.",
-            "example": "Juiceversal Pictures"
-          },
-          "customer_id": {
-            "type": "integer",
-            "description": "Internal customer identifier.",
-            "example": 123
-          }
-        }
-      },
-      "LeadRequest": {
+      "LeadRequestV1": {
         "title": "Lead Request",
         "type": "object",
         "required": ["zip"],
         "properties": {
+          "transaction_id": {
+            "type": "string",
+            "maxLength": 255,
+            "description": "Your own ID for this lead, such as an order or lead number. A retry with the same `transaction_id` and payload returns the original response instead of creating a second lead. Numbers are accepted and treated as strings.",
+            "example": "order-10482"
+          },
           "ping_id": {
             "type": "string",
-            "format": "uuid",
-            "description": "Reference to a previous ping request. Include to link this lead to prior pricing.",
+            "pattern": "^ping_[0-9a-z]{26}$",
+            "description": "The `id` returned by `POST /v1/ping`. Links this lead to the ping's match and pricing. A legacy ping UUID is rejected.",
+            "example": "ping_01jbx8k6y2m4n7p9q3r5s8t0vw"
+          },
+          "bid_id": {
+            "type": "string",
+            "pattern": "^(bid|prt|ping)_[0-9a-z]{26}$",
+            "description": "Any `bids[].id` returned by `POST /v1/ping` for your account. It is checked but doesn't change who gets the lead.",
+            "example": "bid_01h9z3c5e7g9j1k3m5n7p9r1st"
+          },
+          "zip": {
+            "type": "string",
+            "description": "Postal code. Must be valid for your account's operating countries. With the source in test mode, zips `00001` to `00005` return fixed outcomes.",
+            "example": "33139"
+          }
+        },
+        "additionalProperties": {
+          "description": "Additional fields as configured for your source and lead category."
+        }
+      },
+      "PingResponseV1": {
+        "title": "Ping Response",
+        "type": "object",
+        "required": ["data", "version"],
+        "properties": {
+          "data": {
+            "$ref": "#/components/schemas/PingV1"
+          },
+          "version": {
+            "type": "string",
+            "enum": ["v1"],
+            "description": "Always `v1`."
+          }
+        }
+      },
+      "PingV1": {
+        "title": "Ping",
+        "type": "object",
+        "required": ["id", "status"],
+        "properties": {
+          "id": {
+            "type": "string",
+            "pattern": "^ping_[0-9a-z]{26}$",
+            "description": "The ping's ID. Send it as `ping_id` when you post the lead.",
+            "example": "ping_01jbx8k6y2m4n7p9q3r5s8t0vw"
+          },
+          "status": {
+            "type": "string",
+            "enum": ["matched", "no_match", "duplicate", "rejected"],
+            "description": "How the ping was answered. `matched` means a buyer (or the marketplace or Club) will take the lead. `no_match` means nobody will, including when the source has reached a lead quota. `duplicate` means it matched a duplicate check. `rejected` means it was refused before matching.",
+            "example": "matched"
+          },
+          "price": {
+            "type": "number",
+            "description": "Vendor sources only. The price offered for the lead, in dollars. `0` when there's no match.",
+            "example": 45
+          },
+          "bids": {
+            "type": "array",
+            "description": "Every source except vendors. The bids behind the answer. Empty when there's no match.",
+            "items": {
+              "$ref": "#/components/schemas/BidV1"
+            }
+          },
+          "reason": {
+            "type": "string",
+            "enum": ["cycle_detected", "max_hops_exceeded"],
+            "description": "Only on a ping rejected by the distribution loop guard, because the ping already passed through this account or exceeded the hop limit."
+          }
+        }
+      },
+      "BidV1": {
+        "title": "Bid",
+        "type": "object",
+        "required": ["id", "price", "tcpa_name"],
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "The bid's ID. It's a `bid_…` for a customer bid, the partner's `prt_…` for a partner, or the ping's own `ping_…` when the match has no bidder behind it (marketplace or Club). Echo it as `bid_id` when you post the lead.",
+            "example": "bid_01h9z3c5e7g9j1k3m5n7p9r1st"
+          },
+          "price": {
+            "type": "number",
+            "description": "Price offered for the lead, in dollars.",
+            "example": 45
+          },
+          "tcpa_name": {
+            "type": ["string", "null"],
+            "description": "Buyer name to use in TCPA consent language.",
+            "example": "Juiceversal Pictures"
+          },
+          "customer_id": {
+            "type": "string",
+            "description": "Present when a customer placed the bid. The customer's public ID.",
+            "example": "cus_01h8y2b4d6f8h0j2k4m6p8r0tv"
+          },
+          "partner_id": {
+            "type": "string",
+            "description": "Present when a partner made the offer. The partner's public ID.",
+            "example": "prt_01h7x1a3c5e7g9j1k3m5n7q9sv"
+          }
+        }
+      },
+      "LeadResponseV1": {
+        "title": "Lead Response",
+        "type": "object",
+        "required": ["data", "version"],
+        "properties": {
+          "data": {
+            "$ref": "#/components/schemas/LeadV1"
+          },
+          "version": {
+            "type": "string",
+            "enum": ["v1"],
+            "description": "Always `v1`."
+          }
+        }
+      },
+      "LeadV1": {
+        "title": "Lead",
+        "type": "object",
+        "required": ["id", "status", "price"],
+        "properties": {
+          "id": {
+            "type": "string",
+            "pattern": "^lead_[0-9a-z]{26}$",
+            "description": "The lead's public ID.",
+            "example": "lead_01jbx8m2d4f6g8h0j2k4m6n8pq"
+          },
+          "status": {
+            "type": "string",
+            "enum": ["accepted", "rejected", "duplicate"],
+            "description": "The outcome, decided by the source's status response mapping. By default, `accepted` covers leads that were assigned, posted to a partner, placed on the marketplace or parked in the Club; `rejected` covers Unassigned, Audit and Uncategorized leads; `duplicate` covers duplicates.",
+            "example": "accepted"
+          },
+          "price": {
+            "type": "number",
+            "description": "What the source earns for the lead, in dollars. Always `0` unless `status` is `accepted`.",
+            "example": 45
+          }
+        }
+      },
+      "ErrorV1": {
+        "title": "Error",
+        "type": "object",
+        "required": ["error", "version"],
+        "properties": {
+          "error": {
+            "type": "object",
+            "required": ["code", "message"],
+            "properties": {
+              "code": {
+                "type": "string",
+                "enum": [
+                  "unauthenticated",
+                  "validation_failed",
+                  "quota_reached",
+                  "ping_mismatch",
+                  "idempotency_conflict",
+                  "idempotency_in_progress",
+                  "idempotency_reserved",
+                  "idempotency_version_mismatch",
+                  "rate_limited",
+                  "not_found",
+                  "method_not_allowed",
+                  "bad_request",
+                  "server_error"
+                ],
+                "description": "Machine-readable error code. Branch on this, not on `message`."
+              },
+              "message": {
+                "type": "string",
+                "description": "Human-readable explanation."
+              },
+              "errors": {
+                "type": "object",
+                "description": "Only with `validation_failed`. Messages keyed by field.",
+                "additionalProperties": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                }
+              },
+              "lead_id": {
+                "type": "string",
+                "pattern": "^lead_[0-9a-z]{26}$",
+                "description": "Only with `idempotency_version_mismatch`. The lead the `transaction_id` already created."
+              }
+            }
+          },
+          "version": {
+            "type": "string",
+            "enum": ["v1"],
+            "description": "Always `v1`."
+          }
+        }
+      },
+      "LegacyLeadRequest": {
+        "title": "Lead Request (legacy)",
+        "type": "object",
+        "required": ["zip"],
+        "properties": {
+          "transaction_id": {
+            "type": "string",
+            "maxLength": 255,
+            "description": "Your own ID for this lead, such as an order or lead number. A retry with the same `transaction_id` and payload returns the original response instead of creating a second lead. Numbers are accepted and treated as strings.",
+            "example": "order-10482"
+          },
+          "ping_id": {
+            "type": "string",
+            "description": "The `ping_id` returned by the ping (a UUID), or the ping's `ping_…` public ID.",
             "example": "f47ac10b-58cc-4372-a567-0e02b2c3d479"
           },
           "bid_id": {
             "type": "string",
             "format": "uuid",
-            "description": "Specific bid to accept from the ping response. Only applicable for internal sources.",
+            "description": "A bid `id` from the ping response. It must be a UUID, so a partner's numeric bid `id` can't be echoed. It doesn't change who gets the lead.",
             "example": "7c9e6679-7425-40de-944b-e07fc1f90ae7"
           },
           "zip": {
             "type": "string",
-            "description": "Postal code. Must be valid for your account's operating countries.",
+            "description": "Postal code. Must be valid for your account's operating countries. With the source in test mode, zips `00001` to `00005` return fixed outcomes.",
             "example": "33139"
-          },
-          "is_test": {
-            "type": "boolean",
-            "description": "Mark this lead as test data. Test leads are automatically moved to Audit status and won't be distributed. Only works when test mode is enabled on the source.",
-            "default": false,
-            "example": true
           }
         },
         "additionalProperties": {
-          "description": "Additional fields as configured for your source and lead type."
+          "description": "Additional fields as configured for your source and lead category."
         }
       },
-      "LeadResponse": {
-        "title": "Lead Response",
+      "LegacyPingResponseBids": {
+        "title": "Bids",
+        "type": "object",
+        "description": "Non-vendor sources, when the ping went through matching or used a test-mode zip.",
+        "properties": {
+          "ping_id": {
+            "type": "string",
+            "format": "uuid",
+            "description": "The ping's ID. Send it as `ping_id` when you post the lead.",
+            "example": "f47ac10b-58cc-4372-a567-0e02b2c3d479"
+          },
+          "message": {
+            "type": "string",
+            "enum": ["Match found", "No match found", "Duplicate", "Rejected"],
+            "description": "Result of the ping. `Duplicate` and `Rejected` only appear here for test-mode zips."
+          },
+          "bids": {
+            "type": "array",
+            "description": "Bids for this lead. Empty when there's no match.",
+            "items": {
+              "$ref": "#/components/schemas/LegacyBid"
+            }
+          }
+        }
+      },
+      "LegacyPingResponsePrice": {
+        "title": "Price",
+        "type": "object",
+        "description": "Vendor sources, and any ping answered before matching (duplicate, quota reached, or rejected).",
+        "properties": {
+          "message": {
+            "type": "string",
+            "enum": ["Match found", "No match found", "Duplicate", "Rejected"],
+            "description": "Result of the ping. A source over its lead quota gets `No match found`."
+          },
+          "price": {
+            "type": "number",
+            "description": "Price offered for the lead, in dollars. `0` unless matched.",
+            "example": 45
+          },
+          "ping_id": {
+            "type": ["string", "null"],
+            "format": "uuid",
+            "description": "The ping's ID. Send it as `ping_id` when you post the lead.",
+            "example": "f47ac10b-58cc-4372-a567-0e02b2c3d479"
+          },
+          "reason": {
+            "type": "string",
+            "enum": ["cycle_detected", "max_hops_exceeded"],
+            "description": "Only on a ping rejected by the distribution loop guard."
+          }
+        }
+      },
+      "LegacyBid": {
+        "title": "Bid (legacy)",
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": ["string", "integer"],
+            "description": "The bid's UUID for a customer bid, the partner's numeric ID for a partner, or the ping's UUID when the match has no bidder behind it (marketplace or Club).",
+            "example": "7c9e6679-7425-40de-944b-e07fc1f90ae7"
+          },
+          "price": {
+            "type": "number",
+            "description": "Price offered for the lead, in dollars.",
+            "example": 45
+          },
+          "tcpa_name": {
+            "type": ["string", "null"],
+            "description": "Buyer name to use in TCPA consent language.",
+            "example": "Juiceversal Pictures"
+          },
+          "customer_id": {
+            "type": "integer",
+            "description": "Present when a customer placed the bid.",
+            "example": 123
+          },
+          "partner_id": {
+            "type": "integer",
+            "description": "Present when a partner made the offer.",
+            "example": 42
+          }
+        }
+      },
+      "LegacyLeadResponse": {
+        "title": "Lead Response (legacy)",
         "type": "object",
         "properties": {
           "lead_uuid": {
             "type": "string",
             "format": "uuid",
-            "description": "Internal UUID for the lead. Prefer `lead_public_id` for external references.",
+            "description": "Internal UUID for the lead. Prefer `lead_public_id`.",
             "deprecated": true,
             "example": "f47ac10b-58cc-4372-a567-0e02b2c3d479"
           },
           "lead_public_id": {
             "type": "string",
-            "description": "Public identifier for the lead. Use this for display, URLs, and external references.",
+            "description": "The lead's public ID.",
             "example": "lead_01arz3ndektsv4rrffq69g5fav",
-            "minLength": 31,
-            "maxLength": 31,
             "pattern": "^lead_[0-9a-z]{26}$"
           },
           "status": {
             "type": "string",
-            "enum": ["pending", "assigned", "duplicate", "unassigned", "marketplace", "audit"],
-            "description": "Current status of the lead.",
-            "example": "assigned"
+            "enum": ["success", "rejected", "duplicate"],
+            "description": "The outcome, decided by the source's status response mapping. By default, `success` covers leads that were assigned, posted to a partner, placed on the marketplace or parked in the Club; `rejected` covers Unassigned, Audit and Uncategorized leads; `duplicate` covers duplicates.",
+            "example": "success"
           },
           "price": {
             "type": "number",
-            "format": "float",
-            "description": "Price paid for the lead. Zero if not yet assigned.",
-            "example": 45.0
+            "description": "What the source earns for the lead, in dollars. Always `0` unless `status` is `success`.",
+            "example": 45
           }
         }
       },
-      "ValidationError": {
+      "LegacyValidationError": {
         "title": "Validation Error",
         "type": "object",
         "properties": {
           "message": {
             "type": "string",
-            "example": "The given data was invalid."
+            "description": "The first error, followed by a count of any others.",
+            "example": "The email field must be a valid email address. (and 1 more error)"
           },
           "errors": {
             "type": "object",
@@ -551,44 +1253,150 @@
           }
         }
       },
-      "PingReferenceError": {
-        "title": "Ping Reference Error",
+      "LegacyError": {
+        "title": "Error",
         "type": "object",
         "properties": {
           "error": {
             "type": "string",
-            "enum": ["Ping could not be found with the provided ping ID", "Ping ID has expired", "Lead data does not match ping data"]
+            "example": "Lead data does not match ping data"
           }
         }
       },
-      "UnauthorizedError": {
-        "title": "Unauthorized Error",
+      "LegacyMessage": {
+        "title": "Message",
         "type": "object",
         "properties": {
           "message": {
-            "type": "string",
-            "example": "Unauthorized"
+            "type": "string"
           }
         }
       }
     },
     "responses": {
-      "Unauthorized": {
-        "description": "Authentication credentials are missing or invalid.",
+      "UnauthenticatedV1": {
+        "description": "Credentials are missing or invalid. Every authentication failure returns the same error.",
+        "headers": {
+          "X-Request-Id": { "$ref": "#/components/headers/XRequestId" }
+        },
         "content": {
           "application/json": {
             "schema": {
-              "$ref": "#/components/schemas/UnauthorizedError"
+              "$ref": "#/components/schemas/ErrorV1"
+            },
+            "example": {
+              "error": {
+                "code": "unauthenticated",
+                "message": "Missing or invalid API credentials. Send a bearer token or Basic credentials for an active source."
+              },
+              "version": "v1"
             }
           }
         }
       },
-      "ValidationError": {
-        "description": "Request validation failed.",
+      "RateLimitedV1": {
+        "description": "Too many requests.",
+        "headers": {
+          "X-Request-Id": { "$ref": "#/components/headers/XRequestId" },
+          "Retry-After": { "$ref": "#/components/headers/RetryAfter" }
+        },
         "content": {
           "application/json": {
             "schema": {
-              "$ref": "#/components/schemas/ValidationError"
+              "$ref": "#/components/schemas/ErrorV1"
+            },
+            "example": {
+              "error": {
+                "code": "rate_limited",
+                "message": "Too many requests. Retry after the number of seconds in the Retry-After header."
+              },
+              "version": "v1"
+            }
+          }
+        }
+      },
+      "ServerErrorV1": {
+        "description": "Something went wrong on our side. Quote the `X-Request-Id` header when contacting support.",
+        "headers": {
+          "X-Request-Id": { "$ref": "#/components/headers/XRequestId" }
+        },
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/ErrorV1"
+            },
+            "example": {
+              "error": {
+                "code": "server_error",
+                "message": "An unexpected error occurred. Quote the X-Request-Id header when contacting support."
+              },
+              "version": "v1"
+            }
+          }
+        }
+      },
+      "LegacyUnauthorized": {
+        "description": "Credentials are missing or invalid. A rejected bearer token returns `Unauthenticated.`; anything else returns `Unauthorized`.",
+        "headers": {
+          "Deprecation": { "$ref": "#/components/headers/Deprecation" },
+          "Link": { "$ref": "#/components/headers/SuccessorLink" }
+        },
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/LegacyMessage"
+            },
+            "examples": {
+              "Missing header or wrong Basic credentials": {
+                "summary": "Missing header or wrong Basic credentials",
+                "value": {
+                  "message": "Unauthorized"
+                }
+              },
+              "Rejected bearer token": {
+                "summary": "Rejected bearer token",
+                "value": {
+                  "message": "Unauthenticated."
+                }
+              }
+            }
+          }
+        }
+      },
+      "LegacyValidationError": {
+        "description": "The request failed validation.",
+        "headers": {
+          "Deprecation": { "$ref": "#/components/headers/Deprecation" },
+          "Link": { "$ref": "#/components/headers/SuccessorLink" }
+        },
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/LegacyValidationError"
+            },
+            "example": {
+              "message": "The zip field is required.",
+              "errors": {
+                "zip": ["The zip field is required."]
+              }
+            }
+          }
+        }
+      },
+      "LegacyRateLimited": {
+        "description": "Too many requests.",
+        "headers": {
+          "Retry-After": { "$ref": "#/components/headers/RetryAfter" },
+          "Deprecation": { "$ref": "#/components/headers/Deprecation" },
+          "Link": { "$ref": "#/components/headers/SuccessorLink" }
+        },
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/LegacyMessage"
+            },
+            "example": {
+              "message": "Too Many Attempts."
             }
           }
         }
@@ -597,12 +1405,12 @@
   },
   "tags": [
     {
-      "name": "Ping",
-      "description": "Check for matching bids before submitting a full lead."
+      "name": "v1",
+      "description": "The current API. Build on these endpoints."
     },
     {
-      "name": "Leads",
-      "description": "Submit complete leads for processing and assignment."
+      "name": "Legacy",
+      "description": "The frozen, deprecated unversioned endpoints."
     }
   ]
 }

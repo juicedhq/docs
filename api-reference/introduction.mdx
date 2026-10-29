@@ -9,25 +9,39 @@ The Juiced API lets you submit leads programmatically, check pricing before comm
 
 All API requests go to this base URL.
 
-```
+```text
 https://usejuiced.com/api
 ```
+
+## Versioning
+
+Build on **v1**, the endpoints under `/api/v1`. The original unversioned endpoints (`/api/ping` and `/api/leads`) are now the **legacy** API. They keep working, but they're frozen and deprecated, so new features and fixes land in v1 only.
+
+| | v1 | Legacy |
+|---|---|---|
+| Endpoints | `POST /v1/ping`, `POST /v1/leads` | `POST /ping`, `POST /leads` |
+| IDs | Public IDs only (`ping_…`, `lead_…`, `bid_…`, `cus_…`, `prt_…`) | UUIDs and numeric IDs (plus `lead_public_id` on leads) |
+| Success body | `{"data": {...}, "version": "v1"}` | Flat object |
+| Errors | One envelope with a stable `code` (see [Errors](#errors)) | Mixed shapes |
+| Request ID | `X-Request-Id` on every response | None |
+
+Already integrated with the legacy endpoints? See [Migrating from the legacy API](#migrating-from-the-legacy-api).
 
 ## Headers
 
 All requests must include these headers.
 
-```
+```http
 Accept: application/json
 Content-Type: application/json
 ```
 
 ### Partner attribution
 
-If you're integrating on behalf of a partner, include their public ID in the `X-Partner-Id` header. This attributes the submission to that partner even if the request uses different credentials.
+If you're integrating on behalf of a partner, include their public ID in the `X-Partner-Id` header on pings. Juiced records the ping against that partner when the partner is linked to the source whose credentials you use, so it shows up in their ping logs. Lead posts ignore the header.
 
-```
-X-Partner-Id: partner_01arz3ndektsv4rrffq69g5fav
+```http
+X-Partner-Id: prt_01h7x1a3c5e7g9j1k3m5n7q9sv
 ```
 
 The header is optional (requests without it still succeed), but including it is strongly recommended for any partner-mediated integration.
@@ -41,7 +55,7 @@ The API supports two authentication methods.
 Use your source's API key and secret, Base64-encoded in the format `api_key:api_secret`.
 
 ```bash
-curl -X POST https://usejuiced.com/api/leads \
+curl -X POST https://usejuiced.com/api/v1/leads \
   -H "Accept: application/json" \
   -H "Content-Type: application/json" \
   -H "Authorization: Basic $(echo -n 'your_api_key:your_api_secret' | base64)" \
@@ -53,7 +67,7 @@ curl -X POST https://usejuiced.com/api/leads \
 Use a bearer token generated for your source.
 
 ```bash
-curl -X POST https://usejuiced.com/api/leads \
+curl -X POST https://usejuiced.com/api/v1/leads \
   -H "Accept: application/json" \
   -H "Content-Type: application/json" \
   -H "Authorization: Bearer your_token_here" \
@@ -66,15 +80,17 @@ You can find your API credentials in your source settings within Juiced.
 
 | Endpoint | Description |
 |----------|-------------|
-| `POST /ping` | Check for pricing before submitting a full lead |
-| `POST /leads` | Submit a complete lead for processing and distribution |
+| [`POST /v1/ping`](/api-reference/endpoint/v1/ping) | Check for pricing before submitting a full lead |
+| [`POST /v1/leads`](/api-reference/endpoint/v1/leads) | Submit a complete lead for processing and distribution |
+| [`POST /ping`](/api-reference/endpoint/ping) | Legacy ping (deprecated) |
+| [`POST /leads`](/api-reference/endpoint/leads) | Legacy lead submission (deprecated) |
 
 ## Ping-post workflow
 
 The typical integration flow uses both endpoints.
 
 1. **Ping** with partial lead data (at minimum, a zip code) to check for matching bids and get pricing.
-2. **Post** the full lead with the `ping_id` from step 1 if the price is acceptable.
+2. **Post** the full lead with the ping's `id` as `ping_id` if the price is acceptable.
 
 This two-step process lets you make informed decisions about which leads to sell and at what price before committing.
 
@@ -85,28 +101,105 @@ You can also skip the ping and instead post the lead directly if you don't need 
 The exact fields available (and which ones are required) depend on your source and lead category configuration. The documentation here covers the standard fields, but your source may have additional requirements.
 
 <Note>
-For the exact API spec tailored to your source (including your credentials and all configured fields), visit **Sources → [Your Source] → View API Spec** in your Juiced admin dashboard.
+For the exact API spec tailored to your source (including your credentials and all configured fields), visit **Sources → [Your Source] → View API Spec** in your Juiced admin dashboard. If it still shows `/api/ping` or `/api/leads`, use the `/api/v1/` paths instead.
 </Note>
 
-## Error handling
+## Safe retries
 
-The API returns standard HTTP status codes.
+Network hiccups happen, and a lead you can't confirm is a lead you're tempted to send twice. Add a `transaction_id` to each lead post (your own order or lead number works well, up to 255 characters) and retries become safe. Transaction IDs are scoped to the source sending them, and test-mode posts are tracked separately from live ones.
 
-| Code | Description |
-|------|-------------|
-| `200` | Ping processed successfully |
-| `201` | Lead created successfully |
-| `401` | Authentication failed |
-| `422` | Validation error (check the `errors` object for details) |
+- **Same `transaction_id`, same payload** returns the original status and body again, without creating another lead.
+- **Same `transaction_id`, different payload** returns `409` (`idempotency_conflict` on v1).
+- **The first attempt is still processing** returns `409` with a `Retry-After` header (`idempotency_in_progress` on v1). Wait and send the same request again.
+- **The outcome couldn't be confirmed** returns `409` (`idempotency_reserved` on v1). The lead may already have been delivered, so don't resubmit it. It's held for review.
 
-Validation errors include detailed messages for each field that failed.
+A post that didn't create a lead (it failed validation, hit a lead quota, or failed on our side) doesn't use up its `transaction_id`, so you can fix the payload and send it again with the same ID. A lead rejected for not matching its ping was still recorded, so its `transaction_id` stays taken.
+
+## Rate limits
+
+The API accepts up to 240 requests a minute, counting pings and leads together. Past that, it returns `429` with a `Retry-After` header giving the seconds to wait (`rate_limited` on v1).
+
+## Test mode
+
+Turn on test mode from the source's edit form to try your integration. While it's on, these zip codes return fixed outcomes on both pings and posts.
+
+| Zip | Ping `status` | Lead `status` | Lead in Juiced |
+|-----|------|-----------|-------------|
+| `00001` | `matched` | `accepted` | Assigned |
+| `00002` | `duplicate` | `duplicate` | Duplicate |
+| `00003` | `rejected` | `rejected` | Audit |
+| `00004` | `no_match` | `rejected` | Unassigned |
+| `00005` | `matched` | `accepted` | Marketplace |
+
+`00001` is priced at 25 dollars and `00005` at 15, on both the ping and the lead. The other zips are priced at 0. Vendor sources get the ping price as `price`. Other sources get a single bid named `Test Mode` at that price on `00001` and `00005`, and an empty `bids` list on the other zips. Lead statuses assume the source's default [status responses](/features/sources#status-responses) mapping.
+
+With any other zip, pings are matched as usual (including pings to your partners), and leads are marked as test data and never distributed. Those leads are moved to Audit unless they're duplicates or can't be categorized. Stick to the zips above while you build, and turn test mode off before going live.
+
+## Errors
+
+The API uses standard HTTP status codes. A ping that passes validation always returns `200`. A lead that passes validation returns `201` whatever its outcome, unless it doesn't match its ping (`422`). Check the `status` in the body for the outcome.
+
+Every v1 error uses the same envelope. Branch on `error.code`, which is stable, rather than on `message`.
 
 ```json
 {
-  "message": "The given data was invalid.",
-  "errors": {
-    "email": ["The email field must be a valid email address."],
-    "zip": ["The postal code is not valid for this account's operating countries."]
-  }
+  "error": {
+    "code": "validation_failed",
+    "message": "The email field must be a valid email address. (and 1 more error)",
+    "errors": {
+      "email": ["The email field must be a valid email address."],
+      "zip": ["The postal code is not valid for this account's operating countries."]
+    }
+  },
+  "version": "v1"
 }
 ```
+
+| HTTP | `error.code` | When |
+|------|--------------|------|
+| `400` and other `4xx` | `bad_request` | Any other client error. The message is the standard HTTP reason. |
+| `401` | `unauthenticated` | Credentials are missing or invalid. |
+| `404` | `not_found` | The endpoint doesn't exist. |
+| `405` | `method_not_allowed` | The endpoint doesn't accept that HTTP method. |
+| `409` | `idempotency_conflict` | The `transaction_id` was used with a different payload. |
+| `409` | `idempotency_in_progress` | The first attempt is still processing. Retry after `Retry-After` seconds. |
+| `409` | `idempotency_reserved` | The outcome couldn't be confirmed. Don't resubmit. |
+| `409` | `idempotency_version_mismatch` | The `transaction_id` was first used on the legacy API. `error.lead_id` names the lead it created. |
+| `422` | `validation_failed` | The request failed validation. `error.errors` lists the messages by field. |
+| `422` | `quota_reached` | The source has reached one of its lead quotas. Lead posts only, since a ping over quota returns `no_match`. |
+| `422` | `ping_mismatch` | The lead's data doesn't match the ping it references. |
+| `429` | `rate_limited` | Too many requests. Retry after `Retry-After` seconds. |
+| `500` and other `5xx` | `server_error` | Something went wrong on our side. |
+
+### Request IDs
+
+Every v1 response, errors included, carries an `X-Request-Id` header such as `req_01jbx8k6y3a5c7e9g1j3m5p7rt`. Log it with your request, and quote it when you contact support so we can find the exact request.
+
+## Migrating from the legacy API
+
+### Deprecation headers
+
+Every legacy ping and lead response carries two headers that announce its replacement.
+
+```http
+Deprecation: @1792627200
+Link: <https://usejuiced.com/api/v1/ping>; rel="successor-version"
+```
+
+`Deprecation` is the date the legacy API was deprecated, as `@` plus a Unix timestamp ([RFC 9745](https://www.rfc-editor.org/rfc/rfc9745)). `Link` points to the v1 endpoint that replaces the one you called. There's no `Sunset` header yet, which means no shutdown date has been set.
+
+### Moving from legacy to v1
+
+1. Change the path from `/api/ping` to `/api/v1/ping` and from `/api/leads` to `/api/v1/leads`. Credentials and field names stay the same, but ID values change (steps 2 and 4).
+2. Read results from `data`. A ping's `ping_id` and `message` become `data.id` and `data.status`, and its `price` (vendors) or `bids` move under `data` too. A lead's `lead_public_id` and `status` become `data.id` and `data.status`, and `lead_uuid` is gone. Each bid's `id`, `customer_id` and `partner_id` become public IDs.
+3. Update the values you compare against. Ping messages become `matched`, `no_match`, `duplicate` and `rejected`, and the lead status `success` becomes `accepted`.
+4. Send the v1 ping's `data.id` as `ping_id` on the lead and, if you echo a bid, its `bids[].id` as `bid_id`. v1 rejects the UUIDs the legacy API returns, so post a legacy ping's lead to the legacy API.
+5. Handle errors by `error.code` rather than by message.
+
+<Warning>
+One `transaction_id` is one lead, whichever version it arrives on. If you retry a lead on a different version from the one you first sent it to, Juiced won't create a second lead. You get a `409` instead (`idempotency_version_mismatch` on v1), and v1 names the original lead in `error.lead_id`. Finish in-flight retries on the version they started on.
+</Warning>
+
+### Legacy errors
+
+The legacy endpoints keep their original error bodies. Validation errors return `422` with a `message` and an `errors` object keyed by field. Transaction conflicts (`409`) and a lead that doesn't match its ping return a single `error` string. Everything else returns a `message`. See [Submit a Lead (Legacy)](/api-reference/endpoint/leads) for every legacy response.

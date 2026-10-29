@@ -8,6 +8,16 @@ Everything that changed on the tenant side of Juiced, including lead routing, di
 
 Looking for changes to the buyer experience? Those live in [Customer portal updates](/changelog/customer-portal).
 
+<Update label="October 26, 2026" description="v3.76.0" tags={["New", "Improvements"]}>
+  ## v1 lead API
+
+  - Send pings and leads to the new [v1 API](/api-reference/introduction#versioning) at `/api/v1/ping` and `/api/v1/leads`. Responses use public IDs only, a consistent `{data, version}` body, and one error format with a stable `code` for every failure.
+  - Every v1 response carries an [`X-Request-Id`](/api-reference/introduction#request-ids) header. Quote it when contacting support.
+  - The unversioned `/api/ping` and `/api/leads` endpoints are now the deprecated legacy API. They keep working, and their responses now carry [`Deprecation` and `Link` headers](/api-reference/introduction#deprecation-headers) that point to the v1 endpoints. No shutdown date has been set.
+  - A `transaction_id` covers both versions, so a retry on the other version never creates a second lead. See [Safe retries](/api-reference/introduction#safe-retries).
+  - Legacy lead posts can now reference a ping by its `ping_…` public ID as well as its UUID.
+</Update>
+
 <Update label="October 19, 2026" description="v3.69.0" tags={["New", "Improvements", "Fixes"]}>
   ## Faster setup, clearer operations
 

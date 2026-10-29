@@ -1,0 +1,7 @@
+---
+title: Submit a Ping
+description: Check pricing and match potential before submitting a full lead.
+openapi: POST /v1/ping
+---
+
+Vendor sources get a single `price`, never the bids behind it. Every other source gets the matching `bids`, each with the buyer's name for TCPA consent. Every ping that passes validation returns `200` whatever its `status`, so read `data.status` for the outcome, and keep `data.id` to send as `ping_id` when you [post the lead](/api-reference/endpoint/v1/leads).

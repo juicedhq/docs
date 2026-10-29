@@ -54,9 +54,7 @@ The Field Reference is the source of truth for what this source accepts. It auto
 
 ## 4. Submit a lead
 
-Send a `POST` to the `/api/leads` endpoint shown on the spec page. Use the exact URL from the spec rather than typing it yourself.
-
-The spec page includes a copy-paste-ready **Example cURL Request** block with your credentials already baked in. Here's the general shape.
+Send a `POST` to the v1 leads endpoint, `https://usejuiced.com/api/v1/leads`. The spec page includes a copy-paste-ready **Example cURL Request** block with your credentials already baked in. If its URL ends in `/api/leads`, change it to `/api/v1/leads`. Here's the general shape.
 
 ```bash
 curl -X POST \
@@ -64,6 +62,7 @@ curl -X POST \
   -H "Content-Type: application/json" \
   -H "Accept: application/json" \
   -d '{
+    "transaction_id": "order-10482",
     "first_name": "Katy",
     "last_name": "Berry",
     "email": "katy.berry@example.com",
@@ -73,33 +72,41 @@ curl -X POST \
     "state": "FL",
     "zip": "33139"
   }' \
-  https://usejuiced.com/api/leads
+  https://usejuiced.com/api/v1/leads
 ```
 
-An accepted submission returns `201 Created` with a body like this one.
+The `transaction_id` is optional but worth sending. It's your own ID for the lead, so if a request times out you can safely send it again without creating a second lead. See [Safe retries](/api-reference/introduction#safe-retries) for the details.
+
+A submission that passes validation returns `201 Created` with a body like this one.
 
 ```json
 {
-  "lead_uuid": "f47ac10b-58cc-4372-a567-0e02b2c3d479",
-  "lead_public_id": "lead_01arz3ndektsv4rrffq69g5fav",
-  "status": "success",
-  "price": 45.0
+  "data": {
+    "id": "lead_01jbx8m2d4f6g8h0j2k4m6n8pq",
+    "status": "accepted",
+    "price": 45
+  },
+  "version": "v1"
 }
 ```
 
-The `status` field is one of three values, decided by the source's [status responses](/features/sources#status-responses) mapping.
+`data.status` is one of three values, decided by the source's [status responses](/features/sources#status-responses) mapping (`accepted` is the mapping's **Success** response).
 
 | Status | What it means (by default) |
 |--------|--------------|
-| `success` | The lead was assigned, posted to a partner, placed on the [marketplace](/features/marketplace), or parked in the [Club](/features/club). `price` is what the source earns for it. |
+| `accepted` | The lead was assigned, posted to a partner, placed on the [marketplace](/features/marketplace), or parked in the [Club](/features/club). `price` is what the source earns for it. |
 | `rejected` | The lead was valid but ended up Unassigned, Audit, or Uncategorized. `price` is `0`. |
 | `duplicate` | The lead matched a [duplicate check](/features/duplicate-detection). No charge, no distribution, and `price` is `0`. |
 
 If you've changed the source's status response mapping, the statuses behind each value change with it. Your own lead's actual status is always visible on its page in Juiced.
 
 <Warning>
-Validation failures return `422` with an `errors` object keyed by field. Fix the payload and re-submit. The original submission is recorded as rejected and won't be retried automatically.
+Validation failures return `422` with the error code `validation_failed` and an `error.errors` object keyed by field. Fix the payload and re-submit. The original submission is recorded as rejected and won't be retried automatically.
 </Warning>
+
+<Note>
+Already sending leads to `/api/leads`? That's the legacy API. It still works, but it's deprecated, so plan a move to v1. Its success status is `success` rather than `accepted`, and its fields sit at the top level of the response rather than under `data`. See [Moving from legacy to v1](/api-reference/introduction#moving-from-legacy-to-v1).
+</Note>
 
 ## 5. Verify the submission landed
 
@@ -125,16 +132,16 @@ Test traffic is hidden by default. If the source is in test mode, set the **Test
 
 ## Testing without real data
 
-If your source is in **test mode** (switched on from the source's edit form), you can submit leads using test zip codes without touching production data.
+If your source is in **test mode** (switched on from the source's edit form), you can submit leads using test zip codes, and they're never distributed to buyers. See [Test mode](/api-reference/introduction#test-mode) in the API reference for what pings return.
 
-| Zip | Response `status` (default mapping) | Lead status |
+| Zip | Response `data.status` (default mapping) | Lead status |
 |-----|----------|-------------|
-| `00001` | `success` | Assigned |
+| `00001` | `accepted` | Assigned |
 | `00002` | `duplicate` | Duplicate |
 | `00003` | `rejected` | Audit |
 | `00004` | `rejected` | Unassigned |
-| `00005` | `success` | Marketplace |
-| Any other zip | `rejected` | Marked as test data and moved to Audit |
+| `00005` | `accepted` | Marketplace |
+| Any other zip | `rejected` (or `duplicate`) | Marked as test data and moved to Audit (or Duplicate or Uncategorized), never distributed |
 
 <Tip>
 Test mode is the right tool for integration development and vendor sandboxing. Turn it off before going live, because leads posted while test mode is on won't be distributed to real customers.
