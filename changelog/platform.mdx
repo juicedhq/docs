@@ -8,6 +8,57 @@ Everything that changed on the tenant side of Juiced, including lead routing, di
 
 Looking for changes to the buyer experience? Those live in [Customer portal updates](/changelog/customer-portal).
 
+<Update label="November 2, 2026" description="v3.77.0–v3.79.0" tags={["New", "Improvements", "Fixes"]}>
+  <Frame>
+    <img className="block dark:hidden" src="/images/changelog/v3.79.0-light.webp" alt="Juiced release card reading Checkout Pages for every tenant, next to a Stage checkout page with a countdown, a headline offer, and a Claim offer button" />
+    <img className="hidden dark:block" src="/images/changelog/v3.79.0-dark.webp" alt="Juiced release card reading Checkout Pages for every tenant, next to a Stage checkout page with a countdown, a headline offer, and a Claim offer button" />
+  </Frame>
+
+  Checkout pages are now open to every tenant, Canada joins the map as an operating country, and a stack of webhook, payout, and location fixes rounds out the week. Webhook payload v1 and replay have their own entries.
+
+  ## Checkout pages for everyone
+
+  - Every tenant can now create and publish [checkout pages](/features/checkout-pages), with no request needed. Admins find **Checkout Pages** under **Application** in settings. Sell lead credit, bonus credit, and Club memberships from a public page buyers pay on directly.
+  - The checkout welcome and purchase confirmation emails now appear in [Notification Templates](/features/notifications) for every tenant.
+  - The **Stage** design's main button now reads **Claim offer**, matching its sticky bar, and its countdown line reads **Offer ends**.
+
+  ## Canada
+
+  - Add Canada as an [operating country](/features/company-profile#operating-countries) during setup or in Company Profile. Provinces are the state level and Regions (cities, big-city districts, and the areas around them) are the county level, so buyers can bid nationwide, by province, or by region.
+  - Leads, pings, and CSV imports accept Canadian postal codes with or without the space and in any case, so `m5v3l9` and `M5V 3L9` resolve to the same place. See the `zip` [field type](/features/lead-categories).
+  - Workspaces that operate in several countries see combined labels like **States / Provinces** and **Counties / Regions** in [Locations](/features/location-analytics).
+
+  ## Locations
+
+  - Hide columns on the Counties, States, and Countries lists with the new **Columns** menu, handy before you screenshot your prices for a customer. See [Location analytics](/features/location-analytics#timeframe-filters-and-search).
+  - The **Active** column, the location page's **Active Bids** stat, and the county export now count <span className="tone-badge tone-sky">Limited</span> bids, matching who distribution actually sends leads to.
+
+  ## Webhooks
+
+  - Live deliveries to workspace and customer [webhooks](/features/webhooks) now send the request headers and Basic or Bearer auth you configured. Before, they were only used for test sends.
+  - Each webhook gets its own delivery, so one slow endpoint never holds up another. Delivery history shows each attempt and its status, and v1 webhooks retry failures up to six times over about eight and a half hours.
+  - An error response from a Legacy webhook is now logged with its status code, headers, and body, instead of looking like no response at all.
+  - A customer can't have two webhooks with the same URL. Where one already did, Juiced kept the active, most recently edited webhook and moved the others' delivery history onto it.
+  - **Generate sample data** on a customer webhook now builds its sample from a lead category, so it works before the customer's first bid. With several lead categories, you pick the lead type to sample.
+
+  ## Partners, API, and payments
+
+  - A partner's payout is now set once, when the lead is posted, as the price in the post response. Reprocessing, returns, resales, and Club claims no longer change it, and a lead sold to several customers counts its payout once. Past vendor leads whose payout was later changed have been restored to the price quoted at post, where that quote is on record. See [Source pricing](/features/sources#source-pricing).
+  - **View API Spec** on a [source](/features/sources) and the partner **Integrate** page now document the [v1 lead API](/api-reference/introduction#versioning).
+  - New customers are linked to an existing Stripe customer with the same email in your connected Stripe account, instead of creating a duplicate.
+
+  ## Sign-in
+
+  - Users with a passkey who sign in with their password are now asked for the passkey next, instead of being turned away. If the passkey fails, they can use their authenticator app, or an emailed code if they don't have one.
+
+  ## Fixes
+
+  - Webhooks and partner pings and posts to endpoints with only IPv4 addresses, which were briefly blocked on October 26, deliver again.
+  - A post no longer sees a buyer's balance reduced by their own ping win, which had sent some leads to the Marketplace or sold them below the bid.
+  - Auto-upgrade charges only the flat difference between plans, without extra prorated charges on the same invoice.
+  - Dropdowns in the tenant panel no longer lock the page while open, so browser extensions can't block selecting an option.
+</Update>
+
 <Update label="October 26, 2026" description="v3.76.0" tags={["New", "Improvements"]}>
   ## v1 lead API
 

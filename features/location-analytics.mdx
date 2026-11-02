@@ -18,13 +18,13 @@ Open the **Locations** group in the sidebar and choose **Counties**, **States**,
   <img className="hidden dark:block" src="/images/tenant/locations/counties-dark.webp" alt="Counties list with Active, Top Bid, Received, Min Value, Max Value, and Avg Value columns and a timeframe picker in the header" />
 </Frame>
 
-Workspaces that operate in a single country see that country's own terms (for example, "ZIP Codes" in the US). Workspaces that operate in several countries see combined labels like **States / Territories** and **Counties / Postcodes**.
+Workspaces that operate in a single country see that country's own terms (for example, "ZIP Codes" in the US). In Canada, provinces are the state level and **Regions** (cities, big-city districts, and the areas around them) are the county level. Workspaces that operate in several countries see combined labels like **States / Provinces** and **Counties / Regions**.
 
 ### Demand columns
 
 | Column | What it shows |
 |--------|---------------|
-| **Active** | Count of fully operating bids at this level, meaning customers who are ready to buy right now. On States, only state-wide bids count, and on Countries, only nationwide bids do. |
+| **Active** | Count of bids at this level that can receive leads right now, including <span className="tone-badge tone-sky">Limited</span> bids. On States, only state-wide bids count, and on Countries, only nationwide bids do. |
 | **Top Bid** | The highest current bid amount in this location. |
 
 Demand columns always reflect your bids as they stand right now.
@@ -45,6 +45,8 @@ These columns cover the timeframe you pick in the header.
 Use the timeframe picker in the top-right to choose the period for the lead columns. The options are **Billing period**, **Today**, **7D**, **4W**, **3M**, **12M**, **MTD**, **Last month**, **YTD**, **All**, and a **Custom** range. Your choice carries over between the Locations pages and the [Dashboard](/features/dashboard#choosing-a-timeframe).
 
 By default, the table covers all lead types. Use the **Lead types** filter to narrow down to specific ones, which is useful if you want to see where demand is strongest for one product versus another. The Counties page adds a **State** filter, plus a **Country** filter for multi-country workspaces. Search by name to find a location quickly. Filters and sorting are kept in the page URL, so you can bookmark a view.
+
+Use **Columns** to hide any column except **Name**, for example **Active** and **Received** before you screenshot your prices for a customer. Your choice is saved in this browser and applies to the Counties, States, and Countries lists alike.
 
 <Frame>
   <img className="block dark:hidden" src="/images/tenant/locations/states-light.webp" alt="States list showing active bids, top bid, received leads, and value columns for each state" />
