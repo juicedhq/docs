@@ -116,7 +116,7 @@ Here's a v1 request for a new lead, trimmed to a few fields.
 | Key | What it holds |
 |-----|---------------|
 | `version` | Always `"v1"`. |
-| `id` | A unique ID for this lead's assignment to you, like `evt_01jbq7m4x2c9t5w8k3n6r0yzde`. It stays the same when a failed delivery is retried, and when a delivery is [replayed](#replaying-deliveries) with its original data. If your provider re-sends the lead another way, that send gets a new `id`. |
+| `id` | A unique ID for this lead's assignment to you, like `evt_01jbq7m4x2c9t5w8k3n6r0yzde`. It stays the same when a failed delivery is retried, and when a delivery is [replayed](#replaying-deliveries) with its original data. A replay that sends the lead's current data, or a re-send by your provider, gets a new `id`. |
 | `type` | Always `lead.assigned` for your webhooks. |
 | `created_at` | When the lead was assigned to you, in UTC. It's not the time the request was sent. |
 | `tenant_id` | Your provider's ID. |
@@ -151,7 +151,7 @@ Use **Pause** / **Enable** and **Edit** at the top of the page to change the web
 
 If a delivery failed (say your CRM was down), click **Replay** on its row, or open it and click **Replay** at the bottom, once your system is back up. The replay is queued, and it shows in the delivery history as a new delivery once it's sent. When you open a delivery, a note beside the button tells you what it will send.
 
-- **On a v1 webhook**, a replay sends the original request again, with the same `id`, `created_at`, and lead data, so your system can tell it's a repeat. If it fails, it's retried like any other delivery. Deliveries sent before replay existed are the exception. They go out once with the lead's current data and a new `id`.
+- **On a v1 webhook**, a replay sends the original request again, with the same `id`, `created_at`, and lead data, so your system can tell it's a repeat. If it fails, it's retried like any other delivery. Deliveries sent before replay existed, or while the webhook was on Legacy, are the exception. They go out once with the lead's current data and a new `id`.
 - **On a Legacy webhook**, a replay sends the lead's current data once, as a new delivery.
 
 A panel above the delivery history shows how far back you can go. Deliveries can be replayed for 90 days, or 180 days if they failed or needed a retry.
