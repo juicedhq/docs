@@ -36,8 +36,11 @@ Enter a name for your field. This is the identifier sources use when submitting 
 - Must start with a letter or underscore
 - Can only contain letters, numbers, and underscores (no dashes or spaces)
 - Must be unique within this lead category
+- Can't be one of the names Juiced reserves for its own lead data, in any letter case. These are `id`, `public_id`, `uuid`, `tenant_id`, `lead_category_id`, `lead_type_id`, `source_id`, `submission_id`, `customer_id`, `country_id`, `state_id`, `county_id`, `postal_code_id`, `assigned_at`, and `base_amount`
 
 Good examples include `property_type`, `coverage_amount`, `roof_age`, and `electric_bill`.
+
+A field created before these names were reserved keeps its title, but shows a warning asking you to rename it.
 
 ### Type
 

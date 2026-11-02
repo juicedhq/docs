@@ -51,6 +51,54 @@ Choose what the request contains.
 
 With the default payload, each request includes the price you paid (`charged_amount`), the `scope` you won it at, when you received it (`received_on`), the `lead_type`, and all the lead's deliverable fields, such as name, email, phone, and address. Fields your provider adds later are included automatically.
 
+### Payload version
+
+The **Payload version** section sets the shape of every request. New webhooks start on **v1**, and webhooks you created before payload versions existed stay on **Legacy**, so they keep receiving exactly what they always have.
+
+- **v1** wraps your payload in a fixed envelope. Your payload choice shapes only `data`.
+- **Legacy** is the original shape, where your payload choice shapes the whole request.
+
+Here's a v1 request for a new lead, trimmed to a few fields.
+
+```json
+{
+  "version": "v1",
+  "id": "evt_01jbq7m4x2c9t5w8k3n6r0yzde",
+  "type": "lead.assigned",
+  "created_at": "2026-10-28T14:03:12Z",
+  "tenant_id": "ten_01h8x2k4m6p8r0t2v4w6y8z0ab",
+  "data": {
+    "first_name": "Ada",
+    "last_name": "Lovelace",
+    "email": "ada@example.com",
+    "phone": "5555550199",
+    "city": "Austin",
+    "state": "TX",
+    "zip": "78701",
+    "lead_public_id": "lead_01arz3ndektsv4rrffq69g5fav",
+    "charged_amount": "$13.00",
+    "scope": "county",
+    "received_on": "2026-10-28T14:03:12.000000Z",
+    "lead_type": "Motivated Seller"
+  }
+}
+```
+
+| Key | What it holds |
+|-----|---------------|
+| `version` | Always `"v1"` |
+| `id` | A unique ID for this lead's delivery event, like `evt_01jbq7m4x2c9t5w8k3n6r0yzde`. It stays the same when a failed delivery is retried. |
+| `type` | Always `lead.assigned` for your webhooks |
+| `created_at` | When the lead was assigned to you, in UTC. It's not the time the request was sent. |
+| `tenant_id` | Your provider's ID |
+| `data` | The lead, shaped by your payload choice. IDs in it are public IDs only. |
+
+Your system may receive the same lead more than once, for example when a delivery is retried. Have it store each `id` and skip any it has already processed.
+
+Below the cards, a preview shows exactly what your endpoint will receive, including the headers (with passwords and tokens hidden). On a saved webhook, **Use a real lead** previews one of your leads instead of sample data.
+
+To switch an existing webhook, open **Edit webhook** and pick the other card. The preview shows the **Current** request next to the one **After save**, so you can check the difference before anything changes. If a custom payload uses `{{ event }}` or `{{ tenant.* }}` fields, an amber note names them, because they're empty on v1 (the envelope's `type` and `tenant_id` carry the same information). Nothing changes until you save, and **Testing** sends the version you picked, so you can try it first.
+
 Click **Create & continue to testing**. Your webhook is saved and switched on straight away, and you land on its edit page to send a test.
 
 ## Testing a webhook
