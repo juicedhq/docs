@@ -104,7 +104,7 @@ The **Payload version** section decides the shape of every request, with a card 
 
 The payload you shaped in step 4 becomes `data`, and the envelope tells your receiver what happened (`type`), when it happened (`created_at`), and which event it is (`id`, unique to each event). Pick **Legacy** only if your receiver already expects the original shape, where your mapping shapes the whole body.
 
-The preview under the cards shows what your endpoint will receive, headers included (only the `id` differs, since every event gets its own). If your mapping uses the `{{ event }}` or `{{ tenant.* }}` fields, an amber note names them, because they render empty on v1. **Load default mapping** adds `event`, `tenant.id`, and `tenant.name` rows, so delete those on a v1 webhook and use `type` and `tenant_id` from the envelope instead.
+The preview under the cards shows what your endpoint will receive, headers included. Its `id` and `created_at` are samples, since every event gets its own. If your mapping uses the `{{ event }}` or `{{ tenant.* }}` fields, an amber note names them, because they render empty on v1. **Load default mapping** adds `event`, `tenant.id`, and `tenant.name` rows, so delete those on a v1 webhook and use `type` and `tenant_id` from the envelope instead.
 
 <Tip>
 Have your receiver store each event's `id` and skip any it has already processed, so an event that arrives twice is only handled once.
