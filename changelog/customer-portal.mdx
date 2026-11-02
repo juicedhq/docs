@@ -6,6 +6,13 @@ rss: true
 
 Changes to the customer portal, the app you use to browse the marketplace, manage your leads, and keep your account topped up. Newest first. Use the RSS feed on this page so you never miss a drop.
 
+<Update label="October 28, 2026" description="v3.77.2" tags={["New", "Improvements"]}>
+  ## Webhook payload v1
+
+  - New [webhooks](/customer-portal/webhooks#payload-version) start on v1, which wraps each lead in a fixed envelope with a unique event ID, the event type, and when the lead was assigned to you. Your payload choice shapes the lead data inside it.
+  - Webhooks you already have stay on Legacy and keep receiving exactly what they get today. To switch one, open its edit page, where a preview shows what changes before you save.
+</Update>
+
 <Update label="September 2, 2026" description="v3.53.0" tags={["Improvements"]}>
   ## Return information
 
