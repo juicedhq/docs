@@ -177,7 +177,7 @@ Switching changes the shape of every request the webhook sends from the moment y
 
 ### Handling duplicates
 
-Build your receiver so the same event arriving twice does no harm. On v1, use `id` to spot repeats, since every automatic retry of an event carries the same `id`. A **Redeliver** keeps the original `id`, `created_at`, and `data` too, unless the original data is no longer stored, in which case the event is rebuilt from the lead as it is now and sent with a new `id`. Store the IDs you've processed, and skip any event whose `id` you've already seen. Legacy requests have no event ID.
+Build your receiver so the same event arriving twice does no harm. On v1, use `id` to spot repeats, since every automatic retry of an event carries the same `id`, and so does a [replay](#replaying-deliveries) of the original event. Store the IDs you've processed, and skip any event whose `id` you've already seen. Legacy requests have no event ID.
 
 ## Testing a webhook
 
@@ -209,9 +209,35 @@ Click a webhook in the list, or **Overview** on its edit page, to see how it's d
 
 Click a delivery to see the request headers and payload Juiced sent, and the response headers and body your receiver returned.
 
-For lead events, **Redeliver** sends the same lead again using the webhook's current settings. It's the quick fix once your receiver is back on its feet. Other events can't be redelivered.
-
 Webhook deliveries also appear in [Outgoing logs](/features/logs#outgoing-logs) with the **Webhook** type.
+
+### Replaying deliveries
+
+Once your receiver is back on its feet, replay what it missed. A panel above the delivery history shows how far back you can go. Deliveries can be replayed for 90 days, or 180 days if they failed or needed a retry. Older ones have been removed.
+
+To replay one delivery, open it and click **Replay**. Juiced queues the replay, and it appears in the history as a new delivery once it's sent. The original stays as it was. The note beside the button tells you which kind of replay you'll get.
+
+- **The original event** goes out again when the webhook is on [v1](#payload-versions) and the delivery is a v1 delivery whose data Juiced kept. Your receiver gets the same `id`, `created_at`, `type`, and `data` as the first time, so it can spot the repeat, and a failed replay is retried like any other delivery.
+- **A new event** built from the lead's current data goes out otherwise. That covers Legacy webhooks, and v1 deliveries sent before replay existed. It's sent once with no retries, since a Legacy receiver has no event ID to catch duplicates with. This kind needs a lead behind the delivery, so a Legacy delivery for any other event can't be replayed.
+
+To replay a batch, click **Bulk replay** above the history. Pick the **Deliveries** to replay (**Failed**, **Successful**, or **Successful and failed**), optionally narrow them with **First sent from** and **First sent until**, and click **Start replay**.
+
+- The dates are when each event was first sent, so replaying an outage finds every event from it however many times some have been replayed since.
+- Only the latest delivery of each event is replayed, and only once it has finished.
+- Replays go out at 5 per second, so your receiver isn't flooded.
+- A bulk replay that matches more than 1,000 deliveries is refused, with the count, so you can narrow the dates or status.
+- Each webhook runs one bulk replay at a time, and **Bulk replay** stays disabled until the current one finishes.
+
+The panel then shows the last bulk replay, what it covered, and how many of its replays were queued, successful, failed, or skipped, with a status badge.
+
+- <span className="tone-badge tone-info">Queueing</span> means Juiced is still creating the replays.
+- <span className="tone-badge tone-info">Sending</span> means the replays are going out. v1 retries can keep a bulk replay here for hours.
+- <span className="tone-badge tone-success">Finished</span> means every replay is done. The badge is <span className="tone-badge tone-warning">Finished</span> instead when some of them failed.
+- <span className="tone-badge tone-danger">Stalled</span> means the replays were never all created. After an hour it stops blocking a new bulk replay.
+
+Juiced refuses to replay a delivery that's still being attempted, a test send (run the test again instead), or an event that already has a replay being sent. Nothing can be replayed while the webhook is paused, so enable it first.
+
+Replaying needs permission to edit the webhook. Users who can only view it still see the history, the replay window, and bulk replay progress, just without the replay buttons.
 
 ## Reliability
 

@@ -166,7 +166,7 @@ If nothing arrives, work through these checks.
 - **Pause or resume** with the pause button on the webhook's row, or with **Pause webhook** (or **Enable webhook**) on its deliveries page. The settings stay put while it's paused.
 - **Edit** with the edit button on the row, or with **Edit** on the deliveries page. Payload changes apply to the next delivery.
 - **Switch payload version** in the **Payload version** section of the edit page. The preview shows the current payload next to the one after save, so check your receiver can read the new shape before you click **Save changes**.
-- **Redeliver** a lead event by opening a delivery and clicking **Redeliver**, which sends that lead again with the webhook's current settings. It's handy once a broken receiver is fixed.
+- **Replay** a delivery by opening it and clicking **Replay**, or replay every failure from an outage at once with **Bulk replay** above the history. On v1, the original event goes out again with the same `id`. See [Replaying deliveries](/features/webhooks#replaying-deliveries) for how each kind works.
 - **Delete** with the delete button on the row, or with **Delete** on the edit page.
 
 ## Customer webhooks

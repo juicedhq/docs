@@ -116,7 +116,7 @@ Here's a v1 request for a new lead, trimmed to a few fields.
 | Key | What it holds |
 |-----|---------------|
 | `version` | Always `"v1"`. |
-| `id` | A unique ID for this lead's assignment to you, like `evt_01jbq7m4x2c9t5w8k3n6r0yzde`. It stays the same when a failed delivery is retried. If your provider re-sends the lead by hand, the re-send usually keeps the original `id`, `created_at`, and `data`, so you can skip it as a repeat. When the original data is no longer stored, the lead is rebuilt as it is now and sent with a new `id`. |
+| `id` | A unique ID for this lead's assignment to you, like `evt_01jbq7m4x2c9t5w8k3n6r0yzde`. It stays the same when a failed delivery is retried, and when a delivery is [replayed](#replaying-deliveries) with its original data. If your provider re-sends the lead another way, that send gets a new `id`. |
 | `type` | Always `lead.assigned` for your webhooks. |
 | `created_at` | When the lead was assigned to you, in UTC. It's not the time the request was sent. |
 | `tenant_id` | Your provider's ID. |
@@ -147,6 +147,21 @@ Click a webhook in the table to open its overview.
 
 Use **Pause** / **Enable** and **Edit** at the top of the page to change the webhook.
 
-### Re-sending a delivery
+### Replaying deliveries
 
-If a delivery failed (say your CRM was down), click **Redeliver** on that row to send the lead again. Juiced uses the webhook's current settings, so if you fixed the URL, authentication, or payload since, the re-send uses the fixed version.
+If a delivery failed (say your CRM was down), open it and click **Replay** once your system is back up. The replay is queued, and it shows in the delivery history as a new delivery once it's sent. A note beside the button tells you what it will send.
+
+- **On a v1 webhook**, a replay sends the original request again, with the same `id`, `created_at`, and lead data, so your system can tell it's a repeat. If it fails, it's retried like any other delivery.
+- **On a Legacy webhook**, a replay sends the lead's current data once, as a new delivery. v1 deliveries sent before replay existed are replayed this way too.
+
+A panel above the delivery history shows how far back you can go. Deliveries can be replayed for 90 days, or 180 days if they failed or needed a retry.
+
+To replay a batch, say everything that failed during an outage, click **Bulk replay**. Pick the **Deliveries** to replay (**Failed**, **Successful**, or **Successful and failed**), optionally set **First sent from** and **First sent until**, and click **Start replay**.
+
+- Only the latest delivery of each lead is replayed, so leads you've already replayed aren't sent twice.
+- Replays go out at 5 per second, and up to 1,000 at a time. If more match, narrow the dates or status.
+- You can run one bulk replay per webhook at a time. The panel shows its progress as <span className="tone-badge tone-info">Queueing</span>, then <span className="tone-badge tone-info">Sending</span>, then <span className="tone-badge tone-success">Finished</span>, with counts of the replays that succeeded and failed.
+
+You can't replay a test (run the test again instead), a delivery that's still being attempted, or a lead that already has a replay on its way. Nothing can be replayed while the webhook is paused, so enable it first.
+
+If you don't see **Replay** or **Bulk replay**, your role doesn't let you edit webhooks. Ask your account admin for access.
