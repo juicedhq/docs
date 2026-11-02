@@ -53,7 +53,36 @@ With the default payload, each request includes the price you paid (`charged_amo
 
 ### Payload version
 
-The **Payload version** section sets the shape of every request. New webhooks start on **v1**, and webhooks you created before payload versions existed stay on **Legacy**, so they keep receiving exactly what they always have.
+The **Payload version** section sets the shape of every request, with a card for **v1** and one for **Legacy**. New webhooks start on **v1**, which wraps each lead in a fixed envelope, and your payload choice shapes only the lead data inside it. Pick **Legacy** only if your system already expects the original shape. A preview below the cards shows what your endpoint will receive. See [Payload versions](#payload-versions) for what each version sends.
+
+Click **Create & continue to testing**. Your webhook is saved and switched on straight away, and you land on its edit page to send a test.
+
+## Testing a webhook
+
+Open a webhook's edit page (**Edit webhook**) and scroll to **Testing**.
+
+<Frame>
+  <img className="block dark:hidden" src="/images/portal/notifications/webhook-edit-light.webp" alt="Webhook edit page with Destination, Advanced settings summary, Payload choice, and Testing options" />
+  <img className="hidden dark:block" src="/images/portal/notifications/webhook-edit-dark.webp" alt="Webhook edit page with Destination, Advanced settings summary, Payload choice, and Testing options" />
+</Frame>
+
+Pick the data to test with.
+
+- **Test with a real lead** searches your leads by ID, name, email, or phone and sends exactly what that lead would send.
+- **Generate sample data** fills every mapped field with fake but realistic values, which is handy before you've received any leads.
+- **Add test data manually** lets you build the payload one field at a time.
+
+Then click **Run Webhook Test**. Juiced sends the request and shows whether your endpoint **Accepted** or **Rejected** it, along with the details of the request and your endpoint's response, so you can see what went wrong.
+
+Test deliveries don't count as real lead deliveries. They're kept on a separate **Tests** tab in the delivery history.
+
+<Tip>
+Since new webhooks start active, run a test right after creating one. If your endpoint isn't ready yet, click **Pause** so real leads aren't sent to it until it is.
+</Tip>
+
+## Payload versions
+
+Webhooks you created before payload versions existed stay on **Legacy**, so they keep receiving exactly what they always have. New webhooks start on **v1**.
 
 - **v1** wraps your payload in a fixed envelope. Your payload choice shapes only `data`.
 - **Legacy** is the original shape, where your payload choice shapes the whole request.
@@ -86,43 +115,22 @@ Here's a v1 request for a new lead, trimmed to a few fields.
 
 | Key | What it holds |
 |-----|---------------|
-| `version` | Always `"v1"` |
-| `id` | A unique ID for this lead's delivery event, like `evt_01jbq7m4x2c9t5w8k3n6r0yzde`. It stays the same when a failed delivery is retried. |
-| `type` | Always `lead.assigned` for your webhooks |
+| `version` | Always `"v1"`. |
+| `id` | A unique ID for this lead's assignment to you, like `evt_01jbq7m4x2c9t5w8k3n6r0yzde`. It stays the same when a failed delivery is retried. |
+| `type` | Always `lead.assigned` for your webhooks. |
 | `created_at` | When the lead was assigned to you, in UTC. It's not the time the request was sent. |
-| `tenant_id` | Your provider's ID |
+| `tenant_id` | Your provider's ID. |
 | `data` | The lead, shaped by your payload choice. IDs in it are public IDs only. |
 
-Your system may receive the same lead more than once, for example when a delivery is retried. Have it store each `id` and skip any it has already processed.
+Build your system so a lead that arrives twice does no harm. Have it store each `id` and skip any it has already processed.
 
-Below the cards, a preview shows exactly what your endpoint will receive, including the headers (with passwords and tokens hidden). On a saved webhook, **Use a real lead** previews one of your leads instead of sample data.
+### Switching a webhook's version
 
-To switch an existing webhook, open **Edit webhook** and pick the other card. The preview shows the **Current** request next to the one **After save**, so you can check the difference before anything changes. If a custom payload uses `{{ event }}` or `{{ tenant.* }}` fields, an amber note names them, because they're empty on v1 (the envelope's `type` and `tenant_id` carry the same information). Nothing changes until you save, and **Testing** sends the version you picked, so you can try it first.
+Open **Edit webhook** and pick the other card in **Payload version**. The preview shows the **Current** request next to the one **After save**, so you can check the difference before anything changes. Only the `id` differs from a real delivery, since every lead gets its own. **Use a real lead** previews one of your leads instead of sample data.
 
-Click **Create & continue to testing**. Your webhook is saved and switched on straight away, and you land on its edit page to send a test.
+When you switch, a note above the preview turns amber and sums up what changes. On v1, everything moves under `data`, and the request no longer has the `tenant` and `event` keys Legacy sends, so check your system reads the new shape. If a custom payload uses `{{ event }}` or `{{ tenant.* }}` fields, the note names them, because they're empty on v1 (the envelope's `type` and `tenant_id` carry the same information).
 
-## Testing a webhook
-
-Open a webhook's edit page (**Edit webhook**) and scroll to **Testing**.
-
-<Frame>
-  <img className="block dark:hidden" src="/images/portal/notifications/webhook-edit-light.webp" alt="Webhook edit page with Destination, Advanced settings summary, Payload choice, and Testing options" />
-  <img className="hidden dark:block" src="/images/portal/notifications/webhook-edit-dark.webp" alt="Webhook edit page with Destination, Advanced settings summary, Payload choice, and Testing options" />
-</Frame>
-
-Pick the data to test with.
-
-- **Test with a real lead** searches your leads by ID, name, email, or phone and sends exactly what that lead would send.
-- **Generate sample data** fills every mapped field with fake but realistic values, which is handy before you've received any leads.
-- **Add test data manually** lets you build the payload one field at a time.
-
-Then click **Run Webhook Test**. Juiced sends the request and shows whether your endpoint **Accepted** or **Rejected** it, along with the details of the request and your endpoint's response, so you can see what went wrong.
-
-Test deliveries don't count as real lead deliveries. They're kept on a separate **Tests** tab in the delivery history.
-
-<Tip>
-Since new webhooks start active, run a test right after creating one. If your endpoint isn't ready yet, click **Pause** so real leads aren't sent to it until it is.
-</Tip>
+Nothing changes until you save, and **Testing** sends the version you picked, so you can try it first. Your provider can also change the version for you.
 
 ## Monitoring deliveries
 

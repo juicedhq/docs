@@ -33,7 +33,7 @@ Click **New webhook** and fill in the form.
 - **URL** is where the request goes. It must be a public address, since internal and private addresses are rejected.
 - **Advanced settings** (optional) cover **Authentication** (None, Basic Auth, or Bearer Token), **Method** (POST, PUT, or GET), **Format** (JSON or Form), **Timeout** (3 to 60 seconds, 10 by default), and extra **Headers**. The defaults suit most CRMs.
 - **Payload** is either the **Default payload** or a **Custom payload** (see [Payloads](#payloads)).
-- **Payload version** is **v1** for a new webhook. It sets the shape of every request (see [Payload versions](#payload-versions)).
+- **Payload version** starts on **v1** for a new webhook and sets the shape of every request (see [Payload versions](#payload-versions)).
 
 <Frame>
   <img className="block dark:hidden" src="/images/tenant/integrations/webhook-create-light.webp" alt="New webhook form with Event and URL, a collapsed Advanced settings section showing no auth, POST, JSON, 10s timeout, and no headers, and a choice of Default payload or Custom payload" />
@@ -88,7 +88,7 @@ Lead events can include an **all lead fields** row. It expands to the lead's del
 
 Leads and customers have stable public IDs that are safe to store in other systems. `lead.public_id` looks like `lead_01arz3ndektsv4rrffq69g5fav`, and `customer.customer_public_id` (or `buyer.customer_public_id` on lead events) looks like `cus_01arz3ndektsv4rrffq69g5fav`.
 
-On v1, public IDs are all you get. Every ID in `data` is a public one, so `lead.id`, `buyer.id`, and `customer.id` carry the same value as their public ID, and a lead's `source_id`, `customer_id`, and `submission_id` carry the public IDs of its source (`src_…`), customer (`cus_…`), and submission (`subm_…`). Legacy keeps sending the internal numeric IDs it always has.
+On v1, internal IDs never leave Juiced. Every internal numeric ID in `data` is replaced by its public ID, so each block's `id` (such as `lead.id`, `buyer.id`, `customer.id`, and `source.id`) carries the same value as its public ID, and a lead's `source_id`, `customer_id`, and `submission_id` carry the public IDs of its source (`src_…`), customer (`cus_…`), and submission (`subm_…`). Legacy keeps sending the internal numeric IDs it always has.
 
 ## Payload versions
 
@@ -96,8 +96,8 @@ Every workspace webhook and [customer webhook](#customer-webhooks) sends one of 
 
 | Version | Who gets it | What it sends |
 |---------|-------------|---------------|
-| **Legacy** | Every webhook created before payload versions existed | The original payload shape. Your mapping shapes the whole body. |
-| **v1** | New webhooks, unless you pick Legacy | A fixed envelope around your data. Your mapping shapes only `data`. |
+| **Legacy** | Webhooks created before payload versions existed, and any webhook set to Legacy. | The original payload shape. Your mapping shapes the whole body. |
+| **v1** | New webhooks, unless you pick **Legacy**. | A fixed envelope around your data. Your mapping shapes only `data`. |
 
 Existing webhooks stay on **Legacy** and keep receiving exactly what they get today, so nothing changes for your receiver until you switch. v1 is the version to build new receivers against.
 
@@ -107,12 +107,12 @@ A v1 request body always has the same six keys.
 
 | Key | What it holds |
 |-----|---------------|
-| `version` | Always `"v1"` |
+| `version` | Always `"v1"`. |
 | `id` | The event ID, like `evt_01jbq7m4x2c9t5w8k3n6r0yzde`. Unique to the event and the same on every attempt to deliver it. |
-| `type` | The event, like `lead.assigned` (see [Available events](#available-events)) |
+| `type` | The event, like `lead.assigned` (see [Available events](#available-events)). |
 | `created_at` | When the event happened, in UTC (ISO 8601). It doesn't change when a delivery is retried, so it isn't the time the request was sent. |
-| `tenant_id` | Your workspace's public ID, like `ten_01h8x2k4m6p8r0t2v4w6y8z0ab` |
-| `data` | The event's payload, using [public IDs](#public-ids) only |
+| `tenant_id` | Your workspace's public ID, like `ten_01h8x2k4m6p8r0t2v4w6y8z0ab`. |
+| `data` | The event's payload, with [public IDs](#public-ids) in place of internal ones. |
 
 Here's a trimmed **Lead Assigned** body with the default payload.
 
@@ -151,7 +151,7 @@ On v1 the envelope is fixed, and the [payload](#payloads) you choose fills `data
 
 - With the **Default payload**, `data` carries the full default payload for the event.
 - With a **Custom payload**, your mapping shapes `data` and nothing else. You can't rename or remove the envelope keys.
-- The `{{ event }}` and `{{ tenant.* }}` fields render empty on v1, because the envelope's `type` and `tenant_id` already carry them. Remove them from your mapping, or read the envelope instead.
+- The `{{ event }}` and `{{ tenant.* }}` fields render empty on v1, because the envelope's `type` and `tenant_id` already carry them. **Load default mapping** adds `event`, `tenant.id`, and `tenant.name` rows, so delete those on a v1 webhook and read the envelope instead.
 
 ### Switching versions
 
@@ -159,17 +159,25 @@ The **Payload version** section sits below **Payload** on the webhook's form, wi
 
 - When the version you picked differs from the saved one, the preview shows the **Current** payload next to the payload **After save**, so you can compare the two before anything changes.
 - The **Headers** list shows the headers the request carries, with credentials hidden.
-- A note above the payloads sums up what the version means for this webhook. It turns amber when saving would change what your endpoint receives, and when your mapping uses `{{ event }}` or `{{ tenant.* }}` fields, which it names, since they'd render empty on v1.
+- When v1 is picked, or you're switching versions, a note above the payloads sums up what that means for this webhook. It turns amber when saving would change what your endpoint receives, or when your mapping uses `{{ event }}` or `{{ tenant.* }}` fields (it names them, since they'd render empty on v1).
+- The preview's `id` is a sample. Every live event gets its own.
+
+Moving a webhook from Legacy to v1 changes what your receiver reads, even with the default payload.
+
+- Everything except the envelope moves under `data`.
+- The root `tenant` block and `event` key are gone. Read `tenant_id` and `type` instead, and note that `type` uses names like `lead.assigned` where `event` sent names like `LeadAssigned`.
+- Numeric IDs become public ID strings like `lead_…` and `cus_…` (see [Public IDs](#public-ids)), so anything that stores or matches on the old numbers needs updating.
+- Lead fields titled after an internal ID column, such as an old `state_id` field, aren't sent. Rename them (see [Adding fields to a lead category](/guides/adding-fields-to-a-lead-category#title)) to keep them.
 
 Nothing changes until you save. The **Testing** section sends the version you've picked, even before you save, so you can try v1 against your receiver first. Switching back to **Legacy** works the same way.
 
 <Warning>
-Switching changes the shape of every request the webhook sends from the moment you save. Update your receiver to read the new shape first, and send a test from the **Testing** section before you save.
+Switching changes the shape of every request the webhook sends from the moment you save, and a delivery still waiting to be retried at that point is stopped rather than sent in either shape. Update your receiver to read the new shape first, and send a test from the **Testing** section before you save.
 </Warning>
 
 ### Handling duplicates
 
-Your receiver can get the same event more than once, for example when a delivery is retried after a failure. On v1, use `id` to spot repeats. Store the IDs you've processed, and skip any event whose `id` you've already seen. Legacy requests have no event ID.
+Build your receiver so the same event arriving twice does no harm. On v1, use `id` to spot repeats, since every automatic retry of an event carries the same `id`. Store the IDs you've processed, and skip any event whose `id` you've already seen. Legacy requests have no event ID.
 
 ## Testing a webhook
 

@@ -40,7 +40,7 @@ Enter a name for your field. This is the identifier sources use when submitting 
 
 Good examples include `property_type`, `coverage_amount`, `roof_age`, and `electric_bill`.
 
-A field created before these names were reserved keeps its title, but shows a warning asking you to rename it.
+A field created before these names were reserved keeps its title, but shows a warning asking you to rename it. Rename it soon if it's titled after an internal ID like `state_id`, because [v1 webhooks](/features/webhooks#payload-versions) don't send those fields.
 
 ### Type
 
