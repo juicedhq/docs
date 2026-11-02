@@ -149,19 +149,19 @@ Use **Pause** / **Enable** and **Edit** at the top of the page to change the web
 
 ### Replaying deliveries
 
-If a delivery failed (say your CRM was down), open it and click **Replay** once your system is back up. The replay is queued, and it shows in the delivery history as a new delivery once it's sent. A note beside the button tells you what it will send.
+If a delivery failed (say your CRM was down), click **Replay** on its row, or open it and click **Replay** at the bottom, once your system is back up. The replay is queued, and it shows in the delivery history as a new delivery once it's sent. When you open a delivery, a note beside the button tells you what it will send.
 
-- **On a v1 webhook**, a replay sends the original request again, with the same `id`, `created_at`, and lead data, so your system can tell it's a repeat. If it fails, it's retried like any other delivery.
-- **On a Legacy webhook**, a replay sends the lead's current data once, as a new delivery. v1 deliveries sent before replay existed are replayed this way too.
+- **On a v1 webhook**, a replay sends the original request again, with the same `id`, `created_at`, and lead data, so your system can tell it's a repeat. If it fails, it's retried like any other delivery. Deliveries sent before replay existed are the exception. They go out once with the lead's current data and a new `id`.
+- **On a Legacy webhook**, a replay sends the lead's current data once, as a new delivery.
 
 A panel above the delivery history shows how far back you can go. Deliveries can be replayed for 90 days, or 180 days if they failed or needed a retry.
 
 To replay a batch, say everything that failed during an outage, click **Bulk replay**. Pick the **Deliveries** to replay (**Failed**, **Successful**, or **Successful and failed**), optionally set **First sent from** and **First sent until**, and click **Start replay**.
 
-- Only the latest delivery of each lead is replayed, so leads you've already replayed aren't sent twice.
+- Only the latest delivery of each lead is replayed, so a lead you've replayed before is sent once, not once for every earlier replay. **Failed** and **Successful** refer to that latest delivery.
 - Replays go out at 5 per second, and up to 1,000 at a time. If more match, narrow the dates or status.
-- You can run one bulk replay per webhook at a time. The panel shows its progress as <span className="tone-badge tone-info">Queueing</span>, then <span className="tone-badge tone-info">Sending</span>, then <span className="tone-badge tone-success">Finished</span>, with counts of the replays that succeeded and failed.
+- You can run one bulk replay per webhook at a time. The panel shows its progress as <span className="tone-badge tone-info">Queueing</span>, then <span className="tone-badge tone-info">Sending</span>, then <span className="tone-badge tone-success">Finished</span>, with counts of the replays that succeeded and failed. It shows <span className="tone-badge tone-warning">Finished</span> instead when some failed, and <span className="tone-badge tone-danger">Stalled</span> if Juiced couldn't queue them all.
 
-You can't replay a test (run the test again instead), a delivery that's still being attempted, or a lead that already has a replay on its way. Nothing can be replayed while the webhook is paused, so enable it first.
+Tests (run the test again instead) and deliveries that are still being attempted have no **Replay** button, and you can't replay a lead that already has a replay on its way. Nothing can be replayed while the webhook is paused, so enable it first.
 
-If you don't see **Replay** or **Bulk replay**, your role doesn't let you edit webhooks. Ask your account admin for access.
+If you don't see **Bulk replay**, your role doesn't let you edit webhooks. Ask your account admin or provider for access.
