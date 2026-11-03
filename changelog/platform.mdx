@@ -8,6 +8,18 @@ Everything that changed on the tenant side of Juiced, including lead routing, di
 
 Looking for changes to the buyer experience? Those live in [Customer portal updates](/changelog/customer-portal).
 
+<Update label="October 28, 2026" description="v3.77.2" tags={["New", "Improvements"]}>
+  ## Webhook payload v1
+
+  - New [workspace and customer webhooks](/features/webhooks) start on the v1 [payload version](/features/webhooks#payload-versions). Each request wraps `data` in a fixed envelope with `version`, `id`, `type`, `created_at`, and `tenant_id`, and `data` carries public IDs in place of internal ones.
+  - Existing webhooks stay on Legacy and keep receiving exactly what they get today. Switch one from its payload version settings, where a preview shows the current payload next to the one after save, and an amber note flags `{{ event }}` or `{{ tenant.* }}` fields that would render empty on v1.
+  - Every v1 event has its own `evt_…` ID, the same on every delivery attempt, so your receiver can skip duplicates.
+
+  ## Lead fields
+
+  - New field titles can't reuse the names Juiced reserves for its own lead data, such as `source_id` or `customer_id`. Fields that already use one keep their title and show a warning to rename them. See [Adding fields to a lead category](/guides/adding-fields-to-a-lead-category#title).
+</Update>
+
 <Update label="October 26, 2026" description="v3.76.0" tags={["New", "Improvements"]}>
   ## v1 lead API
 

@@ -83,7 +83,36 @@ When in doubt, start with **Load default mapping**. You get every field for the 
 
 See [Available fields](/features/webhooks#available-fields) for what each event can include.
 
-## 5. Create and test
+## 5. Choose the payload version
+
+The **Payload version** section decides the shape of every request, with a card for **Legacy** and one for **v1**. A new webhook starts on **v1**, which wraps your payload in a fixed envelope. Here's a trimmed **Customer Created** request.
+
+```json
+{
+  "version": "v1",
+  "id": "evt_01jbq7m4x2c9t5w8k3n6r0yzde",
+  "type": "customer.created",
+  "created_at": "2026-10-28T14:03:12Z",
+  "tenant_id": "ten_01h8x2k4m6p8r0t2v4w6y8z0ab",
+  "data": {
+    "id": "cus_01arz3ndektsv4rrffq69g5fav",
+    "name": "Citrus Roofing",
+    "email": "owner@citrusroofing.com"
+  }
+}
+```
+
+The payload you shaped in step 4 becomes `data`, and the envelope tells your receiver what happened (`type`), when it happened (`created_at`), and which event it is (`id`, unique to each event). Pick **Legacy** only if your receiver already expects the original shape, where your mapping shapes the whole body.
+
+The preview under the cards shows what your endpoint will receive, headers included. Its `id` and `created_at` are samples, since every event gets its own. If your mapping uses the `{{ event }}` or `{{ tenant.* }}` fields, an amber note names them, because they render empty on v1. **Load default mapping** adds `event`, `tenant.id`, and `tenant.name` rows, so delete those on a v1 webhook and use `type` and `tenant_id` from the envelope instead.
+
+<Tip>
+Have your receiver store each event's `id` and skip any it has already processed, so an event that arrives twice is only handled once.
+</Tip>
+
+For everything v1 sends and how to switch an existing webhook, see [Payload versions](/features/webhooks#payload-versions).
+
+## 6. Create and test
 
 Click **Create & continue to testing**. The webhook is active right away, and its edit page opens with a **Testing** section. Choose what to send.
 
@@ -109,7 +138,7 @@ Tests go to your real endpoint. Make sure your receiver can handle a test record
 
 If you change anything on the edit page, click **Save changes** on the save bar.
 
-## 6. Verify with a real event
+## 7. Verify with a real event
 
 Trigger the event for real and watch your receiver.
 
@@ -136,6 +165,7 @@ If nothing arrives, work through these checks.
 
 - **Pause or resume** with the pause button on the webhook's row, or with **Pause webhook** (or **Enable webhook**) on its deliveries page. The settings stay put while it's paused.
 - **Edit** with the edit button on the row, or with **Edit** on the deliveries page. Payload changes apply to the next delivery.
+- **Switch payload version** in the **Payload version** section of the edit page. The preview shows the current payload next to the one after save, so check your receiver can read the new shape before you click **Save changes**.
 - **Redeliver** a lead event by opening a delivery and clicking **Redeliver**, which sends that lead again with the webhook's current settings. It's handy once a broken receiver is fixed.
 - **Delete** with the delete button on the row, or with **Delete** on the edit page.
 

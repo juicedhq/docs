@@ -51,6 +51,10 @@ Choose what the request contains.
 
 With the default payload, each request includes the price you paid (`charged_amount`), the `scope` you won it at, when you received it (`received_on`), the `lead_type`, and all the lead's deliverable fields, such as name, email, phone, and address. Fields your provider adds later are included automatically.
 
+### Payload version
+
+The **Payload version** section sets the shape of every request, with a card for **Legacy** and one for **v1**. New webhooks start on **v1**, which wraps each lead in a fixed envelope, and your payload choice shapes only the lead data inside it. Pick **Legacy** only if your system already expects the original shape. A preview below the cards shows what your endpoint will receive. See [Payload versions](#payload-versions) for what each version sends.
+
 Click **Create & continue to testing**. Your webhook is saved and switched on straight away, and you land on its edit page to send a test.
 
 ## Testing a webhook
@@ -75,6 +79,58 @@ Test deliveries don't count as real lead deliveries. They're kept on a separate 
 <Tip>
 Since new webhooks start active, run a test right after creating one. If your endpoint isn't ready yet, click **Pause** so real leads aren't sent to it until it is.
 </Tip>
+
+## Payload versions
+
+Webhooks you created before payload versions existed stay on **Legacy**, so they keep receiving exactly what they always have. New webhooks start on **v1**.
+
+- **v1** wraps your payload in a fixed envelope. Your payload choice shapes only `data`.
+- **Legacy** is the original shape, where your payload choice shapes the whole request.
+
+Here's a v1 request for a new lead, trimmed to a few fields.
+
+```json
+{
+  "version": "v1",
+  "id": "evt_01jbq7m4x2c9t5w8k3n6r0yzde",
+  "type": "lead.assigned",
+  "created_at": "2026-10-28T14:03:12Z",
+  "tenant_id": "ten_01h8x2k4m6p8r0t2v4w6y8z0ab",
+  "data": {
+    "first_name": "Ada",
+    "last_name": "Lovelace",
+    "email": "ada@example.com",
+    "phone": "5555550199",
+    "city": "Austin",
+    "state": "TX",
+    "zip": "78701",
+    "lead_public_id": "lead_01arz3ndektsv4rrffq69g5fav",
+    "charged_amount": "$13.00",
+    "scope": "county",
+    "received_on": "2026-10-28T14:03:12.000000Z",
+    "lead_type": "Motivated Seller"
+  }
+}
+```
+
+| Key | What it holds |
+|-----|---------------|
+| `version` | Always `"v1"`. |
+| `id` | A unique ID for this lead's assignment to you, like `evt_01jbq7m4x2c9t5w8k3n6r0yzde`. It stays the same when a failed delivery is retried. If your provider re-sends the lead by hand, the re-send usually keeps the original `id`, `created_at`, and `data`, so you can skip it as a repeat. When the original data is no longer stored, the lead is rebuilt as it is now and sent with a new `id`. |
+| `type` | Always `lead.assigned` for your webhooks. |
+| `created_at` | When the lead was assigned to you, in UTC. It's not the time the request was sent. |
+| `tenant_id` | Your provider's ID. |
+| `data` | The lead, shaped by your payload choice. IDs in it are public IDs only. |
+
+Build your system so a lead that arrives twice does no harm. Have it store each `id` and skip any it has already processed.
+
+### Switching a webhook's version
+
+Open **Edit webhook** and pick the other card in **Payload version**. The preview shows the **Current** request next to the one **After save**, so you can check the difference before anything changes. The `id` and `created_at` in the preview are samples, since every delivery carries its own. **Use a real lead** previews one of your leads instead of sample data.
+
+When you switch, a note above the preview turns amber and sums up what changes. On v1, everything moves under `data`, and the request no longer has the `tenant` and `event` keys Legacy sends, so check your system reads the new shape. If a custom payload uses `{{ event }}` or `{{ tenant.* }}` fields, the note names them, because they're empty on v1 (the envelope's `type` and `tenant_id` carry the same information).
+
+Nothing changes until you save, and **Testing** sends the version you picked, so you can try it first. Your provider can also change the version for you.
 
 ## Monitoring deliveries
 
