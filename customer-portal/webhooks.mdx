@@ -116,7 +116,7 @@ Here's a v1 request for a new lead, trimmed to a few fields.
 | Key | What it holds |
 |-----|---------------|
 | `version` | Always `"v1"`. |
-| `id` | A unique ID for this lead's assignment to you, like `evt_01jbq7m4x2c9t5w8k3n6r0yzde`. It stays the same when a failed delivery is retried. If your provider re-sends the lead by hand, that send gets a new `id`. |
+| `id` | A unique ID for this lead's assignment to you, like `evt_01jbq7m4x2c9t5w8k3n6r0yzde`. It stays the same when a failed delivery is retried. If your provider re-sends the lead by hand, the re-send usually keeps the original `id`, `created_at`, and `data`, so you can skip it as a repeat. When the original data is no longer stored, the lead is rebuilt as it is now and sent with a new `id`. |
 | `type` | Always `lead.assigned` for your webhooks. |
 | `created_at` | When the lead was assigned to you, in UTC. It's not the time the request was sent. |
 | `tenant_id` | Your provider's ID. |

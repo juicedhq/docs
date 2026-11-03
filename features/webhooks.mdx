@@ -177,7 +177,7 @@ Switching changes the shape of every request the webhook sends from the moment y
 
 ### Handling duplicates
 
-Build your receiver so the same event arriving twice does no harm. On v1, use `id` to spot repeats, since every automatic retry of an event carries the same `id`. Store the IDs you've processed, and skip any event whose `id` you've already seen. Legacy requests have no event ID.
+Build your receiver so the same event arriving twice does no harm. On v1, use `id` to spot repeats, since every automatic retry of an event carries the same `id`. A **Redeliver** keeps the original `id`, `created_at`, and `data` too, unless the original data is no longer stored, in which case the event is rebuilt from the lead as it is now and sent with a new `id`. Store the IDs you've processed, and skip any event whose `id` you've already seen. Legacy requests have no event ID.
 
 ## Testing a webhook
 
