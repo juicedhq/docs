@@ -8,6 +8,32 @@ Everything that changed on the tenant side of Juiced, including lead routing, di
 
 Looking for changes to the buyer experience? Those live in [Customer portal updates](/changelog/customer-portal).
 
+<Update label="November 3, 2026" description="v3.80.0" tags={["New", "Improvements", "Fixes", "Breaking changes"]}>
+  <Frame>
+    <img className="block dark:hidden" src="/images/changelog/v3.80.0-light.webp" alt="Juiced release card reading Links and buttons in your customer emails, next to a Lead Assigned email template whose body links to a partner site with the lead's address, state, and ZIP" />
+    <img className="hidden dark:block" src="/images/changelog/v3.80.0-dark.webp" alt="Juiced release card reading Links and buttons in your customer emails, next to a Lead Assigned email template whose body links to a partner site with the lead's address, state, and ZIP" />
+  </Frame>
+
+  ## Notification emails
+
+  - Email [notification templates](/features/notifications) can now include links. Write them as `<a href="https://…">`, and any variables inside the link are URL-encoded, so you can send buyers to a partner tool with the lead's details filled in. See [Links and the action button](/features/notifications#links-and-the-action-button).
+  - Write `{{ actionLink | Button text }}` to place the action button anywhere in the email with your own label. The automatic button at the bottom is then left off. A plain `{{ actionLink }}` still prints the URL.
+  - New `{{ lead.state }}` and `{{ lead.zip }}` variables for lead notifications.
+  - Lead and customer values in emails and texts always show as plain text, so a lead name that looks like a link or HTML can't become one in your customer's inbox. In texts, links from your template show as their text followed by the URL.
+
+  ## Source fields
+
+  - **Breaking:** A source's **Fields** tab no longer adds fields of its own. It now lists its lead category's fields, and you choose **Override** on a field to change its type, required settings, values, or description for that source only. New fields go on the lead category. See [Field overrides](/features/sources#field-overrides).
+  - Fields that only existed on a source have moved to its lead category, so every source on that category now accepts them. Where a source required one of them, the lead category's copy is optional and that source keeps requiring it through an override, so no source starts rejecting leads. Overrides that matched their lead category field in every setting but the description were removed.
+  - A lead category field that a source overrides can't be renamed or deleted, and a source can't move to a lead category without the fields it overrides. The error names the sources or fields involved.
+  - **Values** for List of Values fields are now entered one at a time (press Enter, or paste a list), and spaces, blanks, and repeats are cleaned up on save.
+
+  ## Fixes
+
+  - A ping that can't be categorized into a lead type, or whose lead type is archived, now gets `no_match` before any distribution stage runs. Before, a Club or partner stage could accept it, often at $0, and the post then came in Uncategorized and was never distributed. If your lead types depend on fields a source only sends with the post, see [Ping-post](/features/ping-post#pinging-juiced-from-your-sources).
+  - [Webhooks](/features/webhooks) for new leads, new customers (including checkout signups), and transaction updates no longer occasionally fail to send when they fire while the record is still being saved.
+</Update>
+
 <Update label="October 28, 2026" description="v3.77.2" tags={["New", "Improvements"]}>
   ## Webhook payload v1
 

@@ -52,7 +52,7 @@ Choose your type carefully, because it affects validation. A field typed as **Ph
 
 ### Values (List of Values type only)
 
-If you selected **List of Values**, a **Values** box appears. Enter the allowed values separated by commas, like `single_family, condo, townhouse`. Any submitted value not in this list will fail validation.
+If you selected **List of Values**, a **Values** box appears. Type each allowed value and press Enter, or paste a list like `single_family, condo, townhouse`. Juiced trims spaces and drops blanks and repeats when you save. Any submitted value not in this list fails validation.
 
 ### Toggle settings
 
@@ -78,6 +78,8 @@ Click **Create field**. You'll see a "Field created." confirmation, and your new
 Open a field's row actions and choose **Edit** to change its properties. The same dialog opens with the current values filled in; click **Save field** when you're done.
 
 To remove a custom field, choose **Delete** from its row actions and confirm. If the field is used in a condition (for example, in a lead type or a distribution stage), deletion fails with an error explaining that the field is in use. Remove the field from those conditions first.
+
+A field that a source [overrides](/features/sources#field-overrides) can't be renamed or deleted either. The error names the sources, so you can remove their overrides first.
 
 <Warning>
 Deleting a field is permanent. Any historical lead data for that field is preserved, but the field will no longer appear in the schema or be validated on new submissions.
