@@ -9,7 +9,7 @@ Changes to the customer portal, the app you use to browse the marketplace, manag
 <Update label="November 2, 2026" description="v3.77.4" tags={["New", "Improvements"]}>
   ## Webhook replay
 
-  - **Replay** replaces **Redeliver** on your [webhook](/customer-portal/webhooks#replaying-deliveries) deliveries. For v1 deliveries sent from this release on, a replay sends the original request again with the same `id`, so your system can tell it's a repeat. Otherwise, it sends the lead's current data once.
+  - **Replay** replaces **Redeliver** on your [webhook](/customer-portal/webhooks#replaying-deliveries) deliveries. For v1 deliveries sent from this release on, a replay sends the original event again with the same `id`, so your system can tell it's a repeat. Otherwise, it sends the lead's current data once.
   - **Bulk replay** re-sends up to 1,000 deliveries at once, such as every failure from the day your CRM was down, and shows its progress above your delivery history.
 </Update>
 
