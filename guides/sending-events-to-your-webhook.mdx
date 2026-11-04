@@ -149,8 +149,8 @@ Trigger the event for real and watch your receiver.
 Then click **Overview** on the edit page, or the webhook's row in the list, to open its deliveries.
 
 <Frame>
-  <img className="block dark:hidden" src="/images/tenant/integrations/webhook-deliveries-light.webp" alt="Deliveries page for an active Lead Assigned webhook with delivery stats, a Live deliveries list with response codes and durations, and the webhook's endpoint, method, format, and trigger" />
-  <img className="hidden dark:block" src="/images/tenant/integrations/webhook-deliveries-dark.webp" alt="Deliveries page for an active Lead Assigned webhook with delivery stats, a Live deliveries list with response codes and durations, and the webhook's endpoint, method, format, and trigger" />
+  <img className="block dark:hidden" src="/images/tenant/integrations/webhook-deliveries-light.webp" alt="Deliveries page for an active Lead Assigned webhook with delivery stats, a replay panel with the last bulk replay and a Bulk replay button, a Live deliveries list with response codes and durations, and the webhook's endpoint, method, format, and trigger" />
+  <img className="hidden dark:block" src="/images/tenant/integrations/webhook-deliveries-dark.webp" alt="Deliveries page for an active Lead Assigned webhook with delivery stats, a replay panel with the last bulk replay and a Bulk replay button, a Live deliveries list with response codes and durations, and the webhook's endpoint, method, format, and trigger" />
 </Frame>
 
 The stats across the top show **Total deliveries**, **Success rate**, **Failed**, **Average duration**, and **Last delivery**. Real deliveries are under **Live**, and your test sends are under **Tests**. Click any delivery to see the request Juiced sent and the response it got back.
@@ -166,7 +166,7 @@ If nothing arrives, work through these checks.
 - **Pause or resume** with the pause button on the webhook's row, or with **Pause webhook** (or **Enable webhook**) on its deliveries page. The settings stay put while it's paused.
 - **Edit** with the edit button on the row, or with **Edit** on the deliveries page. Payload changes apply to the next delivery.
 - **Switch payload version** in the **Payload version** section of the edit page. The preview shows the current payload next to the one after save, so check your receiver can read the new shape before you click **Save changes**.
-- **Redeliver** a lead event by opening a delivery and clicking **Redeliver**, which sends that lead again with the webhook's current settings. It's handy once a broken receiver is fixed.
+- **Replay** a delivery by opening it and clicking **Replay**, or replay every failure from an outage at once with **Bulk replay** above the history. On v1, the original event goes out again with the same `id`. See [Replaying deliveries](/features/webhooks#replaying-deliveries) for how each kind works.
 - **Delete** with the delete button on the row, or with **Delete** on the edit page.
 
 ## Customer webhooks

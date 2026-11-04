@@ -8,6 +8,14 @@ Everything that changed on the tenant side of Juiced, including lead routing, di
 
 Looking for changes to the buyer experience? Those live in [Customer portal updates](/changelog/customer-portal).
 
+<Update label="November 2, 2026" description="v3.77.4" tags={["New", "Improvements"]}>
+  ## Webhook replay
+
+  - **Replay** replaces **Redeliver** on workspace and customer webhook deliveries, and it's queued instead of sent while you wait. For v1 deliveries sent from this release on, a replay sends the original event again with the same `id`, `created_at`, and `data`, and it's retried if it fails. Legacy webhooks, and older v1 deliveries, get the lead's current data, sent once as a new event. Replays are refused while a webhook is paused. See [Replaying deliveries](/features/webhooks#replaying-deliveries).
+  - **Bulk replay** re-sends up to 1,000 deliveries at once, filtered by status and the date each event was first sent. It replays only the latest delivery of each event, at 5 per second, and shows its progress above the delivery history.
+  - The delivery history now says how far back deliveries can be replayed, which is 90 days, or 180 days for deliveries that failed or needed a retry.
+</Update>
+
 <Update label="October 28, 2026" description="v3.77.2" tags={["New", "Improvements"]}>
   ## Webhook payload v1
 
