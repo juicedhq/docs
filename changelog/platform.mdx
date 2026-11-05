@@ -8,6 +8,14 @@ Everything that changed on the tenant side of Juiced, including lead routing, di
 
 Looking for changes to the buyer experience? Those live in [Customer portal updates](/changelog/customer-portal).
 
+<Update label="November 5, 2026" description="v3.81.0" tags={["Fixes"]}>
+  ## Fixes
+
+  - Unexpected failures now show a short, safe message instead of raw internal error text (database errors, server names or code details). This covers [incoming and outgoing logs](/features/logs), lead timelines, webhook delivery history, and test sends to partners and webhooks. Failed requests to a partner still say what went wrong, such as a timeout, a connection failure or the HTTP status. Older records read the same way.
+  - The **Error** tab on an [outgoing log](/features/logs#outgoing-logs) shows only the message, without the error class.
+  - Password reset emails for your team and your partners now link to the reset page on the domain they asked from, instead of Juiced's central reset page.
+</Update>
+
 <Update label="November 2, 2026" description="v3.77.4" tags={["New", "Improvements"]}>
   ## Webhook replay
 
