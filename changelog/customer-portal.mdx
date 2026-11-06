@@ -6,6 +6,12 @@ rss: true
 
 Changes to the customer portal, the app you use to browse the marketplace, manage your leads, and keep your account topped up. Newest first. Use the RSS feed on this page so you never miss a drop.
 
+<Update label="November 6, 2026" description="v3.83.0" tags={["Improvements", "Fixes"]}>
+  - Secret headers on your [webhooks](/customer-portal/webhooks#advanced-settings), such as `Authorization` or `X-Api-Key`, are now hidden once saved, just like passwords and tokens. Click **Replace** to change one. If you move the webhook to a different host, you'll enter them again.
+  - If your CRM echoes a credential back in its response, your delivery history now masks it.
+  - Fixed banner buttons that should take you to your [payment methods](/customer-portal/billing#payment-methods) but went nowhere. They now open your payment methods page, so you can add funds in one click.
+</Update>
+
 <Update label="November 6, 2026" description="v3.82.0" tags={["New"]}>
   <Frame>
     <img className="block dark:hidden" src="/images/changelog/v3.82.0-light.webp" alt="Juiced release card reading Signed webhooks you can verify, next to a webhook's Signing section with a new signing secret shown once, a note that the previous secret signs until the next day, and Rotate secret, Expire previous secret now, and Turn off signing buttons" />

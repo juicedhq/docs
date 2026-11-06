@@ -292,7 +292,7 @@ Customer webhooks send lead data to an HTTP endpoint every time a lead is assign
 Click **New webhook** and fill in three sections.
 
 - **Destination** takes an optional **Name** and the **URL** the lead data is sent to.
-- **Advanced settings** cover **Method** (POST, PUT, or GET), **Authentication** (None, Basic Auth, or Bearer Token), **Format** (JSON or Form), **Timeout**, and extra **Headers**.
+- **Advanced settings** cover **Method** (POST, PUT, or GET), **Authentication** (None, Basic Auth, or Bearer Token), **Format** (JSON or Form), **Timeout**, and extra **Headers**. Saved credentials and secret headers stay hidden (see [Saved credentials and secret headers](/features/webhooks#saved-credentials-and-secret-headers)).
 - **Payload** is either the **Default payload** (every available field in the standard shape) or a **Custom payload** where you pick fields, rename keys, add static values, or paste your own JSON shape.
 
 Click **Create & continue to testing**. On the edit page you can then test the webhook with a real lead, generated sample data, or test data you add by hand, and see the request and response. On a v1 webhook, the **Signing** section turns on a signature the customer's endpoint can verify (see [Signing](/features/webhooks#signing)).
