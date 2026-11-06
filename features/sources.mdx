@@ -175,20 +175,26 @@ The **Payouts** tab shows what you owe the source for a period (last month by de
 
 Below the stats, each lead is listed with when it was received, its status, its payout, and its revenue. Pick a different period from the timeframe menu in the header. You need analytics-view permission to see this tab.
 
-## Source-level fields
+## Field overrides
 
-You can define fields at the source level on the **Fields** tab. These fields are appended to the fields from the source's lead category, letting you capture more precise information for specific sources.
+A source's **Fields** tab lists every field of its [lead category](/features/lead-categories), so every lead from a lead category has the same set of fields. When one source needs a field to behave differently, override it. Click **Override** (the pencil at the end of the field's row) and change its type, its **Required for post**, **Required for ping**, **Deliverable**, and **Hidden from API spec** switches, its values, or its description. The override applies to that source only.
 
 <Frame>
-  <img className="block dark:hidden" src="/images/tenant/ingest/source-fields-light.webp" alt="Source Fields tab with an empty Source Fields table and a read-only Lead Category Fields table showing post, ping, deliverable, and hidden-from-spec settings" />
-  <img className="hidden dark:block" src="/images/tenant/ingest/source-fields-dark.webp" alt="Source Fields tab with an empty Source Fields table and a read-only Lead Category Fields table showing post, ping, deliverable, and hidden-from-spec settings" />
+  <img className="block dark:hidden" src="/images/tenant/ingest/source-fields-light.webp" alt="Source Fields tab listing the lead category's fields, with one overridden row highlighted and marked Overridden" />
+  <img className="hidden dark:block" src="/images/tenant/ingest/source-fields-dark.webp" alt="Source Fields tab listing the lead category's fields, with one overridden row highlighted and marked Overridden" />
 </Frame>
 
-If you create a source-level field with the same title as a field on the lead category, the source's field overrides the lead category's. Overriding fields carry an <span className="tone-badge tone-info">Overrides</span> badge, and the lead category field they replace is dimmed in the read-only **Lead Category Fields** table below.
+Overridden rows are highlighted, carry an <span className="tone-badge tone-info">Overridden</span> badge, and show the override's settings, which you can flip right in the table. The pencil and trash icons on an overridden row are **Edit override** and **Remove override**, and removing an override puts the source back on the lead category's settings.
+
+A few rules keep overrides pointing at a real field.
+
+- **Titles don't change.** An override always has its lead category field's title, and a ZIP field keeps its type and required settings.
+- **New fields go on the lead category.** A source can't add a field of its own. Add it to the lead category instead, where every source picks it up.
+- **Overridden fields stay put.** A lead category field that a source overrides can't be renamed or deleted, and a source can't move to a lead category that's missing a field it overrides. The error names the sources or fields involved, so you know which overrides to remove first.
 
 ## Source-level duplicate checks
 
-[Duplicate checks](/features/duplicate-detection) can also be configured on a source's **Duplicate Checks** tab. A check set here only applies to leads coming through that source, just like source-level fields only apply to that source.
+[Duplicate checks](/features/duplicate-detection) can also be configured on a source's **Duplicate Checks** tab. A check set here only applies to leads coming through that source, just like a field override.
 
 <Frame>
   <img className="block dark:hidden" src="/images/tenant/ingest/source-duplicate-checks-light.webp" alt="Source Duplicate Checks tab with an empty table and a New duplicate check button" />
@@ -211,7 +217,7 @@ Deleted sources are soft-deleted rather than permanently removed. Leads, posts, 
 
 <CardGroup cols={2}>
   <Card title="Setting up a source and its attributes" icon={<HugeIcon name="app-window" card />} href="/guides/setting-up-a-source-and-its-attributes">
-    Create a source, configure its settings, and add source-level fields.
+    Create a source, configure its settings, and override fields where it needs to.
   </Card>
   <Card title="Sending leads to Juiced" icon={<HugeIcon name="inbox-download" card />} href="/guides/sending-leads-to-juiced">
     Submit your first lead through the source API.
