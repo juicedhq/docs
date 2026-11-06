@@ -6,6 +6,19 @@ rss: true
 
 Changes to the customer portal, the app you use to browse the marketplace, manage your leads, and keep your account topped up. Newest first. Use the RSS feed on this page so you never miss a drop.
 
+<Update label="November 6, 2026" description="v3.82.0" tags={["New"]}>
+  <Frame>
+    <img className="block dark:hidden" src="/images/changelog/v3.82.0-light.webp" alt="Juiced release card reading Signed webhooks you can verify, next to a webhook's Signing section with a new signing secret shown once, a note that the previous secret signs until the next day, and Rotate secret, Expire previous secret now, and Turn off signing buttons" />
+    <img className="hidden dark:block" src="/images/changelog/v3.82.0-dark.webp" alt="Juiced release card reading Signed webhooks you can verify, next to a webhook's Signing section with a new signing secret shown once, a note that the previous secret signs until the next day, and Rotate secret, Expire previous secret now, and Turn off signing buttons" />
+  </Frame>
+
+  ## Webhook signing
+
+  - Turn on [signing](/customer-portal/webhooks#signing) for any v1 webhook from its edit page, and every lead delivery carries an `X-Juiced-Signature` header your system can check, proving it came from Juiced. Your secret is shown once, and the page includes PHP and Node examples for checking it.
+  - **Rotate secret** gives you a new secret while the old one keeps working for 24 hours, so you can update your system without missing a lead.
+  - Every v1 delivery now also carries `X-Juiced-Event`, `X-Juiced-Webhook-Version`, and `X-Juiced-Delivery` [headers](/customer-portal/webhooks#headers).
+</Update>
+
 <Update label="November 5, 2026" description="v3.81.0" tags={["Fixes"]}>
   ## Fixes
 
