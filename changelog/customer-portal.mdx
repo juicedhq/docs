@@ -6,6 +6,22 @@ rss: true
 
 Changes to the customer portal, the app you use to browse the marketplace, manage your leads, and keep your account topped up. Newest first. Use the RSS feed on this page so you never miss a drop.
 
+<Update label="November 2, 2026" description="v3.77.0–v3.79.0" tags={["Improvements", "Fixes"]}>
+  ## Leads and account
+
+  - Your [Leads](/customer-portal/leads) list now shows each lead's street address, with the city, state, and ZIP underneath.
+  - Signing in with your password when you have a passkey now asks for the passkey next, instead of turning you away. If it fails, use your authenticator app, or an emailed code if you don't have one. See [Logging in](/customer-portal/signing-up-and-logging-in#logging-in).
+  - Your [Company profile](/customer-portal/company-profile) page loads again, and businesses in the United Kingdom can now save it with a county and postcode.
+  - Canadian businesses can now sign up, with a working Province list.
+
+  ## Webhooks
+
+  - Live deliveries to your [webhooks](/customer-portal/webhooks) now send the headers and authentication you set in **Advanced settings**. Before, they were only used for test sends.
+  - Your delivery history shows each attempt and its status, and an error from your endpoint is logged with its status code and response.
+  - You can't add two webhooks with the same URL. If you already had duplicates, the active, most recently edited one was kept, with the others' delivery history moved onto it.
+  - **Generate sample data** works before your first bid. If your provider sells more than one kind of lead, you pick the lead type to sample.
+</Update>
+
 <Update label="November 2, 2026" description="v3.77.4" tags={["New", "Improvements"]}>
   ## Webhook replay
 

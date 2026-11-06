@@ -150,6 +150,8 @@ The table lists every lead type in the source's lead category. Each row has two 
 
 The **Behavior** column spells out the result in plain language, such as "Pays 35% of the winning bid" and "No fallback configured." Leads that get a Rejected or Duplicate [status response](#status-responses) are always priced at &#36;0.00.
 
+A lead's payout is set once, when it's posted, as the price Juiced returns in the post response. Reprocessing, a return, a resale, or a later Marketplace or Club sale never changes it, so a lead quoted &#36;0.00 pays &#36;0.00 even if it sells later. A lead sold to several customers counts its payout once.
+
 <Note>
 Fallback prices matter most for [ping-post](/features/ping-post) traffic. A marketplace stage only accepts a ping when the source has a fallback price for that lead type, and quotes that price in the ping response. A Club stage accepts pings at the fallback price, or at &#36;0 without one, but passes when the lead type has a fixed price and no fallback. Leads posted directly, without a ping, can reach either stage without a fallback price.
 </Note>

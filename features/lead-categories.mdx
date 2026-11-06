@@ -135,7 +135,7 @@ Phone fields validate against actual carrier patterns, not just digit counts. A 
 
 | Type | Label | Format | Example |
 |------|-------|--------|---------|
-| `zip` | Postal Codes | 5-digit US ZIP (also validates Canadian and Australian postal codes for tenants operating in those countries) | `90210` |
+| `zip` | Postal Codes | 5-digit US ZIP (also validates Canadian and Australian postal codes for tenants operating in those countries). Canadian codes are accepted with or without the space and in any case, so `m5v3l9` and `M5V 3L9` match the same code. | `90210` |
 | `state` | States | 2-letter US state abbreviation | `CA` |
 | `county` | Counties | County name as text | `San Francisco County` |
 | `country` | Countries | Country code as text | `US` |
