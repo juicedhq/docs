@@ -97,7 +97,7 @@ When creating a new field, you'll provide the following.
 
 | Property | Required | Description |
 |----------|----------|-------------|
-| Title | Yes | The field identifier. Must start with a letter or underscore and can only contain letters, numbers, and underscores (no dashes or spaces). Must be unique within the category. |
+| Title | Yes | The field identifier. Must start with a letter or underscore and can only contain letters, numbers, and underscores (no dashes or spaces). Must be unique within the category, and can't reuse a name Juiced reserves for its own lead data, such as `source_id` or `customer_id` (see [the full list](/guides/adding-fields-to-a-lead-category#title)). |
 | Type | Yes | The data type and validation format. See [field types](#field-types) below. |
 | Description | No | Optional explanation of what this field captures. |
 | Required for post | No | Whether the field must be present when creating a lead. |
