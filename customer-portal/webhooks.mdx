@@ -42,6 +42,8 @@ The defaults (no authentication, POST, JSON, 10-second timeout, no extra headers
 
 Saved passwords and tokens stay hidden. To change one, type a new value.
 
+Secret headers stay hidden too. That's any header named `Authorization`, `Cookie`, `Set-Cookie`, `X-Api-Key`, `Api-Key`, `Token`, `Access-Token`, `Auth-Token`, `Password`, `Secret`, or `Bearer` (in any case, with dashes, underscores, or neither). Once saved, its value shows a lock and **Saved**. Click **Replace** to type a new one. If you change the **URL** to a different host, enter each secret header value again, since a saved value is only reused for the same host. If your CRM echoes a credential back in its response, your delivery history shows it masked.
+
 ### Payload
 
 Choose what the request contains.

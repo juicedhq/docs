@@ -107,7 +107,7 @@ On the **Ping/Post** tab, click **Configure Ping** or **Configure Post**. Each p
 | Section | What you set |
 |---------|--------------|
 | **Destination** | The **URL** the ping or post is sent to |
-| **Advanced settings** | **Method** (POST, PUT, or GET), **Authentication** (None, Basic Auth, or Bearer Token), **Format** (JSON or Form), **Timeout** in seconds, and extra **Headers**. The defaults suit most endpoints. |
+| **Advanced settings** | **Method** (POST, PUT, or GET), **Authentication** (None, Basic Auth, or Bearer Token), **Format** (JSON or Form), **Timeout** in seconds, and extra **Headers**. The defaults suit most endpoints. Saved credentials and secret headers stay hidden (see [Saved credentials and secret headers](/features/webhooks#saved-credentials-and-secret-headers)). |
 | **Payload** | The fields sent. Use **Load default mapping** for the standard shape, build rows yourself, or **Paste JSON** from the partner's spec. Keys use dot notation for nesting, and you can click a field to chain transformers. |
 | **Response** | How to read the partner's reply. **Price path** and **Message path** point to the price and any message or rejection reason (dot notation, like `data.offer.price`). A **Success Condition** is required; a **Duplicate Condition** is optional. Conditions can check the **HTTP Status Code**, whether a key equals or contains a value (**Key Equals**, **Key Contains**), or whether the response contains some text (**Response Contains**). |
 

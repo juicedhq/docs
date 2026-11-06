@@ -8,6 +8,17 @@ Everything that changed on the tenant side of Juiced, including lead routing, di
 
 Looking for changes to the buyer experience? Those live in [Customer portal updates](/changelog/customer-portal).
 
+<Update label="November 6, 2026" description="v3.83.0" tags={["Improvements", "Fixes"]}>
+  ## Improvements
+
+  - Secret header values on [webhooks](/features/webhooks), customer webhooks, and [partner](/features/partners) endpoints are now hidden once saved, just like passwords and tokens. A header named `Authorization`, `X-Api-Key`, `Token`, `Secret`, or similar shows a lock and **Saved**, with **Replace** to type a new value. Moving the URL to a different host asks for these values again. See [Saved credentials and secret headers](/features/webhooks#saved-credentials-and-secret-headers).
+  - When a receiver echoes a password, token, or secret header back in its response, the delivery history now masks it.
+
+  ## Fixes
+
+  - A [banner](/features/banners) linking to `::billing_url::` now sends customers to their own payment methods page in the portal, instead of a button that went nowhere. The banner form's **Link** field explains the token.
+</Update>
+
 <Update label="November 2, 2026" description="v3.77.4" tags={["New", "Improvements"]}>
   ## Webhook replay
 

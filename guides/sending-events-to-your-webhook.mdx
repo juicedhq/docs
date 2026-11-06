@@ -52,7 +52,7 @@ Need the same event in two places, with different payloads? Create two webhooks.
 | **Method** | **POST**, **PUT**, or **GET**. Almost always POST. |
 | **Format** | **JSON**, or **Form** for receivers that expect URL-encoded form data. |
 | **Timeout** | How many seconds to wait for a response, from 3 to 60. The default is 10. |
-| **Headers** | Extra HTTP headers sent with every request, such as an API key your receiver expects. |
+| **Headers** | Extra HTTP headers sent with every request, such as an API key your receiver expects. Secret headers like `Authorization` or `X-Api-Key` are hidden once saved (see [Saved credentials and secret headers](/features/webhooks#saved-credentials-and-secret-headers)). |
 
 <Warning>
 Juiced doesn't sign webhook requests. If your receiver needs to verify where a request came from, use Basic Auth, a bearer token, or a secret header it can check.
