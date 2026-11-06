@@ -8,6 +8,36 @@ Everything that changed on the tenant side of Juiced, including lead routing, di
 
 Looking for changes to the buyer experience? Those live in [Customer portal updates](/changelog/customer-portal).
 
+<Update label="November 6, 2026" description="v3.84.0" tags={["New", "Improvements"]}>
+  <Frame>
+    <img className="block dark:hidden" src="/images/changelog/v3.84.0-light.webp" alt="Juiced release card reading A guided start for new workspaces, next to the setup guide's How do you want to start selling step with cards for Ping tree, Customer bidding, Marketplace, and Club" />
+    <img className="hidden dark:block" src="/images/changelog/v3.84.0-dark.webp" alt="Juiced release card reading A guided start for new workspaces, next to the setup guide's How do you want to start selling step with cards for Ping tree, Customer bidding, Marketplace, and Club" />
+  </Frame>
+
+  New workspaces now go from signup to selling in one guided flow. It's a fresher squeeze for anyone signing up, and existing workspaces aren't asked to go through it.
+
+  ## Signup and onboarding
+
+  - Signup asks for less. The form is just your name, work email, password, and company name, with a workspace address that fills itself in, checks itself as you type, and suggests free alternatives when yours is taken. See [Create your account](/get-started/quickstart#1-create-your-account).
+  - Confirm your email with a 6-digit code on the **Confirm it's you** screen, or open the link in the same email on any device.
+  - A new sign-in step offers a passkey or an authenticator app. Email codes are already on, so it never holds you up.
+  - Three steps unlock the workspace, finishing your company details, choosing your operating countries, and choosing a plan through Stripe Checkout. Connecting Stripe is no longer one of them. See [Unlock your workspace](/get-started/quickstart#2-unlock-your-workspace).
+
+  ## Setup guide
+
+  - A [setup guide](/get-started/quickstart#3-follow-the-setup-guide) builds your first lead category from a market template, your first source, and the way you want to sell (ping tree, customer bidding, marketplace, or Club), then walks you through the steps that path needs, like a bid range, a first partner or customer, and card payments.
+  - Picking a way to sell creates its [distribution stage](/features/distribution) for you, so new workspaces start with the one stage they need instead of a default Bidding and Marketplace pair.
+  - Import fields from a spreadsheet of leads you already have. Upload a CSV or Excel file and the guide suggests a field name and type for each column.
+  - Ask the guide for a test customer and it creates one with a bid and credit for one lead, ready for your first test.
+  - Skipped steps wait in **Guided setup** on the rail, with a progress ring, **Show me** tours of the right page, and a way to start another way to sell. See [Pick up where you left off](/get-started/quickstart#pick-up-where-you-left-off).
+
+  ## Improvements
+
+  - The dashboard's **Getting started** cards are gone. New workspaces track setup in **Guided setup** instead.
+  - The search box at the top of the sidebar now reads **Search or jump to...**. It still opens the same [command palette](/get-started/finding-your-way-around#the-command-palette).
+  - Contact and support addresses on the Juiced website, and in the custom domain setup copy, now point to support@usejuiced.com.
+</Update>
+
 <Update label="November 6, 2026" description="v3.83.0" tags={["Improvements", "Fixes"]}>
   ## Improvements
 
