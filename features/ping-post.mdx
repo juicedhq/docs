@@ -37,6 +37,8 @@ Your [sources](/features/sources) run ping-post against Juiced with the v1 API. 
 }
 ```
 
+A ping has to resolve to a [lead type](/features/lead-types), the same way the post will be categorized. When it doesn't (or its lead type is archived), Juiced answers `no_match` before any distribution stage runs, since the post would come in Uncategorized and never be distributed. If your lead types' conditions use fields a source only sends with the post, have the source send them with the ping too. Marking them required for ping makes sure it does.
+
 Vendor sources get a single `price` instead of `bids`. To post the lead, the source sends the full lead to `POST /api/v1/leads` with the ping's `id` as `ping_id`. See [Submit a Ping](/api-reference/endpoint/v1/ping) and [Submit a Lead](/api-reference/endpoint/v1/leads) for every field and response.
 
 <Note>

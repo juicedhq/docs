@@ -4,6 +4,7 @@ description: Send real-time event data from Juiced to your CRM, data warehouse, 
 ---
 
 import { HugeIcon } from '/snippets/hugeicon.jsx';
+import WebhookSignatureVerification from '/snippets/webhook-signature-verification.mdx';
 
 Webhooks send data to an outside system the moment something happens in Juiced. A lead is assigned, a customer signs up, a wallet moves, and Juiced sends an HTTP request to your URL with the payload you chose. Your other tools stay as fresh as your leads.
 
@@ -41,6 +42,16 @@ Click **New webhook** and fill in the form.
 </Frame>
 
 Click **Create & continue to testing**. The webhook is active as soon as it's created, and the edit page opens with a **Testing** section so you can try it right away. For a step-by-step walkthrough, see [Sending events to your webhook](/guides/sending-events-to-your-webhook).
+
+### Saved credentials and secret headers
+
+Once saved, passwords, tokens, and secret header values never show again, not even to you. A header is secret when its name is `Authorization`, `Cookie`, `Set-Cookie`, `X-Api-Key`, `Api-Key`, `Token`, `Access-Token`, `Auth-Token`, `Password`, `Secret`, or `Bearer` (in any case, with dashes, underscores, or neither). Other headers stay visible and editable.
+
+- A saved secret header shows a lock and **Saved** in place of its value, and its name is locked. Click **Replace** to type a new value. Leave it alone and Juiced keeps the saved one.
+- If you move the **URL** to a different host, enter each secret header value again. Juiced only reuses a saved value for the same endpoint host, so a secret is never sent somewhere new without you retyping it.
+- When a receiver echoes a credential back in its response, the delivery history shows it masked. Deliveries recorded before November 6, 2026 aren't re-masked.
+
+The same rules apply to [customer webhooks](#customer-webhooks), the customer portal, and [partner](/features/partners) ping and post endpoints.
 
 ## Available events
 
@@ -179,6 +190,65 @@ Switching changes the shape of every request the webhook sends from the moment y
 
 Build your receiver so the same event arriving twice does no harm. On v1, use `id` to spot repeats, since every automatic retry of an event carries the same `id`, and so does a [replay](#replaying-deliveries) of the original event. Store the IDs you've processed, and skip any event whose `id` you've already seen. Legacy requests have no event ID.
 
+### v1 headers
+
+Every v1 request carries these headers, so your receiver can route a request before it parses the body.
+
+| Header | What it holds |
+|--------|---------------|
+| `X-Juiced-Event` | The event, the same as the body's `type`, like `lead.assigned`. |
+| `X-Juiced-Webhook-Version` | Always `v1`. |
+| `X-Juiced-Delivery` | The delivery's ID, like `whdl_01jbq7m4x2c9t5w8k3n6r0yzdf`. Every attempt of a delivery sends the same one, and a replay gets its own. Test sends don't carry it. |
+| `X-Juiced-Signature` | The [signature](#signing), only when signing is on. |
+
+Juiced sets these itself. A header you add under **Headers** with one of these names isn't sent on v1. Legacy requests carry none of them.
+
+## Signing
+
+Signing lets your receiver prove a request really came from Juiced and wasn't changed on the way. It's optional, and worth turning on whenever your own code receives the webhook. Signing works on saved webhooks on the [v1 payload version](#payload-versions), for both workspace and customer webhooks.
+
+### Turning signing on
+
+Open the webhook's edit page and click **Turn on signing** in the **Signing** section. Juiced creates a signing secret (it starts with `whsec_`) and shows it once. Click **Copy** and store it where your receiver can read it, such as an environment variable, then click **Done**. Juiced never shows that secret again, so if you lose it, [rotate](#rotating-the-secret) to get a new one.
+
+<Frame>
+  <img className="block dark:hidden" src="/images/tenant/integrations/webhook-signing-light.webp" alt="Signing section saying deliveries are signed, with an amber note that the previous secret also signs deliveries until the next day, a new whsec_ secret shown once with Copy and Done buttons, and Rotate secret, Expire previous secret now, and Turn off signing buttons" />
+  <img className="hidden dark:block" src="/images/tenant/integrations/webhook-signing-dark.webp" alt="Signing section saying deliveries are signed, with an amber note that the previous secret also signs deliveries until the next day, a new whsec_ secret shown once with Copy and Done buttons, and Rotate secret, Expire previous secret now, and Turn off signing buttons" />
+</Frame>
+
+From then on, every delivery, retry, and replay carries an `X-Juiced-Signature` header, and so do test sends from the **Testing** section (as long as the URL's scheme, host, and port match the saved webhook). The preview shows the header as `t=<timestamp>,v1=<signature>`, since the real value is made as each attempt is sent.
+
+Managing signing needs permission to edit the webhook.
+
+### Verifying a signature
+
+The header looks like `X-Juiced-Signature: t=1730640270,v1=e7268c76…`. `t` is when the attempt was signed (Unix seconds), and each `v1` is an HMAC-SHA256 signature in hex. To check a request, your receiver does four things.
+
+1. Reads the raw request body exactly as it arrived, before any JSON or form parsing. For a GET webhook, it uses the raw query string (everything after the `?`) instead.
+2. Computes an HMAC-SHA256 of `{t}.{raw body}` (the timestamp, a period, then the body), keyed with the whole secret, `whsec_` prefix included.
+3. Compares the result with each `v1` value in constant time. Any match means the request is genuine.
+4. Rejects the request if `t` is more than 5 minutes away from its own clock, so a captured request can't be replayed later.
+
+These examples do all four. Pass both secrets during a [rotation](#rotating-the-secret), and a request signed with either one verifies.
+
+<WebhookSignatureVerification />
+
+<Warning>
+Verify against the bytes you received. Parsing the body and encoding it again changes the bytes (key order, spacing, escaped slashes), and the signature won't match.
+</Warning>
+
+### Rotating the secret
+
+Click **Rotate secret** and confirm to get a new secret, shown once like the first. For the next 24 hours each delivery carries two `v1` signatures, one per secret, so your receiver keeps working while you swap the new secret in. An amber note says when the previous secret stops signing.
+
+Once your receiver uses the new secret, you can click **Expire previous secret now** to end the overlap early. Do that straight away if the old secret may have leaked.
+
+### Turning signing off
+
+**Turn off signing** deletes both secrets, and deliveries go out without an `X-Juiced-Signature` header. A receiver that checks signatures will start rejecting them, so switch that check off first.
+
+Legacy requests are never signed. If you switch a signed webhook to Legacy, Juiced keeps its secret but stops signing, and switching back to v1 and saving picks up the same secret again.
+
 ## Testing a webhook
 
 Once a webhook exists, its edit page has a **Testing** section. Pick what to send.
@@ -249,7 +319,7 @@ Replaying needs permission to edit the webhook. Users who can only view it still
 
 Customer webhooks send each lead assigned to a customer straight to that customer's endpoint, such as their CRM. You can set them up from the customer's **Webhooks** tab (see [Customers](/features/customers#webhooks)), and customers can manage their own from their portal (see [Webhooks in the customer portal](/customer-portal/webhooks)).
 
-They use the same form, payload builder, [payload versions](#payload-versions), testing, and deliveries view as workspace webhooks. On v1, their `type` is always `lead.assigned`.
+They use the same form, payload builder, [payload versions](#payload-versions), [signing](#signing), testing, and deliveries view as workspace webhooks. On v1, their `type` is always `lead.assigned`.
 
 ## Related guides
 

@@ -1,11 +1,11 @@
 ---
 title: Setting Up a Source and Its Attributes
-description: How to create a source, configure its settings, and add source-level fields so your ingest pipeline captures exactly the data you need.
+description: How to create a source, configure its settings, and override lead category fields so your ingest pipeline captures exactly the data you need.
 ---
 
 A [source](/features/sources) represents where leads enter the system, like a web form you own, a vendor API, or a partner feed. Before any lead data can flow into Juiced, you need at least one source wired up to a lead category with the right credentials and field configuration.
 
-This guide walks you through creating a source from scratch, exploring the settings that matter, and adding source-level fields (attributes) that extend or override your lead category's schema.
+This guide walks you through creating a source from scratch, exploring the settings that matter, and overriding the lead category fields (attributes) this source needs to handle differently.
 
 ## Prerequisites
 
@@ -98,32 +98,25 @@ You'll see two authentication options.
 Treat your API credentials like passwords. Bearer tokens can be replaced from this page, but the Basic Auth key and secret can't be regenerated. If a bearer token is compromised, create a new one; the old token stops working 24 hours later.
 </Warning>
 
-## 4. Add source-level fields
+## 4. Override fields (optional)
 
-Click the **Fields** tab. You'll see two sections.
-
-**Source Fields** at the top is where you define fields specific to this source. It starts empty.
-
-**Lead Category Fields** at the bottom is a read-only reference showing the fields inherited from the source's lead category. These are the base fields every source on this category shares.
+Click the **Fields** tab. It lists every field from the source's lead category, the same fields every source on that category accepts. A source can't add fields of its own. If this source sends something new, like a `referral_code` or `campaign_id`, [add it to the lead category](/guides/adding-fields-to-a-lead-category) and every source picks it up.
 
 <Frame>
-  <img className="block dark:hidden" src="/images/tenant/ingest/source-fields-light.webp" alt="Fields tab with an empty Source Fields table, a New field button, and the read-only Lead Category Fields table below" />
-  <img className="hidden dark:block" src="/images/tenant/ingest/source-fields-dark.webp" alt="Fields tab with an empty Source Fields table, a New field button, and the read-only Lead Category Fields table below" />
+  <img className="block dark:hidden" src="/images/tenant/ingest/source-fields-light.webp" alt="Fields tab listing the lead category's fields, with one overridden row highlighted and marked Overridden" />
+  <img className="hidden dark:block" src="/images/tenant/ingest/source-fields-dark.webp" alt="Fields tab listing the lead category's fields, with one overridden row highlighted and marked Overridden" />
 </Frame>
 
-### Why source-level fields?
+### Why override a field?
 
-Source-level fields let you capture data that only applies to a particular source, without cluttering the lead category schema that every other source shares. A vendor might send a `referral_code` or `campaign_id` that's irrelevant to your other sources.
+An override changes how one source handles a lead category field, without touching the other sources on that category. It's useful when a specific source needs different validation rules or delivery settings for a standard field. Say the lead category has a `phone` field typed as **Phone (US & CA)**, but this source only sends US numbers. Override `phone` on this source and set its type to **Phone (US)**.
 
-They also let you **override** lead category fields. If you create a source field with the same title as a lead category field, the source's configuration wins. This is useful when a specific source needs different validation rules or delivery settings for a standard field.
+### Creating an override
 
-### Creating a source field
-
-Click **New field** to open the field dialog. It works just like [adding fields to a lead category](/guides/adding-fields-to-a-lead-category), with the same title rules, type dropdown, and switches.
+Click **Override**, the pencil at the end of the field's row. The dialog starts with the lead category's settings, so you only change what should be different for this source.
 
 | Setting | What it controls |
 |---------|-----------------|
-| **Title** | The field identifier used in API submissions. Must start with a letter or underscore, and can only contain letters, numbers, and underscores. |
 | **Type** | The data type and validation rule. See [field types](/features/lead-categories#field-types) for the full list. |
 | **Required for post** | Must be present when submitting a lead. Returns a `422` error if missing. |
 | **Required for ping** | Must be present during the ping phase of [ping-post](/features/ping-post). |
@@ -131,17 +124,17 @@ Click **New field** to open the field dialog. It works just like [adding fields 
 | **Hidden from API spec** | Won't appear on the source's public API specification page. |
 | **Description** | An optional note about what the field holds. |
 
+The title can't change, and a ZIP field keeps its type and required settings.
+
 <Tip>
-If you select **List of Values** as the type, a **Values** input appears. Enter the allowed options separated by commas. Any submitted value not in this list will fail validation.
+If the type is **List of Values**, a **Values** box appears. Type each allowed value and press Enter, or paste a list. Any submitted value not in the list fails validation.
 </Tip>
 
-Click **Create** to save. Back in the table, the four switches can be flipped inline without reopening the dialog.
+Click **Override** to save. The row is now highlighted with an <span className="tone-badge tone-info">Overridden</span> badge, and its four switches can be flipped inline. The row's pencil and trash icons are now **Edit override** and **Remove override**, and removing an override puts the source back on the lead category's settings.
 
-### Overriding a lead category field
-
-To override a lead category field, create a source field with the exact same title. For example, if the lead category has a `phone` field typed as **Phone (US & CA)** but this source only accepts US numbers, create a source field titled `phone` with the type **Phone (US)**.
-
-Overriding source fields carry an <span className="tone-badge tone-info">Overrides</span> badge in the Source Fields table, and the lead category field they replace is dimmed in the section below, so you can tell at a glance which fields are overrides.
+<Note>
+While a source overrides a field, that field can't be renamed or deleted on the lead category, and the source can't move to a lead category without that field. Remove the override first.
+</Note>
 
 ## 5. Configure additional settings (optional)
 
@@ -178,8 +171,8 @@ If you can view analytics, the **Payouts** tab totals what you owe the source fo
 Once your source is created and configured, here's where things stand.
 
 - **API credentials** are ready to use, so share the Basic Auth credentials or a bearer token with whoever is integrating
-- **Lead validation** enforces both the lead category fields and any source-level fields you added
-- **Source-level fields** override matching lead category fields for this source only, and other sources on the same category are unaffected
+- **Lead validation** enforces the lead category's fields, with this source's overrides applied
+- **Field overrides** change a field for this source only, and other sources on the same category are unaffected
 - **The API spec** (from **View API Spec** in the **More actions** menu) reflects all fields, types, and requirements so integrators know exactly what to send
 
 Ready to send your first lead? Head to [Sending leads to Juiced](/guides/sending-leads-to-juiced).

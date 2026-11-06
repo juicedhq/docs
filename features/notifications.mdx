@@ -60,7 +60,7 @@ Templates support merge fields using double curly braces, like `{{ variable_name
 
 These are available in all templates.
 
-- `{{ actionLink }}` is the URL to the relevant page.
+- `{{ actionLink }}` is the URL to the relevant page. In an email, `{{ actionLink | Button text }}` places the action button at that spot instead. See [Links and the action button](#links-and-the-action-button).
 - `{{ defaultActionText }}` is the default text for the action button.
 - `{{ supportEmail }}` is your tenant's support email.
 
@@ -72,6 +72,7 @@ These are available for lead-related notifications (Lead Assigned, Outbid, Bid M
 - `{{ lead.full_name }}`, `{{ lead.first_name }}`, `{{ lead.last_name }}`
 - `{{ lead.email }}`, `{{ lead.phone }}`
 - `{{ lead.address_1 }}`, `{{ lead.address_2 }}`, `{{ lead.city }}`
+- `{{ lead.state }}` (the two-letter abbreviation, like `TX`), `{{ lead.zip }}`
 - `{{ lead.leadType.name }}`
 - `{{ lead.details.field_name }}` for any custom field on the lead category
 
@@ -102,9 +103,30 @@ Below that is one card per channel (**Email Template**, **SMS Template**, **In-A
 - **Visible to customers** hides this notification type from customers' notification preferences when it's off.
 - **Enabled by default** sets the initial preference when a new contact is created.
 - **Subject** is the email subject or the in-app notification's title. It's required for email, and SMS has no subject.
-- **Body** takes `{{ variable }}` placeholders. Emails keep basic formatting (bold, italic, underline, strikethrough) and put each line in its own paragraph; lines written as `Label: value` are laid out as a tidy details list. Keep SMS bodies short.
+- **Body** takes `{{ variable }}` placeholders. Emails keep basic formatting (bold, italic, underline, strikethrough) and links, and put each line in its own paragraph. Lines written as `Label: value` are laid out as a tidy details list, unless the line contains a link. Keep SMS bodies short.
 
 Emails get a button to the relevant page automatically, labeled with the type's default action text, so you don't need to add the link yourself.
+
+### Links and the action button
+
+Email bodies can link anywhere, such as a partner tool, a booking page, or your own site. Write the link as HTML.
+
+```html
+<a href="https://example.com/comps?address={{ lead.address_1 }}&state={{ lead.state }}&zip={{ lead.zip }}">See homes near {{ lead.address_1 }}</a>
+```
+
+- **Links must start with `http://` or `https://`.** Any other link, and any attribute other than `href`, is removed when the email is sent.
+- **Variables inside a link are URL-encoded**, so a value with spaces or an `&` doesn't break the query string. The exception is a variable that starts the link, like `href="{{ actionLink }}"`, which is used as the URL itself.
+- **Lead and customer values always show as plain text.** A lead whose name looks like a link or HTML can't turn into one in your customer's inbox.
+
+<Frame>
+  <img className="block dark:hidden" src="/images/tenant/settings/notification-template-email-body-light.webp" alt="Email Template card for Lead Assigned with a body containing a link built from lead.address_1, lead.state, and lead.zip and an inline actionLink button labeled View lead, above hints about links and the inline button" />
+  <img className="hidden dark:block" src="/images/tenant/settings/notification-template-email-body-dark.webp" alt="Email Template card for Lead Assigned with a body containing a link built from lead.address_1, lead.state, and lead.zip and an inline actionLink button labeled View lead, above hints about links and the inline button" />
+</Frame>
+
+To move the action button, write `{{ actionLink | Button text }}` on its own line or within one. The button appears at that spot with your label (or the default action text when the label is empty), and the automatic button at the bottom is left off. Only the first one becomes a button, and any after it show as text links. A plain `{{ actionLink }}` still prints the URL, so existing templates don't change.
+
+Other channels handle links their own way. In SMS, a link becomes its text followed by the URL in parentheses (or just the URL, when the text is the URL). In-app notifications keep the link's text only, and the first `{{ actionLink | Button text }}` becomes the notification's action.
 
 Changes to every channel are saved together with **Save all** in the floating save bar. Templates are validated when you save, so referencing a variable that doesn't exist for that notification type shows an error.
 

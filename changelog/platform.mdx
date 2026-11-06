@@ -8,6 +8,70 @@ Everything that changed on the tenant side of Juiced, including lead routing, di
 
 Looking for changes to the buyer experience? Those live in [Customer portal updates](/changelog/customer-portal).
 
+<Update label="November 6, 2026" description="v3.83.0" tags={["Improvements", "Fixes"]}>
+  ## Improvements
+
+  - Secret header values on [webhooks](/features/webhooks), customer webhooks, and [partner](/features/partners) endpoints are now hidden once saved, just like passwords and tokens. A header named `Authorization`, `X-Api-Key`, `Token`, `Secret`, or similar shows a lock and **Saved**, with **Replace** to type a new value. Moving the URL to a different host asks for these values again. See [Saved credentials and secret headers](/features/webhooks#saved-credentials-and-secret-headers).
+  - When a receiver echoes a password, token, or secret header back in its response, the delivery history now masks it.
+
+  ## Fixes
+
+  - A [banner](/features/banners) linking to `::billing_url::` now sends customers to their own payment methods page in the portal, instead of a button that went nowhere. The banner form's **Link** field explains the token.
+</Update>
+
+<Update label="November 6, 2026" description="v3.82.0" tags={["New", "Improvements", "Fixes"]}>
+  <Frame>
+    <img className="block dark:hidden" src="/images/changelog/v3.82.0-light.webp" alt="Juiced release card reading Signed webhooks you can verify, next to a webhook's Signing section with a new signing secret shown once, a note that the previous secret signs until the next day, and Rotate secret, Expire previous secret now, and Turn off signing buttons" />
+    <img className="hidden dark:block" src="/images/changelog/v3.82.0-dark.webp" alt="Juiced release card reading Signed webhooks you can verify, next to a webhook's Signing section with a new signing secret shown once, a note that the previous secret signs until the next day, and Rotate secret, Expire previous secret now, and Turn off signing buttons" />
+  </Frame>
+
+  ## Webhook signing
+
+  - Turn on [signing](/features/webhooks#signing) for any saved v1 workspace or customer webhook from the new **Signing** section on its edit page. Each delivery then carries an `X-Juiced-Signature` header, an HMAC-SHA256 of the timestamp and raw body, that your receiver can check with the secret. The secret is shown once. [Verifying a signature](/features/webhooks#verifying-a-signature) has PHP and Node examples.
+  - **Rotate secret** issues a new secret, and both sign deliveries for 24 hours so receivers can switch over without dropping anything. **Expire previous secret now** ends the overlap early.
+  - Every v1 request now carries `X-Juiced-Event`, `X-Juiced-Webhook-Version`, and (on real deliveries) `X-Juiced-Delivery` headers. Custom headers with those names are no longer sent on v1. See [v1 headers](/features/webhooks#v1-headers).
+  - v1 webhooks using the Form format now send date and list values that were previously left out.
+  - Legacy webhooks are unchanged.
+
+  ## Fixes
+
+  - Partner eligibility, distribution stage, and lead type condition forms now show why a condition couldn't be saved, instead of failing with no message.
+</Update>
+
+<Update label="November 5, 2026" description="v3.81.0" tags={["Fixes"]}>
+  ## Fixes
+
+  - Unexpected failures now show a short, safe message instead of raw internal error text (database errors, server names or code details). This covers [incoming and outgoing logs](/features/logs), lead timelines, webhook delivery history, and test sends to partners and webhooks. Failed requests to a partner still say what went wrong, such as a timeout, a connection failure or the HTTP status. Older records read the same way.
+  - The **Error** tab on an [outgoing log](/features/logs#outgoing-logs) shows only the message, without the error class.
+  - Password reset emails for your team and your partners now link to the reset page on the domain they asked from, instead of Juiced's central reset page.
+</Update>
+
+<Update label="November 3, 2026" description="v3.80.0" tags={["New", "Improvements", "Fixes", "Breaking changes"]}>
+  <Frame>
+    <img className="block dark:hidden" src="/images/changelog/v3.80.0-light.webp" alt="Juiced release card reading Links and buttons in your customer emails, next to a Lead Assigned email template whose body links to a partner site with the lead's address, state, and ZIP" />
+    <img className="hidden dark:block" src="/images/changelog/v3.80.0-dark.webp" alt="Juiced release card reading Links and buttons in your customer emails, next to a Lead Assigned email template whose body links to a partner site with the lead's address, state, and ZIP" />
+  </Frame>
+
+  ## Notification emails
+
+  - Email [notification templates](/features/notifications) can now include links. Write them as `<a href="https://…">`, and any variables inside the link are URL-encoded, so you can send buyers to a partner tool with the lead's details filled in. See [Links and the action button](/features/notifications#links-and-the-action-button).
+  - Write `{{ actionLink | Button text }}` to place the action button anywhere in the email with your own label. The automatic button at the bottom is then left off. A plain `{{ actionLink }}` still prints the URL.
+  - New `{{ lead.state }}` and `{{ lead.zip }}` variables for lead notifications.
+  - Lead and customer values in emails and texts always show as plain text, so a lead name that looks like a link or HTML can't become one in your customer's inbox. In texts, links from your template show as their text followed by the URL.
+
+  ## Source fields
+
+  - **Breaking:** A source's **Fields** tab no longer adds fields of its own. It now lists its lead category's fields, and you choose **Override** on a field to change its type, required settings, values, or description for that source only. New fields go on the lead category. See [Field overrides](/features/sources#field-overrides).
+  - Fields that only existed on a source have moved to its lead category, so every source on that category now accepts them. Where a source required one of them, the lead category's copy is optional and that source keeps requiring it through an override, so no source starts rejecting leads. Overrides that matched their lead category field in every setting but the description were removed.
+  - A lead category field that a source overrides can't be renamed or deleted, and a source can't move to a lead category without the fields it overrides. The error names the sources or fields involved.
+  - **Values** for List of Values fields are now entered one at a time (press Enter, or paste a list), and spaces, blanks, and repeats are cleaned up on save.
+
+  ## Fixes
+
+  - A ping that can't be categorized into a lead type, or whose lead type is archived, now gets `no_match` before any distribution stage runs. Before, a Club or partner stage could accept it, often at $0, and the post then came in Uncategorized and was never distributed. If your lead types depend on fields a source only sends with the post, see [Ping-post](/features/ping-post#pinging-juiced-from-your-sources).
+  - [Webhooks](/features/webhooks) for new leads, new customers (including checkout signups), and transaction updates no longer occasionally fail to send when they fire while the record is still being saved.
+</Update>
+
 <Update label="November 2, 2026" description="v3.77.0–v3.79.0" tags={["New", "Improvements", "Fixes"]}>
   <Frame>
     <img className="block dark:hidden" src="/images/changelog/v3.79.0-light.webp" alt="Juiced release card reading Checkout Pages for every tenant, next to a Stage checkout page with a countdown, a headline offer, and a Claim offer button" />

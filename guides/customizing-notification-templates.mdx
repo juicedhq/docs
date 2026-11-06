@@ -54,7 +54,8 @@ Phone: {{ lead.phone }}
 A few things to know about how messages come out.
 
 - **Emails** keep basic formatting (bold, italic, underline, strikethrough), and each line becomes its own paragraph. Lines written as `Label: value`, like the phone line above, are laid out as a tidy details list.
-- **Emails get a button** to the relevant page automatically, so you don't need to paste the link in.
+- **Emails get a button** to the relevant page automatically, so you don't need to paste the link in. To put it somewhere else, write `{{ actionLink | View lead }}` where you want it, with your own label.
+- **Emails can link out.** Write a link as `<a href="https://…">text</a>`. Links must start with `http://` or `https://`, and variables inside them are URL-encoded for you. See [Links and the action button](/features/notifications#links-and-the-action-button).
 - **SMS** should be short. Put the important detail first.
 
 <Warning>

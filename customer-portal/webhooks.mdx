@@ -3,6 +3,8 @@ title: Webhooks
 description: Send every new lead straight to your CRM or another system, test the connection, and monitor deliveries.
 ---
 
+import WebhookSignatureVerification from '/snippets/webhook-signature-verification.mdx';
+
 A webhook sends each lead to a URL you choose the moment it's assigned to you, whether you won it with a bid, bought it in the [Marketplace](/customer-portal/marketplace), or claimed it from the [Club](/customer-portal/club). Point it at your CRM, a Zapier or Make hook, or your own system, and leads arrive there fresh-squeezed without anyone copying and pasting.
 
 Find webhooks under **Notifications** → **Webhooks** in the sidebar.
@@ -41,6 +43,8 @@ The defaults (no authentication, POST, JSON, 10-second timeout, no extra headers
 | **Headers** | Extra HTTP headers to send with each request |
 
 Saved passwords and tokens stay hidden. To change one, type a new value.
+
+Secret headers stay hidden too. That's any header named `Authorization`, `Cookie`, `Set-Cookie`, `X-Api-Key`, `Api-Key`, `Token`, `Access-Token`, `Auth-Token`, `Password`, `Secret`, or `Bearer` (in any case, with dashes, underscores, or neither). Once saved, its value shows a lock and **Saved**. Click **Replace** to type a new one. If you change the **URL** to a different host, enter each secret header value again, since a saved value is only reused for the same host. If your CRM echoes a credential back in its response, your delivery history shows it masked.
 
 ### Payload
 
@@ -131,6 +135,36 @@ Open **Edit webhook** and pick the other card in **Payload version**. The previe
 When you switch, a note above the preview turns amber and sums up what changes. On v1, everything moves under `data`, and the request no longer has the `tenant` and `event` keys Legacy sends, so check your system reads the new shape. If a custom payload uses `{{ event }}` or `{{ tenant.* }}` fields, the note names them, because they're empty on v1 (the envelope's `type` and `tenant_id` carry the same information).
 
 Nothing changes until you save, and **Testing** sends the version you picked, so you can try it first. Your provider can also change the version for you.
+
+### Headers
+
+Every v1 request also carries a few headers your system can read before it opens the body.
+
+- `X-Juiced-Event` is the event, always `lead.assigned` for your webhooks.
+- `X-Juiced-Webhook-Version` is always `v1`.
+- `X-Juiced-Delivery` is the delivery's ID, like `whdl_01jbq7m4x2c9t5w8k3n6r0yzdf`. Retries of a delivery share it, and test sends don't have one.
+- `X-Juiced-Signature` is there when [signing](#signing) is on.
+
+Headers you add under **Advanced settings** with one of these names aren't sent on v1.
+
+## Signing
+
+Signing lets your system prove a lead really came from Juiced and wasn't changed along the way. It's optional, and a good idea when your own code receives the webhook. It works on saved webhooks on the **v1** payload version.
+
+Open **Edit webhook** and click **Turn on signing** in the **Signing** section. Copy the secret that appears (it starts with `whsec_`) and store it where your system can read it. It's shown only this once.
+
+<Frame>
+  <img className="block dark:hidden" src="/images/portal/notifications/webhook-signing-light.webp" alt="Signing section saying deliveries are signed, with a new whsec_ signing secret shown once with Copy and Done buttons, and Rotate secret and Turn off signing buttons" />
+  <img className="hidden dark:block" src="/images/portal/notifications/webhook-signing-dark.webp" alt="Signing section saying deliveries are signed, with a new whsec_ signing secret shown once with Copy and Done buttons, and Rotate secret and Turn off signing buttons" />
+</Frame>
+
+Every delivery, retry, replay, and test (as long as you keep the same URL domain) then carries an `X-Juiced-Signature` header like `t=1730640270,v1=e7268c76…`. To check it, your system reads the raw body exactly as received (for a GET webhook, the raw query string), computes an HMAC-SHA256 of the timestamp, a period, and the body (`{t}.{raw body}`) with the whole secret as the key, and compares it with each `v1` value. It should also reject a request whose `t` is more than 5 minutes off its own clock. These examples do all of that.
+
+<WebhookSignatureVerification />
+
+- **Rotate secret** creates a new secret, shown once. For 24 hours each delivery is signed with both the old and new secrets, so your system keeps working while you update it. **Expire previous secret now** ends that early, which is what you want if the old secret may have leaked.
+- **Turn off signing** deletes the secrets, and deliveries arrive without the signature header. Turn off the check on your side first, or your system will start rejecting leads.
+- Switching the webhook to **Legacy** pauses signing, since Legacy requests are never signed. Switch back to **v1** and save to pick up the same secret again.
 
 ## Monitoring deliveries
 
