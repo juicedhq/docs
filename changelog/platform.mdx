@@ -8,6 +8,25 @@ Everything that changed on the tenant side of Juiced, including lead routing, di
 
 Looking for changes to the buyer experience? Those live in [Customer portal updates](/changelog/customer-portal).
 
+<Update label="November 6, 2026" description="v3.82.0" tags={["New", "Improvements", "Fixes"]}>
+  <Frame>
+    <img className="block dark:hidden" src="/images/changelog/v3.82.0-light.webp" alt="Juiced release card reading Signed webhooks you can verify, next to a webhook's Signing section with a new signing secret shown once, a note that the previous secret signs until the next day, and Rotate secret, Expire previous secret now, and Turn off signing buttons" />
+    <img className="hidden dark:block" src="/images/changelog/v3.82.0-dark.webp" alt="Juiced release card reading Signed webhooks you can verify, next to a webhook's Signing section with a new signing secret shown once, a note that the previous secret signs until the next day, and Rotate secret, Expire previous secret now, and Turn off signing buttons" />
+  </Frame>
+
+  ## Webhook signing
+
+  - Turn on [signing](/features/webhooks#signing) for any saved v1 workspace or customer webhook from the new **Signing** section on its edit page. Each delivery then carries an `X-Juiced-Signature` header, an HMAC-SHA256 of the timestamp and raw body, that your receiver can check with the secret. The secret is shown once. [Verifying a signature](/features/webhooks#verifying-a-signature) has PHP and Node examples.
+  - **Rotate secret** issues a new secret, and both sign deliveries for 24 hours so receivers can switch over without dropping anything. **Expire previous secret now** ends the overlap early.
+  - Every v1 request now carries `X-Juiced-Event`, `X-Juiced-Webhook-Version`, and (on real deliveries) `X-Juiced-Delivery` headers. Custom headers with those names are no longer sent on v1. See [v1 headers](/features/webhooks#v1-headers).
+  - v1 webhooks using the Form format now send date and list values that were previously left out.
+  - Legacy webhooks are unchanged.
+
+  ## Fixes
+
+  - Partner eligibility, distribution stage, and lead type condition forms now show why a condition couldn't be saved, instead of failing with no message.
+</Update>
+
 <Update label="November 2, 2026" description="v3.77.4" tags={["New", "Improvements"]}>
   ## Webhook replay
 

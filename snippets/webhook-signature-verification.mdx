@@ -1,0 +1,149 @@
+<CodeGroup>
+
+```php verify.php
+<?php
+
+/**
+ * Verify a Juiced webhook signature.
+ *
+ * Pass the raw request body exactly as received (before any JSON decoding),
+ * or for a GET endpoint the raw query string (everything after the `?`),
+ * the X-Juiced-Signature header, and your endpoint's signing secret. During
+ * a rotation pass both secrets: a delivery signed with either verifies.
+ *
+ * Returns true only when the signature matches and its timestamp is within
+ * $toleranceSeconds of now, so a replayed old request fails.
+ *
+ *     $valid = verifyJuicedSignature(
+ *         $_SERVER['REQUEST_METHOD'] === 'GET' ? ($_SERVER['QUERY_STRING'] ?? '') : file_get_contents('php://input'),
+ *         $_SERVER['HTTP_X_JUICED_SIGNATURE'] ?? '',
+ *         getenv('JUICED_WEBHOOK_SECRET'),
+ *     );
+ *
+ * @param  string|list<string>|false|null  $secrets  false or null (an unset secret) never verifies
+ */
+function verifyJuicedSignature(
+    string $rawBody,
+    string $signatureHeader,
+    string|array|false|null $secrets,
+    int $toleranceSeconds = 300,
+    ?int $now = null,
+): bool {
+    // An unset secret (getenv() returns false, an empty string) must never verify.
+    $secrets = array_filter(is_array($secrets) ? $secrets : [$secrets], fn (mixed $secret): bool => is_string($secret) && $secret !== '');
+
+    if ($secrets === []) {
+        return false;
+    }
+
+    $timestamp = null;
+    $signatures = [];
+
+    foreach (explode(',', $signatureHeader) as $part) {
+        [$key, $value] = array_pad(explode('=', trim($part), 2), 2, '');
+
+        if ($key === 't' && ctype_digit($value)) {
+            $timestamp = (int) $value;
+        } elseif ($key === 'v1' && $value !== '') {
+            $signatures[] = $value;
+        }
+    }
+
+    if ($timestamp === null || $signatures === []) {
+        return false;
+    }
+
+    if (abs(($now ?? time()) - $timestamp) > $toleranceSeconds) {
+        return false;
+    }
+
+    foreach ($secrets as $secret) {
+        $expected = hash_hmac('sha256', $timestamp.'.'.$rawBody, $secret);
+
+        foreach ($signatures as $signature) {
+            if (hash_equals($expected, $signature)) {
+                return true;
+            }
+        }
+    }
+
+    return false;
+}
+```
+
+```javascript verify.mjs
+import { createHmac, timingSafeEqual } from 'node:crypto';
+
+/**
+ * Verify a Juiced webhook signature.
+ *
+ * Pass the raw request body exactly as received (before any JSON parsing),
+ * or for a GET endpoint the raw query string (everything after the `?`),
+ * the X-Juiced-Signature header, and your endpoint's signing secret. During
+ * a rotation pass both secrets: a delivery signed with either verifies.
+ *
+ * Returns true only when the signature matches and its timestamp is within
+ * toleranceSeconds of now, so a replayed old request fails.
+ *
+ *     // Express: read the body as raw bytes, whatever its content type.
+ *     app.all('/webhooks/juiced', express.raw({ type: () => true }), ...)
+ *     const valid = verifyJuicedSignature(
+ *         req.method === 'GET'
+ *             ? (req.originalUrl.split('?')[1] ?? '')
+ *             : Buffer.isBuffer(req.body) ? req.body.toString('utf8') : '',
+ *         req.get('X-Juiced-Signature') ?? '',
+ *         process.env.JUICED_WEBHOOK_SECRET,
+ *     );
+ *
+ * @param {string} rawBody
+ * @param {string} signatureHeader
+ * @param {string | string[] | undefined} secrets  an unset secret never verifies
+ * @param {{ toleranceSeconds?: number, now?: number }} [options]
+ * @returns {boolean}
+ */
+export function verifyJuicedSignature(rawBody, signatureHeader, secrets, { toleranceSeconds = 300, now = Math.floor(Date.now() / 1000) } = {}) {
+    // An unset secret (undefined, an empty string) must never verify.
+    const keys = [secrets].flat().filter((secret) => typeof secret === 'string' && secret !== '');
+
+    if (keys.length === 0) {
+        return false;
+    }
+
+    let timestamp = null;
+    const signatures = [];
+
+    for (const part of signatureHeader.split(',')) {
+        const [key, value = ''] = part.trim().split(/=(.*)/s);
+
+        if (key === 't' && /^\d+$/.test(value)) {
+            timestamp = Number(value);
+        } else if (key === 'v1' && value !== '') {
+            signatures.push(value);
+        }
+    }
+
+    if (timestamp === null || signatures.length === 0) {
+        return false;
+    }
+
+    if (Math.abs(now - timestamp) > toleranceSeconds) {
+        return false;
+    }
+
+    for (const secret of keys) {
+        const expected = Buffer.from(createHmac('sha256', secret).update(`${timestamp}.${rawBody}`).digest('hex'));
+
+        for (const signature of signatures) {
+            const received = Buffer.from(signature);
+
+            if (received.length === expected.length && timingSafeEqual(received, expected)) {
+                return true;
+            }
+        }
+    }
+
+    return false;
+}
+```
+
+</CodeGroup>
