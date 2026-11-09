@@ -1,27 +1,34 @@
 ---
 title: Domains & Links
-description: Configure your public marketplace, where customer links land, and a custom domain for your customer portal.
+description: Choose who sees your marketplace, where customer links land, and a custom domain for your customer portal.
 ---
 
 import { HugeIcon } from '/snippets/hugeicon.jsx';
 
-The **Domains & Links** page controls how people reach you. It sets whether visitors can browse your marketplace without an account, where your customer-facing links send people who aren't signed in, and the domain your customer portal lives on. Find it under **Settings → Account → Domains & Links**.
+The **Domains & Links** page controls how people reach you. It sets whether customers and visitors can see your marketplace, where your customer-facing links send people who aren't signed in, and the domain your customer portal lives on. Find it under **Company → Domains & Links**.
 
 <Frame>
   <img className="block dark:hidden" src="/images/tenant/settings/domains-light.webp" alt="Domains & Links settings page with the Public Marketplace switch, the Customer Portal Entry Point select, and a verified custom domain with two validated CNAME records" />
   <img className="hidden dark:block" src="/images/tenant/settings/domains-dark.webp" alt="Domains & Links settings page with the Public Marketplace switch, the Customer Portal Entry Point select, and a verified custom domain with two validated CNAME records" />
 </Frame>
 
-## Public Marketplace
+## Marketplace
 
-Turn on **Enable public marketplace** to let visitors who aren't signed in browse your available leads at `/marketplace`. It's a shop window where prospects can see what you sell before they create an account. See [Marketplace](/features/marketplace) for how the marketplace itself works.
+**Show Marketplace to customers** is on by default. Turn it off to hide the marketplace from your customers' portal while your Marketplace stage keeps placing leads on it. If customers have open buy orders, Juiced asks whether to keep them running or cancel and refund them. See [Hiding the marketplace from customers](/features/marketplace#hiding-the-marketplace-from-customers).
+
+<Frame>
+  <img className="block dark:hidden" src="/images/tenant/settings/domains-marketplace-light.webp" alt="Marketplace section of Domains and Links with the Show Marketplace to customers switch on and the Enable public marketplace switch off" />
+  <img className="hidden dark:block" src="/images/tenant/settings/domains-marketplace-dark.webp" alt="Marketplace section of Domains and Links with the Show Marketplace to customers switch on and the Enable public marketplace switch off" />
+</Frame>
+
+Turn on **Enable public marketplace** to let visitors who aren't signed in browse your available leads at `/marketplace`. It's a shop window where prospects can see what you sell before they create an account. It can only be on while the marketplace is shown to customers. See [Marketplace](/features/marketplace) for how the marketplace itself works.
 
 ## Customer Portal Entry Point
 
 **Unauthenticated visitors see** decides where your customer-facing links send people who aren't signed in.
 
 - **Customer sign-in page** is the default.
-- **Marketplace** is only offered when your distribution plan has a marketplace stage. If the public marketplace is off, links always go to the sign-in page.
+- **Marketplace** is only offered when your distribution plan has a marketplace stage. If the public marketplace is off (or the marketplace is hidden from customers), links always go to the sign-in page.
 
 Save the marketplace and entry point settings with the floating save bar.
 

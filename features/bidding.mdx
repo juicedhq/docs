@@ -30,7 +30,7 @@ Every bid is placed on a **lead type**. The lead type's bidding settings determi
 | **Maximum bid** | The ceiling (hidden when fixed pricing is enabled) |
 | **Bid increments** | The step between valid bid amounts (hidden when fixed pricing is enabled) |
 
-You set these per lead type on its **Bidding** tab (open **Lead Types** under **Ingest**, pick a lead type, then **Bidding**). Each scope you open gets its own row with **Enabled**, **Fixed**, **Minimum**, **Maximum**, and **Step** values. Customers can only bid on scopes that have an enabled row.
+You set these per lead type on its **Bidding** tab (open **Configure → Lead Types**, pick a lead type, then **Bidding**). Each scope you open gets its own row with **Enabled**, **Fixed**, **Minimum**, **Maximum**, and **Step** values. Customers can only bid on scopes that have an enabled row.
 
 <Frame>
   <img className="block dark:hidden" src="/images/tenant/ingest/lead-type-bidding-light.webp" alt="Lead type Bidding tab with county, state, and nationwide scopes, each showing Enabled, Fixed, Minimum, Maximum, and Step, and a New bidding scope button" />
@@ -94,7 +94,7 @@ Pausing a bid is different from pausing a customer. A paused bid shows as "Pause
 
 ## Bid statuses
 
-Like customers, bids have multiple underlying statuses that roll up into a single **display status**. The display status is what you'll see most often. The underlying statuses appear as columns in the bids table on each location's page under **Locations** (see [location analytics](/features/location-analytics)).
+Like customers, bids have multiple underlying statuses that roll up into a single **display status**. The display status is what you'll see most often. The underlying statuses appear as columns in the bids table on each location's page under **Operate → Demand** (see [location analytics](/features/location-analytics)).
 
 ### Underlying statuses
 
@@ -192,7 +192,7 @@ The same logic applies at weekly and monthly levels, and also considers customer
 
 Beyond individual bids, there are tenant-level settings that control how bidding works across your operation.
 
-Open them from the settings gear in the rail, under **Settings → Application → Bidding**. The page has four sections (**Global Bid Settings**, **Customer Bidding Access**, **Lead Cap Settings**, and **Budget Settings**) and saves with the floating save bar.
+Open them from **Configure → Bidding**. The page has four sections (**Global Bid Settings**, **Customer Bidding Access**, **Lead Cap Settings**, and **Budget Settings**) and saves with the floating save bar.
 
 ### Disable all customer bidding
 

@@ -181,6 +181,17 @@ Click a webhook in the table to open its overview.
 
 Use **Pause** / **Enable** and **Edit** at the top of the page to change the webhook.
 
+### When deliveries keep failing
+
+If every delivery to a webhook fails for 24 hours, it shows <span className="tone-badge tone-caution">Failing</span> and everyone on your account gets an email and a notification. If it's still failing after 72 hours (with at least 10 failed deliveries), the webhook is paused automatically and shows <span className="tone-badge tone-danger">Paused: failing</span>, so your provider stops sending leads to an endpoint that isn't taking them. One successful delivery before then resets the clock.
+
+<Frame>
+  <img className="block dark:hidden" src="/images/portal/notifications/webhooks-paused-failing-light.webp" alt="Webhooks table with a red summary saying one webhook was paused because every delivery kept failing, and the Aurelia CRM webhook marked Paused: failing" />
+  <img className="hidden dark:block" src="/images/portal/notifications/webhooks-paused-failing-dark.webp" alt="Webhooks table with a red summary saying one webhook was paused because every delivery kept failing, and the Aurelia CRM webhook marked Paused: failing" />
+</Frame>
+
+The webhook's page says why it was paused, including the latest error. Fix your endpoint, then click **Enable**. Leads that failed in the meantime can be replayed once it's back on.
+
 ### Replaying deliveries
 
 If a delivery failed (say your CRM was down), click **Replay** on its row, or open it and click **Replay** at the bottom, once your system is back up. The replay is queued, and it shows in the delivery history as a new delivery once it's sent. When you open a delivery, a note beside the button tells you what it will send. Every replay uses the webhook's current URL, method, format, authentication, and headers, so fix a wrong URL or expired credentials before you replay.

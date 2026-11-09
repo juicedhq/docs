@@ -14,11 +14,29 @@ Think of it as a clearance rack, but for leads. And instead of prices going up o
 There's no account-wide switch. A lead lands on the marketplace when two things are true.
 
 1. **Its lead type has the marketplace enabled**, with auction pricing configured (see below).
-2. **It reaches a Marketplace stage** in your [distribution stages](/features/distribution). Add one from **Distribution Stages** in the sidebar if you don't have one yet. You can move or pause it like any other stage.
+2. **It reaches a Marketplace stage** in your [distribution stages](/features/distribution). Add one from **Configure → Distribution Stages** if you don't have one yet. You can move or pause it like any other stage.
 
 If the lead type doesn't have the marketplace enabled, the Marketplace stage passes and the lead moves on to the next stage.
 
 To see which leads are on the marketplace right now, open **Leads** and pick the **Marketplace** status tab.
+
+### Hiding the marketplace from customers
+
+Customers see the marketplace in their portal as soon as you have a Marketplace stage. To keep it out of sight while it fills, or while you rethink your pricing, turn off **Show Marketplace to customers** under **Company → Domains & Links** (in the **Marketplace** section). Pausing the stage doesn't hide the marketplace, and you don't need to delete the stage either.
+
+<Frame>
+  <img className="block dark:hidden" src="/images/tenant/settings/domains-marketplace-light.webp" alt="Marketplace section of Domains and Links with the Show Marketplace to customers switch on and the Enable public marketplace switch off" />
+  <img className="hidden dark:block" src="/images/tenant/settings/domains-marketplace-dark.webp" alt="Marketplace section of Domains and Links with the Show Marketplace to customers switch on and the Enable public marketplace switch off" />
+</Frame>
+
+While it's hidden, the Marketplace stage keeps placing leads on the marketplace, and leads that don't sell still move on to the next stage. Customers lose the **Marketplace** page and can't buy from it, and the [public marketplace](#public-marketplace) is turned off and can't be turned back on until you show the marketplace again.
+
+If customers have open buy orders when you save, Juiced asks what to do with them.
+
+- **Keep buy orders** leaves them running, so they still buy leads when the price reaches them. Customers can't see or cancel them while the marketplace is hidden.
+- **Cancel and refund** cancels each one and returns its amount to the customer's wallet as a **Canceled Buy Order** transaction. Customers aren't notified.
+
+Turn the switch back on and everything returns, including any buy orders you kept.
 
 <Frame>
   <img className="block dark:hidden" src="/images/tenant/leads/leads-list-marketplace-light.webp" alt="Leads list showing only leads with the Marketplace status" />
@@ -27,7 +45,7 @@ To see which leads are on the marketplace right now, open **Leads** and pick the
 
 ### Public marketplace
 
-Want to let potential customers browse your marketplace before they sign up? Turn on **Enable public marketplace** under **Settings → Account → Domains & Links** (in the **Public Marketplace** section). It creates a publicly accessible version of your marketplace at `/marketplace`.
+Want to let potential customers browse your marketplace before they sign up? Turn on **Enable public marketplace** under **Company → Domains & Links** (in the **Marketplace** section). It's only available while **Show Marketplace to customers** is on. It creates a publicly accessible version of your marketplace at `/marketplace`.
 
 When it's enabled, here's what changes.
 
@@ -46,7 +64,7 @@ This is useful for showcasing your inventory to prospective customers. They can 
 
 Each lead type that should sell on the marketplace needs its own auction settings.
 
-1. Open **Lead Types** under **Ingest** in the sidebar and click a lead type
+1. Open **Configure → Lead Types** and click a lead type
 2. Click the **Marketplace** tab
 3. Turn on **Enable marketplace** and fill in the pricing
 
@@ -144,7 +162,7 @@ Buy orders can be cancelled at any time before the lead sells, and the amount re
 
 All marketplace purchases, whether instant buys or buy orders, draw from the customer's wallet. No wallet balance, no purchasing. This keeps things simple and ensures customers can only buy what they can actually pay for.
 
-A buy order's amount leaves the wallet the moment the order is placed, so it can't be spent twice. It shows in the customer's [transactions](/features/transactions) as **Placed Buy Order**. Later, the amount comes back as either **Canceled Buy Order** (the customer cancelled) or **Released Buy Order** (the auction ended, or the order won). When an order wins, the lead's purchase is then recorded as a regular lead charge at the buy order price.
+A buy order's amount leaves the wallet the moment the order is placed, so it can't be spent twice. It shows in the customer's [transactions](/features/transactions) as **Placed Buy Order**. Later, the amount comes back as either **Canceled Buy Order** (the customer cancelled, or you canceled it when [hiding the marketplace](#hiding-the-marketplace-from-customers)) or **Released Buy Order** (the auction ended, or the order won). When an order wins, the lead's purchase is then recorded as a regular lead charge at the buy order price.
 
 ## Related guides
 
