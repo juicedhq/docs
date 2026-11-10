@@ -71,6 +71,8 @@ Rotate leads evenly across a set of customers and/or partners at a flat price.
 
 Round Robin is terminal when it finds an eligible recipient.
 
+Round Robin is also the method to use for a partner that only accepts posts (no ping). A partner only needs a post configured to take part, so put them in a Round Robin stage. Add several partners to the same stage to rotate leads between them. Each lead goes to whoever received one least recently.
+
 ### Marketplace
 
 Place the lead on the [marketplace](/features/marketplace) for a reverse auction. There are no recipient settings on the stage itself. Marketplace stages answer pings using the **fallback prices** configured on each [source](/features/sources#source-pricing). If the source has a fallback price for the ping's lead type, the ping is accepted at that price. Otherwise it's rejected.
@@ -153,6 +155,10 @@ Back on the list, drag the handle on any row to reorder, then click **Save chang
 6. Club pool (Club) lets Club members claim whatever's left.
 
 Your own pipeline can be shorter or longer. The point is that each stage is responsible for a single decision, and the order reflects your preference.
+
+### Using the same partner in more than one stage
+
+A partner can sit in more than one stage, for example in a Highest Price stage for pinged leads and again in a later Round Robin stage. Leads move through your stages one at a time until one of them places the lead, so a partner that passes on a lead early can still get it further down. Their [lead eligibility](/features/partners#lead-eligibility), quotas and duplicate checks apply in every stage.
 
 ## 6. Pause stages without deleting them
 

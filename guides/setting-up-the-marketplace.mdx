@@ -106,6 +106,16 @@ Once real leads are flowing, here's what to watch.
 - **Unsold leads** continue to the next distribution stage. Auctions are kept for 90 days, then pruned.
 - In **wallet transactions**, each buy is a regular lead charge. Each buy order appears as **Placed Buy Order** when the amount is withdrawn, then comes back as **Canceled Buy Order** (customer cancelled) or **Released Buy Order** (auction ended or the order won). See [Transactions](/features/transactions).
 
+## Keeping unsold leads listed at a final price
+
+A lead stays at the floor price for one interval, like every other price step, and then the auction ends. To keep unsold leads on the marketplace longer at a final price, give them a second auction under their own lead type.
+
+1. Create a second lead type in the same category, for example "Final Sale". Leave **Fallback Lead Type** off and don't add any conditions. A lead type without conditions never matches a new lead, so only the stage in step 2 puts leads in it. On its **Marketplace** tab, turn on **Enable marketplace** with a longer **Interval**, and set **First Price** and **Last Price** to the same amount for a fixed price.
+2. After your Marketplace stage, add an **Alter Data** stage with a **Set Lead Type** operation that switches the lead to "Final Sale". Give it an eligibility condition on the original lead type so it only touches those leads.
+3. After that, add a second **Marketplace** stage with an eligibility condition on "Final Sale".
+
+If the lead still doesn't sell, it continues to any later stages, and it's marked <span className="tone-badge tone-caution">Unassigned</span> if none of them takes it.
+
 <Tip>
   Curious what other operators charge for leads that didn't sell the first time? Ask in [That Agency Group](https://www.skool.com/that-agency-group), our free Skool community.
 </Tip>
