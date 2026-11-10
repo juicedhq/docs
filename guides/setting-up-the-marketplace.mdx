@@ -18,7 +18,7 @@ For the conceptual model (how the floor moves with buy orders, what customers se
 
 Each lead type opts in to the marketplace on its own, with its own auction curve.
 
-Open **Lead Types** under **Ingest** in the sidebar, click a lead type, then click the **Marketplace** tab.
+Open **Configure → Lead Types**, click a lead type, then click the **Marketplace** tab.
 
 <Frame>
   <img className="block dark:hidden" src="/images/tenant/ingest/lead-type-marketplace-light.webp" alt="Lead type Marketplace tab with Enable marketplace on, First Price, Last Price, Increment, and Interval filled in, and a summary sentence describing the auction" />
@@ -46,7 +46,7 @@ Each lead type has its own auction curve. A fresh lead can start high with a ste
 
 A lead doesn't enter the marketplace just because its lead type allows it. It has to be *routed* there by a **Marketplace** stage in your [distribution stages](/features/distribution).
 
-Open **Distribution Stages** in the sidebar. If you don't already have a Marketplace stage, click **New stage**, choose **Marketplace** as the **Method**, and give it a name. Add **Eligibility Conditions** if only some leads should be listed. Click **Create stage**.
+Open **Configure → Distribution Stages**. If you don't already have a Marketplace stage, click **New stage**, choose **Marketplace** as the **Method**, and give it a name. Add **Eligibility Conditions** if only some leads should be listed. Click **Create stage**.
 
 <Frame>
   <img className="block dark:hidden" src="/images/tenant/distribution/stage-marketplace-light.webp" alt="Marketplace stage form with Name, Method set to Marketplace, Description, Paused, a note about fallback prices, and Eligibility Conditions" />
@@ -59,7 +59,7 @@ Order matters. Stages run top to bottom, so the usual spot for a Marketplace sta
 
 If a source sends [pings](/features/ping-post) before posting, a Marketplace stage can only accept the ping when the source has a **fallback price** for the lead type. The fallback is the price Juiced quotes back in the ping response. Sources that only post leads directly can skip this step.
 
-Open **Sources** under **Ingest**, pick a source, and click the **Pricing** tab. Each lead type in the source's category gets a row with a **Fallback Price** input. Enter the price you're willing to pay the source for a lead that ends up on the marketplace; it saves when you leave the field.
+Open **Configure → Sources**, pick a source, and click the **Pricing** tab. Each lead type in the source's category gets a row with a **Fallback Price** input. Enter the price you're willing to pay the source for a lead that ends up on the marketplace; it saves when you leave the field.
 
 <Frame>
   <img className="block dark:hidden" src="/images/tenant/ingest/source-pricing-light.webp" alt="Source Pricing tab with Fixed Price and Fallback Price inputs for each lead type" />
@@ -70,7 +70,7 @@ Got several sources on the same category? **Copy from Source** in the **More act
 
 ## 4. Turn on the public marketplace (optional)
 
-Want prospects to browse your inventory before signing up? Click the settings gear in the rail, choose **Domains & Links** under **Account**, and turn on **Enable public marketplace** in the **Public Marketplace** section.
+Want prospects to browse your inventory before signing up? Open **Company → Domains & Links** and turn on **Enable public marketplace** in the **Marketplace** section. **Show Marketplace to customers** above it needs to be on too (it is by default).
 
 Visitors can then browse live auctions at `/marketplace` on your domain without logging in. Buy buttons are replaced with **Sign up to purchase**, which sends them to registration. The same page lets you choose whether unauthenticated visitors who follow a customer link land on the public marketplace or the sign-in page.
 
@@ -115,7 +115,7 @@ Once real leads are flowing, here's what to watch.
 With the marketplace running, here are the natural follow-ups.
 
 - **Tune pricing.** Watch which lead types sell fast vs. floor unsold. Drop the First Price on the stale ones, raise the Last Price on the ones selling instantly.
-- **Customize buy order notifications.** Customers with outbid buy orders want to know. The default template usually works; customize it under **Settings → Application → Notification Templates** if you want your own copy. See [Customizing notification templates](/guides/customizing-notification-templates).
+- **Customize buy order notifications.** Customers with outbid buy orders want to know. The default template usually works; customize it under **Storefront → Notification Templates** if you want your own copy. See [Customizing notification templates](/guides/customizing-notification-templates).
 - **Run the marketplace twice.** If you want a fresh pass and an aged pass, put an **Alter Data** stage between two Marketplace stages to switch the lead to an aged lead type. See [Configuring distribution stages](/guides/configuring-distribution-stages).
 - **Promote the public marketplace.** Link your marketing site to `/marketplace` so prospects see live inventory. Pair it with your sign-up call to action.
 

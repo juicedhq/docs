@@ -1,11 +1,11 @@
 ---
 title: Finding your way around
-description: A tour of the tenant panel's command palette, rail, sidebar, settings, and the patterns every page shares.
+description: A tour of the tenant panel's command palette, modules, sidebar, and the patterns every page shares.
 ---
 
 import { HugeIcon } from '/snippets/hugeicon.jsx';
 
-The tenant panel is where you run your whole operation, so it's worth five minutes to learn the layout. Once you know where the rail, the sidebar, and the settings live, every other page in these docs will make a lot more sense.
+The tenant panel is where you run your whole operation, so it's worth five minutes to learn the layout. Once you know how the rail's modules and the sidebar fit together, every other page in these docs will make a lot more sense.
 
 Panel addresses look like `yourcompany.usejuiced.com/tenants/{workspace id}/...`. You rarely need to type them, because everything below is a click (or a keystroke) away.
 
@@ -14,8 +14,8 @@ Panel addresses look like `yourcompany.usejuiced.com/tenants/{workspace id}/...`
 </Tip>
 
 <Frame>
-  <img className="block dark:hidden" src="/images/tenant/overview/dashboard-light.webp" alt="Tenant dashboard with the icon rail on the far left, the sidebar with Dashboard, Customers, Partners, Distribution Stages and grouped links, and revenue stats with a daily revenue chart" />
-  <img className="hidden dark:block" src="/images/tenant/overview/dashboard-dark.webp" alt="Tenant dashboard with the icon rail on the far left, the sidebar with Dashboard, Customers, Partners, Distribution Stages and grouped links, and revenue stats with a daily revenue chart" />
+  <img className="block dark:hidden" src="/images/tenant/overview/dashboard-light.webp" alt="Tenant dashboard with the rail on the far left showing the Operate, Analytics, Configure, Storefront, and Company modules, the Operate sidebar with Dashboard, Leads, Customers, Partners, Logs, and Demand, and revenue stats with a daily revenue chart" />
+  <img className="hidden dark:block" src="/images/tenant/overview/dashboard-dark.webp" alt="Tenant dashboard with the rail on the far left showing the Operate, Analytics, Configure, Storefront, and Company modules, the Operate sidebar with Dashboard, Leads, Customers, Partners, Logs, and Demand, and revenue stats with a daily revenue chart" />
 </Frame>
 
 ## Signing in
@@ -40,7 +40,7 @@ The command palette is the panel's hidden superpower. Press <kbd>⌘</kbd> <kbd>
 
 ### Jump to any page
 
-Every page your role can open is in the palette, including settings pages that are a few clicks deep in the sidebar. You don't need the exact page name either, because the palette also matches what a page is for. Type what's on your mind and the right page comes up.
+Every page your role can open is in the palette, whichever module it lives in, and so are the tabs inside a page (like **Outgoing logs** or **Return settings**). You don't need the exact page name either, because the palette also matches what a page is for. Type what's on your mind and the right page comes up.
 
 | Type | And you get |
 |------|-------------|
@@ -50,7 +50,7 @@ Every page your role can open is in the palette, including settings pages that a
 | `fees` or `deposits` | Payments & Deposits |
 | `logo` or `colors` | Branding |
 | `consent` or `signup` | Registration & Login |
-| `caps` | Bidding Settings |
+| `caps` | Bidding |
 | `webinar` | Checkout Pages |
 | `claude` or `mcp` | AI Assistants |
 | `team` or `invites` | Users |
@@ -85,14 +85,31 @@ If you type more than one word, a page only shows up when it matches every word.
 
 Once it's in your fingers, you'll rarely touch the sidebar again.
 
-## The rail
+## The rail and its modules
 
-The narrow column on the far left is the rail. From top to bottom it holds these items.
+The narrow column on the far left is the rail. The panel is split into five modules, and the rail switches between them. Click a module and the sidebar shows its pages.
 
-- **Your logo**
+| Module | What's in it |
+|--------|--------------|
+| **Operate** | Day-to-day work, with [Dashboard](/features/dashboard), [Leads](/features/leads), [Customers](/features/customers), [Partners](/features/partners), [Logs](/features/logs), and Demand ([location analytics](/features/location-analytics)) |
+| **Analytics** | An overview of the deeper reports that are on the way. Planned reports show a **Soon** tag. |
+| **Configure** | How leads come in, get routed, and go out. **Intake** has [Lead Categories](/features/lead-categories), [Lead Types](/features/lead-types), [Sources](/features/sources), and [Duplicate Checks](/features/duplicate-detection). **Routing** has [Distribution Stages](/features/distribution), [Bidding](/features/bidding), and [Returns](/features/returns). **Connections** has [Integrations](/features/integrations) and [Webhooks](/features/webhooks). |
+| **Storefront** | What your customers see and buy. **Selling** has [Checkout Pages](/features/checkout-pages), [Subscription Products](/features/subscription-products), and [Payments & Deposits](/features/payments-and-deposits). **Customer portal** has [Registration & Login](/features/registration-and-login), [Notification Templates](/features/notifications), and [Banners](/features/banners). |
+| **Company** | Your business, team, and plan. **Identity** has [Company Profile](/features/company-profile), [Branding](/features/branding), and [Domains & Links](/features/domains). **Team & billing** has [Users](/features/users), [AI Assistants](/features/ai-assistants), Beta Program, and [Usage & Billing](/features/billing). |
+
+<Frame>
+  <img className="block dark:hidden" src="/images/tenant/overview/module-configure-light.webp" alt="Configure module open in the rail, with the sidebar grouping Lead Categories, Lead Types, Sources, and Duplicate Checks under Intake, Distribution Stages, Bidding, and Returns under Routing, and Integrations and Webhooks under Connections" />
+  <img className="hidden dark:block" src="/images/tenant/overview/module-configure-dark.webp" alt="Configure module open in the rail, with the sidebar grouping Lead Categories, Lead Types, Sources, and Duplicate Checks under Intake, Distribution Stages, Bidding, and Returns under Routing, and Integrations and Webhooks under Connections" />
+</Frame>
+
+These docs write a page's location as module, then page, so **Configure → Webhooks** means "choose **Configure** in the rail, then **Webhooks** in the sidebar." Each module remembers the last page you had open in it, so switching back drops you where you left off. Page addresses didn't change with the modules, so bookmarks keep working.
+
+Your [role](/features/roles) decides which modules and pages appear. A Sales user, for example, won't see Partners or Distribution Stages at all, and a module with nothing your role can open is left off the rail. Most pages in **Configure**, **Storefront**, and **Company** are Admin-only. AI Assistants only appears once Juiced has enabled it for your account.
+
+The bottom of the rail holds a few utilities.
+
 - **Guided setup** appears in workspaces created with the [setup guide](/get-started/quickstart#3-follow-the-setup-guide). It's a progress ring for the way to sell you're setting up, with an amber dot while skipped steps wait, or a compass between paths. Click it to pick up the next step.
 - **Switch to the classic panel** returns you to the previous version of the panel if you need something that hasn't moved over yet.
-- **Settings** (gear) opens the first settings page your role can see.
 - **Notifications** (bell) shows your in-app notifications, such as a lead or bid export that's ready to download, with a red count for unread ones and **Mark all as read**.
 - **Documentation** (book) opens these docs.
 
@@ -101,42 +118,13 @@ The narrow column on the far left is the rail. From top to bottom it holds these
   <img className="hidden dark:block" src="/images/tenant/overview/notifications-dark.webp" alt="Notifications panel open from the bell in the rail, showing two unread items for lead and bid exports ready to download, a county export notice, and a Mark all as read button" />
 </Frame>
 
+Collapse the sidebar and the rail shrinks with it, showing module names when you hover. On a phone there's no rail. Open the menu to see the modules as a list, then tap one to see its pages.
+
 ## The sidebar
 
-The sidebar is where day-to-day work happens. At the top are the pages you'll visit most.
-
-- **Dashboard** shows revenue, ping/post/assigned counts, and your top customers and sources for the selected timeframe.
-- **Customers** are the businesses that buy your leads ([Customers](/features/customers)).
-- **Partners** are external buyers and suppliers ([Partners](/features/partners)).
-- **Distribution Stages** control how leads are routed ([Distribution](/features/distribution)).
-
-Below those, links are grouped. Click a group heading to collapse it, and the panel remembers your choice.
-
-| Group | Pages |
-|-------|-------|
-| **Locations** | Counties, States, Countries ([Location analytics](/features/location-analytics)) |
-| **Entries** | Leads, Incoming logs, Outgoing logs |
-| **Ingest** | Lead Categories, Lead Types, Sources, Duplicate Checks |
-| **Integrations** | Integrations, Webhooks |
-
-Your [role](/features/roles) decides which links appear. A Sales user, for example, won't see Partners or Distribution Stages at all.
+The sidebar lists the pages in the module you're in, under the module's name, grouped under small headings like **Intake** and **Routing**. A few pages split into tabs across the top instead of taking several sidebar spots. **Logs** has **Incoming** and **Outgoing**, **Demand** has **Counties**, **States**, and **Countries**, and **Returns** and **Subscription Products** each have **Tiers** and **Settings**.
 
 The footer of the sidebar shows who you're signed in as. Its menu has **Profile** (your name, password, passkeys and other sign-in methods), a **Theme** switch (Light, Dark, or System), and **Log out**.
-
-## Settings
-
-Click the gear in the rail to open Settings. The settings sidebar splits pages into two groups.
-
-<CardGroup cols={2}>
-  <Card title="Account" icon={<HugeIcon name="building" card />}>
-    You and your relationship with Juiced, covering [Company Profile](/features/company-profile), [Branding](/features/branding), [Domains & Links](/features/domains), [Users](/features/users), [AI Assistants](/features/ai-assistants), and [Usage & Billing](/features/billing).
-  </Card>
-  <Card title="Application" icon={<HugeIcon name="settings-01" card />}>
-    The product your customers experience, covering [Bidding](/features/bidding), [Payments & Deposits](/features/payments-and-deposits), [Subscription Products](/features/subscription-products), [Checkout Pages](/features/checkout-pages), [Registration & Login](/features/registration-and-login), [Returns](/features/returns), [Notification Templates](/features/notifications), and [Banners](/features/banners).
-  </Card>
-</CardGroup>
-
-Most settings pages are Admin-only. If a page is missing from your settings sidebar, your role doesn't include it. AI Assistants only appears once Juiced has enabled it for your account.
 
 ## Patterns you'll see everywhere
 
