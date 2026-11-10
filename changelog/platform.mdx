@@ -8,6 +8,27 @@ Everything that changed on the tenant side of Juiced, including lead routing, di
 
 Looking for changes to the buyer experience? Those live in [Customer portal updates](/changelog/customer-portal).
 
+<Update label="November 10, 2026" description="v3.86.0" tags={["New", "Improvements", "Fixes"]}>
+  <Frame>
+    <img className="block dark:hidden" src="/images/changelog/v3.86.0-light.webp" alt="Juiced release card reading Show partners where buyers are bidding, next to the partner portal's Demand page listing states with their active bids and top bid, led by California with 6 active bids and a 120 dollar top bid" />
+    <img className="hidden dark:block" src="/images/changelog/v3.86.0-dark.webp" alt="Juiced release card reading Show partners where buyers are bidding, next to the partner portal's Demand page listing states with their active bids and top bid, led by California with 6 active bids and a 120 dollar top bid" />
+  </Frame>
+
+  ## Partner demand
+
+  - Give a [partner](/features/partners) a view of where your buyers are bidding. Turn on the new **Show Demand in Portal** toggle on the partner and their portal gets a **Demand** page listing states, counties, and countries with the number of **Active** bids and the **Top Bid** in each. Partners can filter by lead type and sort by either number. See [Demand in the partner portal](/features/partners#demand-in-the-partner-portal).
+  - Your lead values, and which buyers are bidding, stay private. The toggle is off for every partner until you turn it on.
+
+  ## Improvements
+
+  - The [ping inspector](/features/logs#ping-inspector) no longer stores credentials a source sends in its headers, such as its API secret on Basic-auth pings or a bearer token. They show as `[REDACTED]`. Headers added by our CDN and hosting are left out, so the **Headers** tab shows what the source actually sent.
+  - Any header whose name contains a secret word, like `X-Auth-Token` or `X-Client-Secret`, is now treated as a secret on [webhooks](/features/webhooks), customer webhooks, and partner endpoints. It shows **Saved** with **Replace** once saved, is asked for again when the URL moves to a new host, and is masked in delivery history. See [Saved credentials and secret headers](/features/webhooks#saved-credentials-and-secret-headers).
+
+  ## Fixes
+
+  - Leads posted to the API are no longer rejected when a [lead type](/features/lead-types) condition points at a field that was deleted. That condition now counts as not matching, so the lead goes to the next matching lead type or the category's fallback. A [banner](/features/banners) with such a condition stops showing instead of failing.
+</Update>
+
 <Update label="November 6, 2026" description="v3.83.0" tags={["Improvements", "Fixes"]}>
   ## Improvements
 

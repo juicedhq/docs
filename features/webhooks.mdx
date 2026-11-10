@@ -45,7 +45,7 @@ Click **Create & continue to testing**. The webhook is active as soon as it's cr
 
 ### Saved credentials and secret headers
 
-Once saved, passwords, tokens, and secret header values never show again, not even to you. A header is secret when its name is `Authorization`, `Cookie`, `Set-Cookie`, `X-Api-Key`, `Api-Key`, `Token`, `Access-Token`, `Auth-Token`, `Password`, `Secret`, or `Bearer` (in any case, with dashes, underscores, or neither). Other headers stay visible and editable.
+Once saved, passwords, tokens, and secret header values never show again, not even to you. A header is secret when its name contains `Authorization`, `Cookie`, `Api-Key`, `Token`, `Password`, `Secret`, or `Bearer` (in any case, with dashes, underscores, or neither). That covers names like `X-Auth-Token`, `X-Client-Secret`, and `Proxy-Authorization` too. Other headers stay visible and editable.
 
 - A saved secret header shows a lock and **Saved** in place of its value, and its name is locked. Click **Replace** to type a new value. Leave it alone and Juiced keeps the saved one.
 - If you move the **URL** to a different host, enter each secret header value again. Juiced only reuses a saved value for the same endpoint host, so a secret is never sent somewhere new without you retyping it.

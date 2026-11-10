@@ -50,7 +50,7 @@ Click **New partner**, fill in the form, and click **Create partner**. To change
 | **Basic Info** | **Name**, and an optional **Offer Penalty** (0 to 100%). The penalty lowers the partner's offer score when they compete for a lead, without changing what they're charged. Leave it empty for no penalty. |
 | **Duplicate checks** | **Use tenant default**, **Disabled**, or **Custom**. See [Duplicate checks](#duplicate-checks) below. |
 | **Lead Quotas** | Daily, weekly, and monthly limits on **Lead Count** and **Revenue**. See [Lead quotas](#lead-quotas). |
-| **Toggles** | **Show Returned Status in Portal** lets the partner see when a lead was returned. **Exclude Returned Leads from Payout** leaves returned leads out of the payout total shown to the partner. |
+| **Toggles** | **Show Returned Status in Portal** lets the partner see when a lead was returned. **Exclude Returned Leads from Payout** leaves returned leads out of the payout total shown to the partner. **Show Demand in Portal** adds a **Demand** page to the partner's portal. See [Demand in the partner portal](#demand-in-the-partner-portal). |
 
 ### Duplicate checks
 
@@ -73,8 +73,8 @@ Once a partner reaches any quota, Juiced stops sending them new pings and posts.
 Open a partner to see its record. The tabs across the top are **Overview**, **Payouts** (for roles that can see analytics), **Lead Eligibility**, **Sources**, and **Users**.
 
 <Frame>
-  <img className="block dark:hidden" src="/images/tenant/partners/partner-overview-light.webp" alt="Partner overview with Pings, Posts, Leads, and Payout stats, a Ping/Post table listing a ping and a post endpoint, and a Details panel with Offer Penalty, Show Returned Status, Exclude Returned from Payout, and Created" />
-  <img className="hidden dark:block" src="/images/tenant/partners/partner-overview-dark.webp" alt="Partner overview with Pings, Posts, Leads, and Payout stats, a Ping/Post table listing a ping and a post endpoint, and a Details panel with Offer Penalty, Show Returned Status, Exclude Returned from Payout, and Created" />
+  <img className="block dark:hidden" src="/images/tenant/partners/partner-overview-light.webp" alt="Partner overview with Pings, Posts, Leads, and Payout stats, a Ping/Post table listing a ping and a post endpoint, and a Details panel with Offer Penalty, Show Returned Status, Exclude Returned from Payout, Show Demand, and Created" />
+  <img className="hidden dark:block" src="/images/tenant/partners/partner-overview-dark.webp" alt="Partner overview with Pings, Posts, Leads, and Payout stats, a Ping/Post table listing a ping and a post endpoint, and a Details panel with Offer Penalty, Show Returned Status, Exclude Returned from Payout, Show Demand, and Created" />
 </Frame>
 
 The **Overview** shows **Pings**, **Posts**, **Leads**, and **Payout** for the timeframe you pick in the header, plus a **Details** panel with the partner's settings and any quotas. Below that are three tabs.
@@ -171,6 +171,20 @@ Partners can have their own users who sign in to the partner portal to see their
 - **Pending** invites show in the same list with **Resend invite** and **Revoke invite**. A revoked invite stops working immediately.
 - **Reset 2FA and passkeys** helps a partner user who's lost their authenticator app or passkey.
 - **Remove** takes away their access right away.
+
+## Demand in the partner portal
+
+Supply partners send better traffic when they know where your buyers are hungry. Turn on **Show Demand in Portal** in the partner's **Toggles** and their portal gets a **Demand** page in its sidebar and search, listing your buyers' bids by location.
+
+<Frame>
+  <img className="block dark:hidden" src="/images/tenant/partners/partner-portal-demand-light.webp" alt="Demand page in the partner portal on its States tab, sorted by Active, with California at 6 active bids and a 120 dollar top bid, followed by Washington, New York, Texas, and Colorado" />
+  <img className="hidden dark:block" src="/images/tenant/partners/partner-portal-demand-dark.webp" alt="Demand page in the partner portal on its States tab, sorted by Active, with California at 6 active bids and a 120 dollar top bid, followed by Washington, New York, Texas, and Colorado" />
+</Frame>
+
+- **States**, **Counties**, and **Countries** tabs each list locations with two numbers. **Active** is how many bids can receive leads there right now, and **Top Bid** is the highest of them.
+- **Filters** narrow the list to one lead type, and on **Counties** to one state. Search by name, and sort by **Name**, **Active**, or **Top Bid**.
+- Partners never see your lead values (received counts and minimum, maximum, or average lead value) or which buyers are bidding.
+- The setting is off for every partner until you turn it on. Turn it off and the page disappears from their portal.
 
 ## Related guides
 

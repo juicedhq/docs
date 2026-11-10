@@ -101,7 +101,7 @@ Shows exactly what a source sent to the [ping endpoint](/api-reference/endpoint/
   <img className="hidden dark:block" src="/images/tenant/logs/ping-inspector-dark.webp" alt="Ping inspector with the request payload, a response body containing a price and Match found message, and Details and Records in the sidebar" />
 </Frame>
 
-- **Request** shows the **Payload** and **Headers**, plus **Validation errors** when the ping was rejected.
+- **Request** shows the **Payload** and **Headers**, plus **Validation errors** when the ping was rejected. Credentials in the headers, such as the source's API secret or a bearer token, show as `[REDACTED]`, and headers our CDN and hosting add are left out (apart from the sender's IP and country), so you see what the source sent.
 - **Response** shows the **Body** and **Headers** Juiced returned, including the price offered.
 - **Details** lists the response **Status** code, **Mode**, **Source**, **Method**, **Timestamp**, and ping **ID**.
 - **Records** shows the **Source**, **Lead category**, **Lead type**, **County**, and **Postal code** the ping resolved to.
