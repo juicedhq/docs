@@ -121,6 +121,19 @@ The **Orders** tab lists every order, with the buyer, the customer account, what
   <img className="hidden dark:block" src="/images/tenant/checkout/checkout-page-orders-dark.webp" alt="Checkout page Orders tab listing orders with the date, buyer and offer, customer account, amount paid, credit plus bonus, and Fulfilled or Abandoned status" />
 </Frame>
 
+## Tracking who referred a customer
+
+There are two ways to credit a referrer, depending on what you need.
+
+| | Signup URL tracking | Affiliates |
+|---|---|---|
+| **How it works** | Add a parameter such as `?utm_source=jane` to your customer signup link (`/app/register`). | Create the affiliate on the **Affiliates** tab with a referral code. They share your checkout page link with `?ref=` and their code added. |
+| **Where it shows** | Each parameter gets its own row under **Registration Tracking** on the customer's overview. See [Onboarding customers](/guides/onboarding-customers). | The affiliate's record, under **View customers**. A customer's first affiliate also shows under **Registration Tracking**. |
+| **Works on** | Customer signups | Checkout page sales |
+| **Use it when** | You want to see who sent a signup and handle any commission yourself. | You want sales credited to a referrer automatically, with commissions tracked for you. |
+
+A `?ref=` code on the signup link is only stored as a tracking parameter. It doesn't credit an affiliate, so send affiliates' audiences to a checkout page instead.
+
 ## Affiliates
 
 Affiliates are the people promoting your offers, like a podcast host or a partner agency. Credit their sales and track what you owe them on the **Affiliates** tab.

@@ -113,6 +113,18 @@ A reverse auction is in one of three states at any given time.
 
 When an auction ends unsold, the lead picks up where it left off in your distribution stages, so a later stage (a [Club](/features/club) stage or a partner, for example) still gets a crack at it. Sold and unsold auctions are kept for 90 days and then pruned automatically.
 
+### What happens at the floor price
+
+A lead stays at the floor (last) price for one interval, the same as every other price step. If it still doesn't sell, the auction ends unsold and the lead moves on to your next stage. If no later stage takes it, it's marked <span className="tone-badge tone-caution">Unassigned</span>. To give unsold leads a longer run at a final price, see [Keeping unsold leads listed at a final price](/guides/setting-up-the-marketplace#keeping-unsold-leads-listed-at-a-final-price).
+
+## Reselling leads later
+
+Juiced sells each lead once, so it won't relist a lead that already sold. To resell older leads as aged leads, send sold leads out with a [webhook](/features/webhooks) to a tool such as Zapier, add a delay there, and then post them back into Juiced. Add or change a field on the way back in (for example `reposted` set to `yes`) so a [lead type](/features/lead-types) can catch the re-posted leads.
+
+<Warning>
+[Global duplicate checks](/features/duplicate-detection#global-duplicate-checks) also apply to re-posted leads. If a check's lookback window is longer than your delay, it rejects the re-post as a duplicate of the original.
+</Warning>
+
 ## What customers see
 
 The marketplace intentionally shows limited information about each lead, just enough to make a purchasing decision without enabling cherry-picking.

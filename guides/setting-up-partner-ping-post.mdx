@@ -23,6 +23,8 @@ Open the partner, stay on the **Overview** tab, and in the **Ping/Post** tab cli
 1. Under **Destination**, enter the partner's ping **URL**.
 2. Expand **Advanced settings** if the partner needs something other than the defaults. Set the **Method** (POST, PUT, or GET), **Authentication** (None, Basic Auth, or Bearer Token), **Format** (JSON or Form), **Timeout** in seconds, and any extra **Headers**. Saved passwords and tokens stay hidden after you save.
 
+The ping and the post each have their own **Timeout**. It's 10 seconds by default and can be anything from 3 to 60 seconds. If the partner doesn't answer in time, the request counts as failed.
+
 ## 2. Map the payload
 
 Nothing is sent until you map it, so add every field the partner expects.
@@ -34,6 +36,12 @@ Nothing is sent until you map it, so add every field the partner expects.
 <Tip>
 Pings usually carry less than posts. If the partner's spec leaves out contact details for the ping, leave them out of your ping mapping too.
 </Tip>
+
+### Swapping values with the Map transformer
+
+The **Map** transformer swaps an incoming value for the value the partner expects. Click a field pill, add **Map**, and enter a JSON object where each key is a value your leads arrive with and each value is what the partner should get. For example, `{"Home": "Single Family"}` sends "Single Family" when a lead arrives with "Home".
+
+You only need to list values that change. Anything not in the list passes through as it is, unless you also set a **fallback**, which replaces every unlisted value. Keys match exactly, so "home" and "Home" each need their own entry.
 
 ## 3. Tell Juiced how to read the response
 
@@ -61,6 +69,12 @@ Click **Run Webhook Test**. The result shows whether the response was **Accepted
 ## 5. Configure the post
 
 Back on the partner, click **Configure Post** and repeat Steps 1 to 4 with the partner's post URL and the full set of lead fields they need.
+
+### Passing the ping ID into the post
+
+Many partners want the ID from their ping response sent back with the post. In the post's payload, set that key's value to `{{ response.ping_id }}`, changing the path to wherever the partner's ping response puts its ID (for example `{{ response.data.lead_id }}`). Once the partner has answered at least one ping, its response fields also appear in the field picker under **Ping Response**.
+
+A post test runs on its own, without a ping first, so the value comes out empty there. Check it on the post's deliveries once the first real lead goes through.
 
 <Frame>
   <img className="block dark:hidden" src="/images/tenant/partners/partner-post-config-light.webp" alt="Edit Post page for a partner with the post Destination URL, Advanced settings, and Payload mapping" />

@@ -19,6 +19,18 @@ The **Registration & Login** page controls the words and consent checkboxes cust
 
 Customers register at `/app/register` on your portal's domain. See [Onboarding customers](/guides/onboarding-customers) for sharing the link and tracking where signups come from.
 
+## Your login and signup URLs
+
+All of these work on your subdomain (`https://<your-subdomain>.usejuiced.com`) or your [custom domain](/features/domains).
+
+| Page | Path |
+|------|------|
+| Your team's login | `/tenants/login` |
+| Customer signup | `/app/register` |
+| Customer login | `/app/login` |
+
+Your base URL takes signed-out visitors to the customer login page (or your public marketplace, if you chose that in [Domains & Links](/features/domains)), so bookmark your team's login. To track signups in Google Tag Manager, use `/app/register-business`, the page every new customer lands on right after creating their account.
+
 ## Consent links
 
 Add the documents customers must agree to, such as your privacy policy and terms of service. Click **Add link** and enter the link's **Text** and its URL. Customers see the links next to a checkbox and must check it before they can register.

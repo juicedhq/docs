@@ -55,6 +55,8 @@ Choose what the request contains.
 
 With the default payload, each request includes the price you paid (`charged_amount`), the `scope` you won it at, when you received it (`received_on`), the `lead_type`, and all the lead's deliverable fields, such as name, email, phone, and address. Fields your provider adds later are included automatically.
 
+In a custom payload, if a lead field doesn't appear in the **Lead Data** list, type its name in double curly braces as the value, with a `lead.` prefix, for example `{{ lead.your_state }}`. After you save, it shows as a linked field.
+
 ### Payload version
 
 The **Payload version** section sets the shape of every request, with a card for **Legacy** and one for **v1**. New webhooks start on **v1**, which wraps each lead in a fixed envelope, and your payload choice shapes only the lead data inside it. Pick **Legacy** only if your system already expects the original shape. A preview below the cards shows what your endpoint will receive. See [Payload versions](#payload-versions) for what each version sends.

@@ -91,6 +91,12 @@ The field picker groups what you can insert. Every event has **Tenant** fields (
 
 When you paste JSON, a placeholder like `{{ lead.email }}` becomes a linked field, and so does a bare lead field name like `email`.
 
+### Mapping a field missing from the picker
+
+If a lead field doesn't appear in the picker, type its name in double curly braces as the value, for example `{{ BBDO_Lead_ID }}`. After you save, it shows as a linked field. Your custom lead fields also work with a `lead.` prefix, like `{{ lead.your_state }}`. There's no `lead.details.` path. The same works for [partner payloads](/guides/setting-up-partner-ping-post#2-map-the-payload) and [customer webhooks](/customer-portal/webhooks#payload), though customer webhooks only carry fields marked [deliverable](/features/lead-categories#deliverable).
+
+To swap values on the way out (say, "Home" to "Single Family"), add the **Map** transformer to the field. See [Swapping values with the Map transformer](/guides/setting-up-partner-ping-post#swapping-values-with-the-map-transformer).
+
 ### Lead fields
 
 Lead events can include an **all lead fields** row. It expands to the lead's deliverable fields when the webhook fires, so new fields show up without editing the webhook. If you'd rather list fields one by one, you can expand the row into individual fields, but that's a snapshot, so fields added later won't be included.
