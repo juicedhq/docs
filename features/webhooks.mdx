@@ -10,12 +10,12 @@ Webhooks send data to an outside system the moment something happens in Juiced. 
 
 There are two kinds.
 
-- **Workspace webhooks** fire on events across your whole workspace. You manage them under **Integrations → Webhooks**, and they're what most of this page covers.
+- **Workspace webhooks** fire on events across your whole workspace. You manage them under **Configure → Webhooks**, and they're what most of this page covers.
 - **Customer webhooks** deliver each lead assigned to one customer to that customer's own endpoint. See [Customer webhooks](#customer-webhooks).
 
 ## The Webhooks page
 
-Open **Webhooks** under **Integrations** in the sidebar. Each row shows the **Event**, the **URL** ("Not configured" if it has none), and whether the webhook is **Active**.
+Open **Configure → Webhooks**. Each row shows the **Event**, the **URL** ("Not configured" if it has none), and whether the webhook is **Active**.
 
 <Frame>
   <img className="block dark:hidden" src="/images/tenant/integrations/webhooks-light.webp" alt="Webhooks list with three webhooks showing their event, URL, and active status, with pause or enable, edit, and delete buttons on each row" />
@@ -45,7 +45,7 @@ Click **Create & continue to testing**. The webhook is active as soon as it's cr
 
 ### Saved credentials and secret headers
 
-Once saved, passwords, tokens, and secret header values never show again, not even to you. A header is secret when its name is `Authorization`, `Cookie`, `Set-Cookie`, `X-Api-Key`, `Api-Key`, `Token`, `Access-Token`, `Auth-Token`, `Password`, `Secret`, or `Bearer` (in any case, with dashes, underscores, or neither). Other headers stay visible and editable.
+Once saved, passwords, tokens, and secret header values never show again, not even to you. A header is secret when its name contains `Authorization`, `Cookie`, `Api-Key`, `Token`, `Password`, `Secret`, or `Bearer` (in any case, with dashes, underscores, or neither). That covers names like `X-Auth-Token`, `X-Client-Secret`, and `Proxy-Authorization` too. Other headers stay visible and editable.
 
 - A saved secret header shows a lock and **Saved** in place of its value, and its name is locked. Click **Replace** to type a new value. Leave it alone and Juiced keeps the saved one.
 - If you move the **URL** to a different host, enter each secret header value again. Juiced only reuses a saved value for the same endpoint host, so a secret is never sent somewhere new without you retyping it.
@@ -90,6 +90,12 @@ The field picker groups what you can insert. Every event has **Tenant** fields (
 - **Transaction Updated** adds the customer under `customer.` and the transaction under `transaction.`, such as `transaction.amount` and `transaction.event`
 
 When you paste JSON, a placeholder like `{{ lead.email }}` becomes a linked field, and so does a bare lead field name like `email`.
+
+### Mapping a field missing from the picker
+
+If a lead field doesn't appear in the picker, type its name in double curly braces as the value, for example `{{ BBDO_Lead_ID }}`. After you save, it shows as a linked field. Your custom lead fields also work with a `lead.` prefix, like `{{ lead.your_state }}`. There's no `lead.details.` path. The same works for [partner payloads](/guides/setting-up-partner-ping-post#2-map-the-payload) and [customer webhooks](/customer-portal/webhooks#payload), though customer webhooks only carry fields marked [deliverable](/features/lead-categories#deliverable).
+
+To swap values on the way out (say, "Home" to "Single Family"), add the **Map** transformer to the field. See [Swapping values with the Map transformer](/guides/setting-up-partner-ping-post#swapping-values-with-the-map-transformer).
 
 ### Lead fields
 
@@ -314,6 +320,26 @@ Replaying needs permission to edit the webhook. Users who can only view it still
 - **Automatic retries** kick in when your endpoint returns a server error (5xx), or the connection fails before the request is sent. Juiced tries again, for up to 3 attempts in total. Client errors (4xx) and timeouts after the request was sent aren't retried, so your receiver never gets the same event twice by accident.
 - **Timeouts** follow the webhook's **Timeout** setting, which is how long each request waits for a response.
 - **Isolation** means each webhook is delivered on its own, so a failing endpoint doesn't hold up the others.
+- **Automatic pausing** stops Juiced from sending to an endpoint that's been down for days. See below.
+
+### Automatic pausing
+
+When every delivery to a webhook keeps failing, Juiced warns you first and then pauses it, so a dead endpoint doesn't quietly swallow events for weeks.
+
+- **After 24 hours** of nothing but failed deliveries, the webhook shows <span className="tone-badge tone-caution">Failing</span> and every Admin on your account gets an email and an in-app notification.
+- **After 72 hours**, with at least 10 failed deliveries, Juiced pauses the webhook. It shows <span className="tone-badge tone-danger">Paused: failing</span>, and Admins are notified again.
+- **One successful delivery** before the pause ends the run, and the countdown starts over.
+
+A delivery counts as failed once its retries are used up and the request actually reached (or tried to reach) your endpoint. Replays, and deliveries stopped because you paused or edited the webhook, don't count. Partner ping and post endpoints are never paused this way.
+
+The webhook list shows a summary line when any webhook is failing or was paused, and the webhook's own page explains why, including the latest error. Fix the endpoint, then click **Enable webhook**. That clears the warning. Events that failed in the meantime can be [replayed](#replaying-deliveries) once it's back on.
+
+<Frame>
+  <img className="block dark:hidden" src="/images/tenant/integrations/webhook-paused-failing-light.webp" alt="Customer webhook page with an Enable webhook button and a red notice reading This webhook was paused because its deliveries kept failing, with the reason, 14 failures over 72 hours, and the latest HTTP 503 error" />
+  <img className="hidden dark:block" src="/images/tenant/integrations/webhook-paused-failing-dark.webp" alt="Customer webhook page with an Enable webhook button and a red notice reading This webhook was paused because its deliveries kept failing, with the reason, 14 failures over 72 hours, and the latest HTTP 503 error" />
+</Frame>
+
+For a [customer webhook](#customer-webhooks), the customer's users get the same emails and notifications, branded as you, with a link to the webhook in their portal.
 
 ## Customer webhooks
 

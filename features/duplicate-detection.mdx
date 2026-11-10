@@ -10,7 +10,7 @@ Juiced checks for duplicates at two points.
 - **When a lead arrives.** [Global](#global-duplicate-checks) and [source-level](#source-level-duplicate-checks) checks compare the new lead with leads you've already received. A match marks the lead as a duplicate and rejects it.
 - **When a lead is about to be delivered.** [Customer](#customer-duplicate-checks) and [partner](#partner-duplicate-checks) checks compare it with what that particular buyer has already received. A match skips that buyer, and the lead moves on to the next one.
 
-Open **Duplicate Checks** under **Ingest** in the sidebar. The tabs across the top are **Global Duplicate Checks**, **Customer Duplicate Checks**, and **Partner duplicate-check default**. You'll see the tabs your role allows. The global checks have their own permission, while the customer and partner tabs require permission to manage settings.
+Open **Configure → Duplicate Checks**. The tabs across the top are **Global Duplicate Checks**, **Customer Duplicate Checks**, and **Partner duplicate-check default**. You'll see the tabs your role allows. The global checks have their own permission, while the customer and partner tabs require permission to manage settings.
 
 ## Global duplicate checks
 
@@ -105,3 +105,11 @@ Partners get the same kind of check against their own delivery history. The **Pa
 </Frame>
 
 Each partner then chooses, under **Duplicate checks** on its own form, to **Use tenant default**, turn checks off with **Disabled**, or set up a **Custom** replacement. See [Partners](/features/partners#duplicate-checks).
+
+## Recommended setup
+
+Not sure where to start? Here's what the Juiced team uses.
+
+- **Leads from vendors** get a [source-level check](#source-level-duplicate-checks) on each vendor's source that blocks on phone, email and address.
+- **Your own leads** get a source-level check that blocks on address only, because people sometimes submit more than one property.
+- **Customer duplicate checks** block on phone and email with a **History window** of about 5 years (1825 days), so a customer never receives the same person twice. Customers tend to return a repeat lead no matter how long it's been.

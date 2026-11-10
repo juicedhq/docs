@@ -16,7 +16,7 @@ This guide walks you through making your first submission end-to-end, from pulli
 
 ## 1. Open the source's API specification
 
-Open **Sources** under **Ingest** in the sidebar and click the source you're integrating. On the source's **Overview**, open the **More actions** (⋯) menu in the header and choose **View API Spec**.
+Open **Configure → Sources** and click the source you're integrating. On the source's **Overview**, open the **More actions** (⋯) menu in the header and choose **View API Spec**.
 
 <Frame>
   <img className="block dark:hidden" src="/images/tenant/ingest/source-detail-light.webp" alt="Source overview with the Edit button and the More actions menu in the header" />
@@ -112,7 +112,7 @@ Already sending leads to `/api/leads`? That's the legacy API. It still works, bu
 
 ## 5. Verify the submission landed
 
-Back in Juiced, open **Incoming logs** under **Entries** in the sidebar. Every submission gets an incoming log, newest first, showing the source, the post's outcome, the lead it created, and who bought it.
+Back in Juiced, open **Operate → Logs** (the **Incoming** tab). Every submission gets an incoming log, newest first, showing the source, the post's outcome, the lead it created, and who bought it.
 
 Click the log, then the **Post** link under **Records**, to open the post inspector.
 
@@ -127,6 +127,8 @@ Click the log, then the **Post** link under **Records**, to open the post inspec
 - **Records** links to the lead the post created, if any.
 
 This is the first place to look when an integrator says "I sent a lead but didn't see it." See [Logs](/features/logs) for everything else the logs can tell you.
+
+A rejected post never creates a lead, so there's nothing to fix inside Juiced. Correct the data at the source and post it again. See [Fixing a rejected post](/features/submissions#fixing-a-rejected-post).
 
 <Tip>
 Test traffic is hidden by default. If the source is in test mode, set the **Test mode** filter on Incoming logs to **Test only** to find those requests.
@@ -160,6 +162,6 @@ Once a lead is accepted, a few things follow.
 - **Matching** runs immediately. Juiced classifies the lead into a [lead type](/features/lead-types) and runs it through your [distribution stages](/features/distribution).
 - **The response** tells you the outcome before the API call returns.
 - **Delivery** follows if the lead was assigned, so the customer sees it in their portal and any configured [webhooks](/features/webhooks) fire.
-- The **Leads page** lists every accepted lead under **Entries** → **Leads** with its full history.
+- The **Leads page** lists every accepted lead under **Operate → Leads** with its full history.
 
 If you're expecting higher volume or want to check price and availability before committing to a full submission, see [ping-post](/features/ping-post) for the two-phase submission flow.

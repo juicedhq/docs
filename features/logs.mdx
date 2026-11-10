@@ -5,15 +5,15 @@ description: Incoming and outgoing logs, plus the ping and post inspectors, whic
 
 Every request that touches Juiced leaves a receipt. When a source pings or posts, Juiced records an **incoming log**. When Juiced pings or posts to a partner, or sends a lead to a customer's webhook, it records an **outgoing log**. Together they answer the two questions you'll ask most, "What did they send us?" and "What did we send them?"
 
-Both live under **Entries** in the sidebar, next to **Leads**.
+Both live under **Operate → Logs**, as the **Incoming** and **Outgoing** tabs.
 
 ## Incoming logs
 
 An incoming log (also called a distribution flow) is one run of the pipeline, covering a ping, a post, the lead it created, and every [distribution stage](/features/distribution) the lead visited. Open **Incoming logs** to see them all, newest first.
 
 <Frame>
-  <img className="block dark:hidden" src="/images/tenant/logs/incoming-logs-light.webp" alt="Incoming logs list with Source, Ping, Post, Lead, Honored, Recipient, and Sold For columns, a search box, and a Filters button" />
-  <img className="hidden dark:block" src="/images/tenant/logs/incoming-logs-dark.webp" alt="Incoming logs list with Source, Ping, Post, Lead, Honored, Recipient, and Sold For columns, a search box, and a Filters button" />
+  <img className="block dark:hidden" src="/images/tenant/logs/incoming-logs-light.webp" alt="Logs page on its Incoming tab, with Source, Ping, Post, Lead, Honored, Recipient, and Sold For columns, a search box, and a Filters button" />
+  <img className="hidden dark:block" src="/images/tenant/logs/incoming-logs-dark.webp" alt="Logs page on its Incoming tab, with Source, Ping, Post, Lead, Honored, Recipient, and Sold For columns, a search box, and a Filters button" />
 </Frame>
 
 | Column | What it shows |
@@ -59,8 +59,8 @@ Click **View** next to **Offers** to see every offer the lead attracted. The dia
 **Outgoing logs** lists every request Juiced sent out, including pings and posts to [partners](/features/partners) and webhook deliveries. Rows are grouped by the incoming log they belong to, with a **View log** link to jump back to it.
 
 <Frame>
-  <img className="block dark:hidden" src="/images/tenant/logs/outgoing-logs-light.webp" alt="Outgoing logs list grouped by log number, with date, type, partner, result, price, and a View log link on each row" />
-  <img className="hidden dark:block" src="/images/tenant/logs/outgoing-logs-dark.webp" alt="Outgoing logs list grouped by log number, with date, type, partner, result, price, and a View log link on each row" />
+  <img className="block dark:hidden" src="/images/tenant/logs/outgoing-logs-light.webp" alt="Logs page on its Outgoing tab, grouped by log number, with date, type, partner, result, price, and a View log link on each row" />
+  <img className="hidden dark:block" src="/images/tenant/logs/outgoing-logs-dark.webp" alt="Logs page on its Outgoing tab, grouped by log number, with date, type, partner, result, price, and a View log link on each row" />
 </Frame>
 
 The search box matches partner names and endpoint URLs. **Filters** cover these options.
@@ -101,7 +101,7 @@ Shows exactly what a source sent to the [ping endpoint](/api-reference/endpoint/
   <img className="hidden dark:block" src="/images/tenant/logs/ping-inspector-dark.webp" alt="Ping inspector with the request payload, a response body containing a price and Match found message, and Details and Records in the sidebar" />
 </Frame>
 
-- **Request** shows the **Payload** and **Headers**, plus **Validation errors** when the ping was rejected.
+- **Request** shows the **Payload** and **Headers**, plus **Validation errors** when the ping was rejected. Credentials in the headers, such as the source's API secret or a bearer token, show as `[REDACTED]`, and headers our CDN and hosting add are left out (apart from the sender's IP and country), so you see what the source sent.
 - **Response** shows the **Body** and **Headers** Juiced returned, including the price offered.
 - **Details** lists the response **Status** code, **Mode**, **Source**, **Method**, **Timestamp**, and ping **ID**.
 - **Records** shows the **Source**, **Lead category**, **Lead type**, **County**, and **Postal code** the ping resolved to.

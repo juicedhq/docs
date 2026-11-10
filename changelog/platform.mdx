@@ -8,6 +8,71 @@ Everything that changed on the tenant side of Juiced, including lead routing, di
 
 Looking for changes to the buyer experience? Those live in [Customer portal updates](/changelog/customer-portal).
 
+<Update label="November 10, 2026" description="v3.86.0" tags={["New", "Improvements", "Fixes"]}>
+  <Frame>
+    <img className="block dark:hidden" src="/images/changelog/v3.86.0-light.webp" alt="Juiced release card reading Show partners where buyers are bidding, next to the partner portal's Demand page listing states with their active bids and top bid, led by California with 6 active bids and a 120 dollar top bid" />
+    <img className="hidden dark:block" src="/images/changelog/v3.86.0-dark.webp" alt="Juiced release card reading Show partners where buyers are bidding, next to the partner portal's Demand page listing states with their active bids and top bid, led by California with 6 active bids and a 120 dollar top bid" />
+  </Frame>
+
+  ## Partner demand
+
+  - Give a [partner](/features/partners) a view of where your buyers are bidding. Turn on the new **Show Demand in Portal** toggle on the partner and their portal gets a **Demand** page listing states, counties, and countries with the number of **Active** bids and the **Top Bid** in each. Partners can filter by lead type and sort by either number. See [Demand in the partner portal](/features/partners#demand-in-the-partner-portal).
+  - Your lead values, and which buyers are bidding, stay private. The toggle is off for every partner until you turn it on.
+
+  ## Improvements
+
+  - The [ping inspector](/features/logs#ping-inspector) no longer stores credentials a source sends in its headers, such as its API secret on Basic-auth pings or a bearer token. They show as `[REDACTED]`. Headers added by our CDN and hosting are left out, so the **Headers** tab shows what the source actually sent.
+  - Any header whose name contains a secret word, like `X-Auth-Token` or `X-Client-Secret`, is now treated as a secret on [webhooks](/features/webhooks), customer webhooks, and partner endpoints. It shows **Saved** with **Replace** once saved, is asked for again when the URL moves to a new host, and is masked in delivery history. See [Saved credentials and secret headers](/features/webhooks#saved-credentials-and-secret-headers).
+
+  ## Fixes
+
+  - Leads posted to the API are no longer rejected when a [lead type](/features/lead-types) condition points at a field that was deleted. That condition now counts as not matching, so the lead goes to the next matching lead type or the category's fallback. A [banner](/features/banners) with such a condition stops showing instead of failing.
+</Update>
+
+<Update label="November 9, 2026" description="v3.85.0" tags={["New", "Improvements", "Fixes"]}>
+  <Frame>
+    <img className="block dark:hidden" src="/images/changelog/v3.85.0-light.webp" alt="Juiced release card reading A panel organized by how you work, next to the tenant panel with the Configure module open on the rail and its sidebar grouping Intake, Routing, and Connections pages" />
+    <img className="hidden dark:block" src="/images/changelog/v3.85.0-dark.webp" alt="Juiced release card reading A panel organized by how you work, next to the tenant panel with the Configure module open on the rail and its sidebar grouping Intake, Routing, and Connections pages" />
+  </Frame>
+
+  The tenant panel has a new shape. The rail now switches between five modules, and the sidebar only shows the pages you need for the job at hand. You can also hide the Marketplace from customers while it keeps filling, and webhooks that keep failing now warn you and pause themselves.
+
+  ## Navigation
+
+  - The rail is now a module switcher, with **Operate**, **Analytics**, **Configure**, **Storefront**, and **Company**. Click one and the sidebar shows that module's pages, grouped under headings like **Intake**, **Routing**, and **Selling**. The settings gear is gone, since settings pages now live in the module they belong to (Bidding and Returns in Configure, Banners in Storefront, Users in Company). See [Finding your way around](/get-started/finding-your-way-around#the-rail-and-its-modules).
+  - Each module remembers the last page you opened in it. Page addresses haven't changed, so bookmarks still work.
+  - **Logs** and **Demand** (formerly Locations) are now single sidebar items, with **Incoming** and **Outgoing**, or **Counties**, **States**, and **Countries**, as tabs at the top of the page. [Returns](/features/returns) and [Subscription Products](/features/subscription-products) each split into **Tiers** and **Settings** tabs.
+  - A new **Analytics** module previews the reports on the way.
+  - On a phone, the menu lists the modules, and tapping one opens its pages.
+
+  ## Checkout pages
+
+  - Offers now live on their own **Offers** tab on each [checkout page](/features/checkout-pages#adding-offers), instead of inside the edit form. Each offer is added, edited, recommended, reordered, or removed on its own, and a change that would stop a live page from selling isn't saved.
+  - A new page starts off and opens on its **Offers** tab, ready for its first offer. It can go live once it has one.
+  - Orders moved to their own **Orders** tab, next to **Overview**.
+
+  ## Marketplace
+
+  - Turn off the new **Show Marketplace to customers** switch under **Company → Domains & Links** to hide the [Marketplace](/features/marketplace#hiding-the-marketplace-from-customers) from your customers while your Marketplace stage keeps placing leads on it. It's on by default, so nothing changes until you flip it.
+  - When you hide it with open buy orders, choose **Keep buy orders** to leave them running or **Cancel and refund** to return the funds to each customer's wallet.
+  - The public marketplace is turned off while the Marketplace is hidden.
+
+  ## Webhooks
+
+  - [Workspace and customer webhooks](/features/webhooks#automatic-pausing) whose deliveries all fail for 24 hours now show **Failing**, and your Admins get an email and an in-app notification. After 72 hours (and at least 10 failures) the webhook is paused automatically and shows **Paused: failing**, with the reason on its page. Fix the endpoint and click **Enable webhook** to start it again.
+  - For customer webhooks, the customer's users get the same notices, branded as you.
+
+  ## Improvements
+
+  - Customer and partner invites sent through your [SendGrid integration](/features/integrations) no longer have SendGrid's click and open tracking, so their links point straight at your portal instead of a tracking address.
+
+  ## Fixes
+
+  - Notices from Juiced, such as billing reminders, now show at the top of the new panel, not just the classic one.
+  - Opening an email verification link in a browser that isn't signed in now shows the confirmation page instead of a server error.
+  - A return tier with a discount or penalty turned on but no percentage now shows 0% instead of breaking the page.
+</Update>
+
 <Update label="November 6, 2026" description="v3.84.0" tags={["New", "Improvements"]}>
   <Frame>
     <img className="block dark:hidden" src="/images/changelog/v3.84.0-light.webp" alt="Juiced release card reading A guided start for new workspaces, next to the setup guide's How do you want to start selling step with cards for Ping tree, Customer bidding, Marketplace, and Club" />

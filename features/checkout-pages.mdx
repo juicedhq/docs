@@ -11,7 +11,7 @@ Checkout pages are public, pay-first offer pages. A buyer picks a package, pays 
 - **Card payments.** Your [Stripe account](/features/integrations) must be connected and able to take customer payments. Until it is, pages show as **Not selling**.
 - **For Club offers**, turn on the [Club](/features/club) and offer a tier in [Subscription Products](/features/subscription-products).
 
-Click the gear in the rail and choose **Checkout Pages** under **Application**. The page has four tabs (**Pages**, **Products**, **Affiliates**, and **Results**).
+Open **Storefront → Checkout Pages**. It has four tabs (**Pages**, **Products**, **Affiliates**, and **Results**).
 
 ## Products
 
@@ -54,8 +54,8 @@ Each row has **Edit**, **Preview**, and **Duplicate**.
 ### Building a page
 
 <Frame>
-  <img className="block dark:hidden" src="/images/tenant/checkout/checkout-page-edit-light.webp" alt="Checkout page editor with Internal name, Link, Live switch, Who can buy, Offer ends, and Default affiliate fields, followed by the Offers table" />
-  <img className="hidden dark:block" src="/images/tenant/checkout/checkout-page-edit-dark.webp" alt="Checkout page editor with Internal name, Link, Live switch, Who can buy, Offer ends, and Default affiliate fields, followed by the Offers table" />
+  <img className="block dark:hidden" src="/images/tenant/checkout/checkout-page-edit-light.webp" alt="Checkout page editor with Internal name, Link, Live switch, and Offer ends fields, followed by Qualifying customers and the start of the Content section" />
+  <img className="hidden dark:block" src="/images/tenant/checkout/checkout-page-edit-dark.webp" alt="Checkout page editor with Internal name, Link, Live switch, and Offer ends fields, followed by Qualifying customers and the start of the Content section" />
 </Frame>
 
 **Page**
@@ -64,12 +64,10 @@ Each row has **Edit**, **Preview**, and **Duplicate**.
 |-------|--------------|
 | **Internal name** | Only your team sees it |
 | **Link** | The page's address, which is `/offers/` followed by the link you choose, on your custom domain if you have one |
-| **Live** | Buyers can only check out while the page is live |
+| **Live** | Buyers can only check out while the page is live. A new page starts off, and it can only go live once it has an offer. |
 | **Who can buy** | **Everyone**; **New customers only** (people who already have an account can't check out, good for welcome offers); or **Existing customers only** (buyers must sign in, good for reload sales) |
 | **Offer ends** | Optional. Shows a countdown on the page. Times are in UTC. |
 | **Default affiliate** | Sales are credited to this affiliate unless the link carries another affiliate's `?ref=` code |
-
-**Offers** are the packages buyers choose between. Click **Add offer**, give it a **Name**, and add products. The buyer gets all of them in one checkout. An offer can include one buyer-entered product and one Club tier. The dialog shows what's **Due today** and how much **Credit** the buyer gets. Mark one offer **Recommended** to select it when the page opens. Buyers see offers in the order you set.
 
 **Content** is what the page says, made up of a **Headline**, **Subheadline**, an optional **Video** (YouTube, Vimeo, or Loom), and **Details**. In Details, lines written as "Label: text" or starting with "-" show as a highlighted list; other text shows as paragraphs.
 
@@ -85,6 +83,19 @@ Each row has **Edit**, **Preview**, and **Duplicate**.
 
 Use **Preview** to see the saved page before you share it.
 
+### Adding offers
+
+**Offers** are the packages buyers choose between, and they live on the page's **Offers** tab. Saving a new page takes you straight there.
+
+Click **Add offer**, give it a **Name**, and add products. The buyer gets all of them in one checkout. An offer can include one buyer-entered product and one Club tier, and a page can have up to six offers. The dialog shows what's **Due today** and how much **Credit** the buyer gets.
+
+<Frame>
+  <img className="block dark:hidden" src="/images/tenant/checkout/checkout-page-offers-light.webp" alt="Checkout page Offers tab listing Starter, Growth marked Recommended, and Scale offers with what each includes, due today, credit, sales, and revenue, plus move, recommend, edit, and remove buttons on each row" />
+  <img className="hidden dark:block" src="/images/tenant/checkout/checkout-page-offers-dark.webp" alt="Checkout page Offers tab listing Starter, Growth marked Recommended, and Scale offers with what each includes, due today, credit, sales, and revenue, plus move, recommend, edit, and remove buttons on each row" />
+</Frame>
+
+Each offer saves on its own. Use the row buttons to edit, **Recommend** (the recommended offer is selected when the page opens), move up or down (buyers see offers in this order), or remove an offer. On a live page, a change that would stop the page from selling isn't saved, and the last offer can't be removed until you turn the page off.
+
 ### What happens when someone buys
 
 The buyer pays in Stripe Checkout. Once payment is confirmed, Juiced creates their customer account (or uses the one they signed in to), saves their card, adds the credit and any bonus to their wallet, and starts their Club membership if the offer included one. New buyers get a welcome email with a link to set up their login, and existing customers get a purchase confirmation. You can edit both emails in [Notification Templates](/features/notifications).
@@ -93,16 +104,35 @@ In the customer's [transactions](/features/transactions), the credit shows as **
 
 ### Page results
 
-Open a page to see its link (with **Copy link**), when the offer ends, and how it's doing.
+Open a page to see its record, with **Overview**, **Offers**, and **Orders** tabs. **Overview** shows its status, link (with **Copy link**), when the offer ends, and how it's doing. **Edit** is in the header, with **Preview** and **Duplicate** under **More actions**.
 
 <Frame>
-  <img className="block dark:hidden" src="/images/tenant/checkout/checkout-page-detail-light.webp" alt="Checkout page detail with its live link, offer end date, Visits, Sales, Revenue, and New customers stats, sales by offer, and a list of orders" />
-  <img className="hidden dark:block" src="/images/tenant/checkout/checkout-page-detail-dark.webp" alt="Checkout page detail with its live link, offer end date, Visits, Sales, Revenue, and New customers stats, sales by offer, and a list of orders" />
+  <img className="block dark:hidden" src="/images/tenant/checkout/checkout-page-detail-light.webp" alt="Checkout page Overview tab with its live link, offer end date, Visits, Sales, Revenue, and New customers stats, and sales by offer with a Recommended badge on the Growth offer" />
+  <img className="hidden dark:block" src="/images/tenant/checkout/checkout-page-detail-dark.webp" alt="Checkout page Overview tab with its live link, offer end date, Visits, Sales, Revenue, and New customers stats, and sales by offer with a Recommended badge on the Growth offer" />
 </Frame>
 
 - **Visits**, **Sales** (with the conversion rate), **Revenue**, and **New customers**
 - **Sales by offer**, including offers you've since removed
-- **Orders**, with the buyer, the customer account, what they **Paid**, **Credit + bonus**, and a status of <span className="tone-badge tone-success">Fulfilled</span>, <span className="tone-badge tone-danger">Needs attention</span> (paid, but delivery couldn't complete as bought, so review it), or <span className="tone-badge tone-neutral">Abandoned</span> (the buyer left Stripe Checkout and nothing was charged)
+
+The **Orders** tab lists every order, with the buyer, the customer account, what they **Paid**, **Credit + bonus**, and a status of <span className="tone-badge tone-success">Fulfilled</span>, <span className="tone-badge tone-danger">Needs attention</span> (paid, but delivery couldn't complete as bought, so review it), or <span className="tone-badge tone-neutral">Abandoned</span> (the buyer left Stripe Checkout and nothing was charged)
+
+<Frame>
+  <img className="block dark:hidden" src="/images/tenant/checkout/checkout-page-orders-light.webp" alt="Checkout page Orders tab listing orders with the date, buyer and offer, customer account, amount paid, credit plus bonus, and Fulfilled or Abandoned status" />
+  <img className="hidden dark:block" src="/images/tenant/checkout/checkout-page-orders-dark.webp" alt="Checkout page Orders tab listing orders with the date, buyer and offer, customer account, amount paid, credit plus bonus, and Fulfilled or Abandoned status" />
+</Frame>
+
+## Tracking who referred a customer
+
+There are two ways to credit a referrer, depending on what you need.
+
+| | Signup URL tracking | Affiliates |
+|---|---|---|
+| **How it works** | Add a parameter such as `?utm_source=jane` to your customer signup link (`/app/register`). | Create the affiliate on the **Affiliates** tab with a referral code. They share your checkout page link with `?ref=` and their code added. |
+| **Where it shows** | Each parameter gets its own row under **Registration Tracking** on the customer's overview. See [Onboarding customers](/guides/onboarding-customers). | The affiliate's record, under **View customers**. A customer's first affiliate also shows under **Registration Tracking**. |
+| **Works on** | Customer signups | Checkout page sales |
+| **Use it when** | You want to see who sent a signup and handle any commission yourself. | You want sales credited to a referrer automatically, with commissions tracked for you. |
+
+A `?ref=` code on the signup link is only stored as a tracking parameter. It doesn't credit an affiliate, so send affiliates' audiences to a checkout page instead.
 
 ## Affiliates
 

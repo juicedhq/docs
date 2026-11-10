@@ -55,6 +55,8 @@ Choose what the request contains.
 
 With the default payload, each request includes the price you paid (`charged_amount`), the `scope` you won it at, when you received it (`received_on`), the `lead_type`, and all the lead's deliverable fields, such as name, email, phone, and address. Fields your provider adds later are included automatically.
 
+In a custom payload, if a lead field doesn't appear in the **Lead Data** list, type its name in double curly braces as the value, with a `lead.` prefix, for example `{{ lead.your_state }}`. After you save, it shows as a linked field.
+
 ### Payload version
 
 The **Payload version** section sets the shape of every request, with a card for **Legacy** and one for **v1**. New webhooks start on **v1**, which wraps each lead in a fixed envelope, and your payload choice shapes only the lead data inside it. Pick **Legacy** only if your system already expects the original shape. A preview below the cards shows what your endpoint will receive. See [Payload versions](#payload-versions) for what each version sends.
@@ -180,6 +182,17 @@ Click a webhook in the table to open its overview.
 - **Details** shows the endpoint, method, format, trigger (**Lead assigned**), and webhook ID.
 
 Use **Pause** / **Enable** and **Edit** at the top of the page to change the webhook.
+
+### When deliveries keep failing
+
+If every delivery to a webhook fails for 24 hours, it shows <span className="tone-badge tone-caution">Failing</span> and everyone on your account gets an email and a notification. If it's still failing after 72 hours (with at least 10 failed deliveries), the webhook is paused automatically and shows <span className="tone-badge tone-danger">Paused: failing</span>, so your provider stops sending leads to an endpoint that isn't taking them. One successful delivery before then resets the clock.
+
+<Frame>
+  <img className="block dark:hidden" src="/images/portal/notifications/webhooks-paused-failing-light.webp" alt="Webhooks table with a red summary saying one webhook was paused because every delivery kept failing, and the Aurelia CRM webhook marked Paused: failing" />
+  <img className="hidden dark:block" src="/images/portal/notifications/webhooks-paused-failing-dark.webp" alt="Webhooks table with a red summary saying one webhook was paused because every delivery kept failing, and the Aurelia CRM webhook marked Paused: failing" />
+</Frame>
+
+The webhook's page says why it was paused, including the latest error. Fix your endpoint, then click **Enable**. Leads that failed in the meantime can be replayed once it's back on.
 
 ### Replaying deliveries
 

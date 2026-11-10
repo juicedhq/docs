@@ -3,7 +3,7 @@ title: Registration & Login
 description: Customize the customer sign-up page with campaign text and a headline, and require customers to accept your terms when they register or log in.
 ---
 
-The **Registration & Login** page controls the words and consent checkboxes customers see when they create an account in your portal and, optionally, every time they log in. Click the gear in the rail and choose **Registration & Login** under **Application**. Save changes with the floating save bar.
+The **Registration & Login** page controls the words and consent checkboxes customers see when they create an account in your portal and, optionally, every time they log in. Open it from **Storefront → Registration & Login**. Save changes with the floating save bar.
 
 <Frame>
   <img className="block dark:hidden" src="/images/tenant/settings/registration-light.webp" alt="Registration & Login settings page with Campaign Banner Text, Account Creation Headline, two Consent Links for a privacy policy and terms of service, and the Require consent links on login switch" />
@@ -18,6 +18,18 @@ The **Registration & Login** page controls the words and consent checkboxes cust
 | **Account Creation Headline** | The main call to action on the registration form. Leave it empty to use "Create your user account". |
 
 Customers register at `/app/register` on your portal's domain. See [Onboarding customers](/guides/onboarding-customers) for sharing the link and tracking where signups come from.
+
+## Your login and signup URLs
+
+All of these work on your subdomain (`https://<your-subdomain>.usejuiced.com`) or your [custom domain](/features/domains).
+
+| Page | Path |
+|------|------|
+| Your team's login | `/tenants/login` |
+| Customer signup | `/app/register` |
+| Customer login | `/app/login` |
+
+Your base URL takes signed-out visitors to the customer login page (or your public marketplace, if you chose that in [Domains & Links](/features/domains)), so bookmark your team's login. To track signups in Google Tag Manager, use `/app/register-business`, the page every new customer lands on right after creating their account.
 
 ## Consent links
 

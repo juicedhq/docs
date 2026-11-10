@@ -7,11 +7,11 @@ import { HugeIcon } from '/snippets/hugeicon.jsx';
 
 In the pay-per-lead model, many companies let customers return leads that don't meet quality standards. That's great for trust, and also an open invitation for the occasional customer who returns everything that isn't perfectly ripe. Return tiers help you manage this by adjusting customer pricing and competitiveness based on their return behavior.
 
-Find these settings under **Settings → Application → Returns**. Only Admins can open the page.
+Find them under **Configure → Returns**. The page has two tabs, **Tiers** for the [return tiers](#return-tiers) table and **Settings** for the [return settings](#return-settings). Only Admins can open it.
 
 <Frame>
-  <img className="block dark:hidden" src="/images/tenant/settings/returns-light.webp" alt="Returns settings page with Recalculate and New tier buttons, Return Settings for enabling and hiding return tiers, lead volume lookback, return rate message, and Lead Returns URL, followed by the Return Tiers table" />
-  <img className="hidden dark:block" src="/images/tenant/settings/returns-dark.webp" alt="Returns settings page with Recalculate and New tier buttons, Return Settings for enabling and hiding return tiers, lead volume lookback, return rate message, and Lead Returns URL, followed by the Return Tiers table" />
+  <img className="block dark:hidden" src="/images/tenant/settings/returns-light.webp" alt="Returns page on its Tiers tab, with Recalculate and New tier buttons and a Return Tiers table listing Healthy, Watching with a 5% discount, Penalty and At Risk with penalties, and a New Customer tier" />
+  <img className="hidden dark:block" src="/images/tenant/settings/returns-dark.webp" alt="Returns page on its Tiers tab, with Recalculate and New tier buttons and a Return Tiers table listing Healthy, Watching with a 5% discount, Penalty and At Risk with penalties, and a New Customer tier" />
 </Frame>
 
 ## How return rates are calculated
@@ -19,6 +19,8 @@ Find these settings under **Settings → Application → Returns**. Only Admins 
 A customer's return rate is the total value of their returned leads divided by the total value of leads assigned to them. It's based on revenue, not lead count, and only looks at their most recent assigned lead volume (the **Lead volume lookback**), so customers can improve their rate over time.
 
 ## Return settings
+
+These live on the **Settings** tab.
 
 | Setting | What it does |
 |---------|--------------|
@@ -33,7 +35,7 @@ Save your changes with the floating save bar.
 
 ## Return tiers
 
-Return tiers group customers by return rate. Each tier can reward good behavior, penalize excessive returns, or simply label where a customer stands. Click **New tier** to add one.
+Return tiers group customers by return rate. Each tier can reward good behavior, penalize excessive returns, or simply label where a customer stands. They live on the **Tiers** tab. Click **New tier** to add one.
 
 | Field | Description |
 |-------|-------------|
@@ -74,7 +76,7 @@ Turn on **Apply to new customers** to make a tier apply to customers whose assig
 
 ## Recalculating tiers
 
-After you add or change tiers, click **Recalculate** in the page header. Juiced goes through every customer and assigns them to the right tier based on their current return rate. Customers whose tier changes get the **Return Tier Updated** [notification](/features/notifications).
+After you add or change tiers, click **Recalculate** in the header of the **Tiers** tab. Juiced goes through every customer and assigns them to the right tier based on their current return rate. Customers whose tier changes get the **Return Tier Updated** [notification](/features/notifications).
 
 Between recalculations, a customer's tier also updates on its own as they're assigned leads and as their returns are approved, so you only need **Recalculate** after changing the tiers themselves.
 

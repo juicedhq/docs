@@ -18,7 +18,7 @@ A partner can have several sources, one for each form, campaign, or integration 
 
 ## The partner list
 
-Click **Partners** in the sidebar.
+Open **Operate → Partners**.
 
 <Frame>
   <img className="block dark:hidden" src="/images/tenant/partners/partners-list-light.webp" alt="Partners list with Net Revenue, Payout, Contribution Margin, and Rev / Received stats above a daily revenue chart, and a table of partners showing leads and whether ping and post are configured" />
@@ -50,13 +50,13 @@ Click **New partner**, fill in the form, and click **Create partner**. To change
 | **Basic Info** | **Name**, and an optional **Offer Penalty** (0 to 100%). The penalty lowers the partner's offer score when they compete for a lead, without changing what they're charged. Leave it empty for no penalty. |
 | **Duplicate checks** | **Use tenant default**, **Disabled**, or **Custom**. See [Duplicate checks](#duplicate-checks) below. |
 | **Lead Quotas** | Daily, weekly, and monthly limits on **Lead Count** and **Revenue**. See [Lead quotas](#lead-quotas). |
-| **Toggles** | **Show Returned Status in Portal** lets the partner see when a lead was returned. **Exclude Returned Leads from Payout** leaves returned leads out of the payout total shown to the partner. |
+| **Toggles** | **Show Returned Status in Portal** lets the partner see when a lead was returned. **Exclude Returned Leads from Payout** leaves returned leads out of the payout total shown to the partner. **Show Demand in Portal** adds a **Demand** page to the partner's portal. See [Demand in the partner portal](#demand-in-the-partner-portal). |
 
 ### Duplicate checks
 
 Duplicate checks stop you from sending a partner a lead they've already received. They compare against the partner's own delivery history. The window starts when a lead is delivered, returned deliveries and Club claims count, and pending reservations don't.
 
-- **Use tenant default** follows the partner default under **Ingest → Duplicate Checks**.
+- **Use tenant default** follows the partner default under **Configure → Duplicate Checks**.
 - **Disabled** turns checks off for this partner.
 - **Custom** replaces the default with this partner's own **History window**, **Field matching** (all or any of the selected fields), **Fields**, and **Matching options** (case sensitivity and punctuation). You can also choose whether a lead skipped as a duplicate can still go to the **Marketplace** or **Club** immediately, never, or after a number of days.
 
@@ -73,8 +73,8 @@ Once a partner reaches any quota, Juiced stops sending them new pings and posts.
 Open a partner to see its record. The tabs across the top are **Overview**, **Payouts** (for roles that can see analytics), **Lead Eligibility**, **Sources**, and **Users**.
 
 <Frame>
-  <img className="block dark:hidden" src="/images/tenant/partners/partner-overview-light.webp" alt="Partner overview with Pings, Posts, Leads, and Payout stats, a Ping/Post table listing a ping and a post endpoint, and a Details panel with Offer Penalty, Show Returned Status, Exclude Returned from Payout, and Created" />
-  <img className="hidden dark:block" src="/images/tenant/partners/partner-overview-dark.webp" alt="Partner overview with Pings, Posts, Leads, and Payout stats, a Ping/Post table listing a ping and a post endpoint, and a Details panel with Offer Penalty, Show Returned Status, Exclude Returned from Payout, and Created" />
+  <img className="block dark:hidden" src="/images/tenant/partners/partner-overview-light.webp" alt="Partner overview with Pings, Posts, Leads, and Payout stats, a Ping/Post table listing a ping and a post endpoint, and a Details panel with Offer Penalty, Show Returned Status, Exclude Returned from Payout, Show Demand, and Created" />
+  <img className="hidden dark:block" src="/images/tenant/partners/partner-overview-dark.webp" alt="Partner overview with Pings, Posts, Leads, and Payout stats, a Ping/Post table listing a ping and a post endpoint, and a Details panel with Offer Penalty, Show Returned Status, Exclude Returned from Payout, Show Demand, and Created" />
 </Frame>
 
 The **Overview** shows **Pings**, **Posts**, **Leads**, and **Payout** for the timeframe you pick in the header, plus a **Details** panel with the partner's settings and any quotas. Below that are three tabs.
@@ -107,7 +107,7 @@ On the **Ping/Post** tab, click **Configure Ping** or **Configure Post**. Each p
 | Section | What you set |
 |---------|--------------|
 | **Destination** | The **URL** the ping or post is sent to |
-| **Advanced settings** | **Method** (POST, PUT, or GET), **Authentication** (None, Basic Auth, or Bearer Token), **Format** (JSON or Form), **Timeout** in seconds, and extra **Headers**. The defaults suit most endpoints. Saved credentials and secret headers stay hidden (see [Saved credentials and secret headers](/features/webhooks#saved-credentials-and-secret-headers)). |
+| **Advanced settings** | **Method** (POST, PUT, or GET), **Authentication** (None, Basic Auth, or Bearer Token), **Format** (JSON or Form), **Timeout** in seconds (10 by default, 3 to 60, set separately for the ping and the post), and extra **Headers**. The defaults suit most endpoints. Saved credentials and secret headers stay hidden (see [Saved credentials and secret headers](/features/webhooks#saved-credentials-and-secret-headers)). |
 | **Payload** | The fields sent. Use **Load default mapping** for the standard shape, build rows yourself, or **Paste JSON** from the partner's spec. Keys use dot notation for nesting, and you can click a field to chain transformers. |
 | **Response** | How to read the partner's reply. **Price path** and **Message path** point to the price and any message or rejection reason (dot notation, like `data.offer.price`). A **Success Condition** is required; a **Duplicate Condition** is optional. Conditions can check the **HTTP Status Code**, whether a key equals or contains a value (**Key Equals**, **Key Contains**), or whether the response contains some text (**Response Contains**). |
 
@@ -119,6 +119,8 @@ A new endpoint is saved with **Create & continue to testing**, which takes you t
 </Frame>
 
 Back on the **Ping/Post** tab, each endpoint's row shows its URL, method, format, and whether it's **Active** or **Paused**. Row actions let you pause or enable it, **Edit** it, or **Delete** it. A paused endpoint isn't called.
+
+A partner with only a post (no ping) can still get leads from a [Round Robin](/guides/configuring-distribution-stages#round-robin) stage, and the same partner can sit in more than one stage. See [Using the same partner in more than one stage](/guides/configuring-distribution-stages#using-the-same-partner-in-more-than-one-stage).
 
 ### Deliveries
 
@@ -171,6 +173,20 @@ Partners can have their own users who sign in to the partner portal to see their
 - **Pending** invites show in the same list with **Resend invite** and **Revoke invite**. A revoked invite stops working immediately.
 - **Reset 2FA and passkeys** helps a partner user who's lost their authenticator app or passkey.
 - **Remove** takes away their access right away.
+
+## Demand in the partner portal
+
+Supply partners send better traffic when they know where your buyers are hungry. Turn on **Show Demand in Portal** in the partner's **Toggles** and their portal gets a **Demand** page in its sidebar and search, listing your buyers' bids by location.
+
+<Frame>
+  <img className="block dark:hidden" src="/images/tenant/partners/partner-portal-demand-light.webp" alt="Demand page in the partner portal on its States tab, sorted by Active, with California at 6 active bids and a 120 dollar top bid, followed by Washington, New York, Texas, and Colorado" />
+  <img className="hidden dark:block" src="/images/tenant/partners/partner-portal-demand-dark.webp" alt="Demand page in the partner portal on its States tab, sorted by Active, with California at 6 active bids and a 120 dollar top bid, followed by Washington, New York, Texas, and Colorado" />
+</Frame>
+
+- **States**, **Counties**, and **Countries** tabs each list locations with two numbers. **Active** is how many bids can receive leads there right now, and **Top Bid** is the highest of them.
+- **Filters** narrow the list to one lead type, and on **Counties** to one state. Search by name, and sort by **Name**, **Active**, or **Top Bid**.
+- Partners never see your lead values (received counts and minimum, maximum, or average lead value) or which buyers are bidding.
+- The setting is off for every partner until you turn it on. Turn it off and the page disappears from their portal.
 
 ## Related guides
 

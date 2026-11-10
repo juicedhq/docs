@@ -36,3 +36,7 @@ Both open the [post inspector](/features/logs#post-inspector), which shows the r
 <Note>
 "Post" here means the HTTP POST a source made to create the submission. In [ping-post](/features/ping-post), the post is the follow-up request that delivers the full lead after a successful ping, so in a ping-post flow they're the same thing.
 </Note>
+
+## Fixing a rejected post
+
+A rejected post (for example, one with a zip code outside your operating countries) never creates a lead, so there's nothing to edit in Juiced. Read the **Validation errors** on the submission, fix the data where the lead came from, and post it again from the source.

@@ -15,7 +15,7 @@ For the full list of events, payload fields, and retry behavior, see the [Webhoo
 
 ## 1. Open the Webhooks page
 
-Open **Webhooks** under **Integrations** in the sidebar. You'll see every webhook you've created, with its **Event**, **URL**, and whether it's **Active**.
+Open **Configure → Webhooks**. You'll see every webhook you've created, with its **Event**, **URL**, and whether it's **Active**.
 
 <Frame>
   <img className="block dark:hidden" src="/images/tenant/integrations/webhooks-light.webp" alt="Webhooks list with three webhooks showing their event, URL, and active status, and a New webhook button" />
@@ -81,7 +81,7 @@ Two shortcuts save typing.
 When in doubt, start with **Load default mapping**. You get every field for the event, then trim what your receiver doesn't need.
 </Tip>
 
-See [Available fields](/features/webhooks#available-fields) for what each event can include.
+See [Available fields](/features/webhooks#available-fields) for what each event can include. If a lead field isn't in the picker, type it in as `{{ field_name }}` (see [Mapping a field missing from the picker](/features/webhooks#mapping-a-field-missing-from-the-picker)).
 
 ## 5. Choose the payload version
 
