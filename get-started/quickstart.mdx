@@ -95,7 +95,7 @@ Your choice creates a matching [distribution stage](/features/distribution) and 
 A few things worth knowing along the way.
 
 - Most steps have **Skip for now**. The lead category, how you'll sell, how partners get leads (ping tree), and card payments (Club) can't be skipped.
-- The card payments step is where you connect [Stripe](/features/integrations#stripe). Outside the Club, you can choose **I'll add funds by hand for now** and connect later from **Settings → Payments & Deposits**.
+- The card payments step is where you connect [Stripe](/features/integrations#stripe). Outside the Club, you can choose **I'll add funds by hand for now** and connect later from **Storefront → Payments & Deposits**.
 - For your first customer, you can ask for **A test customer for you**. Juiced creates a "(Test)" customer from your company details, makes you its admin, and (if you've set a bid range) places a bid with enough credit for one lead, which is handy for the test in [step 11](#11-send-a-test-lead).
 
 When you're done, the guide shows a summary of what it set up. Click **Open my workspace** and you're in.
@@ -115,7 +115,7 @@ Once you're in, take a minute with [Finding your way around](/get-started/findin
 
 ## 4. Create your first lead category
 
-[Lead categories](/features/lead-categories) define the schema for the leads you sell. Navigate to **Lead Categories → New lead category** and give it a name (e.g. "Auto Insurance"). Every new category automatically includes ten basic fields (first name, last name, email, phone, address, city, state, ZIP, address 2, and county).
+[Lead categories](/features/lead-categories) define the schema for the leads you sell. Open **Configure → Lead Categories**, click **New lead category**, and give it a name (e.g. "Auto Insurance"). Every new category automatically includes ten basic fields (first name, last name, email, phone, address, city, state, ZIP, address 2, and county).
 
 If your leads carry extra data (vehicle year, coverage amount, roof age, whatever), add [custom fields](/guides/adding-fields-to-a-lead-category). You can always add more later; start with what you know you need.
 
@@ -123,7 +123,7 @@ If your leads carry extra data (vehicle year, coverage amount, roof age, whateve
 
 Every lead category starts with one [lead type](/features/lead-types), a fallback. The fallback catches every lead that doesn't match a more specific type. Most operations want at least one more, for example a "High Intent" type that commands a higher price.
 
-Open **Lead Types → New lead type**, pick the category, and set the type's priority. When a lead arrives, Juiced evaluates non-fallback types in priority order; the first one whose conditions match wins.
+Open **Configure → Lead Types**, click **New lead type**, pick the category, and set the type's priority. When a lead arrives, Juiced evaluates non-fallback types in priority order; the first one whose conditions match wins.
 
 ### Add conditions (optional but usually necessary)
 
@@ -152,7 +152,7 @@ Your [distribution plan](/features/distribution) starts with one stage, created 
 
 Starting another way to sell from **Guided setup** adds its stage too. Open **Configure → Distribution Stages** to see your plan.
 
-For launch, one stage is often all you need. Want leads that don't sell at auction to fall back to the marketplace, or partner ping-post behind your bidders? Add stages from **Distribution Stages → New stage** and put them in the order you want.
+For launch, one stage is often all you need. Want leads that don't sell at auction to fall back to the marketplace, or partner ping-post behind your bidders? Add stages with **New stage** on **Configure → Distribution Stages** and put them in the order you want.
 
 ## 8. Create a customer and fund their wallet
 
@@ -182,7 +182,7 @@ Without at least one active bid, no leads will auction off to anyone. A single b
 
 ## 10. Set up a source
 
-Navigate to **Sources → New source** and create a [source](/features/sources) tied to your lead category. Juiced generates an API key and secret automatically; click the **Authentication** tab to grab them, or generate a bearer token instead.
+Open **Configure → Sources**, click **New source**, and create a [source](/features/sources) tied to your lead category. Juiced generates an API key and secret automatically; click the **Authentication** tab to grab them, or generate a bearer token instead.
 
 Share those credentials (or the **View API Spec** link) with whoever's integrating on the supply side. See [Setting Up a Source and Its Attributes](/guides/setting-up-a-source-and-its-attributes) for a walkthrough with field mapping.
 

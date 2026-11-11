@@ -1,0 +1,60 @@
+---
+title: Connecting Twilio
+description: Connect your Twilio account so Juiced can text your customers when they get a new lead, get outbid, and more.
+---
+
+Juiced sends text message (SMS) notifications through your own Twilio account. Until Twilio is connected, SMS stays out of [notification templates](/features/notifications#channels) and your customers can't add phone contacts for alerts. This guide covers finding your Twilio credentials, connecting them, and sending a test text.
+
+## Prerequisites
+
+- The **Admin** [role](/features/roles).
+- A Twilio account with a phone number.
+- A Messaging Service in Twilio with that phone number in its sender pool. Step 2 covers creating one.
+
+<Note>
+Carriers filter texts to US numbers from unregistered senders. A local Twilio number needs A2P 10DLC registration, and a toll-free number needs toll-free verification. Finish this in your Twilio account before you rely on SMS alerts, or your messages may be blocked.
+</Note>
+
+## 1. Copy your Account SID and Auth Token
+
+1. Log in to the [Twilio Console](https://console.twilio.com).
+2. Find **Account SID** and **Auth Token** under **Account Info** on the Console home page. Click to reveal the Auth Token.
+3. Copy both. The Account SID starts with `AC`.
+
+## 2. Copy your Messaging Service SID
+
+1. In the Twilio Console, go to **Messaging → Services**.
+2. If you don't have a Messaging Service yet, click **Create Messaging Service** and add your Twilio phone number to its sender pool.
+3. Copy the service's SID. It starts with `MG`.
+
+## 3. Connect Twilio in Juiced
+
+Open **Configure → Integrations** and click the **Twilio** card, which shows **Not Configured** until you connect it. Paste your **Account SID**, **Auth Token**, and **Messaging Service SID**, then click **Connect**.
+
+You land back on Integrations with the Twilio card marked **Enabled**. Juiced doesn't check the credentials with Twilio when you save, so the test in [step 6](#6-send-a-test-text) is how you know they work.
+
+## 4. Review your SMS templates
+
+With Twilio connected, **Storefront → Notification Templates** gains **SMS** columns, and every notification that supports texts, such as **Lead Assigned** and **Outbid**, gets an **SMS Template** card. Each one already has default copy, so you don't have to write anything before texts go out.
+
+To make the texts sound like you, see [Customizing Notification Templates](/guides/customizing-notification-templates). Keep them short and put the important detail first.
+
+## 5. Add phone contacts
+
+Texts go to a customer's phone [contacts](/features/customers#contacts), not to the phone number on their account.
+
+- **Customers add their own** under **Notifications → Contacts** in their portal, and choose which alerts each number receives. See [Notifications in the customer portal](/customer-portal/notifications#adding-a-contact).
+- **You can add one for them** on the customer's **Contacts** tab with **New contact**.
+- **New customers get one automatically.** A customer created after you connect Twilio has the phone number on their account added as a phone contact. Customers created before then need one added.
+
+## 6. Send a test text
+
+Add your own phone number as a contact on a test customer. Open **Operate → Customers**, click the customer, and go to the **Contacts** tab. Choose **Test** on your number's row, then **Send test**.
+
+You should get a text reading "This is just a test notification. We are excited to have you on board!" If nothing arrives, check the three values on the Twilio card and your number's registration status in Twilio.
+
+## Good to know
+
+- Twilio bills your account for every text Juiced sends.
+- If Twilio rejects a text (an invalid number, or a recipient who replied STOP), Juiced skips it instead of retrying. Twilio outages are retried.
+- To change the credentials, click the **Twilio** card again, edit the fields, and click **Save changes**. Click **Delete** in the header to disconnect Twilio, which takes SMS back out of your notification templates.

@@ -156,6 +156,7 @@
             "group": "Events & Messaging",
             "icon": "/images/icons/notification-03.svg",
             "pages": [
+              "guides/connecting-twilio",
               "guides/customizing-notification-templates",
               "guides/sending-events-to-your-webhook",
               "guides/publishing-a-banner"
