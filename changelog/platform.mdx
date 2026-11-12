@@ -8,6 +8,31 @@ Everything that changed on the tenant side of Juiced, including lead routing, di
 
 Looking for changes to the buyer experience? Those live in [Customer portal updates](/changelog/customer-portal).
 
+<Update label="November 12, 2026" description="v3.89.0" tags={["New", "Fixes"]}>
+  <Frame>
+    <img className="block dark:hidden" src="/images/changelog/v3.89.0-light.webp" alt="Juiced release card reading Locate leads as precisely as you sell them, next to the Locations section of Company Profile with a Deepest Layer dropdown and name rows for the state, county, and ZIP code layers" />
+    <img className="hidden dark:block" src="/images/changelog/v3.89.0-dark.webp" alt="Juiced release card reading Locate leads as precisely as you sell them, next to the Locations section of Company Profile with a Deepest Layer dropdown and name rows for the state, county, and ZIP code layers" />
+  </Frame>
+
+  Not every lead comes with a ZIP code. You can now decide how precisely your leads are located, rename the location layers to match your market, and sell leads in Latvia.
+
+  ## Locations
+
+  - A new **Locations** section in [Company Profile](/features/company-profile#locations) sets your **Deepest Layer**. Keep the default postal code, or locate leads by county, state, or country only. Below postal code, leads and pings no longer need a zip and are located from their `state`, `county`, and `country` instead, and states can be sent by name or abbreviation.
+  - Your deepest layer also sets which [bidding scopes](/features/bidding#scopes) customers can use. At state depth there are no county bids, and at country depth only nationwide ones. Juiced won't let you switch while open bids would stop matching, and tells you how many are in the way.
+  - Rename the state, county, and postal code layers with your own singular and plural names. They replace the built-in names across your panel and customer portal, including bidding scopes and location filters.
+
+  ## Latvia
+
+  - Latvia is now an [operating country](/features/company-profile#operating-countries), with its 42 municipalities as the state level. Real Latvian postal codes aren't loaded yet, so each municipality has a placeholder code from `LV-9001` to `LV-9043`, or you can locate Latvian leads by municipality alone.
+  - A new **Phone (LV)** [field type](/features/lead-categories#field-types) accepts Latvian numbers like `21234567` and `+371 2123 4567`. The zip field accepts Latvian codes as `LV-1050`, `LV 1050`, or `lv1050`.
+  - Latvia can be picked as a customer's country when you [add a customer](/features/customers), and Latvian phone numbers are accepted on customers, contacts, and your profile.
+
+  ## Fixes
+
+  - The `state` field type now accepts 3-character abbreviations from your operating countries, so Australian leads with `NSW` or `VIC` are no longer rejected.
+</Update>
+
 <Update label="November 12, 2026" description="v3.88.0" tags={["Improvements"]}>
   - The page people land on from an invite email has a fresh look, for teammates you [invite](/features/users#inviting-users) and for [customer users](/features/customers) alike. It shows your branding (logo or name, brand color, and favicon) on staff invites too.
   - Invitees who already have an account can sign in with a passkey, and the sign-in form now has a **Forgot password?** link. Anyone who opens an invite while signed in as someone else sees which account they're on and a **Sign out and continue** button that brings them straight back to the invite.
