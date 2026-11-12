@@ -24,13 +24,13 @@ Open **Configure → Webhooks**. Each row shows the **Event**, the **URL** ("Not
 
 The buttons on each row pause or re-enable the webhook, edit it, or delete it. Click a row to open its [deliveries](#deliveries). A paused webhook keeps its settings and simply stops sending.
 
-You can create as many webhooks as you like, including several for the same event. Each one fires on its own, which is handy when two systems want different payloads.
+Each event can have one webhook. In the **Event** dropdown, events that already have a webhook are greyed out with a **Has a webhook** note, so pick a free event or edit the existing webhook instead.
 
 ## Creating a webhook
 
 Click **New webhook** and fill in the form.
 
-- **Event** is what triggers the webhook (see [Available events](#available-events)). Each webhook listens for one event.
+- **Event** is what triggers the webhook (see [Available events](#available-events)). Each webhook listens for one event, and each event can have only one webhook. The form opens on the first event that doesn't have one yet.
 - **URL** is where the request goes. It must be a public address, since internal and private addresses are rejected.
 - **Advanced settings** (optional) cover **Authentication** (None, Basic Auth, or Bearer Token), **Method** (POST, PUT, or GET), **Format** (JSON or Form), **Timeout** (3 to 60 seconds, 10 by default), and extra **Headers**. The defaults suit most CRMs.
 - **Payload** is either the **Default payload** or a **Custom payload** (see [Payloads](#payloads)).
