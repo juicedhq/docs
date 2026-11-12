@@ -30,7 +30,7 @@ Start in the **Webhook** section.
 
 | Field | What it does |
 |-------|--------------|
-| **Event** | What triggers the webhook. Each webhook listens for one event. |
+| **Event** | What triggers the webhook. Each webhook listens for one event, and each event can have only one webhook. Events that already have one are greyed out with a **Has a webhook** note. |
 | **URL** | Where the request goes, such as `https://api.yourcompany.com/webhooks/juiced`. It must be a public address. Internal and private addresses are rejected. |
 
 Here are some common picks.
@@ -39,8 +39,6 @@ Here are some common picks.
 - **Lead Not Assigned** pings your team when a lead finishes distribution unsold.
 - **Transaction Updated** mirrors wallet activity into your accounting tools.
 - **Customer Created** starts an onboarding sequence for each new customer.
-
-Need the same event in two places, with different payloads? Create two webhooks. Each one fires on its own.
 
 ## 3. Check the advanced settings
 

@@ -8,6 +8,11 @@ Everything that changed on the tenant side of Juiced, including lead routing, di
 
 Looking for changes to the buyer experience? Those live in [Customer portal updates](/changelog/customer-portal).
 
+<Update label="November 12, 2026" description="v3.87.0" tags={["Improvements", "Fixes"]}>
+  - When you create or edit a [webhook](/features/webhooks), the **Event** dropdown now greys out events that already have a webhook and marks them **Has a webhook**. A new webhook form opens on the first event that's still free.
+  - Saving a second webhook for an event that already has one now shows "A webhook for this event already exists." instead of failing with a server error. Each event can have one webhook.
+</Update>
+
 <Update label="November 10, 2026" description="v3.86.0" tags={["New", "Improvements", "Fixes"]}>
   <Frame>
     <img className="block dark:hidden" src="/images/changelog/v3.86.0-light.webp" alt="Juiced release card reading Show partners where buyers are bidding, next to the partner portal's Demand page listing states with their active bids and top bid, led by California with 6 active bids and a 120 dollar top bid" />
