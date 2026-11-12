@@ -159,7 +159,7 @@ If nothing arrives, work through these checks.
 
 - Check the webhook is **Active**, not **Paused**.
 - Check the URL is reachable from the public internet.
-- Open the failed delivery and read the response. Juiced retries server errors (5xx) and connections that fail before the request is sent, up to 3 attempts in total, but not client errors (4xx). Fix the cause, then send it again.
+- Open the failed delivery and read the response. Juiced retries network errors and server errors (5xx), but not most client errors (4xx). On v1 it keeps trying for about 8.5 hours, and on Legacy it gives up after a few quick tries (see [Reliability](/features/webhooks#reliability)). Fix the cause, then [replay](/features/webhooks#replaying-deliveries) what it missed.
 
 ## Managing webhooks over time
 
