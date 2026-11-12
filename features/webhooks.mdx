@@ -285,6 +285,13 @@ Click a webhook in the list, or **Overview** on its edit page, to see how it's d
 
 Click a delivery to see the request headers and payload Juiced sent, and the response headers and body your receiver returned.
 
+Every live attempt is its own row. Its **Attempt** shows where it falls in the delivery, like `2 of 6`, and its **Delivery status** shows where the delivery as a whole stands (see [Reliability](#reliability) for how many attempts each version gets).
+
+- <span className="tone-badge tone-info">Pending</span> means the delivery's first attempt hasn't finished yet.
+- <span className="tone-badge tone-warning">Retrying</span> means an attempt failed and another is scheduled. The time of the next one shows beside the badge.
+- <span className="tone-badge tone-success">Delivered</span> means your receiver accepted it.
+- <span className="tone-badge tone-danger">Failed permanently</span> means Juiced has stopped trying. **Final failure** says why, such as the last error once every attempt was used, or that the webhook was paused first.
+
 Webhook deliveries also appear in [Outgoing logs](/features/logs#outgoing-logs) with the **Webhook** type.
 
 ### Replaying deliveries
@@ -317,10 +324,27 @@ Replaying needs permission to edit the webhook. Users who can only view it still
 
 ## Reliability
 
-- **Automatic retries** kick in when your endpoint returns a server error (5xx), or the connection fails before the request is sent. Juiced tries again, for up to 3 attempts in total. Client errors (4xx) and timeouts after the request was sent aren't retried, so your receiver never gets the same event twice by accident.
-- **Timeouts** follow the webhook's **Timeout** setting, which is how long each request waits for a response.
-- **Isolation** means each webhook is delivered on its own, so a failing endpoint doesn't hold up the others.
-- **Automatic pausing** stops Juiced from sending to an endpoint that's been down for days. See below.
+Every webhook gets its own delivery of each event, so one slow or failing endpoint never holds up the others. Each attempt waits as long as the webhook's **Timeout** setting for a response. What happens after a failed attempt depends on the webhook's [payload version](#payload-versions).
+
+### Retries on v1
+
+A v1 delivery gets up to 6 attempts over about 8.5 hours. After the first try, Juiced waits roughly 1 minute, 5 minutes, 30 minutes, 2 hours, and 6 hours between attempts. Each wait is nudged by up to 20% either way, so a backlog of retries doesn't hit your receiver all at once.
+
+- **Network errors and timeouts**, server errors (5xx), `408`, and `429` are retried.
+- **Any other client error** (4xx) isn't. Juiced takes it as your receiver turning the event down, and the delivery fails straight away.
+- **A `429` with a `Retry-After` header** (in seconds, or as an HTTP date) sets the wait. Juiced never retries sooner than its usual schedule, and never waits longer than 6 hours.
+
+Every attempt sends the same event `id` and `created_at`. A timeout doesn't mean your receiver missed the request, so the same event can arrive twice. Skip events whose `id` you've already processed (see [Handling duplicates](#handling-duplicates)).
+
+### Retries on Legacy
+
+A Legacy delivery is a single attempt. Inside it, Juiced makes up to 3 quick tries, a moment apart, when your endpoint returns a server error (5xx) or the connection fails before the request is sent. There are no retries later on. Client errors (4xx) and timeouts after the request was sent aren't retried either, because a Legacy payload has no event ID for your receiver to spot a repeat with. For retries that ride out a longer outage, [switch to v1](#switching-versions).
+
+### When retries stop early
+
+A delivery waiting for its next attempt stops when you pause the webhook or switch its payload version, and shows as failed with the reason. It also stops when you delete the webhook, when the customer a [customer webhook](#customer-webhooks) belongs to is removed, or when the lead it's about is deleted. Once your endpoint is fixed and the webhook is enabled, you can [replay](#replaying-deliveries) what it missed.
+
+Juiced also stops sending to an endpoint that's been down for days. See [Automatic pausing](#automatic-pausing).
 
 ### Automatic pausing
 
