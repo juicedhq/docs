@@ -1,6 +1,6 @@
 ---
 title: Company Profile
-description: Your business identity, billing address, operating countries, and support settings.
+description: Your business identity, billing address, operating countries, location settings, and support settings.
 ---
 
 import { HugeIcon } from '/snippets/hugeicon.jsx';
@@ -10,8 +10,8 @@ Your company profile holds the core information about your business. Much of it 
 To edit it, open **Company → Company Profile**. Make your changes, then save with the floating save bar.
 
 <Frame>
-  <img className="block dark:hidden" src="/images/tenant/settings/company-profile-light.webp" alt="Company Profile settings page with Company, Billing Address, Operating Countries, Support, and 1:1 Default Consent sections" />
-  <img className="hidden dark:block" src="/images/tenant/settings/company-profile-dark.webp" alt="Company Profile settings page with Company, Billing Address, Operating Countries, Support, and 1:1 Default Consent sections" />
+  <img className="block dark:hidden" src="/images/tenant/settings/company-profile-light.webp" alt="Company Profile settings page with Company, Billing Address, Operating Countries, Locations, Support, and 1:1 Default Consent sections" />
+  <img className="hidden dark:block" src="/images/tenant/settings/company-profile-dark.webp" alt="Company Profile settings page with Company, Billing Address, Operating Countries, Locations, Support, and 1:1 Default Consent sections" />
 </Frame>
 
 ## Company
@@ -30,9 +30,37 @@ This is separate from your payment methods, which you manage in [Billing](/featu
 
 ## Operating countries
 
-The countries you accept and distribute leads in. You can operate in any mix of the **United States**, **Canada**, and **Australia**, switching each one on or off. At least one country must stay enabled, so the last one can't be turned off.
+The countries you accept and distribute leads in. You can operate in any mix of the **United States**, **Canada**, **Australia**, and **Latvia**, switching each one on or off. At least one country must stay enabled, so the last one can't be turned off.
 
 You first choose these when you [unlock your workspace](/get-started/quickstart#2-unlock-your-workspace) after signing up.
+
+In Latvia, the 42 municipalities (35 novadi and 7 state cities) are the state level, and each has a single **Area** below it with the same name. Real Latvian postal codes aren't loaded yet, so each municipality has one placeholder code between `LV-9001` and `LV-9043`, which your lead forms send as the zip. Set your [deepest layer](#locations) to the municipality (state) level and Latvian leads won't need a postal code at all.
+
+## Locations
+
+This section sets how precisely your leads are located, and what each location layer is called across your panel and customer portal.
+
+<Frame>
+  <img className="block dark:hidden" src="/images/tenant/settings/company-profile-locations-light.webp" alt="Locations section of Company Profile with a Deepest Layer dropdown set to ZIP Code, and State Name, County Name, and ZIP Code Name rows, each with blank singular and plural boxes" />
+  <img className="hidden dark:block" src="/images/tenant/settings/company-profile-locations-dark.webp" alt="Locations section of Company Profile with a Deepest Layer dropdown set to ZIP Code, and State Name, County Name, and ZIP Code Name rows, each with blank singular and plural boxes" />
+</Frame>
+
+**Deepest Layer** is the most precise location your leads need. It also decides which [bidding scopes](/features/bidding#scopes) customers can use.
+
+| Deepest layer | What leads send | Bids customers can place |
+|---------------|-----------------|--------------------------|
+| **Postal code** (the default) | A ZIP or postal code, which sets the county, state, and country | County, state, and nationwide |
+| **County** | A state and a county | County, state, and nationwide |
+| **State** | A state | State and nationwide |
+| **Country** | Only a country | Nationwide |
+
+Below postal code, the zip is optional and leads are located from their `state`, `county`, and `country` fields instead. A state can be its abbreviation or its full name, and a county matches with or without the word "County". If you operate in a single country, leads don't need to send it. See [Field types](/features/lead-categories#field-types) for the formats.
+
+<Note>
+You can't switch to a layer that would leave open bids unable to match. Juiced tells you how many county or state bids are in the way. Turn off that scope on your [lead types](/features/lead-types#bidding-scopes), or delete those bids, then switch.
+</Note>
+
+The three name rows (**State Name**, **County Name**, and **ZIP Code Name** for a US workspace) rename the state, county, and postal code layers. Each has a singular and a plural box, and the placeholders show the built-in names for your operating countries (like **Province** in Canada or **Municipality** in Latvia). Fill one in and it replaces the built-in name everywhere, including bidding scopes, location filters, and the customer portal. Leave a box blank to keep the default. A blank plural reuses your singular.
 
 ## Support
 

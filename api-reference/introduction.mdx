@@ -91,7 +91,7 @@ You can find your API credentials in your source settings within Juiced.
 
 The typical integration flow uses both endpoints.
 
-1. **Ping** with partial lead data (at minimum, a zip code) to check for matching bids and get pricing.
+1. **Ping** with partial lead data (at minimum, a zip code, or the `state` or `country` when the account's [deepest location layer](/features/company-profile#locations) is above postal code) to check for matching bids and get pricing.
 2. **Post** the full lead with the ping's `id` as `ping_id` if the price is acceptable.
 
 This two-step process lets you make informed decisions about which leads to sell and at what price before committing.
