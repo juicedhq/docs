@@ -88,7 +88,7 @@ Hidden fields don't appear on the API specification page you share with your sou
 You can flip any of these four properties straight from the switches in the **Fields** table, without opening the field.
 
 <Note>
-The entire system is geographically based, so ZIP code is always required. If you're generating leads at a state or national level only, you can pre-fill a valid ZIP code within the target state, or any valid US postal code for national campaigns.
+The entire system is geographically based, so every lead needs a location. By default that's the ZIP code. If you're generating leads at a state or national level only, set your [deepest location layer](/features/company-profile#locations) to state or country, and leads send a `state` or `country` instead of a ZIP.
 </Note>
 
 ## Creating custom fields
@@ -125,6 +125,7 @@ Field types determine what kind of data a field accepts and how it's validated. 
 | `phone-us` | Phone (US) | US phone number | `218-686-7890` |
 | `phone-us-ca` | Phone (US & CA) | US or Canadian phone | `250-555-0199` |
 | `phone-au` | Phone (AU) | Australian phone | `0412345678` |
+| `phone-lv` | Phone (LV) | Latvian phone | `21234567` or `+371 2123 4567` |
 | `phone-international` | Phone (International) | Any valid international number | `+61412345678` |
 
 <Warning>
@@ -135,13 +136,13 @@ Phone fields validate against actual carrier patterns, not just digit counts. A 
 
 | Type | Label | Format | Example |
 |------|-------|--------|---------|
-| `zip` | Postal Codes | 5-digit US ZIP (also validates Canadian and Australian postal codes for tenants operating in those countries). Canadian codes are accepted with or without the space and in any case, so `m5v3l9` and `M5V 3L9` match the same code. | `90210` |
-| `state` | States | 2-letter US state abbreviation | `CA` |
+| `zip` | Postal Codes | 5-digit US ZIP (also validates Canadian and Australian postal codes for tenants operating in those countries). Canadian codes are accepted with or without the space and in any case, so `m5v3l9` and `M5V 3L9` match the same code. Latvian codes work the same way, so `lv1050`, `LV 1050`, and `LV-1050` all match. | `90210` |
+| `state` | States | A 2 or 3 character state abbreviation from your operating countries | `CA`, `NSW`, `RIX` |
 | `county` | Counties | County name as text | `San Francisco County` |
 | `country` | Countries | Country code as text | `US` |
 
 <Note>
-The ZIP field's required-for-post and required-for-ping settings can't be changed, and neither can its type. ZIP is handled at the system level since all routing is geographically based.
+The ZIP field's required-for-post and required-for-ping settings can't be changed, and neither can its type. ZIP is handled at the system level since all routing is geographically based. When your [deepest location layer](/features/company-profile#locations) is above postal code, Juiced accepts leads without a ZIP no matter what the field says, and requires the `state` (and `county`, at county depth) instead.
 </Note>
 
 ### URLs and network
