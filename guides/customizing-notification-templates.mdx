@@ -32,8 +32,8 @@ A type that doesn't support a channel shows a dash there. Payment emails, for ex
 Click a notification type. The top of the page lists its **Available variables**, and below that is a card per channel (**Email Template**, **SMS Template**, and **In-App Template**).
 
 <Frame>
-  <img className="block dark:hidden" src="/images/tenant/settings/notification-template-manage-light.webp" alt="Edit Lead Assigned Template page listing available variables such as lead.full_name and customer.name, followed by the Email Template card with Visible to customers and Enabled by default switches" />
-  <img className="hidden dark:block" src="/images/tenant/settings/notification-template-manage-dark.webp" alt="Edit Lead Assigned Template page listing available variables such as lead.full_name and customer.name, followed by the Email Template card with Visible to customers and Enabled by default switches" />
+  <img className="block dark:hidden" src="/images/tenant/settings/notification-template-manage-light.webp" alt="Edit Lead Assigned Template page listing available variables such as lead.full_name and customer.name, followed by the Manual Purchases card with its Send email and SMS switch turned on and the start of the Email Template card" />
+  <img className="hidden dark:block" src="/images/tenant/settings/notification-template-manage-dark.webp" alt="Edit Lead Assigned Template page listing available variables such as lead.full_name and customer.name, followed by the Manual Purchases card with its Send email and SMS switch turned on and the start of the Email Template card" />
 </Frame>
 
 ## 3. Write the copy
@@ -70,6 +70,8 @@ Each card also has two switches.
 - **Enabled by default** sets whether new contacts start with it on.
 
 They work together. Visible and on by default is the usual setup. Hidden and on makes a must-send message. Visible and off makes it opt-in, which suits chatty notifications like Bid Matched.
+
+Lead Assigned also has a **Manual Purchases** card. Switch off **Send email and SMS** to stop emails and texts for leads buyers buy on the Marketplace or claim in the Club themselves, while bid and buy order wins still notify. See [Manual purchases](/features/notifications#manual-purchases).
 
 ## 5. Save
 

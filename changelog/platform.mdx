@@ -8,6 +8,26 @@ Everything that changed on the tenant side of Juiced, including lead routing, di
 
 Looking for changes to the buyer experience? Those live in [Customer portal updates](/changelog/customer-portal).
 
+<Update label="November 12, 2026" description="v3.90.0" tags={["New"]}>
+  <Frame>
+    <img className="block dark:hidden" src="/images/changelog/v3.90.0-light.webp" alt="Juiced release card reading Juiced Lite runs your ping tree for free, next to the Usage and Billing page for a workspace on Juiced Lite at 0 dollars a month, using 6,702.50 of its 10,000 dollars of monthly revenue and 79 of its 1,000 leads" />
+    <img className="hidden dark:block" src="/images/changelog/v3.90.0-dark.webp" alt="Juiced release card reading Juiced Lite runs your ping tree for free, next to the Usage and Billing page for a workspace on Juiced Lite at 0 dollars a month, using 6,702.50 of its 10,000 dollars of monthly revenue and 79 of its 1,000 leads" />
+  </Frame>
+
+  Juiced now has a free plan. Juiced Lite runs a ping tree to your partners at no cost and with no card, so you can start moving leads today and upgrade when you're ready to sell to buyers of your own. This release also lets you turn off emails and texts for leads buyers buy themselves.
+
+  ## Juiced Lite
+
+  - [Juiced Lite](/features/billing#juiced-lite) includes 1,000 leads and up to \$10,000 in lead sales a month, 1 lead category, 1 source, and 5 partners. It sells to [partners](/features/partners) only, so customers, bidding, the Marketplace, the Club, checkout pages, and Stripe payments stay on paid plans.
+  - Pick it at signup and click **Start for free**. There's no Stripe checkout, and your workspace unlocks right away. See the [Quickstart](/get-started/quickstart#2-unlock-your-workspace).
+  - Paid-only pages stay in the panel behind an **Upgrade your plan** prompt, and **New** buttons open it once you reach a limit. Upgrading from the prompt asks for a card if you don't have one yet, and your new plan starts that day. See [Upgrading from Juiced Lite](/features/billing#upgrading-from-juiced-lite).
+  - Moving a paid plan to Juiced Lite needs a workspace that fits it, with no customers and nothing over its limits. The switch takes effect right away, and the rest of the paid period isn't credited.
+
+  ## Notifications
+
+  - The Lead Assigned template has a new **Manual Purchases** switch. Turn off **Send email and SMS** and buyers' contacts no longer get emails and texts for leads they buy on the Marketplace or claim in the Club themselves. Bid and buy order wins, leads you assign yourself, and in-app notifications still go out. It's on by default, so nothing changes until you flip it. See [Manual purchases](/features/notifications#manual-purchases).
+</Update>
+
 <Update label="November 12, 2026" description="v3.88.0" tags={["Improvements"]}>
   - The page people land on from an invite email has a fresh look, for teammates you [invite](/features/users#inviting-users) and for [customer users](/features/customers) alike. It shows your branding (logo or name, brand color, and favicon) on staff invites too.
   - Invitees who already have an account can sign in with a passkey, and the sign-in form now has a **Forgot password?** link. Anyone who opens an invite while signed in as someone else sees which account they're on and a **Sign out and continue** button that brings them straight back to the invite.
