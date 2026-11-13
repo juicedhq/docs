@@ -94,8 +94,8 @@ These are available for customer-related notifications.
 Click a notification type to open its editor. The top of the page lists the **Available variables** for that type; copy any of them into your templates.
 
 <Frame>
-  <img className="block dark:hidden" src="/images/tenant/settings/notification-template-manage-light.webp" alt="Edit Lead Assigned Template page listing available variables such as lead.full_name and customer.name, followed by the Email Template card with Visible to customers and Enabled by default switches" />
-  <img className="hidden dark:block" src="/images/tenant/settings/notification-template-manage-dark.webp" alt="Edit Lead Assigned Template page listing available variables such as lead.full_name and customer.name, followed by the Email Template card with Visible to customers and Enabled by default switches" />
+  <img className="block dark:hidden" src="/images/tenant/settings/notification-template-manage-light.webp" alt="Edit Lead Assigned Template page listing available variables such as lead.full_name and customer.name, followed by the Manual Purchases card with its Send email and SMS switch turned on and the start of the Email Template card" />
+  <img className="hidden dark:block" src="/images/tenant/settings/notification-template-manage-dark.webp" alt="Edit Lead Assigned Template page listing available variables such as lead.full_name and customer.name, followed by the Manual Purchases card with its Send email and SMS switch turned on and the start of the Email Template card" />
 </Frame>
 
 Below that is one card per channel (**Email Template**, **SMS Template**, **In-App Template**), each with four settings.
@@ -127,6 +127,15 @@ Email bodies can link anywhere, such as a partner tool, a booking page, or your 
 To move the action button, write `{{ actionLink | Button text }}` on its own line or within one. The button appears at that spot with your label (or the default action text when the label is empty), and the automatic button at the bottom is left off. Only the first one becomes a button, and any after it show as text links. A plain `{{ actionLink }}` still prints the URL, so existing templates don't change.
 
 Other channels handle links their own way. In SMS, a link becomes its text followed by the URL in parentheses (or just the URL, when the text is the URL). In-app notifications keep the link's text only, and the first `{{ actionLink | Button text }}` becomes the notification's action.
+
+### Manual purchases
+
+The Lead Assigned template has one extra card, **Manual Purchases**, with a **Send email and SMS** switch. It decides whether a buyer's email and phone [contacts](/features/customers#contacts) hear about leads the buyer took themselves, by buying a lead on the [Marketplace](/features/marketplace) (bulk buys included) or claiming one in the [Club](/features/club).
+
+- **On** (the default) sends Lead Assigned emails and texts for every lead, as before.
+- **Off** skips them for those purchases. The buyer just clicked the button, so they already know, and you're not paying Twilio to tell them.
+
+Either way, leads won through [bids](/features/bidding) and buy orders always notify, and so do leads you assign to a customer yourself. In-app notifications always send, and [webhooks](/features/webhooks) fire as usual. The switch saves with the rest of the page.
 
 Changes to every channel are saved together with **Save all** in the floating save bar. Templates are validated when you save, so referencing a variable that doesn't exist for that notification type shows an error.
 
