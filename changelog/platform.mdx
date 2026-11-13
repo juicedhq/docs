@@ -8,6 +8,27 @@ Everything that changed on the tenant side of Juiced, including lead routing, di
 
 Looking for changes to the buyer experience? Those live in [Customer portal updates](/changelog/customer-portal).
 
+<Update label="November 13, 2026" description="v3.91.0" tags={["New", "Improvements"]}>
+  <Frame>
+    <img className="block dark:hidden" src="/images/changelog/v3.91.0-light.webp" alt="Juiced release card reading Ask Claude about your leads, next to the AI Assistants page with the Connector URL and the steps for setting up the connector in claude.ai" />
+    <img className="hidden dark:block" src="/images/changelog/v3.91.0-dark.webp" alt="Juiced release card reading Ask Claude about your leads, next to the AI Assistants page with the Connector URL and the steps for setting up the connector in claude.ai" />
+  </Frame>
+
+  AI Assistants is now open to every tenant, with no request needed. Connect Claude to your account and ask why a buyer missed a lead, where buyers are bidding, or why someone can't sign in. It can also return a lead or add funds to a buyer's balance after you confirm. And the free plan has a new name.
+
+  ## AI Assistants
+
+  - [AI Assistants](/features/ai-assistants) no longer needs Juiced to turn it on. Admins and Customer Support users can connect Claude as soon as your account has a verified [custom domain](/guides/adding-a-custom-domain), which comes with Citrus Splash and up. See [Connect an AI assistant](/guides/connecting-an-ai-assistant).
+  - Admins always see **Company → AI Assistants**. On a plan without custom domains it shows which plan adds them and an upgrade button, and without a verified domain it walks you through setting one up.
+  - Beyond explaining leads, bids, and logins, Claude can answer why a buyer got few leads over a period, what happened on a buyer's account, which states or counties perform best, what's available on the Marketplace and in the Club, and where buyers are bidding right now.
+  - Claude can [return a lead or add funds](/features/ai-assistants#returning-leads-and-adding-funds) to a buyer's balance (up to \$1,000 at a time). It shows a preview first and only acts after you say yes, and only for people with the same permission in the panel.
+
+  ## Ginger Shot
+
+  - The free plan is now called [Ginger Shot](/features/billing#ginger-shot). Only the name changed. Its limits, price (free), and what it includes are the same as Juiced Lite's.
+  - Ginger Shot workspaces no longer see the banner for booking an onboarding call on the [dashboard](/features/dashboard).
+</Update>
+
 <Update label="November 12, 2026" description="v3.90.0" tags={["New"]}>
   <Frame>
     <img className="block dark:hidden" src="/images/changelog/v3.90.0-light.webp" alt="Juiced release card reading Juiced Lite runs your ping tree for free, next to the Usage and Billing page for a workspace on Juiced Lite at 0 dollars a month, using 6,702.50 of its 10,000 dollars of monthly revenue and 79 of its 1,000 leads" />
@@ -18,9 +39,9 @@ Looking for changes to the buyer experience? Those live in [Customer portal upda
 
   ## Juiced Lite
 
-  - [Juiced Lite](/features/billing#juiced-lite) includes 1,000 leads and up to \$10,000 in lead sales a month, 1 lead category, 1 source, and 5 partners. It sells to [partners](/features/partners) only, so customers, bidding, the Marketplace, the Club, checkout pages, and Stripe payments stay on paid plans.
+  - [Juiced Lite](/features/billing#ginger-shot) includes 1,000 leads and up to \$10,000 in lead sales a month, 1 lead category, 1 source, and 5 partners. It sells to [partners](/features/partners) only, so customers, bidding, the Marketplace, the Club, checkout pages, and Stripe payments stay on paid plans.
   - Pick it at signup and click **Start for free**. There's no Stripe checkout, and your workspace unlocks right away. See the [Quickstart](/get-started/quickstart#2-unlock-your-workspace).
-  - Paid-only pages stay in the panel behind an **Upgrade your plan** prompt, and **New** buttons open it once you reach a limit. Upgrading from the prompt asks for a card if you don't have one yet, and your new plan starts that day. See [Upgrading from Juiced Lite](/features/billing#upgrading-from-juiced-lite).
+  - Paid-only pages stay in the panel behind an **Upgrade your plan** prompt, and **New** buttons open it once you reach a limit. Upgrading from the prompt asks for a card if you don't have one yet, and your new plan starts that day. See [Upgrading from Juiced Lite](/features/billing#upgrading-from-ginger-shot).
   - Moving a paid plan to Juiced Lite needs a workspace that fits it, with no customers and nothing over its limits. The switch takes effect right away, and the rest of the paid period isn't credited.
 
   ## Notifications

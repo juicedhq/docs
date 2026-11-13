@@ -1,19 +1,15 @@
 ---
 title: Connect an AI assistant
-description: Connect Claude to your Juiced account so your team can ask read-only questions about leads, buyers, bids, and logins.
+description: Connect Claude to your Juiced account so your team can ask about leads, buyers, bids, and logins in plain language.
 ---
 
 Want to know why a buyer missed a lead without digging through logs? Connect Claude to Juiced and just ask. This guide walks through connecting Claude with your own login. For what the connection can and can't do, see the [AI Assistants](/features/ai-assistants) feature page.
 
-The assistant is read-only. It can explain what happened, but it can't change leads, bids, customers, domains, or settings.
-
-<Note>
-AI Assistants is available on request. If you don't see **AI Assistants** in your settings, contact your Juiced representative to have it enabled.
-</Note>
+The assistant mostly explains what happened. The only things it can change are returning a lead and adding funds to a buyer's balance, and only after you confirm a preview. It can't touch bids, domains, or settings.
 
 ## Prerequisites
 
-- AI Assistants enabled for your account by Juiced.
+- A plan with custom domains ([Citrus Splash and up](/features/billing#premium-features)).
 - A verified [custom domain](/guides/adding-a-custom-domain). The assistant connects through your own domain, never your Juiced subdomain.
 - The **Admin** or **Customer Support** [role](/features/roles).
 - A Claude account at claude.ai.
@@ -27,7 +23,7 @@ Open **Company → AI Assistants**. Copy the **Connector URL**. It's your custom
   <img className="hidden dark:block" src="/images/tenant/settings/ai-assistants-dark.webp" alt="AI Assistants settings page showing the Connector URL and numbered setup steps for claude.ai" />
 </Frame>
 
-If the page says **A custom domain is required**, set one up first. Admins get a **Set up a custom domain** button that takes them to **Domains & Links**.
+If the page says **A custom domain is required**, set one up first. Admins get a **Set up a custom domain** button that takes them to **Domains & Links**. If it says **AI assistants are on** another plan, your plan doesn't include custom domains yet, and the button there lets you upgrade.
 
 ## 2. Add the connector in Claude
 
@@ -46,7 +42,7 @@ On a Claude Team or Enterprise plan, an owner adds the connector once from **Org
 
 Claude sends you to your custom domain to sign in to Juiced. Use your own Juiced login, because each person on your team connects separately.
 
-After you sign in, Juiced shows **Connect an AI assistant to** your company, along with where access will be sent. It confirms the access is read-only and never includes lead contact details. Check the details, then click **Approve**. If anything looks off, click **Deny**.
+After you sign in, Juiced shows **Connect an AI assistant to** your company, along with where access will be sent. It explains that the app can look things up, can return a lead or add funds only when you confirm, and never sees lead contact details. Check the details, then click **Approve**. If anything looks off, click **Deny**.
 
 ## 4. Turn it on in a chat
 
@@ -58,6 +54,8 @@ In a Claude chat, select **+**, then **Connectors**, and turn on your company's 
 - "Why can't jane@example.com sign in?"
 - "Is our custom domain set up correctly?"
 
+You can also ask it to act, like "Return lead lead_01h… for cus_01h…" or "Add \$50 to cus_01h…'s balance for the missed lead last week." Claude shows a preview of the change first and only goes ahead after you say yes. See [Returning leads and adding funds](/features/ai-assistants#returning-leads-and-adding-funds).
+
 Leads, buyers, and bids are identified by their IDs (`lead_…`, `cus_…`, `bid_…`), which you can copy from their pages in the panel.
 
 ## Managing connections
@@ -66,7 +64,7 @@ Back on the **AI Assistants** page, **Connected apps** lists the apps that have 
 
 ## Troubleshooting
 
-**I don't see AI Assistants in settings.** Either it isn't enabled for your account yet, or your role isn't Admin or Customer Support. If you're Customer Support and your account has no verified custom domain yet, the page stays hidden until one exists.
+**I don't see AI Assistants in settings.** Your role isn't Admin or Customer Support, or you're Customer Support and your account has no verified custom domain yet. The page stays hidden for Customer Support until one exists. Admins always see it, along with what's missing.
 
 **"AI assistant connections are not available."** You signed in with an account that isn't allowed to connect. Check your role with a tenant admin.
 
