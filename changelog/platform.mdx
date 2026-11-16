@@ -8,6 +8,12 @@ Everything that changed on the tenant side of Juiced, including lead routing, di
 
 Looking for changes to the buyer experience? Those live in [Customer portal updates](/changelog/customer-portal).
 
+<Update label="November 16, 2026" description="v3.91.1" tags={["Improvements", "Fixes"]}>
+  - Latvia's real postal codes are in. All 693 Latvian Post codes now sit under their municipalities in place of the `LV-9001` to `LV-9043` placeholders, so your lead forms can send a lead's actual postal code, like `LV-1050` for Rīga. See [Operating countries](/features/company-profile#operating-countries).
+  - Posting a lead to the [lead API](/api-reference/endpoint/v1/leads) with an `is_test` field sent as text, like `"true"` or `"false"`, now creates the lead instead of failing with a server error. Values like `"true"`, `"1"`, and `"yes"` mark it as a test lead, and anything else doesn't (leads from a source in test mode are always test leads).
+  - A promo code entered when you subscribe to Juiced now always replaces the free trial right away. Before, the trial could occasionally linger for a while after checkout.
+</Update>
+
 <Update label="November 12, 2026" description="v3.90.0" tags={["New"]}>
   <Frame>
     <img className="block dark:hidden" src="/images/changelog/v3.90.0-light.webp" alt="Juiced release card reading Juiced Lite runs your ping tree for free, next to the Usage and Billing page for a workspace on Juiced Lite at 0 dollars a month, using 6,702.50 of its 10,000 dollars of monthly revenue and 79 of its 1,000 leads" />
