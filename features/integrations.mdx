@@ -29,7 +29,9 @@ Without Stripe, you can still create customers and adjust their balances by hand
 
 ## SendGrid
 
-SendGrid sends your customer notification emails. Connecting it turns on the **Email** channel in [notification templates](/features/notifications#channels).
+SendGrid sends your customer notification emails. Connecting it turns on the **Email** channel in [notification templates](/features/notifications#channels). It also sends your customers' and partners' account emails (password resets, email verification, sign-in codes, and two-factor and passkey security notices) from your own From Address and From Name.
+
+Without SendGrid, Juiced sends those account emails for you. They come from `info@usejuiced.com` under your company **Name** from [Company Profile](/features/company-profile), replies go to your **Support Email** when you've set one, and they carry a small "Powered by Juiced" footer. Emails to your own team (invites, password resets, sign-in codes) always come from Juiced.
 
 | Field | What to enter |
 |-------|---------------|

@@ -135,7 +135,7 @@ Real Estate API is non-terminal, so the lead continues through the pipeline with
 
 Scroll to **Eligibility Conditions** and click **Add filters** to restrict this stage to a subset of leads. Conditions use the same builder as [lead types](/guides/defining-lead-types#2-define-conditions). Each group says **Match all of the following**, `Add "AND" condition` adds a rule to the group, and `Add "OR" group` adds an alternative group.
 
-Pick a property from **Metadata** (Lead Category, Lead Type, Source) or from your lead **Fields**. If a lead doesn't match, the stage is skipped for that lead and the pipeline continues to the next stage. For Real Estate API stages, the selected lead category is enforced automatically.
+Pick a property from **Metadata** (Lead Category, Lead Type, Source) or from your lead **Fields**. Metadata properties take **Any of** and **None of** too, so one condition like "Source None of" with two sources skips leads from both. If a lead doesn't match, the stage is skipped for that lead and the pipeline continues to the next stage. For Real Estate API stages, the selected lead category is enforced automatically.
 
 <Tip>
 Conditions are the right tool for "only run this stage for aged leads" or "only run for leads from Source X." To exclude a single partner or customer from a stage, use the stage's own partner or customer filter instead.
