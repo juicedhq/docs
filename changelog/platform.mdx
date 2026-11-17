@@ -8,6 +8,12 @@ Everything that changed on the tenant side of Juiced, including lead routing, di
 
 Looking for changes to the buyer experience? Those live in [Customer portal updates](/changelog/customer-portal).
 
+<Update label="November 17, 2026" description="v3.92.0" tags={["Improvements", "Fixes"]}>
+  - 23 US counties whose names abbreviated Saint without a period now have one, like St. Louis, MN, St. Tammany Parish, LA, and Ste. Genevieve, MO. They now match the four that already had it, so a search for "St. Louis" finds every one of them in bid lists and the [command palette](/get-started/finding-your-way-around#the-command-palette). County IDs don't change, so bids and leads keep their counties.
+  - At [county depth](/features/company-profile#locations), a lead's `county` now matches with or without the period, so sources still sending "St Charles" keep getting through.
+  - If a page in the new panel crashes, you now see a "Something went wrong on this page" message with a **Reload page** button, and the sidebar keeps working. Before, the whole panel went blank until you reloaded.
+</Update>
+
 <Update label="November 16, 2026" description="v3.91.1" tags={["Improvements", "Fixes"]}>
   - Latvia's real postal codes are in. All 693 Latvian Post codes now sit under their municipalities in place of the `LV-9001` to `LV-9043` placeholders, so your lead forms can send a lead's actual postal code, like `LV-1050` for Rīga. See [Operating countries](/features/company-profile#operating-countries).
   - Posting a lead to the [lead API](/api-reference/endpoint/v1/leads) with an `is_test` field sent as text, like `"true"` or `"false"`, now creates the lead instead of failing with a server error. Values like `"true"`, `"1"`, and `"yes"` mark it as a test lead, and anything else doesn't (leads from a source in test mode are always test leads).
