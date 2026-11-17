@@ -34,7 +34,7 @@ The countries you accept and distribute leads in. You can operate in any mix of 
 
 You first choose these when you [unlock your workspace](/get-started/quickstart#2-unlock-your-workspace) after signing up.
 
-In Latvia, the 42 municipalities (35 novadi and 7 state cities) are the state level, and each has a single **Area** below it with the same name. Real Latvian postal codes aren't loaded yet, so each municipality has one placeholder code between `LV-9001` and `LV-9043`, which your lead forms send as the zip. Set your [deepest layer](#locations) to the municipality (state) level and Latvian leads won't need a postal code at all.
+In Latvia, the 42 municipalities (35 novadi and 7 state cities) are the state level, and each has a single **Area** below it with the same name. All 693 Latvian Post codes are loaded, each under its municipality, so your lead forms can send a lead's real postal code as the zip. Send it with the `LV` prefix (`LV-1050`, `LV 1050`, and `lv1050` all work). A bare `1050` is read as an Australian postcode, not a Latvian one. Set your [deepest layer](#locations) to the municipality (state) level and Latvian leads won't need a postal code at all.
 
 ## Locations
 
@@ -54,7 +54,7 @@ This section sets how precisely your leads are located, and what each location l
 | **State** | A state | State and nationwide |
 | **Country** | Only a country | Nationwide |
 
-Below postal code, the zip is optional and leads are located from their `state`, `county`, and `country` fields instead. A state can be its abbreviation or its full name, and a county matches with or without the word "County". If you operate in a single country, leads don't need to send it. See [Field types](/features/lead-categories#field-types) for the formats.
+Below postal code, the zip is optional and leads are located from their `state`, `county`, and `country` fields instead. A state can be its abbreviation or its full name, and a county matches with or without the word "County" (and with or without the period in names like "St. Louis"). If you operate in a single country, leads don't need to send it. See [Field types](/features/lead-categories#field-types) for the formats.
 
 <Note>
 You can't switch to a layer that would leave open bids unable to match. Juiced tells you how many county or state bids are in the way. Turn off that scope on your [lead types](/features/lead-types#bidding-scopes), or delete those bids, then switch.
