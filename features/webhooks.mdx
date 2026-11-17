@@ -61,14 +61,12 @@ The same rules apply to [customer webhooks](#customer-webhooks), the customer po
 | **Lead Assigned** | `lead.assigned` | A lead is assigned to a customer |
 | **Lead Not Assigned** | `lead.unassigned` | A lead finishes distribution without being assigned |
 | **Lead Duplicated** | `lead.duplicated` | A lead is rejected as a [duplicate](/features/duplicate-detection) |
-| **Lead Posted** | `lead.posted` | A lead is posted to a [partner](/features/partners) |
 | **Customer Created** | `customer.created` | A new customer is created |
 | **User Attached To Customer** | `customer.user_attached` | A user is added to a customer |
 | **Transaction Updated** | `transaction.updated` | A wallet [transaction](/features/transactions) is created or updated |
 | **Customer Subscription Updated** | `subscription.updated` | A customer's subscription changes, such as starting, renewing, canceling, or falling past due |
 | **Customer Subscription Payment Recorded** | `subscription.payment_recorded` | A customer's subscription payment is recorded |
 | **Customer Subscription Payment Failed** | `subscription.payment_failed` | A customer's subscription payment fails |
-| **State Lead Type Stats Updated** | `lead_type_stats.updated` | Lead type statistics for a state are updated |
 
 On the [v1 payload version](#payload-versions), each request names its event in `type`, using the value in the middle column.
 
@@ -95,7 +93,7 @@ When you paste JSON, a placeholder like `{{ lead.email }}` becomes a linked fiel
 
 If a lead field doesn't appear in the picker, type its name in double curly braces as the value, for example `{{ BBDO_Lead_ID }}`. After you save, it shows as a linked field. Your custom lead fields also work with a `lead.` prefix, like `{{ lead.your_state }}`. There's no `lead.details.` path. The same works for [partner payloads](/guides/setting-up-partner-ping-post#2-map-the-payload) and [customer webhooks](/customer-portal/webhooks#payload), though customer webhooks only carry fields marked [deliverable](/features/lead-categories#deliverable).
 
-To swap values on the way out (say, "Home" to "Single Family"), add the **Map** transformer to the field. See [Swapping values with the Map transformer](/guides/setting-up-partner-ping-post#swapping-values-with-the-map-transformer).
+To swap values on the way out (say, "Home" to "Single Family"), add the **Map** transformer to the field. See [Swapping values with the Map transformer](/guides/setting-up-partner-ping-post#swapping-values-with-the-map-transformer). To send a real `true` or `false` instead of text, add the **Boolean** transformer. See [Sending true or false with the Boolean transformer](/guides/setting-up-partner-ping-post#sending-true-or-false-with-the-boolean-transformer).
 
 ### Lead fields
 

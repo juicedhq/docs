@@ -43,6 +43,16 @@ The **Map** transformer swaps an incoming value for the value the partner expect
 
 You only need to list values that change. Anything not in the list passes through as it is, unless you also set a **fallback**, which replaces every unlisted value. Keys match exactly, so "home" and "Home" each need their own entry.
 
+### Sending true or false with the Boolean transformer
+
+Every mapped value goes out as text, so a partner that wants a real JSON boolean will reject `"true"` or `"yes"`. Add the **Boolean** transformer (under **Type**) to the field instead. It reads `true`/`false`, `yes`/`no`, `y`/`n`, `1`/`0`, and `on`/`off` in any case, and sends `true` or `false`.
+
+- The value is a real boolean when the row's value is that one field on its own, like `{"listing_status": false}`. Other transformers can come before Boolean in the chain.
+- Mixed into other text, it prints as the word `true` or `false`. Form-encoded requests get `1` or `0`.
+- A value it can't read, like `maybe`, goes out unchanged, so the partner's error shows you what the lead sent.
+
+A **Map** that outputs `true` and `false` still sends text (`"1"` and an empty string), so reach for Boolean whenever the partner's spec says boolean.
+
 ## 3. Tell Juiced how to read the response
 
 Under **Response**, use dot notation for nested paths (like `data.offer.price`) to fill in these fields.

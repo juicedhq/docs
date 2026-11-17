@@ -8,6 +8,38 @@ Everything that changed on the tenant side of Juiced, including lead routing, di
 
 Looking for changes to the buyer experience? Those live in [Customer portal updates](/changelog/customer-portal).
 
+<Update label="November 17, 2026" description="v3.93.0" tags={["New", "Improvements", "Fixes"]}>
+  <Frame>
+    <img className="block dark:hidden" src="/images/changelog/v3.93.0-light.webp" alt="Juiced release card reading Exclude several sources in one rule, next to a customer's lead eligibility condition set to Source None of Honeycomb Reach Network and Greenwave Wellness Ad Funnel" />
+    <img className="hidden dark:block" src="/images/changelog/v3.93.0-dark.webp" alt="Juiced release card reading Exclude several sources in one rule, next to a customer's lead eligibility condition set to Source None of Honeycomb Reach Network and Greenwave Wellness Ad Funnel" />
+  </Frame>
+
+  One condition can now match or exclude several sources, lead types, or categories at once. Partners that want a real `true` or `false` get one, and you can stop paying for manual-purchase texts without turning off the emails.
+
+  ## Conditions
+
+  - **Source**, **Lead Type**, and **Lead Category** conditions have two new operators, **Any of** and **None of**, so you can pick several records in one condition. Use them in customer and partner lead eligibility, distribution stage conditions, and lead type conditions (Source). See [Available operators](/features/lead-types#available-operators).
+  - To keep leads from several sources away from a buyer, use one **None of** condition. Two **Does not equal** conditions in separate OR groups exclude nothing, since every lead passes one of them.
+
+  ## Partners and webhooks
+
+  - A new **Boolean** transformer sends a real JSON `true` or `false` instead of text, for partners that reject `"true"`. It reads true/false, yes/no, y/n, 1/0, and on/off. See [Sending true or false with the Boolean transformer](/guides/setting-up-partner-ping-post#sending-true-or-false-with-the-boolean-transformer).
+  - The **Lead Posted** and **State Lead Type Stats Updated** [webhook](/features/webhooks#available-events) events are gone from the event picker. Neither had fired for months, and existing webhooks for them were removed.
+
+  ## Notifications and email
+
+  - The **Manual Purchases** card on the Lead Assigned template now has separate **Send email** and **Send SMS** switches, so you can stop the texts (and their Twilio cost) for leads buyers buy or claim themselves while still sending the email. Both start where your old switch was. See [Manual purchases](/features/notifications#manual-purchases).
+  - Your customers' and partners' account emails (password resets, email verification, sign-in codes, and security notices) now go through your [SendGrid](/features/integrations#sendgrid) when you've connected it. Without it, they come from `info@usejuiced.com` under your company name, replies go to your support email, and they carry a "Powered by Juiced" footer, even with the [portal footer](/features/branding#footer) hidden.
+
+  ## Checkout pages
+
+  - An order paid with a card another of your customers already bought with, when that customer couldn't have claimed the offer, now gets a <span className="tone-badge tone-warning">Repeat card</span> badge on the [Orders tab](/features/checkout-pages#page-results), linking to that customer. The order is still delivered, so review it and refund if you need to.
+
+  ## Fixes
+
+  - Exporting a large set of [leads](/features/leads#exporting-leads) no longer fails with a database error.
+</Update>
+
 <Update label="November 12, 2026" description="v3.90.0" tags={["New"]}>
   <Frame>
     <img className="block dark:hidden" src="/images/changelog/v3.90.0-light.webp" alt="Juiced release card reading Juiced Lite runs your ping tree for free, next to the Usage and Billing page for a workspace on Juiced Lite at 0 dollars a month, using 6,702.50 of its 10,000 dollars of monthly revenue and 79 of its 1,000 leads" />

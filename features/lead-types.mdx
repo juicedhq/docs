@@ -60,6 +60,19 @@ The operators available depend on the field type you select.
 | All of | List of Values fields | All specified values are present |
 | None of | List of Values fields | None of the specified values are present |
 
+Properties under **Metadata** (**Source** here, and also **Lead Type** and **Lead Category** in customer, partner, and distribution stage conditions) have their own four operators.
+
+| Operator | Matches leads where |
+|----------|---------------------|
+| Equals | The value is the one record you pick |
+| Does not equal | The value is anything but the one record you pick |
+| Any of | The value is one of the records you pick |
+| None of | The value is none of the records you pick |
+
+<Tip>
+To keep leads from several sources out, use one **None of** condition with every source you want to exclude. Two **Does not equal** conditions in separate OR groups exclude nothing, because every lead passes at least one of them.
+</Tip>
+
 <Tip>
 The relative date operators (**Within past days** and **Older than days**) are useful for time-sensitive routing. For example, you could create a lead type that only matches leads where a quote was requested within the past 7 days.
 </Tip>

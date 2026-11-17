@@ -94,8 +94,8 @@ These are available for customer-related notifications.
 Click a notification type to open its editor. The top of the page lists the **Available variables** for that type; copy any of them into your templates.
 
 <Frame>
-  <img className="block dark:hidden" src="/images/tenant/settings/notification-template-manage-light.webp" alt="Edit Lead Assigned Template page listing available variables such as lead.full_name and customer.name, followed by the Manual Purchases card with its Send email and SMS switch turned on and the start of the Email Template card" />
-  <img className="hidden dark:block" src="/images/tenant/settings/notification-template-manage-dark.webp" alt="Edit Lead Assigned Template page listing available variables such as lead.full_name and customer.name, followed by the Manual Purchases card with its Send email and SMS switch turned on and the start of the Email Template card" />
+  <img className="block dark:hidden" src="/images/tenant/settings/notification-template-manage-light.webp" alt="Edit Lead Assigned Template page listing available variables such as lead.full_name and customer.name, followed by the Manual Purchases card with its Send email and Send SMS switches turned on and the start of the Email Template card" />
+  <img className="hidden dark:block" src="/images/tenant/settings/notification-template-manage-dark.webp" alt="Edit Lead Assigned Template page listing available variables such as lead.full_name and customer.name, followed by the Manual Purchases card with its Send email and Send SMS switches turned on and the start of the Email Template card" />
 </Frame>
 
 Below that is one card per channel (**Email Template**, **SMS Template**, **In-App Template**), each with four settings.
@@ -130,12 +130,12 @@ Other channels handle links their own way. In SMS, a link becomes its text follo
 
 ### Manual purchases
 
-The Lead Assigned template has one extra card, **Manual Purchases**, with a **Send email and SMS** switch. It decides whether a buyer's email and phone [contacts](/features/customers#contacts) hear about leads the buyer took themselves, by buying a lead on the [Marketplace](/features/marketplace) (bulk buys included) or claiming one in the [Club](/features/club).
+The Lead Assigned template has one extra card, **Manual Purchases**, with a **Send email** switch and a **Send SMS** switch. They decide whether a buyer's [contacts](/features/customers#contacts) hear about leads the buyer took themselves, by buying a lead on the [Marketplace](/features/marketplace) (bulk buys included) or claiming one in the [Club](/features/club). **Send email** covers email contacts and **Send SMS** covers phone contacts.
 
-- **On** (the default) sends Lead Assigned emails and texts for every lead, as before.
-- **Off** skips them for those purchases. The buyer just clicked the button, so they already know, and you're not paying Twilio to tell them.
+- **On** (the default for both) sends that channel's Lead Assigned message for every lead.
+- **Off** skips that channel for those purchases. The buyer just clicked the button, so they already know. Turning off only **Send SMS** is a handy way to stop paying Twilio for those texts while buyers still get the email.
 
-Either way, leads won through [bids](/features/bidding) and buy orders always notify, and so do leads you assign to a customer yourself. In-app notifications always send, and [webhooks](/features/webhooks) fire as usual. The switch saves with the rest of the page.
+Either way, leads won through [bids](/features/bidding) and buy orders always notify, and so do leads you assign to a customer yourself. In-app notifications always send, and [webhooks](/features/webhooks) fire as usual. Both switches save with the rest of the page.
 
 Changes to every channel are saved together with **Save all** in the floating save bar. Templates are validated when you save, so referencing a variable that doesn't exist for that notification type shows an error.
 

@@ -116,6 +116,8 @@ Open a page to see its record, with **Overview**, **Offers**, and **Orders** tab
 
 The **Orders** tab lists every order, with the buyer, the customer account, what they **Paid**, **Credit + bonus**, and a status of <span className="tone-badge tone-success">Fulfilled</span>, <span className="tone-badge tone-danger">Needs attention</span> (paid, but delivery couldn't complete as bought, so review it), or <span className="tone-badge tone-neutral">Abandoned</span> (the buyer left Stripe Checkout and nothing was charged)
 
+An order paid with a card another of your customers already bought with gets a <span className="tone-badge tone-warning">Repeat card</span> badge under its customer account, with a **Same card as** link to that customer, when that customer couldn't have claimed the offer themselves (it isn't for them, they've hit its claim limit, or it includes the Club and they're already a member). That's usually the same buyer back under a new email. The order is still delivered, because they've paid, so review it and refund it if you need to.
+
 <Frame>
   <img className="block dark:hidden" src="/images/tenant/checkout/checkout-page-orders-light.webp" alt="Checkout page Orders tab listing orders with the date, buyer and offer, customer account, amount paid, credit plus bonus, and Fulfilled or Abandoned status" />
   <img className="hidden dark:block" src="/images/tenant/checkout/checkout-page-orders-dark.webp" alt="Checkout page Orders tab listing orders with the date, buyer and offer, customer account, amount paid, credit plus bonus, and Fulfilled or Abandoned status" />
