@@ -8,6 +8,12 @@ Everything that changed on the tenant side of Juiced, including lead routing, di
 
 Looking for changes to the buyer experience? Those live in [Customer portal updates](/changelog/customer-portal).
 
+<Update label="November 17, 2026" description="v3.92.0" tags={["Improvements", "Fixes"]}>
+  - 23 US counties whose names abbreviated Saint without a period now have one, like St. Louis, MN, St. Tammany Parish, LA, and Ste. Genevieve, MO. They now match the four that already had it, so a search for "St. Louis" finds every one of them in bid lists and the [command palette](/get-started/finding-your-way-around#the-command-palette). County IDs don't change, so bids and leads keep their counties.
+  - At [county depth](/features/company-profile#locations), a lead's `county` now matches with or without the period, so sources still sending "St Charles" keep getting through.
+  - If a page in the new panel crashes, you now see a "Something went wrong on this page" message with a **Reload page** button, and the sidebar keeps working. Before, the whole panel went blank until you reloaded.
+</Update>
+
 <Update label="November 12, 2026" description="v3.90.0" tags={["New"]}>
   <Frame>
     <img className="block dark:hidden" src="/images/changelog/v3.90.0-light.webp" alt="Juiced release card reading Juiced Lite runs your ping tree for free, next to the Usage and Billing page for a workspace on Juiced Lite at 0 dollars a month, using 6,702.50 of its 10,000 dollars of monthly revenue and 79 of its 1,000 leads" />
