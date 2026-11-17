@@ -1,0 +1,7 @@
+---
+title: Get a Customer
+description: Get one customer by ID, including their balance.
+openapi: GET /v1/customers/{id}
+---
+
+Use the `id` returned when the customer was created, which starts with `cus_`. Archived customers are returned too, with `archived_at` set.
