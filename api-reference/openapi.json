@@ -458,7 +458,7 @@
       "get": {
         "operationId": "listCustomersV1",
         "summary": "List customers",
-        "description": "Lists your active customers, oldest first, 50 at a time. With `email`, returns the customer using that email (archived ones included), or an empty list.\n\nRequires the `customers:read` ability.",
+        "description": "Lists your active customers, oldest first, 50 at a time. With `email`, returns the active customer using that email, or an empty list.\n\nRequires the `customers:read` ability.",
         "tags": [
           "Customers"
         ],
@@ -1679,7 +1679,7 @@
             "type": "string",
             "format": "email",
             "maxLength": 255,
-            "description": "Must include a domain with a TLD. Unique across your customers, archived ones included."
+            "description": "Must include a domain with a TLD. Unique across your active customers. An archived customer's email can be used again."
           },
           "phone": {
             "type": "string",
@@ -1730,31 +1730,37 @@
           "daily_lead_cap": {
             "type": "integer",
             "minimum": 1,
+            "maximum": 2147483647,
             "description": "Most leads a day. Accepted only when the matching cap or budget is turned on in your account settings, and ignored otherwise."
           },
           "weekly_lead_cap": {
             "type": "integer",
             "minimum": 1,
+            "maximum": 2147483647,
             "description": "Most leads a week. Accepted only when the matching cap or budget is turned on in your account settings, and ignored otherwise."
           },
           "monthly_lead_cap": {
             "type": "integer",
             "minimum": 1,
+            "maximum": 2147483647,
             "description": "Most leads a month. Accepted only when the matching cap or budget is turned on in your account settings, and ignored otherwise."
           },
           "daily_budget": {
             "type": "number",
             "minimum": 1,
+            "maximum": 21474836,
             "description": "Most spent a day, in dollars. Accepted only when the matching cap or budget is turned on in your account settings, and ignored otherwise."
           },
           "weekly_budget": {
             "type": "number",
             "minimum": 1,
+            "maximum": 21474836,
             "description": "Most spent a week, in dollars. Accepted only when the matching cap or budget is turned on in your account settings, and ignored otherwise."
           },
           "monthly_budget": {
             "type": "number",
             "minimum": 1,
+            "maximum": 21474836,
             "description": "Most spent a month, in dollars. Accepted only when the matching cap or budget is turned on in your account settings, and ignored otherwise."
           },
           "send_invite": {

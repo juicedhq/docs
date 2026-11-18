@@ -6,6 +6,6 @@ openapi: POST /v1/customers
 
 Only `name` and `email` are required, so a CRM workflow can create a customer straight from a contact. Add `send_invite` to email the customer a link to set up their portal login.
 
-Each email can belong to one customer in your account, archived customers included. To check whether a contact is already a customer, [look them up by email](/api-reference/endpoint/v1/customers-list) first.
+Each email can belong to one active customer in your account. An archived customer's email can be used for a new customer. To check whether a contact is already a customer, [look them up by email](/api-reference/endpoint/v1/customers-list) first.
 
 Send an `Idempotency-Key` header so a retried request can never create a second customer. See [Safe retries](/api-reference/api-keys#safe-retries).
