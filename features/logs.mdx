@@ -78,7 +78,7 @@ Click a row to see the full exchange.
   <img className="hidden dark:block" src="/images/tenant/logs/outgoing-log-detail-dark.webp" alt="Successful outgoing post with the request payload, the partner's response, and Details in the sidebar" />
 </Frame>
 
-- **Request** shows what Juiced sent, as **Payload**, **Headers**, or **Raw body**.
+- **Request** shows what Juiced sent, as **Payload**, **Headers**, or **Raw body**. Credentials in the headers, such as an `Authorization` or `X-Auth-Token` header, show as `[REDACTED]`.
 - **Response** shows what the partner sent back, as **Body**, **Headers**, or **Raw body**. When something went wrong on our side of the wire, an **Error** tab shows a short message, such as "The request timed out" or "Could not connect to the receiving server".
 - **Details** lists **Result**, **Type**, **Mode**, **Partner**, **Price**, **Response code**, **Method**, **Format** (JSON or Form), **Duration**, **Timestamp**, and **Endpoint**.
 - **Records** links to the incoming log.

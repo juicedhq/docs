@@ -34,8 +34,8 @@ A lead is considered "sold" if it's Assigned, Posted, or Returned. Yes, even ret
 Open **Operate → Leads** to see every lead in your workspace, newest first, 50 to a page.
 
 <Frame>
-  <img className="block dark:hidden" src="/images/tenant/leads/leads-list-light.webp" alt="Leads list with status tabs and counts, a search box, Filters and Columns buttons, and an Export button in the header" />
-  <img className="hidden dark:block" src="/images/tenant/leads/leads-list-dark.webp" alt="Leads list with status tabs and counts, a search box, Filters and Columns buttons, and an Export button in the header" />
+  <img className="block dark:hidden" src="/images/tenant/leads/leads-list-light.webp" alt="Leads list with status tabs and counts, a search box, Filters and Columns buttons, and Import and Export buttons in the header" />
+  <img className="hidden dark:block" src="/images/tenant/leads/leads-list-dark.webp" alt="Leads list with status tabs and counts, a search box, Filters and Columns buttons, and Import and Export buttons in the header" />
 </Frame>
 
 ### Status tabs
@@ -116,6 +116,7 @@ Everything you can do with a lead lives in the **More actions** (⋯) menu in th
 | **View Log** | Opens the lead's [incoming log](/features/logs#incoming-logs), showing every stage it went through. |
 | **View Ping** / **View Post** | Opens the [ping or post](/features/logs#ping-and-post-inspectors) that created the lead. Only shown for leads that came in that way. |
 | **Process** | Runs the lead back through your distribution stages. See [Reprocessing leads](#reprocessing-leads). |
+| **Enrich with Real Estate API** | Fills the lead's fields with property and owner data on demand. Unassigned leads only, once the [Real Estate API integration](/features/integrations#enriching-a-single-lead) is connected. |
 | **Trigger Webhook** | Resends the lead to the customer's configured webhook endpoints. Assigned leads only. |
 | **Return** | Returns the lead and refunds the customer. See [Returning leads](#returning-leads). |
 | **Delete** | Permanently deletes the lead. |
@@ -203,6 +204,26 @@ Reprocessing requires the **leads.reprocess** permission, at least one distribut
 **Delete** removes a lead entirely. Use this for test data or leads that should never have entered the system in the first place. Deleting can't be undone.
 
 The lead's incoming log is preserved for historical reference. In the logs, the lead column shows a **Deleted** badge instead of the lead's name.
+
+## Importing leads
+
+Got leads in a spreadsheet, from an old system or a list you bought? Click **Import** in the Leads header to bring them in from a CSV. You need the **leads.import** permission and a workspace that isn't restricted.
+
+<Frame>
+  <img className="block dark:hidden" src="/images/tenant/leads/leads-import-light.webp" alt="Import leads dialog with a CSV file picker, Lead category and Force lead type selects, and Skip global duplicate checks and Import directly to Club checkboxes" />
+  <img className="hidden dark:block" src="/images/tenant/leads/leads-import-dark.webp" alt="Import leads dialog with a CSV file picker, Lead category and Force lead type selects, and Skip global duplicate checks and Import directly to Club checkboxes" />
+</Frame>
+
+1. Choose the **CSV file** (up to 10 MB and 2,000 rows) and the **Lead category**. The category decides which fields are imported and how each row is validated.
+2. Pick a **Force lead type** to put every lead in one lead type, or leave it on **Classify each lead** to sort them by your lead type priority and conditions.
+3. Check **Skip global duplicate checks** if the file shouldn't be checked against your [global duplicate checks](/features/duplicate-detection#global-duplicate-checks). Otherwise a row matching an existing lead comes in as a duplicate.
+4. Check **Import directly to Club** to skip distribution and make the leads claimable in your [Club](/features/club) right away. Set a **Club claim cap**, or check **Unlimited claims**. Your Club has to be accepting leads.
+5. Click **Next**. On **Map columns**, choose the CSV column each lead field is read from. Juiced fills in its best guess for each, and columns named after one of your fields are mapped automatically.
+6. Click **Start import**.
+
+The import runs in the background. When it's done, a **Lead import completed** notification in the [notification bell](/features/dashboard#notifications) tells you how many rows came in and how many failed. Click it to download the failed rows as a CSV, fix them, and import that file.
+
+Imported leads don't run through your distribution stages. Each one goes to the [Marketplace](/features/marketplace) when it's on for the lead's type, and otherwise waits as <span className="tone-badge tone-sky">Pending</span>. To send the pending ones through distribution, select them in the list and use [bulk reprocessing](#bulk-reprocessing).
 
 ## Exporting leads
 

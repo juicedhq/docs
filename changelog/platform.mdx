@@ -8,6 +8,29 @@ Everything that changed on the tenant side of Juiced, including lead routing, di
 
 Looking for changes to the buyer experience? Those live in [Customer portal updates](/changelog/customer-portal).
 
+<Update label="November 18, 2026" description="v3.94.0" tags={["New", "Improvements", "Fixes"]}>
+  <Frame>
+    <img className="block dark:hidden" src="/images/changelog/v3.94.0-light.webp" alt="Juiced release card reading Rotate source credentials safely, next to a source's Basic Auth section with a Rotate key and secret button and a Rotation in progress banner showing when the previous API key and secret stop working, with an Expire previous credentials now button" />
+    <img className="hidden dark:block" src="/images/changelog/v3.94.0-dark.webp" alt="Juiced release card reading Rotate source credentials safely, next to a source's Basic Auth section with a Rotate key and secret button and a Rotation in progress banner showing when the previous API key and secret stop working, with an Expire previous credentials now button" />
+  </Frame>
+
+  A source's API key and secret are no longer forever. Rotate them in one click, and the old pair keeps working for 24 hours while your vendor switches over. Lead imports and Real Estate API enrichment also made the move to the new panel.
+
+  ## Sources
+
+  - Click **Rotate key and secret** on a source's **Authentication** tab for a new API key and secret. The previous pair keeps working for 24 hours, and an amber banner shows when it stops. Click **Expire previous credentials now** to cut it off early if the credentials leaked. Bearer tokens aren't affected. See [Rotating the API key and secret](/features/sources#rotating-the-api-key-and-secret).
+
+  ## Leads
+
+  - **Import** on the Leads list brings leads in from a CSV of up to 2,000 rows. Pick the lead category, optionally force a lead type, skip global duplicate checks or send the leads straight to your Club, then map each field to a column. A notification tells you how it went, with the failed rows to download. See [Importing leads](/features/leads#importing-leads).
+  - Unassigned leads have an **Enrich with Real Estate API** action in their **More actions** menu, so you can fill in property and owner data on demand using one of your Real Estate API stages' mappings. See [Enriching a single lead](/features/integrations#enriching-a-single-lead).
+
+  ## Fixes
+
+  - Custom credential headers like `X-Auth-Token` that were saved on older [outgoing logs](/features/logs#outgoing-logs) before they were masked now show as `[REDACTED]`. Headers with several values also read as one line, like `Accept, Origin`, instead of a bracketed list.
+  - Buyers who paid on a [checkout page](/features/checkout-pages) and then signed up on their own, instead of through the invite email, are now sent to that invite, so they join the customer holding their purchase rather than creating a second one. Buyers asked to log in partway through checkout now land back on the offer.
+</Update>
+
 <Update label="November 17, 2026" description="v3.93.0" tags={["New", "Improvements", "Fixes"]}>
   <Frame>
     <img className="block dark:hidden" src="/images/changelog/v3.93.0-light.webp" alt="Juiced release card reading Exclude several sources in one rule, next to a customer's lead eligibility condition set to Source None of Honeycomb Reach Network and Greenwave Wellness Ad Funnel" />

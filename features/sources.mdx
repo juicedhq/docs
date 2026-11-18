@@ -44,12 +44,28 @@ Click **Edit** to change the source's settings. The **More actions** (⋯) menu 
 When you create a source, an API key and API secret are generated automatically for HTTP Basic Authentication. You can also authenticate with a bearer token. Both live on the **Authentication** tab.
 
 <Frame>
-  <img className="block dark:hidden" src="/images/tenant/ingest/source-authentication-light.webp" alt="Source Authentication tab with the Basic Auth API key and masked API secret, and a Bearer Token table with a New bearer token button" />
-  <img className="hidden dark:block" src="/images/tenant/ingest/source-authentication-dark.webp" alt="Source Authentication tab with the Basic Auth API key and masked API secret, and a Bearer Token table with a New bearer token button" />
+  <img className="block dark:hidden" src="/images/tenant/ingest/source-authentication-light.webp" alt="Source Authentication tab with the Basic Auth API key, masked API secret and a Rotate key and secret button, and a Bearer Token table with a New bearer token button" />
+  <img className="hidden dark:block" src="/images/tenant/ingest/source-authentication-dark.webp" alt="Source Authentication tab with the Basic Auth API key, masked API secret and a Rotate key and secret button, and a Bearer Token table with a New bearer token button" />
 </Frame>
 
-- **Basic Auth** shows the **API Key** and a masked **API Secret** you can reveal or copy. The key and secret can't be regenerated.
+- **Basic Auth** shows the **API Key** and a masked **API Secret** you can reveal or copy. Click **Rotate key and secret** to replace them. See [Rotating the API key and secret](#rotating-the-api-key-and-secret).
 - **Bearer Token** lists every token with when it was created, last used, and when it expires. Click **New bearer token** to create one. The new token is shown once, in a **Token created** banner, so copy it right away. Creating a token expires the previous one in 24 hours, giving the integrator a window to swap it in.
+
+### Rotating the API key and secret
+
+If a source's credentials leak, or a vendor you've stopped working with still has them, rotate them. Click **Rotate key and secret** and confirm with **Rotate**. Juiced issues a new API key and secret right away, and the previous pair keeps working for 24 hours so the source can switch over without dropping leads.
+
+<Frame>
+  <img className="block dark:hidden" src="/images/tenant/ingest/source-authentication-rotation-light.webp" alt="Basic Auth section showing a new API key and an amber banner reading Rotation in progress, the previous API key and secret also work until a time 24 hours after the rotation, with an Expire previous credentials now button" />
+  <img className="hidden dark:block" src="/images/tenant/ingest/source-authentication-rotation-dark.webp" alt="Basic Auth section showing a new API key and an amber banner reading Rotation in progress, the previous API key and secret also work until a time 24 hours after the rotation, with an Expire previous credentials now button" />
+</Frame>
+
+While the window is open, an amber **Rotation in progress** banner shows when the previous pair stops working. A request has to use a matching pair, so the old key with the new secret (or the reverse) is rejected.
+
+- **Cut the old pair off now.** Click **Expire previous credentials now** in the banner and confirm with **Expire now**. Requests still using the previous key and secret are rejected from that moment. Do this when the credentials were compromised.
+- **Rotate again during the window.** The pair from the earlier rotation stops working immediately, and the current pair gets the 24 hours. At most two pairs ever work at once.
+
+Rotating needs the same permission as creating bearer tokens, and it doesn't touch the source's bearer tokens. An API spec link you've already shared shows the new pair once you rotate, since the spec always shows the current credentials.
 
 ## Source types
 
