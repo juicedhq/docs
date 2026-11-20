@@ -186,11 +186,19 @@
         "groups": [
           {
             "group": "Overview",
-            "pages": ["api-reference/introduction"]
+            "pages": ["api-reference/introduction", "api-reference/api-keys"]
           },
           {
             "group": "v1 Endpoints",
             "pages": ["api-reference/endpoint/v1/ping", "api-reference/endpoint/v1/leads"]
+          },
+          {
+            "group": "Customers",
+            "pages": [
+              "api-reference/endpoint/v1/customers-create",
+              "api-reference/endpoint/v1/customers-list",
+              "api-reference/endpoint/v1/customers-get"
+            ]
           },
           {
             "group": "Legacy Endpoints (Deprecated)",

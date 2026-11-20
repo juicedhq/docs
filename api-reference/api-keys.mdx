@@ -1,0 +1,73 @@
+---
+title: API Keys
+description: Let your own systems, like a CRM workflow or Zapier, manage your customers through the Juiced API.
+---
+
+The lead endpoints authenticate as a [source](/features/sources). Everything else in the API, starting with [customers](/api-reference/endpoint/v1/customers-create), authenticates with an **API key** that belongs to your account. Use one when your CRM, Zapier, or your own code needs to create or look up customers without anyone logging in to Juiced.
+
+<Note>
+API keys are available on paid plans. Only admins can see, create and revoke them.
+</Note>
+
+## Create a key
+
+1. Open **Configure → API Keys**.
+2. Click **New API key**.
+3. Give it a label that says where it's used, such as `GoHighLevel` or `Zapier`. The label shows up in your customers' activity timelines, so you can always tell what a key changed.
+4. Choose what the key can do.
+5. Choose when it expires, or leave it set to **Never**.
+6. Click **Create key** and copy the key.
+
+<Warning>
+The full key is shown once. Juiced only keeps a fingerprint of it, so if you lose it, revoke it and create a new one. Store it in your tool's secret settings, never in a shared document or in code you commit.
+</Warning>
+
+Keys start with `jz_live_`, which makes them easy to spot if one leaks into a log or a repository.
+
+### Abilities
+
+Give each key only what its integration needs.
+
+| Ability | What it allows |
+|---------|----------------|
+| `customers:read` | Look up customers by ID or email, including their balance. |
+| `customers:write` | Create customers and send them a portal invite. |
+
+## Use a key
+
+Send the key as a bearer token, along with the usual JSON headers.
+
+```bash
+curl https://usejuiced.com/api/v1/customers?email=owner@acme-roofing.com \
+  -H "Accept: application/json" \
+  -H "Authorization: Bearer jz_live_your_key_here"
+```
+
+The key decides which account a request acts on, so every request only ever sees your own customers.
+
+## Revoke a key
+
+Open **Configure → API Keys**, open the key's menu, and click **Revoke**. It stops working right away. Anything still using it gets `401` errors until you give it a new key.
+
+To rotate a key without downtime, create the new key, update your integration to use it, then revoke the old one.
+
+## Errors
+
+API key requests use the same [error envelope](/api-reference/introduction#errors) as the rest of v1.
+
+| HTTP | `error.code` | When |
+|------|--------------|------|
+| `401` | `unauthenticated` | The key is missing, unknown, revoked or expired. |
+| `403` | `bad_request` | The key doesn't have the ability the endpoint needs, your plan doesn't include the API, or your account is locked for an unpaid subscription. The `message` says which. |
+| `404` | `not_found` | The record doesn't exist in your account. |
+| `429` | `rate_limited` | The key sent more than 120 requests in a minute. Retry after `Retry-After` seconds. |
+
+## Safe retries
+
+Creating a customer accepts an optional `Idempotency-Key` header, any string up to 255 characters, such as your CRM's contact ID. Send the same key again within 24 hours and you get the original response back, with an `Idempotent-Replayed: true` header, instead of a second customer.
+
+- **Same key, same body** replays the original response.
+- **Same key, different body** returns `409` with `idempotency_conflict`.
+- **The first request is still running** returns `409` with `idempotency_in_progress` and a `Retry-After` header.
+
+Idempotency keys belong to your account, not to one API key, so a retry still matches after you rotate keys.

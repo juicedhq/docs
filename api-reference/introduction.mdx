@@ -1,9 +1,9 @@
 ---
 title: Introduction
-description: Integrate with Juiced to submit leads programmatically.
+description: Integrate with Juiced to submit leads and manage customers programmatically.
 ---
 
-The Juiced API lets you submit leads programmatically, check pricing before committing, and integrate your lead sources directly with the platform.
+The Juiced API lets you submit leads programmatically, check pricing before committing, and integrate your lead sources directly with the platform. Your own systems, like a CRM workflow or Zapier, can also create and look up customers with an [API key](/api-reference/api-keys).
 
 <Tip>Sending leads from a form builder, funnel, ad platform, CRM or another lead platform? See [Sending leads from other tools](/guides/sending-leads-from-other-tools).</Tip>
 
@@ -50,7 +50,7 @@ The header is optional (requests without it still succeed), but including it is 
 
 ## Authentication
 
-The API supports two authentication methods.
+The ping and lead endpoints authenticate as a source, using either of the two methods below. The customer endpoints use an [API key](/api-reference/api-keys) from **Configure → API Keys** instead.
 
 ### Basic Authentication
 
@@ -84,6 +84,9 @@ You can find your API credentials in your source settings within Juiced.
 |----------|-------------|
 | [`POST /v1/ping`](/api-reference/endpoint/v1/ping) | Check for pricing before submitting a full lead |
 | [`POST /v1/leads`](/api-reference/endpoint/v1/leads) | Submit a complete lead for processing and distribution |
+| [`POST /v1/customers`](/api-reference/endpoint/v1/customers-create) | Create a customer and optionally invite them to their portal |
+| [`GET /v1/customers`](/api-reference/endpoint/v1/customers-list) | List customers or find one by email |
+| [`GET /v1/customers/{id}`](/api-reference/endpoint/v1/customers-get) | Get one customer, including their balance |
 | [`POST /ping`](/api-reference/endpoint/ping) | Legacy ping (deprecated) |
 | [`POST /leads`](/api-reference/endpoint/leads) | Legacy lead submission (deprecated) |
 
@@ -161,7 +164,7 @@ Every v1 error uses the same envelope. Branch on `error.code`, which is stable, 
 |------|--------------|------|
 | `400` and other `4xx` | `bad_request` | Any other client error. The message is the standard HTTP reason. |
 | `401` | `unauthenticated` | Credentials are missing or invalid. |
-| `404` | `not_found` | The endpoint doesn't exist. |
+| `404` | `not_found` | The endpoint, or the record you asked for, doesn't exist. |
 | `405` | `method_not_allowed` | The endpoint doesn't accept that HTTP method. |
 | `409` | `idempotency_conflict` | The `transaction_id` was used with a different payload. |
 | `409` | `idempotency_in_progress` | The first attempt is still processing. Retry after `Retry-After` seconds. |

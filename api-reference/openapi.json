@@ -454,6 +454,401 @@
         }
       }
     },
+    "/v1/customers": {
+      "get": {
+        "operationId": "listCustomersV1",
+        "summary": "List customers",
+        "description": "Lists your active customers, oldest first, 50 at a time. With `email`, returns the active customer using that email, or an empty list.\n\nRequires the `customers:read` ability.",
+        "tags": [
+          "Customers"
+        ],
+        "security": [
+          {
+            "API Key": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "email",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Find the customer using this email."
+          },
+          {
+            "name": "cursor",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            },
+            "description": "The `next_cursor` from the previous page."
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "A page of customers.",
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/XRequestId"
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CustomerListResponseV1"
+                },
+                "example": {
+                  "data": [
+                    {
+                      "id": "cus_01jbx8p4r6t8v0x2z4b6d8f0hk",
+                      "name": "Acme Roofing",
+                      "email": "owner@acme-roofing.com",
+                      "phone": null,
+                      "address": null,
+                      "address_2": null,
+                      "city": null,
+                      "state": null,
+                      "zip": null,
+                      "country": null,
+                      "paused": false,
+                      "can_access_bidding": false,
+                      "can_access_club": false,
+                      "balance": 0,
+                      "daily_lead_cap": null,
+                      "weekly_lead_cap": null,
+                      "monthly_lead_cap": null,
+                      "daily_budget": null,
+                      "weekly_budget": null,
+                      "monthly_budget": null,
+                      "archived_at": null,
+                      "created_at": "2026-11-17T15:04:05Z",
+                      "updated_at": "2026-11-17T15:04:05Z"
+                    }
+                  ],
+                  "next_cursor": null,
+                  "version": "v1"
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/ApiKeyUnauthenticatedV1"
+          },
+          "403": {
+            "$ref": "#/components/responses/ApiKeyForbiddenV1"
+          },
+          "429": {
+            "$ref": "#/components/responses/RateLimitedV1"
+          },
+          "500": {
+            "$ref": "#/components/responses/ServerErrorV1"
+          }
+        }
+      },
+      "post": {
+        "operationId": "createCustomerV1",
+        "summary": "Create a customer",
+        "description": "Creates a customer. Only `name` and `email` are required. With `send_invite`, the customer is emailed an invite to set up their portal login.\n\nSend an `Idempotency-Key` header so a retry can never create a second customer.\n\nRequires the `customers:write` ability.",
+        "tags": [
+          "Customers"
+        ],
+        "security": [
+          {
+            "API Key": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "Idempotency-Key",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "maxLength": 255
+            },
+            "description": "Any string, such as your CRM's contact ID. A retry with the same key and body within 24 hours returns the original response."
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CustomerRequestV1"
+              },
+              "examples": {
+                "Name and email": {
+                  "summary": "Name and email",
+                  "value": {
+                    "name": "Acme Roofing",
+                    "email": "owner@acme-roofing.com",
+                    "send_invite": true
+                  }
+                },
+                "With address": {
+                  "summary": "With address",
+                  "value": {
+                    "name": "Acme Roofing",
+                    "email": "owner@acme-roofing.com",
+                    "phone": "555-123-4567",
+                    "address": "742 Orchard Lane",
+                    "city": "Paradise Bay",
+                    "state": "FL",
+                    "zip": "33139",
+                    "country": "US",
+                    "can_access_bidding": true
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Customer created. A retry with the same `Idempotency-Key` and body returns this same response again, with an `Idempotent-Replayed: true` header.",
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/XRequestId"
+              },
+              "Idempotent-Replayed": {
+                "description": "Sent as `true` when this is a stored response to a retried request.",
+                "schema": {
+                  "type": "string",
+                  "example": "true"
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CustomerResponseV1"
+                },
+                "example": {
+                  "data": {
+                    "id": "cus_01jbx8p4r6t8v0x2z4b6d8f0hk",
+                    "name": "Acme Roofing",
+                    "email": "owner@acme-roofing.com",
+                    "phone": null,
+                    "address": null,
+                    "address_2": null,
+                    "city": null,
+                    "state": null,
+                    "zip": null,
+                    "country": null,
+                    "paused": false,
+                    "can_access_bidding": false,
+                    "can_access_club": false,
+                    "balance": 0,
+                    "daily_lead_cap": null,
+                    "weekly_lead_cap": null,
+                    "monthly_lead_cap": null,
+                    "daily_budget": null,
+                    "weekly_budget": null,
+                    "monthly_budget": null,
+                    "archived_at": null,
+                    "created_at": "2026-11-17T15:04:05Z",
+                    "updated_at": "2026-11-17T15:04:05Z"
+                  },
+                  "version": "v1"
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/ApiKeyUnauthenticatedV1"
+          },
+          "403": {
+            "$ref": "#/components/responses/ApiKeyForbiddenV1"
+          },
+          "409": {
+            "description": "The `Idempotency-Key` was already used and this request can't be replayed.",
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/XRequestId"
+              },
+              "Retry-After": {
+                "description": "Sent with `idempotency_in_progress` only. Seconds to wait before retrying the same request.",
+                "schema": {
+                  "type": "integer",
+                  "example": 5
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorV1"
+                },
+                "examples": {
+                  "Same key, different body": {
+                    "summary": "Same key, different body",
+                    "value": {
+                      "error": {
+                        "code": "idempotency_conflict",
+                        "message": "This Idempotency-Key was already used with a different request body."
+                      },
+                      "version": "v1"
+                    }
+                  },
+                  "First request still running": {
+                    "summary": "First request still running",
+                    "value": {
+                      "error": {
+                        "code": "idempotency_in_progress",
+                        "message": "A request with this Idempotency-Key is still being processed. Retry after the number of seconds in the Retry-After header."
+                      },
+                      "version": "v1"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "The customer failed validation.",
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/XRequestId"
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorV1"
+                },
+                "example": {
+                  "error": {
+                    "code": "validation_failed",
+                    "message": "The email has already been taken.",
+                    "errors": {
+                      "email": [
+                        "The email has already been taken."
+                      ]
+                    }
+                  },
+                  "version": "v1"
+                }
+              }
+            }
+          },
+          "429": {
+            "$ref": "#/components/responses/RateLimitedV1"
+          },
+          "500": {
+            "$ref": "#/components/responses/ServerErrorV1"
+          }
+        }
+      }
+    },
+    "/v1/customers/{id}": {
+      "get": {
+        "operationId": "getCustomerV1",
+        "summary": "Get a customer",
+        "description": "Gets one customer by ID, archived ones included.\n\nRequires the `customers:read` ability.",
+        "tags": [
+          "Customers"
+        ],
+        "security": [
+          {
+            "API Key": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "pattern": "^cus_[0-9a-z]{26}$"
+            },
+            "description": "The customer's ID."
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "The customer.",
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/XRequestId"
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CustomerResponseV1"
+                },
+                "example": {
+                  "data": {
+                    "id": "cus_01jbx8p4r6t8v0x2z4b6d8f0hk",
+                    "name": "Acme Roofing",
+                    "email": "owner@acme-roofing.com",
+                    "phone": null,
+                    "address": null,
+                    "address_2": null,
+                    "city": null,
+                    "state": null,
+                    "zip": null,
+                    "country": null,
+                    "paused": false,
+                    "can_access_bidding": false,
+                    "can_access_club": false,
+                    "balance": 0,
+                    "daily_lead_cap": null,
+                    "weekly_lead_cap": null,
+                    "monthly_lead_cap": null,
+                    "daily_budget": null,
+                    "weekly_budget": null,
+                    "monthly_budget": null,
+                    "archived_at": null,
+                    "created_at": "2026-11-17T15:04:05Z",
+                    "updated_at": "2026-11-17T15:04:05Z"
+                  },
+                  "version": "v1"
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/ApiKeyUnauthenticatedV1"
+          },
+          "403": {
+            "$ref": "#/components/responses/ApiKeyForbiddenV1"
+          },
+          "404": {
+            "description": "No customer in your account has this ID.",
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/XRequestId"
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorV1"
+                },
+                "example": {
+                  "error": {
+                    "code": "not_found",
+                    "message": "No customer matches this request."
+                  },
+                  "version": "v1"
+                }
+              }
+            }
+          },
+          "429": {
+            "$ref": "#/components/responses/RateLimitedV1"
+          },
+          "500": {
+            "$ref": "#/components/responses/ServerErrorV1"
+          }
+        }
+      }
+    },
     "/ping": {
       "post": {
         "operationId": "createPing",
@@ -855,6 +1250,11 @@
         "type": "http",
         "scheme": "bearer",
         "description": "Use a bearer token generated for your source."
+      },
+      "API Key": {
+        "type": "http",
+        "scheme": "bearer",
+        "description": "An API key from **Configure → API Keys** (it starts with `jz_live_`), sent as a bearer token. See [API Keys](/api-reference/api-keys)."
       }
     },
     "schemas": {
@@ -1081,6 +1481,292 @@
             "type": "string",
             "enum": ["v1"],
             "description": "Always `v1`."
+          }
+        }
+      },
+      "CustomerV1": {
+        "title": "Customer",
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "pattern": "^cus_[0-9a-z]{26}$",
+            "description": "The customer's public ID."
+          },
+          "name": {
+            "type": "string"
+          },
+          "email": {
+            "type": "string",
+            "format": "email"
+          },
+          "phone": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "Phone number."
+          },
+          "address": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "Street address."
+          },
+          "address_2": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "Second address line."
+          },
+          "city": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "City."
+          },
+          "state": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "State, province or region."
+          },
+          "zip": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "Postal code."
+          },
+          "country": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "Two-letter country code: `US`, `CA`, `AU` or `LV`."
+          },
+          "paused": {
+            "type": "boolean",
+            "description": "Whether the customer is paused and gets no leads."
+          },
+          "can_access_bidding": {
+            "type": "boolean",
+            "description": "Whether the customer can place bids."
+          },
+          "can_access_club": {
+            "type": "boolean",
+            "description": "Whether the customer can join the Club."
+          },
+          "balance": {
+            "type": "number",
+            "description": "Available balance in dollars, after funds held for pending pings."
+          },
+          "daily_lead_cap": {
+            "type": [
+              "integer",
+              "null"
+            ],
+            "description": "Most leads a day."
+          },
+          "weekly_lead_cap": {
+            "type": [
+              "integer",
+              "null"
+            ],
+            "description": "Most leads a week."
+          },
+          "monthly_lead_cap": {
+            "type": [
+              "integer",
+              "null"
+            ],
+            "description": "Most leads a month."
+          },
+          "daily_budget": {
+            "type": [
+              "number",
+              "null"
+            ],
+            "description": "Most spent a day, in dollars."
+          },
+          "weekly_budget": {
+            "type": [
+              "number",
+              "null"
+            ],
+            "description": "Most spent a week, in dollars."
+          },
+          "monthly_budget": {
+            "type": [
+              "number",
+              "null"
+            ],
+            "description": "Most spent a month, in dollars."
+          },
+          "archived_at": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "When the customer was archived.",
+            "format": "date-time"
+          },
+          "created_at": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "updated_at": {
+            "type": "string",
+            "format": "date-time"
+          }
+        }
+      },
+      "CustomerResponseV1": {
+        "type": "object",
+        "properties": {
+          "data": {
+            "$ref": "#/components/schemas/CustomerV1"
+          },
+          "version": {
+            "type": "string",
+            "enum": [
+              "v1"
+            ]
+          }
+        }
+      },
+      "CustomerListResponseV1": {
+        "type": "object",
+        "properties": {
+          "data": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/CustomerV1"
+            }
+          },
+          "next_cursor": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "Pass as `cursor` to get the next page. `null` on the last page."
+          },
+          "version": {
+            "type": "string",
+            "enum": [
+              "v1"
+            ]
+          }
+        }
+      },
+      "CustomerRequestV1": {
+        "type": "object",
+        "required": [
+          "name",
+          "email"
+        ],
+        "properties": {
+          "name": {
+            "type": "string",
+            "maxLength": 255,
+            "description": "The customer's business or display name."
+          },
+          "email": {
+            "type": "string",
+            "format": "email",
+            "maxLength": 255,
+            "description": "Must include a domain with a TLD. Unique across your active customers. An archived customer's email can be used again."
+          },
+          "phone": {
+            "type": "string",
+            "description": "A US, Canadian, Australian or Latvian phone number."
+          },
+          "address": {
+            "type": "string",
+            "maxLength": 255
+          },
+          "address_2": {
+            "type": "string",
+            "maxLength": 255
+          },
+          "city": {
+            "type": "string",
+            "maxLength": 255
+          },
+          "state": {
+            "type": "string",
+            "maxLength": 255
+          },
+          "zip": {
+            "type": "string",
+            "description": "Checked against `country`, which is required with it."
+          },
+          "country": {
+            "type": "string",
+            "enum": [
+              "US",
+              "CA",
+              "AU",
+              "LV"
+            ],
+            "description": "Required when `state` or `zip` is sent."
+          },
+          "paused": {
+            "type": "boolean",
+            "default": false
+          },
+          "can_access_bidding": {
+            "type": "boolean",
+            "default": false
+          },
+          "can_access_club": {
+            "type": "boolean",
+            "default": false
+          },
+          "daily_lead_cap": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 2147483647,
+            "description": "Most leads a day. Accepted only when the matching cap or budget is turned on in your account settings, and ignored otherwise."
+          },
+          "weekly_lead_cap": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 2147483647,
+            "description": "Most leads a week. Accepted only when the matching cap or budget is turned on in your account settings, and ignored otherwise."
+          },
+          "monthly_lead_cap": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 2147483647,
+            "description": "Most leads a month. Accepted only when the matching cap or budget is turned on in your account settings, and ignored otherwise."
+          },
+          "daily_budget": {
+            "type": "number",
+            "minimum": 1,
+            "maximum": 21474836,
+            "description": "Most spent a day, in dollars. Accepted only when the matching cap or budget is turned on in your account settings, and ignored otherwise."
+          },
+          "weekly_budget": {
+            "type": "number",
+            "minimum": 1,
+            "maximum": 21474836,
+            "description": "Most spent a week, in dollars. Accepted only when the matching cap or budget is turned on in your account settings, and ignored otherwise."
+          },
+          "monthly_budget": {
+            "type": "number",
+            "minimum": 1,
+            "maximum": 21474836,
+            "description": "Most spent a month, in dollars. Accepted only when the matching cap or budget is turned on in your account settings, and ignored otherwise."
+          },
+          "send_invite": {
+            "type": "boolean",
+            "default": false,
+            "description": "Email the customer an invite to set up their portal login."
           }
         }
       },
@@ -1335,6 +2021,75 @@
           }
         }
       },
+      "ApiKeyUnauthenticatedV1": {
+        "description": "The API key is missing, unknown, revoked or expired.",
+        "headers": {
+          "X-Request-Id": {
+            "$ref": "#/components/headers/XRequestId"
+          }
+        },
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/ErrorV1"
+            },
+            "example": {
+              "error": {
+                "code": "unauthenticated",
+                "message": "Missing or invalid API key. Send an active jz_live_ key as a bearer token."
+              },
+              "version": "v1"
+            }
+          }
+        }
+      },
+      "ApiKeyForbiddenV1": {
+        "description": "The key lacks the ability this endpoint needs, your plan doesn't include the API, or your account is locked for an unpaid subscription.",
+        "headers": {
+          "X-Request-Id": {
+            "$ref": "#/components/headers/XRequestId"
+          }
+        },
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/ErrorV1"
+            },
+            "examples": {
+              "Missing ability": {
+                "summary": "Missing ability",
+                "value": {
+                  "error": {
+                    "code": "bad_request",
+                    "message": "This API key does not have the customers:write ability."
+                  },
+                  "version": "v1"
+                }
+              },
+              "Plan without the API": {
+                "summary": "Plan without the API",
+                "value": {
+                  "error": {
+                    "code": "bad_request",
+                    "message": "The API is not included in your plan. Upgrade to a paid plan to use it."
+                  },
+                  "version": "v1"
+                }
+              },
+              "Account locked": {
+                "summary": "Account locked",
+                "value": {
+                  "error": {
+                    "code": "bad_request",
+                    "message": "This workspace is locked until its subscription is paid."
+                  },
+                  "version": "v1"
+                }
+              }
+            }
+          }
+        }
+      },
       "LegacyUnauthorized": {
         "description": "Credentials are missing or invalid. A rejected bearer token returns `Unauthenticated.`; anything else returns `Unauthorized`.",
         "headers": {
@@ -1407,6 +2162,10 @@
     {
       "name": "v1",
       "description": "The current API. Build on these endpoints."
+    },
+    {
+      "name": "Customers",
+      "description": "Create and look up your customers with an API key."
     },
     {
       "name": "Legacy",
