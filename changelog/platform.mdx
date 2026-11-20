@@ -8,6 +8,27 @@ Everything that changed on the tenant side of Juiced, including lead routing, di
 
 Looking for changes to the buyer experience? Those live in [Customer portal updates](/changelog/customer-portal).
 
+<Update label="November 19, 2026" description="v3.95.0" tags={["Improvements", "Fixes"]}>
+  <Frame>
+    <img className="block dark:hidden" src="/images/changelog/v3.95.0-light.webp" alt="Juiced release card reading One panel, now at /manage, next to a banner form with its Warning banner previewed across the top of the page" />
+    <img className="hidden dark:block" src="/images/changelog/v3.95.0-dark.webp" alt="Juiced release card reading One panel, now at /manage, next to a banner form with its Warning banner previewed across the top of the page" />
+  </Frame>
+
+  The classic panel is retired. Everyone on your team now uses the same panel, and it lives at `/manage`. Old links and bookmarks still take you to the right page.
+
+  ## The panel
+
+  - Panel pages moved from `/tenants/...` to `/manage/...`, and your team signs in at `/manage/login`. See [Finding your way around](/get-started/finding-your-way-around#signing-in) and [Your login and signup URLs](/features/registration-and-login#your-login-and-signup-urls).
+  - Links to the classic panel, including the ones in older emails from Juiced, now open the matching page in the panel. Links to a specific lead, customer, source, or partner open that record.
+  - **Switch to the classic panel** is gone from the rail, along with the classic panel's Marketplace monitor page.
+  - While you create, edit, or view a [banner](/features/banners#creating-a-banner), its preview now runs across the top of the page, the way it runs across the top of the customer portal. The preview doesn't track views or clicks, and it's dimmed while the banner is inactive.
+
+  ## Fixes
+
+  - A lead posted to the [lead API](/api-reference/endpoint/v1/leads) no longer fails with a server error when a brief internal hiccup happens after the lead is saved. The post is accepted and the lead is distributed as usual.
+  - Pages and API calls no longer hang when Amazon's IP address service is slow or down.
+</Update>
+
 <Update label="November 18, 2026" description="v3.94.0" tags={["New", "Improvements", "Fixes"]}>
   <Frame>
     <img className="block dark:hidden" src="/images/changelog/v3.94.0-light.webp" alt="Juiced release card reading Rotate source credentials safely, next to a source's Basic Auth section with a Rotate key and secret button and a Rotation in progress banner showing when the previous API key and secret stop working, with an Expire previous credentials now button" />

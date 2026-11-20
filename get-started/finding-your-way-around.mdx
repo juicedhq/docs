@@ -7,7 +7,9 @@ import { HugeIcon } from '/snippets/hugeicon.jsx';
 
 The tenant panel is where you run your whole operation, so it's worth five minutes to learn the layout. Once you know how the rail's modules and the sidebar fit together, every other page in these docs will make a lot more sense.
 
-Panel addresses look like `yourcompany.usejuiced.com/tenants/{workspace id}/...`. You rarely need to type them, because everything below is a click (or a keystroke) away.
+Panel addresses look like `yourcompany.usejuiced.com/manage/{workspace id}/...`. You rarely need to type them, because everything below is a click (or a keystroke) away.
+
+Older links that start with `/tenants/`, like bookmarks or links in past emails from Juiced, still work. They take you to the same page under `/manage/`.
 
 <Tip>
   If you only learn one thing on this page, make it <kbd>⌘</kbd> <kbd>K</kbd> (<kbd>Ctrl</kbd> <kbd>K</kbd> on Windows and Linux). It opens the [command palette](#the-command-palette), which gets you to any page, setting, customer, or lead in a few keystrokes.
@@ -20,7 +22,7 @@ Panel addresses look like `yourcompany.usejuiced.com/tenants/{workspace id}/...`
 
 ## Signing in
 
-Sign in at `/tenants/login` on your subdomain or [custom domain](/features/domains) with your email address and password, or choose **Sign in with a passkey** if you've set one up. **Forgot password?** sends a reset link. Accounts that only use a passkey are asked to sign in with it instead of a password.
+Sign in at `/manage/login` on your subdomain or [custom domain](/features/domains) with your email address and password, or choose **Sign in with a passkey** if you've set one up. **Forgot password?** sends a reset link. Accounts that only use a passkey are asked to sign in with it instead of a password.
 
 Bookmark that login page. Your base URL takes signed-out visitors to the customer login instead. See [Your login and signup URLs](/features/registration-and-login#your-login-and-signup-urls).
 
@@ -111,7 +113,6 @@ Your [role](/features/roles) decides which modules and pages appear. A Sales use
 The bottom of the rail holds a few utilities.
 
 - **Guided setup** appears in workspaces created with the [setup guide](/get-started/quickstart#3-follow-the-setup-guide). It's a progress ring for the way to sell you're setting up, with an amber dot while skipped steps wait, or a compass between paths. Click it to pick up the next step.
-- **Switch to the classic panel** returns you to the previous version of the panel if you need something that hasn't moved over yet.
 - **Notifications** (bell) shows your in-app notifications, such as a lead or bid export that's ready to download, with a red count for unread ones and **Mark all as read**.
 - **Documentation** (book) opens these docs.
 
