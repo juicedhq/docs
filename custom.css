@@ -87,8 +87,9 @@
 /* Hugeicons sidebar group icons (generated) */
 /* Mintlify renders file-based nav icons as plain <img>, which can't follow the theme. Collapse the
    image and paint its padding box with the text color through a mask of the same SVG, the way
-   Mintlify draws its built-in icons. */
-img.sidebar-group-icon[src^="/images/icons/"] {
+   Mintlify draws its built-in icons. The deployed site rewrites src to an absolute CDN URL
+   (mintlify.s3...amazonaws.com/<project>/images/icons/...), so match on *= and $=, never ^= or =. */
+img.sidebar-group-icon[src*="/images/icons/"] {
   box-sizing: content-box;
   width: 0;
   height: 0;
@@ -97,11 +98,11 @@ img.sidebar-group-icon[src^="/images/icons/"] {
   -webkit-mask: var(--nav-icon) center / contain no-repeat;
   mask: var(--nav-icon) center / contain no-repeat;
 }
-img.sidebar-group-icon[src="/images/icons/folder-tree.svg"] { --nav-icon: url("/images/icons/folder-tree.svg"); }
-img.sidebar-group-icon[src="/images/icons/hold-01.svg"] { --nav-icon: url("/images/icons/hold-01.svg"); }
-img.sidebar-group-icon[src="/images/icons/user-multiple.svg"] { --nav-icon: url("/images/icons/user-multiple.svg"); }
-img.sidebar-group-icon[src="/images/icons/wallet-01.svg"] { --nav-icon: url("/images/icons/wallet-01.svg"); }
-img.sidebar-group-icon[src="/images/icons/security-check.svg"] { --nav-icon: url("/images/icons/security-check.svg"); }
-img.sidebar-group-icon[src="/images/icons/notification-03.svg"] { --nav-icon: url("/images/icons/notification-03.svg"); }
-img.sidebar-group-icon[src="/images/icons/workflow-square-10.svg"] { --nav-icon: url("/images/icons/workflow-square-10.svg"); }
-img.sidebar-group-icon[src="/images/icons/building.svg"] { --nav-icon: url("/images/icons/building.svg"); }
+img.sidebar-group-icon[src$="/images/icons/folder-tree.svg"] { --nav-icon: url("/images/icons/folder-tree.svg"); }
+img.sidebar-group-icon[src$="/images/icons/hold-01.svg"] { --nav-icon: url("/images/icons/hold-01.svg"); }
+img.sidebar-group-icon[src$="/images/icons/user-multiple.svg"] { --nav-icon: url("/images/icons/user-multiple.svg"); }
+img.sidebar-group-icon[src$="/images/icons/wallet-01.svg"] { --nav-icon: url("/images/icons/wallet-01.svg"); }
+img.sidebar-group-icon[src$="/images/icons/security-check.svg"] { --nav-icon: url("/images/icons/security-check.svg"); }
+img.sidebar-group-icon[src$="/images/icons/notification-03.svg"] { --nav-icon: url("/images/icons/notification-03.svg"); }
+img.sidebar-group-icon[src$="/images/icons/workflow-square-10.svg"] { --nav-icon: url("/images/icons/workflow-square-10.svg"); }
+img.sidebar-group-icon[src$="/images/icons/building.svg"] { --nav-icon: url("/images/icons/building.svg"); }
