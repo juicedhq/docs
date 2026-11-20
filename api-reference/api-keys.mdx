@@ -11,6 +11,11 @@ API keys are available on paid plans. Only admins can see, create and revoke the
 
 ## Create a key
 
+<Frame>
+  <img className="block dark:hidden" src="/images/tenant/settings/api-keys-light.webp" alt="API Keys page under Configure, Connections, listing a GoHighLevel key that can read and create customers and a Zapier lookups key that can read customers, with each key's masked value, creator, last used time, expiry and a revoke button" />
+  <img className="hidden dark:block" src="/images/tenant/settings/api-keys-dark.webp" alt="API Keys page under Configure, Connections, listing a GoHighLevel key that can read and create customers and a Zapier lookups key that can read customers, with each key's masked value, creator, last used time, expiry and a revoke button" />
+</Frame>
+
 1. Open **Configure → API Keys**.
 2. Click **New API key**.
 3. Give it a label that says where it's used, such as `GoHighLevel` or `Zapier`. The label shows up in your customers' activity timelines, so you can always tell what a key changed.
@@ -48,7 +53,9 @@ The key decides which account a request acts on, so every request only ever sees
 
 ## Revoke a key
 
-Open **Configure → API Keys**, open the key's menu, and click **Revoke**. It stops working right away. Anything still using it gets `401` errors until you give it a new key.
+The key list shows what each key can do, who created it, when it was last used and when it expires, so a key nothing has used in months is easy to spot.
+
+To revoke one, open **Configure → API Keys**, click the trash icon on the key's row, and confirm with **Revoke**. It stops working right away. Anything still using it gets `401` errors until you give it a new key.
 
 To rotate a key without downtime, create the new key, update your integration to use it, then revoke the old one.
 

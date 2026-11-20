@@ -40,14 +40,14 @@ The table shows each customer's status, balance, active markets, lead count, ret
 
 ## Creating and editing a customer
 
-Click **New customer** to add a buyer. This creates the same kind of account as a customer registering through your portal; you're just doing it on their behalf. To change an existing customer, open them and click **Edit**.
+Click **New customer** to add a buyer. This creates the same kind of account as a customer registering through your portal; you're just doing it on their behalf. To change an existing customer, open them and click **Edit**. Your own systems, like a CRM workflow or Zapier, can also create customers through the [customers API](/api-reference/endpoint/v1/customers-create) with an [API key](/api-reference/api-keys).
 
 The form has these sections.
 
 | Section | Fields |
 |---------|--------|
 | **Basic Info** | Name, Business Email, Phone |
-| **Address** | Street Address, Apt / Suite, City, Country (United States, Canada, Australia, or Latvia), State, and ZIP. Street address, city, state, and ZIP are required. |
+| **Address** | Street Address, Apt / Suite, City, Country (United States, Canada, Australia, or Latvia), State, and ZIP. Street address, city, state, and ZIP are required for a new customer. Customers created through the API or a checkout page can have no address, and editing one only requires the address fields it already has. |
 | **Toggles** | See [Account toggles](#account-toggles) below |
 | **Bidding Limits** | Daily, weekly, and monthly lead caps and budgets. Each field only appears when you've enabled that limit for customers in **Configure → Bidding**; if none are enabled, the section is hidden. Leave a limit empty for unlimited. See [Budgets and caps](/features/budgets-and-caps). |
 | **Auto Recharge** | Auto Recharge, Trigger Amount, and Recharge Amount. See [Auto recharge](#auto-recharge). |
@@ -96,6 +96,8 @@ Click any customer to open their record. The header shows the customer's name an
 ### Archiving and reactivating
 
 Archiving a customer also archives their bids. A customer with an active subscription can't be archived; cancel the subscription first (immediately, or wait for a scheduled cancellation to finish). To bring an archived customer back, open them and choose **Reactivate** from **More actions**.
+
+An archived customer's email is free to use again, so you can add a new customer with it. If you do, the archived customer can't be reactivated until you change the active customer's email. A buyer you archived can't use that email to sign up or check out on their own; they're told to contact you to reopen their account.
 
 ## Overview
 

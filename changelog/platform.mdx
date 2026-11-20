@@ -8,6 +8,30 @@ Everything that changed on the tenant side of Juiced, including lead routing, di
 
 Looking for changes to the buyer experience? Those live in [Customer portal updates](/changelog/customer-portal).
 
+<Update label="November 20, 2026" description="v3.97.0" tags={["New", "Improvements", "Breaking changes"]}>
+  <Frame>
+    <img className="block dark:hidden" src="/images/changelog/v3.97.0-light.webp" alt="Juiced release card reading Your CRM, now on speaking terms, next to the API Keys page listing a GoHighLevel key that can read and create customers and a Zapier lookups key that can read customers" />
+    <img className="hidden dark:block" src="/images/changelog/v3.97.0-dark.webp" alt="Juiced release card reading Your CRM, now on speaking terms, next to the API Keys page listing a GoHighLevel key that can read and create customers and a Zapier lookups key that can read customers" />
+  </Frame>
+
+  Close a deal in your CRM and the buyer can be a Juiced customer before you've hung up. API keys let GoHighLevel, Zapier, or your own code create and look up customers, and send their portal invite. Customer sign-up also got shorter, with one form for the login and the business.
+
+  ## API keys and the customers API
+
+  - Admins on paid plans create [API keys](/api-reference/api-keys) under **Configure → API Keys**. Pick what each key can do (**Read customers**, **Create customers**, or both) and, if you like, an expiry of 30, 90, 180, or 365 days. The key is shown once, and the list shows when each key was last used so you can revoke the ones nothing needs.
+  - [Create a customer](/api-reference/endpoint/v1/customers-create) with just a name and email, and optionally email them a portal invite. Send an `Idempotency-Key` and a retried request never makes a second customer.
+  - [Look up customers](/api-reference/endpoint/v1/customers-list) by email or page through them all, or [get one by ID](/api-reference/endpoint/v1/customers-get), balance included.
+  - Changes made with a key show in the customer's timeline under the key's label, such as "API key 'GoHighLevel' created the customer".
+
+  ## Customers
+
+  - An [archived customer's](/features/customers#archiving-and-reactivating) email can be used for a new customer. The archived one can't be reactivated while an active customer has its email. A buyer you archived still can't sign up or check out with that email; they're asked to contact you.
+  - Customers created through the API or a checkout page can have no address. Editing one in the panel only requires the address fields it already has, so you can change something else without making up an address.
+  - Customers now sign up with one form that holds their login and their business, and the email they sign in with becomes the customer's billing email. See [Onboarding customers](/guides/onboarding-customers#3-what-the-customer-does).
+  - When someone signs up with an email that already belongs to one of your customers, Juiced emails them that customer's existing invite instead of creating a second customer. If you never invited that email, they're asked to get an invite from you, so nobody gets into a customer you added without your say-so.
+  - **Breaking:** New customers no longer pass through `/app/register-business` after signing up, so a Google Tag Manager trigger on that page stops firing. Switch it to `/email/verify`, where every new customer now lands. See [Your login and signup URLs](/features/registration-and-login#your-login-and-signup-urls).
+</Update>
+
 <Update label="November 20, 2026" description="v3.96.0" tags={["Improvements", "Fixes"]}>
   ## Improvements
 

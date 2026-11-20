@@ -15,7 +15,7 @@ The **Registration & Login** page controls the words and consent checkboxes cust
 | Setting | What it does |
 |---------|--------------|
 | **Campaign Banner Text** | Optional. Use it to match the sign-up page to an ad campaign, like "Start buying fresh subscriber leads". When it's set, it becomes the page's title, and the account creation headline moves into the line beneath it. |
-| **Account Creation Headline** | The main call to action on the registration form. Leave it empty to use "Create your user account". |
+| **Account Creation Headline** | The main call to action on the registration form. Leave it empty to use "Create your account". |
 
 Customers register at `/app/register` on your portal's domain. See [Onboarding customers](/guides/onboarding-customers) for sharing the link and tracking where signups come from.
 
@@ -29,7 +29,7 @@ All of these work on your subdomain (`https://<your-subdomain>.usejuiced.com`) o
 | Customer signup | `/app/register` |
 | Customer login | `/app/login` |
 
-Your base URL takes signed-out visitors to the customer login page (or your public marketplace, if you chose that in [Domains & Links](/features/domains)), so bookmark your team's login. To track signups in Google Tag Manager, use `/app/register-business`, the page every new customer lands on right after creating their account.
+Your base URL takes signed-out visitors to the customer login page (or your public marketplace, if you chose that in [Domains & Links](/features/domains)), so bookmark your team's login. To track signups in Google Tag Manager, use `/email/verify`, the page every new customer lands on right after creating their account.
 
 ## Consent links
 
