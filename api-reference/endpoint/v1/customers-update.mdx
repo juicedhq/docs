@@ -1,0 +1,17 @@
+---
+title: Update a Customer
+description: Keep a customer in sync with your CRM, or pause and unpause them.
+openapi: PATCH /v1/customers/{id}
+---
+
+Send only the fields you want to change. Anything you leave out keeps its current value, so a CRM workflow can update a phone number without touching the rest of the customer.
+
+To pause a customer, send `"paused": true`. They stop receiving leads, just as when you pause them in Juiced. Send `"paused": false` to start their leads again.
+
+The same rules apply as when you edit a customer in Juiced:
+
+- Each email can belong to one active customer in your account. An email another active customer uses is refused with `validation_failed`.
+- Lead caps and budgets are only accepted when they're turned on in your account settings.
+- Once a customer has an address, it can be changed but not cleared.
+
+Every change shows on the customer's activity timeline under your API key's label.

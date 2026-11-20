@@ -197,7 +197,10 @@
             "pages": [
               "api-reference/endpoint/v1/customers-create",
               "api-reference/endpoint/v1/customers-list",
-              "api-reference/endpoint/v1/customers-get"
+              "api-reference/endpoint/v1/customers-get",
+              "api-reference/endpoint/v1/customers-update",
+              "api-reference/endpoint/v1/customers-archive",
+              "api-reference/endpoint/v1/customers-reactivate"
             ]
           },
           {
