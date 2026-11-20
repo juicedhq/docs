@@ -8,6 +8,18 @@ Everything that changed on the tenant side of Juiced, including lead routing, di
 
 Looking for changes to the buyer experience? Those live in [Customer portal updates](/changelog/customer-portal).
 
+<Update label="November 20, 2026" description="v3.96.0" tags={["Improvements", "Fixes"]}>
+  ## Improvements
+
+  - Only [leads](/features/leads#deleting-leads) that were never assigned can be deleted. A lead that went to a customer or partner, even one that was later returned, keeps its sale and delivery records, so **Delete** no longer shows in its **More actions** menu.
+  - [Posts](/features/submissions) that never became a lead, such as rejected or duplicate posts, are now deleted 90 days after they arrive. Posts behind a lead are kept with the lead.
+
+  ## Fixes
+
+  - The **Partner integration complete** email now arrives once a partner's [test-mode source](/features/sources#test-mode) passes every integration check. Before, the post check never passed, so the email was never sent.
+  - Partners' ping lists and live feed now show only pings that signed in with one of their own sources. A ping that fails sign-in no longer shows up for the partner named in its headers. You still see every ping in your own [logs](/features/logs).
+</Update>
+
 <Update label="November 19, 2026" description="v3.95.0" tags={["Improvements", "Fixes"]}>
   <Frame>
     <img className="block dark:hidden" src="/images/changelog/v3.95.0-light.webp" alt="Juiced release card reading One panel, now at /manage, next to a banner form with its Warning banner previewed across the top of the page" />

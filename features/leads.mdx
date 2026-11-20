@@ -203,6 +203,8 @@ Reprocessing requires the **leads.reprocess** permission, at least one distribut
 
 **Delete** removes a lead entirely. Use this for test data or leads that should never have entered the system in the first place. Deleting can't be undone.
 
+Only leads that were never assigned can be deleted. Once a lead has gone to a customer or partner, even if it was later returned, it's a record of a sale, so **Delete** no longer appears in its **More actions** menu.
+
 The lead's incoming log is preserved for historical reference. In the logs, the lead column shows a **Deleted** badge instead of the lead's name.
 
 ## Importing leads
