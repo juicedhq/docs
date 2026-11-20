@@ -1,0 +1,11 @@
+---
+title: Archive a Customer
+description: Archive a customer who's no longer buying, along with their bids.
+openapi: POST /v1/customers/{id}/archive
+---
+
+Archiving works just like archiving a customer in Juiced. The customer stops receiving leads, their bids are archived, and their email is free for a new customer. Their history stays, and you can [reactivate them](/api-reference/endpoint/v1/customers-reactivate) later.
+
+A customer with an active subscription can't be archived. Cancel the subscription in Juiced first.
+
+Archiving a customer who's already archived changes nothing and returns them, so it's safe to retry.
