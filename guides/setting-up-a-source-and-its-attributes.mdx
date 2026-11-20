@@ -84,8 +84,8 @@ The **More actions** (⋯) menu in the header holds **View API Spec**, which ope
 Click the **Authentication** tab. Juiced generates credentials automatically when a source is created, so no extra setup is needed.
 
 <Frame>
-  <img className="block dark:hidden" src="/images/tenant/ingest/source-authentication-light.webp" alt="Authentication tab with the Basic Auth API key and masked secret, plus the Bearer Token section with a New bearer token button" />
-  <img className="hidden dark:block" src="/images/tenant/ingest/source-authentication-dark.webp" alt="Authentication tab with the Basic Auth API key and masked secret, plus the Bearer Token section with a New bearer token button" />
+  <img className="block dark:hidden" src="/images/tenant/ingest/source-authentication-light.webp" alt="Authentication tab with the Basic Auth API key, masked secret and a Rotate key and secret button, plus the Bearer Token section with a New bearer token button" />
+  <img className="hidden dark:block" src="/images/tenant/ingest/source-authentication-dark.webp" alt="Authentication tab with the Basic Auth API key, masked secret and a Rotate key and secret button, plus the Bearer Token section with a New bearer token button" />
 </Frame>
 
 You'll see two authentication options.
@@ -95,7 +95,7 @@ You'll see two authentication options.
 **Bearer Token** is the alternative. Click **New bearer token** and confirm with **Create token** to generate a token for the `Authorization` header. The token appears once in a **Token created** banner, so copy it before you leave the page. Each new token expires the previous one in 24 hours.
 
 <Warning>
-Treat your API credentials like passwords. Bearer tokens can be replaced from this page, but the Basic Auth key and secret can't be regenerated. If a bearer token is compromised, create a new one; the old token stops working 24 hours later.
+Treat your API credentials like passwords. If a bearer token is compromised, create a new one, and the old token stops working 24 hours later. If the Basic Auth key and secret are compromised, click **Rotate key and secret**, then **Expire previous credentials now** to cut off the old pair right away. See [Rotating the API key and secret](/features/sources#rotating-the-api-key-and-secret).
 </Warning>
 
 ## 4. Override fields (optional)

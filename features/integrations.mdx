@@ -77,6 +77,12 @@ Enrichment runs as a **Real Estate API** stage in your [distribution stages](/fe
 
 The stage doesn't end distribution. The lead moves on to the next stage with its new data, so later stages can use it in their conditions. The stage's result in the lead's [incoming log](/features/logs#incoming-logs) shows how it went, such as "No fields enriched" when the lookup found nothing to add. For setup steps, see [Configuring distribution stages](/guides/configuring-distribution-stages#real-estate-api).
 
+### Enriching a single lead
+
+You can also enrich one lead by hand, say a lead that came in before you set the stage up. Open an unassigned lead and choose **Enrich with Real Estate API** from its **More actions** (⋯) menu, on the lead page or its edit page. Pick the stage whose mappings to use under **Use field mappings from**, check the **Endpoint groups** to look up (**Property Data Enrichment**, **Skip Trace Owner Contacts**, or both), and click **Enrich**.
+
+The lead needs an address, city, state, and postal code, and you need permission to edit leads. The action shows up once at least one Real Estate API stage has field mappings. A message tells you how many fields were filled, or why nothing was.
+
 <Warning>
 Deleting the RealEstateAPI integration also deletes your Real Estate API distribution stages. Juiced tells you how many before you confirm.
 </Warning>
