@@ -38,7 +38,8 @@ Give each key only what its integration needs.
 Send the key as a bearer token, along with the usual JSON headers.
 
 ```bash
-curl https://usejuiced.com/api/v1/customers?email=owner@acme-roofing.com \
+curl -G https://usejuiced.com/api/v1/customers \
+  --data-urlencode "email=owner+leads@acme-roofing.com" \
   -H "Accept: application/json" \
   -H "Authorization: Bearer jz_live_your_key_here"
 ```

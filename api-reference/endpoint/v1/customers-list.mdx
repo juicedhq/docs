@@ -7,3 +7,5 @@ openapi: GET /v1/customers
 Without filters, this lists your active customers, oldest first, 50 at a time. Pass `next_cursor` back as `cursor` to get the next page. When `next_cursor` is `null`, you've reached the end.
 
 With `email`, it returns the active customer using that email, or an empty list. Archived customers aren't included, since their email can be used for a new customer.
+
+URL-encode the email before you send it, since a `+` in an address is otherwise read as a space and the lookup comes back empty.
