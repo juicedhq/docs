@@ -475,7 +475,7 @@
             "schema": {
               "type": "string"
             },
-            "description": "Find the customer using this email."
+            "description": "Find the customer using this email. URL-encode it, since a `+` in an address is otherwise read as a space and the lookup comes back empty."
           },
           {
             "name": "cursor",
