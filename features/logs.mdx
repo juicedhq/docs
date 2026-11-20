@@ -108,7 +108,7 @@ Shows exactly what a source sent to the [ping endpoint](/api-reference/endpoint/
 
 ### Post inspector
 
-A post (also called a [submission](/features/submissions)) is the full lead a source sent to the [leads endpoint](/api-reference/endpoint/v1/leads). Every post is stored as received, whether or not it became a lead.
+A post (also called a [submission](/features/submissions)) is the full lead a source sent to the [leads endpoint](/api-reference/endpoint/v1/leads). Every post is stored as received, whether or not it became a lead. Posts that never became a lead are deleted after 90 days.
 
 <Frame>
   <img className="block dark:hidden" src="/images/tenant/logs/post-inspector-light.webp" alt="Post inspector with the request payload, Juiced's response, and Details and Records in the sidebar" />

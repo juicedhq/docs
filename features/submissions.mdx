@@ -5,6 +5,8 @@ description: The raw post a source sent to the API, stored for audit and trouble
 
 A submission (shown in the panel as a **post**) is the exact payload a source sent to the [leads endpoint](/api-reference/endpoint/v1/leads), captured before any processing happens. Juiced keeps it whether or not it became a lead, so you have a reliable record of what was sent, separate from the lead that may or may not have been created from it. Pings sent to the [ping endpoint](/api-reference/endpoint/v1/ping) are recorded separately as pings.
 
+A submission behind a lead is kept as long as the lead. One that never became a lead (a rejected or duplicate post, for example) is deleted 90 days after it arrived.
+
 ## Why submissions exist
 
 Leads are the cleaned, validated, categorized result of a post. Submissions are the original data. They're useful in cases like these.
