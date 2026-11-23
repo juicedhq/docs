@@ -8,6 +8,11 @@ Everything that changed on the tenant side of Juiced, including lead routing, di
 
 Looking for changes to the buyer experience? Those live in [Customer portal updates](/changelog/customer-portal).
 
+<Update label="November 23, 2026" description="v3.98.0" tags={["Improvements", "Fixes"]}>
+  - Dollar amount fields in the panel now line up with the fields beside them, at the same height and without the grey background.
+  - Customers no longer get the **Return Tier Updated** [notification](/features/notifications) when they're given their first [return tier](/features/returns#recalculating-tiers). Before, a new customer could get it right after being created, and **Recalculate** sent it to customers who had no tier yet. Moving between tiers, or losing a tier, still notifies them.
+</Update>
+
 <Update label="November 20, 2026" description="v3.97.0" tags={["New", "Improvements", "Breaking changes"]}>
   <Frame>
     <img className="block dark:hidden" src="/images/changelog/v3.97.0-light.webp" alt="Juiced release card reading Your CRM, now on speaking terms, next to the API Keys page listing a GoHighLevel key that can read and create customers and a Zapier lookups key that can read customers" />
