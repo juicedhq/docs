@@ -201,7 +201,7 @@
       "get": {
         "operationId": "listLeadsByApiKeyV1",
         "summary": "List leads",
-        "description": "Lists the leads in your account, newest first, 50 at a time. Filter by the customer who bought them, their status, or when they came in. Test leads are left out unless you send `include_test=true`.\n\nNo contact details are returned. Get those with [Get Lead Details](/api-reference/endpoint/v1/leads-details).\n\nAuthenticates with an API key, not a source's credentials. Requires the `leads:read` ability.",
+        "description": "Lists the leads in your account, newest first, 50 at a time. Filter by the customer or partner who bought them, their status, or when they came in. Test leads are left out unless you send `include_test=true`.\n\nNo contact details are returned. Get those with [Get Lead Details](/api-reference/endpoint/v1/leads-details).\n\nAuthenticates with an API key, not a source's credentials. Requires the `leads:read` ability.",
         "tags": [
           "Leads"
         ],
@@ -220,6 +220,16 @@
               "pattern": "^cus_[0-9a-z]{26}$"
             },
             "description": "Only leads this customer bought, including ones they returned. Archived customers work too."
+          },
+          {
+            "name": "partner",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "pattern": "^prt_[0-9a-z]{26}$"
+            },
+            "description": "Only leads sold to this partner, including ones they returned. Archived partners work too."
           },
           {
             "name": "status",
@@ -316,15 +326,24 @@
                       "assignments": [
                         {
                           "customer": "cus_01jbx8p4r6t8v0x2z4b6d8f0hk",
+                          "partner": null,
                           "price": 25,
                           "assigned_at": "2026-11-20T10:00:00Z",
                           "returned_at": null
                         },
                         {
                           "customer": "cus_01jbx9a2c4e6g8j0k2m4p6r8tv",
+                          "partner": null,
                           "price": 20,
                           "assigned_at": "2026-11-20T10:00:00Z",
                           "returned_at": "2026-11-21T09:30:00Z"
+                        },
+                        {
+                          "customer": null,
+                          "partner": "prt_01h7x1a3c5e7g9j1k3m5n7q9sv",
+                          "price": 18,
+                          "assigned_at": "2026-11-20T10:00:01Z",
+                          "returned_at": null
                         }
                       ],
                       "created_at": "2026-11-20T09:59:58Z"
@@ -408,6 +427,21 @@
                         "errors": {
                           "customer": [
                             "No customer has this ID."
+                          ]
+                        }
+                      },
+                      "version": "v1"
+                    }
+                  },
+                  "Unknown partner": {
+                    "summary": "Unknown partner",
+                    "value": {
+                      "error": {
+                        "code": "validation_failed",
+                        "message": "No partner has this ID.",
+                        "errors": {
+                          "partner": [
+                            "No partner has this ID."
                           ]
                         }
                       },
@@ -1162,15 +1196,24 @@
                     "assignments": [
                       {
                         "customer": "cus_01jbx8p4r6t8v0x2z4b6d8f0hk",
+                        "partner": null,
                         "price": 25,
                         "assigned_at": "2026-11-20T10:00:00Z",
                         "returned_at": null
                       },
                       {
                         "customer": "cus_01jbx9a2c4e6g8j0k2m4p6r8tv",
+                        "partner": null,
                         "price": 20,
                         "assigned_at": "2026-11-20T10:00:00Z",
                         "returned_at": "2026-11-21T09:30:00Z"
+                      },
+                      {
+                        "customer": null,
+                        "partner": "prt_01h7x1a3c5e7g9j1k3m5n7q9sv",
+                        "price": 18,
+                        "assigned_at": "2026-11-20T10:00:01Z",
+                        "returned_at": null
                       }
                     ],
                     "created_at": "2026-11-20T09:59:58Z"
@@ -4234,23 +4277,34 @@
         "type": "object",
         "properties": {
           "customer": {
-            "type": "string",
+            "type": [
+              "string",
+              "null"
+            ],
             "pattern": "^cus_[0-9a-z]{26}$",
-            "description": "The customer the lead went to."
+            "description": "The customer the lead was sold to, or `null` when it went to a partner. Exactly one of `customer` and `partner` is set."
+          },
+          "partner": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "pattern": "^prt_[0-9a-z]{26}$",
+            "description": "The partner the lead was sold to, or `null` when it went to a customer. Exactly one of `customer` and `partner` is set."
           },
           "price": {
             "type": [
               "number",
               "null"
             ],
-            "description": "What this customer was charged, in dollars."
+            "description": "What this buyer, customer or partner, paid for the lead, in dollars."
           },
           "assigned_at": {
             "type": [
               "string",
               "null"
             ],
-            "description": "When the lead was assigned to this customer.",
+            "description": "When the lead was assigned to this buyer.",
             "format": "date-time"
           },
           "returned_at": {
@@ -4258,7 +4312,7 @@
               "string",
               "null"
             ],
-            "description": "When this customer returned the lead. `null` unless they returned it.",
+            "description": "When this buyer returned the lead. `null` unless they returned it.",
             "format": "date-time"
           }
         }
@@ -4289,7 +4343,7 @@
               "uncategorized",
               "distribution_error"
             ],
-            "description": "The lead's status. `club` is a lead in your Club and `returned` is a lead its buyer returned. When a lead went to more than one customer, read `assignments` for each one."
+            "description": "The lead's status. `club` is a lead in your Club and `returned` is a lead its buyer returned. When a lead was sold more than once, read `assignments` for each sale."
           },
           "lead_type": {
             "type": [
@@ -4315,7 +4369,7 @@
               "number",
               "null"
             ],
-            "description": "What the lead sold for, in dollars, which is its first sale. Each customer's own price is in `assignments`."
+            "description": "What the lead sold for, in dollars, which is its first sale, whether to a customer or a partner. Each buyer's own price is in `assignments`."
           },
           "test": {
             "type": "boolean",
@@ -4326,7 +4380,7 @@
             "items": {
               "$ref": "#/components/schemas/LeadAssignmentV1"
             },
-            "description": "One entry for each customer the lead went to, oldest first, including customers who returned it. Deliveries to partners aren't listed."
+            "description": "One entry for each sale, to a customer or a partner, oldest first, including sales that were returned. A partner send that's still in progress isn't listed until it's delivered."
           },
           "created_at": {
             "type": "string",

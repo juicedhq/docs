@@ -11,6 +11,7 @@ Leads come back newest first, 50 at a time. Pass `next_cursor` back as `cursor`,
 ## Filters
 
 - **`customer`** returns only the leads that customer bought, including ones they returned. Archived customers work too. An ID that isn't one of your customers returns `validation_failed` on `customer`.
+- **`partner`** returns only the leads sold to that [partner](/features/partners), including ones they returned. Archived partners work too. An ID that isn't one of your partners returns `validation_failed` on `partner`.
 - **`status`** returns only leads with that status (see below).
 - **`created_after`** and **`created_before`** limit when the lead came in. Send them as ISO 8601 with any offset, like `2026-11-01T00:00:00Z` or `2026-11-01T00:00:00-05:00`, and they're compared in UTC. `created_after` includes leads at that exact time, and `created_before` stops just before it.
 - **`include_test=true`** adds test leads, which are left out by default, just like the leads list in Juiced. Looking up a test lead by its ID always works.
@@ -25,7 +26,9 @@ Leads come back newest first, 50 at a time. Pass `next_cursor` back as `cursor`,
 | `club` | Club |
 | `returned` | Returned |
 
-A lead sold to more than one customer has a single `status`, so read `assignments` to see each customer's side. Every customer the lead went to has an entry with what they paid, when it was assigned, and `returned_at` if they returned it. Deliveries to partners aren't listed.
+A lead sold more than once has a single `status`, so read `assignments` to see each sale. Every sale has an entry, to a customer or a partner, with exactly one of `customer` and `partner` set. Each entry has what that buyer paid, when it was assigned, and `returned_at` if they returned it. A partner send that's still in progress isn't listed until it's delivered.
+
+The lead's own `price` is what its first sale went for, whether to a customer or a partner.
 
 ## What's not included
 
