@@ -49,7 +49,23 @@ Twilio sends your customer notification text messages. Connecting it turns on th
 
 ## Google Tag Manager
 
-Add your Google Tag Manager **Container ID** to load your container in the customer portal and on its sign-in and sign-up pages. From there you can add analytics, conversion tracking, and marketing tags without touching code.
+Add your Google Tag Manager **Container ID** to load your container in the customer portal, on your public marketplace, and on your checkout pages. From there you can add analytics, conversion tracking, and marketing tags without touching code.
+
+Your container never loads on pages where someone types a password or a code, such as sign-in, sign-up, password reset, and two-factor pages. A tag there could read what customers type, so Juiced keeps every third-party script off them.
+
+### Tracking signups
+
+Since the sign-up pages don't load your container, Juiced tells it about new customers instead. The first time a new customer opens a page that loads your container (usually their dashboard, once their email is verified), Juiced pushes one `customer_registered` event to the `dataLayer`. It carries the tracking parameters from the link they signed up through, like `utm_source` or `gclid`, and never their name, email, phone, or address.
+
+```json
+{
+  "utm_source": "facebook",
+  "utm_campaign": "spring",
+  "event": "customer_registered"
+}
+```
+
+In Google Tag Manager, create a **Custom Event** trigger with the event name `customer_registered` and use it for your signup conversion tags. Read the parameters with **Data Layer Variables** of the same names. Each signup pushes the event once, so reloading the page doesn't count it twice.
 
 ## Intercom
 
