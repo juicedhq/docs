@@ -36,7 +36,7 @@ Give each key only what its integration needs.
 | Ability | What it allows |
 |---------|----------------|
 | `customers:read` | Look up customers by ID or email, including their balance, and [list their transactions](/api-reference/endpoint/v1/transactions-list). |
-| `customers:write` | Create customers and send them a portal invite. |
+| `customers:write` | Create, update, pause, archive and reactivate customers, and send them a portal invite. |
 | `funds:write` | [Add funds to or remove funds from](/api-reference/endpoint/v1/transactions-create) a customer's balance. Never charges their card. |
 | `leads:read` | [Look up leads](/api-reference/endpoint/v1/leads-list), with their status, lead type, location, price and who bought them. No contact details. |
 | `lead_details:read` | [Read a lead's contact and custom fields](/api-reference/endpoint/v1/leads-details), as its buyers receive them. |
@@ -75,6 +75,7 @@ API key requests use the same [error envelope](/api-reference/introduction#error
 | `401` | `unauthenticated` | The key is missing, unknown, revoked or expired. |
 | `403` | `bad_request` | The key doesn't have the ability the endpoint needs, your plan doesn't include the API, or your account is locked for an unpaid subscription. The `message` says which. |
 | `404` | `not_found` | The record doesn't exist in your account. |
+| `409` | `bad_request` | The record's current state doesn't allow the change, such as archiving a customer with an active subscription. The `message` says why. |
 | `429` | `rate_limited` | The key sent more than 120 requests in a minute. Retry after `Retry-After` seconds. |
 
 ## Safe retries
@@ -86,6 +87,8 @@ Creating a customer accepts an optional `Idempotency-Key` header, any string up 
 - **The first request is still running** returns `409` with `idempotency_in_progress` and a `Retry-After` header.
 
 Idempotency keys belong to your account, not to one API key, so a retry still matches after you rotate keys.
+
+Updating, archiving and reactivating a customer don't need an `Idempotency-Key`. Each is already safe to repeat. Sending the same update again leaves the customer as it is, and archiving an archived customer or reactivating an active one changes nothing.
 
 [Adding or removing funds](/api-reference/endpoint/v1/transactions-create) **requires** an `Idempotency-Key`, since it moves money. Without one, the request returns `422` with `validation_failed` and no money moves. Use an ID from your own system, such as your payment ID. A key belongs to the customer URL it was first sent to, so the same key and body sent for a different customer returns `409` with `idempotency_conflict` instead of a replay.
 

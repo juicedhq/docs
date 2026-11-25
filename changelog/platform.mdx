@@ -8,6 +8,43 @@ Everything that changed on the tenant side of Juiced, including lead routing, di
 
 Looking for changes to the buyer experience? Those live in [Customer portal updates](/changelog/customer-portal).
 
+<Update label="November 25, 2026" description="v3.99.0" tags={["New", "Improvements", "Fixes", "Breaking changes"]}>
+  <Frame>
+    <img className="block dark:hidden" src="/images/changelog/v3.99.0-light.webp" alt="Juiced release card reading Your CRM can now pause buyers, next to a customer page marked Paused whose activity shows API key GoHighLevel updated the phone number and then paused the customer" />
+    <img className="hidden dark:block" src="/images/changelog/v3.99.0-dark.webp" alt="Juiced release card reading Your CRM can now pause buyers, next to a customer page marked Paused whose activity shows API key GoHighLevel updated the phone number and then paused the customer" />
+  </Frame>
+
+  Your CRM can now do more than create customers. Pause a buyer the moment their invoice bounces, update their details when they change, and archive them when the deal ends, all from GoHighLevel, Zapier, or your own code. Lead categories also get a proper retirement plan, and your Google Tag Manager container stays off every page where customers type a password.
+
+  ## Customers API
+
+  - [Update a customer](/api-reference/endpoint/v1/customers-update) through the API. Send only the fields you want to change, including `paused` to pause or unpause them, and caps and budgets when you've turned those on. It works exactly like editing the customer in the panel, so pausing takes their bids out of the running straight away.
+  - [Archive](/api-reference/endpoint/v1/customers-archive) and [reactivate](/api-reference/endpoint/v1/customers-reactivate) customers too. Archiving archives their bids, and reactivating brings the bids back paused, just like the panel. Sending either one twice is safe.
+  - All three need an [API key](/api-reference/api-keys) with **Write customers**, so keys you already made with it work right away. Every change shows in the customer's timeline under the key's label.
+
+  ## Lead categories
+
+  - Lead categories are now archived instead of deleted. **Archive** replaces **Delete** on a category's page, and the dialog lists the sources, lead types, and customer bids that are archived with it. Leads you already received keep their category. Before, deleting a category that had leads could fail with an error. See [Archiving a lead category](/features/lead-categories#archiving-a-lead-category).
+
+  ## Google Tag Manager
+
+  - **Breaking:** Your [Google Tag Manager](/features/integrations#google-tag-manager) container no longer loads on the customer sign-in, sign-up, password reset, and two-factor pages, and a container loaded on an earlier page can't follow a customer onto them. Triggers based on those pages stop firing, including one on `/email/verify`. Use the new `customer_registered` event instead, which Juiced pushes once on the first page after signup that loads your container. See [Tracking signups](/features/integrations#tracking-signups).
+
+  ## Improvements
+
+  - DNS records for a [custom domain](/guides/adding-a-custom-domain#3-add-the-dns-records) now show the **Host** to enter at your DNS provider (like `leads` instead of `leads.yourcompany.com.`), with the **Full name** underneath for providers that want it. Pasting the full name into most providers doubled the domain.
+  - Banners no longer have a **Stackable** setting. The customer portal always showed one [banner](/features/banners) at a time, and notices from Juiced at the top of your panel now do too.
+  - Your [partners'](/features/partners) portal got a refresh. Their dashboard uses the same date ranges as your analytics (7D through YTD, or a custom range of up to 366 days), their password lives on their profile page, their sources sit in a collapsible sidebar group with a live or test dot, and **Generate new token** asks before it replaces their current one.
+
+  ## Fixes
+
+  - Changing your custom domain is limited to once an hour again. Before, the countdown could restart every hour for up to a day while the domain was validating.
+  - A partner testing a [test-mode source](/features/sources#test-mode) with a real ZIP can now post with the `ping_id` their ping returned. Before, the post failed with "The ping could not be found."
+  - When the partner that won a ping fails the post (an error, a timeout, or a failed success condition), the lead posted with that `ping_id` is now a clean rejection. The source gets `rejected` at \$0, the lead stays unassigned, and its [log](/features/logs) reads "Ping winner's partner post failed; no fallback attempted". Posts without a `ping_id` still fall back to the next buyer.
+  - Ping responses no longer wait for the live ping feed to update, so a slow feed can't slow down your sources' pings.
+  - Customer notification emails, like the one sent when you archive a customer, now skip a contact whose address isn't a valid email instead of failing.
+</Update>
+
 <Update label="November 23, 2026" description="v3.98.0" tags={["Improvements", "Fixes"]}>
   - Dollar amount fields in the panel now line up with the fields beside them, at the same height and without the grey background.
   - Customers no longer get the **Return Tier Updated** [notification](/features/notifications) when they're given their first [return tier](/features/returns#recalculating-tiers). Before, a new customer could get it right after being created, and **Recalculate** sent it to customers who had no tier yet. Moving between tiers, or losing a tier, still notifies them.

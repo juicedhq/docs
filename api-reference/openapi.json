@@ -1139,6 +1139,410 @@
             "$ref": "#/components/responses/ServerErrorV1"
           }
         }
+      },
+      "patch": {
+        "operationId": "updateCustomerV1",
+        "summary": "Update a customer",
+        "description": "Updates the fields you send and leaves the rest unchanged. Pause or unpause a customer with `paused`.\n\nThe change shows on the customer's activity timeline as made by your API key.\n\nRequires the `customers:write` ability.",
+        "tags": ["Customers"],
+        "security": [
+          {
+            "API Key": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "pattern": "^cus_[0-9a-z]{26}$"
+            },
+            "description": "The customer's ID."
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CustomerUpdateRequestV1"
+              },
+              "examples": {
+                "New contact details": {
+                  "summary": "New contact details",
+                  "value": {
+                    "email": "billing@acme-roofing.com",
+                    "phone": "555-123-4567"
+                  }
+                },
+                "Pause": {
+                  "summary": "Pause",
+                  "value": {
+                    "paused": true
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "The updated customer.",
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/XRequestId"
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CustomerResponseV1"
+                },
+                "example": {
+                  "data": {
+                    "id": "cus_01jbx8p4r6t8v0x2z4b6d8f0hk",
+                    "name": "Acme Roofing",
+                    "email": "owner@acme-roofing.com",
+                    "phone": null,
+                    "address": null,
+                    "address_2": null,
+                    "city": null,
+                    "state": null,
+                    "zip": null,
+                    "country": null,
+                    "paused": true,
+                    "can_access_bidding": false,
+                    "can_access_club": false,
+                    "balance": 0,
+                    "daily_lead_cap": null,
+                    "weekly_lead_cap": null,
+                    "monthly_lead_cap": null,
+                    "daily_budget": null,
+                    "weekly_budget": null,
+                    "monthly_budget": null,
+                    "archived_at": null,
+                    "created_at": "2026-11-17T15:04:05Z",
+                    "updated_at": "2026-11-20T16:30:00Z"
+                  },
+                  "version": "v1"
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/ApiKeyUnauthenticatedV1"
+          },
+          "403": {
+            "$ref": "#/components/responses/ApiKeyForbiddenV1"
+          },
+          "404": {
+            "description": "No customer in your account has this ID.",
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/XRequestId"
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorV1"
+                },
+                "example": {
+                  "error": {
+                    "code": "not_found",
+                    "message": "No customer matches this request."
+                  },
+                  "version": "v1"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "The update failed validation. Nothing was changed.",
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/XRequestId"
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorV1"
+                },
+                "example": {
+                  "error": {
+                    "code": "validation_failed",
+                    "message": "The email has already been taken.",
+                    "errors": {
+                      "email": ["The email has already been taken."]
+                    }
+                  },
+                  "version": "v1"
+                }
+              }
+            }
+          },
+          "429": {
+            "$ref": "#/components/responses/RateLimitedV1"
+          },
+          "500": {
+            "$ref": "#/components/responses/ServerErrorV1"
+          }
+        }
+      }
+    },
+    "/v1/customers/{id}/archive": {
+      "post": {
+        "operationId": "archiveCustomerV1",
+        "summary": "Archive a customer",
+        "description": "Archives the customer and their bids, as archiving in Juiced does. An archived customer stops receiving leads, and their email can be used for a new customer.\n\nArchiving a customer who is already archived changes nothing and returns them, so a retry is safe.\n\nRequires the `customers:write` ability.",
+        "tags": ["Customers"],
+        "security": [
+          {
+            "API Key": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "pattern": "^cus_[0-9a-z]{26}$"
+            },
+            "description": "The customer's ID."
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "The archived customer.",
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/XRequestId"
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CustomerResponseV1"
+                },
+                "example": {
+                  "data": {
+                    "id": "cus_01jbx8p4r6t8v0x2z4b6d8f0hk",
+                    "name": "Acme Roofing",
+                    "email": "owner@acme-roofing.com",
+                    "phone": null,
+                    "address": null,
+                    "address_2": null,
+                    "city": null,
+                    "state": null,
+                    "zip": null,
+                    "country": null,
+                    "paused": false,
+                    "can_access_bidding": false,
+                    "can_access_club": false,
+                    "balance": 0,
+                    "daily_lead_cap": null,
+                    "weekly_lead_cap": null,
+                    "monthly_lead_cap": null,
+                    "daily_budget": null,
+                    "weekly_budget": null,
+                    "monthly_budget": null,
+                    "archived_at": "2026-11-20T16:30:00Z",
+                    "created_at": "2026-11-17T15:04:05Z",
+                    "updated_at": "2026-11-20T16:30:00Z"
+                  },
+                  "version": "v1"
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/ApiKeyUnauthenticatedV1"
+          },
+          "403": {
+            "$ref": "#/components/responses/ApiKeyForbiddenV1"
+          },
+          "404": {
+            "description": "No customer in your account has this ID.",
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/XRequestId"
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorV1"
+                },
+                "example": {
+                  "error": {
+                    "code": "not_found",
+                    "message": "No customer matches this request."
+                  },
+                  "version": "v1"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "The customer has an active subscription. Cancel it in Juiced before archiving.",
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/XRequestId"
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorV1"
+                },
+                "example": {
+                  "error": {
+                    "code": "bad_request",
+                    "message": "This customer has an active subscription. Cancel it before archiving."
+                  },
+                  "version": "v1"
+                }
+              }
+            }
+          },
+          "429": {
+            "$ref": "#/components/responses/RateLimitedV1"
+          },
+          "500": {
+            "$ref": "#/components/responses/ServerErrorV1"
+          }
+        }
+      }
+    },
+    "/v1/customers/{id}/reactivate": {
+      "post": {
+        "operationId": "reactivateCustomerV1",
+        "summary": "Reactivate a customer",
+        "description": "Brings an archived customer back, as reactivating in Juiced does. Their bids come back paused, so they don't receive leads until the bids are turned back on.\n\nReactivating a customer who isn't archived changes nothing and returns them, so a retry is safe.\n\nRequires the `customers:write` ability.",
+        "tags": ["Customers"],
+        "security": [
+          {
+            "API Key": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "pattern": "^cus_[0-9a-z]{26}$"
+            },
+            "description": "The customer's ID."
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "The reactivated customer.",
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/XRequestId"
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CustomerResponseV1"
+                },
+                "example": {
+                  "data": {
+                    "id": "cus_01jbx8p4r6t8v0x2z4b6d8f0hk",
+                    "name": "Acme Roofing",
+                    "email": "owner@acme-roofing.com",
+                    "phone": null,
+                    "address": null,
+                    "address_2": null,
+                    "city": null,
+                    "state": null,
+                    "zip": null,
+                    "country": null,
+                    "paused": false,
+                    "can_access_bidding": false,
+                    "can_access_club": false,
+                    "balance": 0,
+                    "daily_lead_cap": null,
+                    "weekly_lead_cap": null,
+                    "monthly_lead_cap": null,
+                    "daily_budget": null,
+                    "weekly_budget": null,
+                    "monthly_budget": null,
+                    "archived_at": null,
+                    "created_at": "2026-11-17T15:04:05Z",
+                    "updated_at": "2026-11-20T16:30:00Z"
+                  },
+                  "version": "v1"
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/ApiKeyUnauthenticatedV1"
+          },
+          "403": {
+            "$ref": "#/components/responses/ApiKeyForbiddenV1"
+          },
+          "404": {
+            "description": "No customer in your account has this ID.",
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/XRequestId"
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorV1"
+                },
+                "example": {
+                  "error": {
+                    "code": "not_found",
+                    "message": "No customer matches this request."
+                  },
+                  "version": "v1"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Another active customer now uses this customer's email. Change that customer's email first.",
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/XRequestId"
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorV1"
+                },
+                "example": {
+                  "error": {
+                    "code": "bad_request",
+                    "message": "Acme Roofing Co now uses owner@acme-roofing.com. Change that customer's email before reactivating this one."
+                  },
+                  "version": "v1"
+                }
+              }
+            }
+          },
+          "429": {
+            "$ref": "#/components/responses/RateLimitedV1"
+          },
+          "500": {
+            "$ref": "#/components/responses/ServerErrorV1"
+          }
+        }
       }
     },
     "/v1/leads/{id}": {
@@ -5039,6 +5443,101 @@
             "enum": [
               "v1"
             ]
+          }
+        }
+      },
+      "CustomerUpdateRequestV1": {
+        "type": "object",
+        "description": "Send only the fields to change. Fields you leave out keep their current values. Any other field, such as auto-recharge settings, is ignored.",
+        "properties": {
+          "name": {
+            "type": "string",
+            "maxLength": 255,
+            "description": "The customer's business or display name."
+          },
+          "email": {
+            "type": "string",
+            "format": "email",
+            "maxLength": 255,
+            "description": "Must include a domain with a TLD. Unique across your active customers, so an email another active customer uses is refused with `validation_failed`."
+          },
+          "phone": {
+            "type": ["string", "null"],
+            "description": "A US, Canadian, Australian or Latvian phone number. Send `null` to clear it."
+          },
+          "address": {
+            "type": ["string", "null"],
+            "maxLength": 255,
+            "description": "Once set, it can be changed but not cleared."
+          },
+          "address_2": {
+            "type": ["string", "null"],
+            "maxLength": 255
+          },
+          "city": {
+            "type": ["string", "null"],
+            "maxLength": 255,
+            "description": "Once set, it can be changed but not cleared."
+          },
+          "state": {
+            "type": ["string", "null"],
+            "maxLength": 255,
+            "description": "Once set, it can be changed but not cleared."
+          },
+          "zip": {
+            "type": ["string", "null"],
+            "description": "Checked against `country`, or the customer's stored country when `country` isn't sent. Once set, it can be changed but not cleared."
+          },
+          "country": {
+            "type": ["string", "null"],
+            "enum": ["US", "CA", "AU", "LV"],
+            "description": "Required with `state` or `zip` when the customer has no country yet. Once set, it can be changed but not cleared."
+          },
+          "paused": {
+            "type": "boolean",
+            "description": "Pausing stops the customer receiving leads, exactly as pausing them in Juiced does. Send `false` to unpause."
+          },
+          "can_access_bidding": {
+            "type": "boolean"
+          },
+          "can_access_club": {
+            "type": "boolean"
+          },
+          "daily_lead_cap": {
+            "type": ["integer", "null"],
+            "minimum": 1,
+            "maximum": 2147483647,
+            "description": "Most leads a day. Accepted only when the matching cap or budget is turned on in your account settings, and ignored otherwise. Send `null` to remove the limit."
+          },
+          "weekly_lead_cap": {
+            "type": ["integer", "null"],
+            "minimum": 1,
+            "maximum": 2147483647,
+            "description": "Most leads a week. Accepted only when the matching cap or budget is turned on in your account settings, and ignored otherwise. Send `null` to remove the limit."
+          },
+          "monthly_lead_cap": {
+            "type": ["integer", "null"],
+            "minimum": 1,
+            "maximum": 2147483647,
+            "description": "Most leads a month. Accepted only when the matching cap or budget is turned on in your account settings, and ignored otherwise. Send `null` to remove the limit."
+          },
+          "daily_budget": {
+            "type": ["number", "null"],
+            "minimum": 1,
+            "maximum": 21474836,
+            "description": "Most spent a day, in dollars. Accepted only when the matching cap or budget is turned on in your account settings, and ignored otherwise. Send `null` to remove the limit."
+          },
+          "weekly_budget": {
+            "type": ["number", "null"],
+            "minimum": 1,
+            "maximum": 21474836,
+            "description": "Most spent a week, in dollars. Accepted only when the matching cap or budget is turned on in your account settings, and ignored otherwise. Send `null` to remove the limit."
+          },
+          "monthly_budget": {
+            "type": ["number", "null"],
+            "minimum": 1,
+            "maximum": 21474836,
+            "description": "Most spent a month, in dollars. Accepted only when the matching cap or budget is turned on in your account settings, and ignored otherwise. Send `null` to remove the limit."
           }
         }
       },

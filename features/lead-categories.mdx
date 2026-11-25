@@ -36,11 +36,28 @@ Click a category to open it. The top of the page shows **Leads received**, **Lea
 - **Fields** holds the category's schema. This is where you add and configure fields.
 
 <Frame>
-  <img className="block dark:hidden" src="/images/tenant/ingest/lead-category-detail-light.webp" alt="Lead category page with Leads received, Leads assigned, and Revenue stats, Lead Types, Sources, and Fields tabs, and a Details sidebar" />
-  <img className="hidden dark:block" src="/images/tenant/ingest/lead-category-detail-dark.webp" alt="Lead category page with Leads received, Leads assigned, and Revenue stats, Lead Types, Sources, and Fields tabs, and a Details sidebar" />
+  <img className="block dark:hidden" src="/images/tenant/ingest/lead-category-detail-light.webp" alt="Lead category page with Archive and Edit in the header, Leads received, Leads assigned, and Revenue stats, Lead Types, Sources, and Fields tabs, and a Details sidebar" />
+  <img className="hidden dark:block" src="/images/tenant/ingest/lead-category-detail-dark.webp" alt="Lead category page with Archive and Edit in the header, Leads received, Leads assigned, and Revenue stats, Lead Types, Sources, and Fields tabs, and a Details sidebar" />
 </Frame>
 
-**Edit** in the header changes the category's name and description. **Delete** removes the category, but only once no sources use it.
+**Edit** in the header changes the category's name and description.
+
+## Archiving a lead category
+
+Lead categories aren't deleted, they're archived, so the leads you already received keep their category and their history. Click **Archive** in the category's header. Before you confirm, the dialog tells you what goes with it.
+
+<Frame>
+  <img className="block dark:hidden" src="/images/tenant/ingest/lead-category-archive-light.webp" alt="Archive lead category dialog saying it also archives the category's 1 source and 3 lead types, and that 36 customer bids on those lead types will be archived too" />
+  <img className="hidden dark:block" src="/images/tenant/ingest/lead-category-archive-dark.webp" alt="Archive lead category dialog saying it also archives the category's 1 source and 3 lead types, and that 36 customer bids on those lead types will be archived too" />
+</Frame>
+
+- **Its sources and lead types** are archived too, so they stop taking new leads.
+- **Customer bids** on those lead types are archived, the same as when you [archive a lead type](/features/lead-types).
+- **Leads already received** keep the category, and logs and activity still show its name.
+
+An archived category drops out of the list and out of every picker, such as the lead category on a new source, lead type, or distribution stage. Conditions in your distribution stages that name it are left as they are and simply stop matching, since no new leads arrive in it.
+
+To find it again, open **Filters** on the Lead Categories list and set **Archived lead categories** to **With archived** or **Only archived**. It shows an <span className="tone-badge tone-neutral">Archived</span> badge, and its page opens read-only with an **Unarchive** button. Unarchiving brings back only the category. Its sources and lead types stay archived, so create new ones before it takes leads again.
 
 ## Basic fields
 
