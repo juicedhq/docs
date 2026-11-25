@@ -11,12 +11,12 @@ It needs the `customers:read` ability. There's no separate ability for reading t
 ## Amounts and balances
 
 - **`amount`** is signed, positive for a credit and negative for a debit.
-- **`balance`** is the customer's balance right after that transaction, and it carries over correctly from page to page.
+- **`balance`** is the customer's wallet balance right after that transaction, before funds held for pending pings. It carries over correctly from page to page, and it's the same figure the [Add or Remove Funds](/api-reference/endpoint/v1/transactions-create) response gave for that transaction.
 - **`lead`** is the lead's ID on transactions for a lead, such as a lead charge or a refund for a returned lead.
 - **`receipt_url`** is only set on payments and credits that came with a receipt.
 - **`description`** is the description you sent on credits and debits you made. Other transactions get a short label for their event, like `Lead charge` or `Payment`.
 
-`balance` here doesn't subtract funds held for pending pings, while the customer's own `balance` from [Get a Customer](/api-reference/endpoint/v1/customers-get) does. So the newest transaction's `balance` can be higher than the customer's while a ping is waiting. The response to [Add or Remove Funds](/api-reference/endpoint/v1/transactions-create) is different. Its `balance` is the customer's own `balance` right after the credit or debit.
+The customer's own `balance` from [Get a Customer](/api-reference/endpoint/v1/customers-get) subtracts funds held for pending pings. So the newest transaction's `balance` can be higher than the customer's while a ping is waiting.
 
 ## Events
 

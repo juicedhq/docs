@@ -11,11 +11,11 @@ No card is charged. A credit adds to the customer's balance and a debit takes fr
 </Note>
 
 - **A `credit`** adds `amount` to the customer's balance. Add a `receipt_url` to link the customer to your own receipt. It's only accepted on credits.
-- **A `debit`** takes `amount` from the customer's balance. It can't be more than their current balance. A larger debit is refused with `validation_failed` on `amount`, and nothing moves.
+- **A `debit`** takes `amount` from the customer's balance. It can't be more than the customer's `balance` from [Get a Customer](/api-reference/endpoint/v1/customers-get), which subtracts funds held for pending pings. A larger debit is refused with `validation_failed` on `amount`, the message names that balance, and nothing moves.
 
 `amount` is in dollars, with at most 2 decimal places, from 0.01 up to 99,999,999.99. It's always positive, since `type` sets the direction. `description` is required and shows on the customer's transactions in their portal, so write it for them.
 
-The response's `balance` is the customer's balance right after this credit or debit, the same figure [Get a Customer](/api-reference/endpoint/v1/customers-get) returns.
+The response's `balance` is the customer's wallet balance right after this credit or debit, before funds held for pending pings. It's the same figure the transaction shows in [List Transactions](/api-reference/endpoint/v1/transactions-list), and a replayed response carries it too.
 
 Archived customers can be credited and debited too. Credits and debits for one customer run one at a time, so each request sees the balance the one before it left. This endpoint needs the `funds:write` ability.
 

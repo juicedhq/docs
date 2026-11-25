@@ -4442,7 +4442,7 @@
           },
           "balance": {
             "type": "number",
-            "description": "The customer's balance right after this transaction, in dollars. In a list, it doesn't subtract funds held for pending pings. In the response to [Add or Remove Funds](/api-reference/endpoint/v1/transactions-create), it's the customer's `balance` at that moment, after funds held for pending pings, so the two can differ while a ping is waiting."
+            "description": "The customer's wallet balance right after this transaction, in dollars, before funds held for pending pings. It's the same in the transaction history and in the response to [Add or Remove Funds](/api-reference/endpoint/v1/transactions-create)."
           },
           "description": {
             "type": "string",
