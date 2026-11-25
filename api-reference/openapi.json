@@ -253,7 +253,7 @@
               "type": "string",
               "format": "date-time"
             },
-            "description": "Only leads created at or after this time, in UTC, like `2026-11-01T00:00:00Z`."
+            "description": "Only leads created at or after this time, as ISO 8601 with any offset, like `2026-11-01T00:00:00Z` or `2026-11-01T00:00:00-05:00`."
           },
           {
             "name": "created_before",
@@ -263,7 +263,7 @@
               "type": "string",
               "format": "date-time"
             },
-            "description": "Only leads created before this time, in UTC. It must be later than `created_after`."
+            "description": "Only leads created before this time, as ISO 8601 with any offset. It must be later than `created_after`."
           },
           {
             "name": "include_test",
@@ -1453,7 +1453,7 @@
                       "event": "lead_charge",
                       "amount": -25,
                       "balance": 100.5,
-                      "description": "Lead Assigned",
+                      "description": "Lead charge",
                       "lead": "lead_01jbx8m2d4f6g8h0j2k4m6n8pq",
                       "receipt_url": null,
                       "created_at": "2026-11-20T10:00:00Z"
@@ -1461,7 +1461,7 @@
                     {
                       "id": "txn_01jbxb3d5f7h9k1m3p5r7t9v2w",
                       "type": "credit",
-                      "event": "tenant_credit",
+                      "event": "manual_credit",
                       "amount": 125.5,
                       "balance": 125.5,
                       "description": "Invoice 1042 paid",
@@ -1614,7 +1614,7 @@
               "type": "string",
               "maxLength": 255
             },
-            "description": "Required. An ID from your own system, such as your payment ID. A retry with the same key and body within 24 hours returns the first response, and the funds move once."
+            "description": "Required. An ID from your own system, such as your payment ID. A retry with the same key and body to the same customer within 24 hours returns the first response, and the funds move once. The same key sent for a different customer, or with a different body, is a `409` conflict."
           }
         ],
         "requestBody": {
@@ -1648,7 +1648,7 @@
         },
         "responses": {
           "201": {
-            "description": "Funds moved. A retry with the same `Idempotency-Key` and body returns this same response again, with an `Idempotent-Replayed: true` header.",
+            "description": "Funds moved. A retry with the same `Idempotency-Key` and body to the same customer returns this same response again, with an `Idempotent-Replayed: true` header.",
             "headers": {
               "X-Request-Id": {
                 "$ref": "#/components/headers/XRequestId"
@@ -1673,7 +1673,7 @@
                       "data": {
                         "id": "txn_01jbxb3d5f7h9k1m3p5r7t9v2w",
                         "type": "credit",
-                        "event": "tenant_credit",
+                        "event": "manual_credit",
                         "amount": 125.5,
                         "balance": 125.5,
                         "description": "Invoice 1042 paid",
@@ -1690,7 +1690,7 @@
                       "data": {
                         "id": "txn_01jbxc5f7h9k1m3p5r7t9v1x3z",
                         "type": "debit",
-                        "event": "tenant_debit",
+                        "event": "manual_debit",
                         "amount": -20,
                         "balance": 80.5,
                         "description": "Refunded to card",
@@ -2406,7 +2406,44 @@
             }
           },
           "429": {
-            "$ref": "#/components/responses/RateLimitedV1"
+            "description": "The key sent too many requests, or another change to this customer's bid on the same lead type and location was still running after 10 seconds. Retry after `Retry-After` seconds.",
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/XRequestId"
+              },
+              "Retry-After": {
+                "$ref": "#/components/headers/RetryAfter"
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorV1"
+                },
+                "examples": {
+                  "Too many requests": {
+                    "summary": "Too many requests",
+                    "value": {
+                      "error": {
+                        "code": "rate_limited",
+                        "message": "Too many requests. Retry after the number of seconds in the Retry-After header."
+                      },
+                      "version": "v1"
+                    }
+                  },
+                  "Same market still changing": {
+                    "summary": "Same market still changing",
+                    "value": {
+                      "error": {
+                        "code": "rate_limited",
+                        "message": "Another change to this customer's bid on this lead type and location is still running. Retry after the number of seconds in the Retry-After header."
+                      },
+                      "version": "v1"
+                    }
+                  }
+                }
+              }
+            }
           },
           "500": {
             "$ref": "#/components/responses/ServerErrorV1"
@@ -2610,7 +2647,7 @@
       "patch": {
         "operationId": "updateBidV1",
         "summary": "Update a bid",
-        "description": "Changes a bid. Send only the fields you want to change. `paused` pauses or unpauses the bid. An archived bid can't be changed.\n\nRequires the `bids:write` ability.",
+        "description": "Changes a bid. Send only the fields you want to change. `paused` pauses or unpauses the bid. A refused change changes nothing, and an archived bid can't be changed.\n\nRequires the `bids:write` ability.",
         "tags": [
           "Bids"
         ],
@@ -2781,7 +2818,7 @@
             }
           },
           "422": {
-            "description": "The change failed validation. Moving the bid onto a lead type and location another of the customer's bids holds carries that bid's ID in `error.bid`.",
+            "description": "The change failed validation. Moving the bid onto a lead type and location another of the customer's bids holds carries that bid's ID in `error.bid`. The message is on `lead_type` when only the lead type changed, and on `location` otherwise.",
             "headers": {
               "X-Request-Id": {
                 "$ref": "#/components/headers/XRequestId"
@@ -2874,7 +2911,44 @@
             }
           },
           "429": {
-            "$ref": "#/components/responses/RateLimitedV1"
+            "description": "The key sent too many requests, or another change to this customer's bid on the same lead type and location was still running after 10 seconds. Retry after `Retry-After` seconds.",
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/XRequestId"
+              },
+              "Retry-After": {
+                "$ref": "#/components/headers/RetryAfter"
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorV1"
+                },
+                "examples": {
+                  "Too many requests": {
+                    "summary": "Too many requests",
+                    "value": {
+                      "error": {
+                        "code": "rate_limited",
+                        "message": "Too many requests. Retry after the number of seconds in the Retry-After header."
+                      },
+                      "version": "v1"
+                    }
+                  },
+                  "Same market still changing": {
+                    "summary": "Same market still changing",
+                    "value": {
+                      "error": {
+                        "code": "rate_limited",
+                        "message": "Another change to this customer's bid on this lead type and location is still running. Retry after the number of seconds in the Retry-After header."
+                      },
+                      "version": "v1"
+                    }
+                  }
+                }
+              }
+            }
           },
           "500": {
             "$ref": "#/components/responses/ServerErrorV1"
@@ -3039,7 +3113,7 @@
       "get": {
         "operationId": "listLeadTypesV1",
         "summary": "List lead types",
-        "description": "Lists your lead types with the scopes bids can be placed at and each scope's minimum. Archived lead types are left out. The list isn't paginated.\n\nRequires the `bids:read` ability.",
+        "description": "Lists your lead types with the scopes bids can be placed at and each scope's minimum. Archived lead types are left out. Every lead type comes back in one page, so `next_cursor` is always `null`.\n\nRequires the `bids:read` ability.",
         "tags": [
           "Bids"
         ],
@@ -3083,6 +3157,7 @@
                       ]
                     }
                   ],
+                  "next_cursor": null,
                   "version": "v1"
                 }
               }
@@ -4193,7 +4268,7 @@
               "number",
               "null"
             ],
-            "description": "What the lead's first buyer was charged, in dollars. Each customer's own price is in `assignments`."
+            "description": "What the lead sold for, in dollars, which is its first sale. Each customer's own price is in `assignments`."
           },
           "test": {
             "type": "boolean",
@@ -4303,9 +4378,9 @@
             "enum": [
               "customer_payment",
               "lead_charge",
-              "tenant_credit",
+              "manual_credit",
               "lead_refund",
-              "tenant_debit",
+              "manual_debit",
               "auto_recharge",
               "buy_order_placed",
               "buy_order_canceled",
@@ -4324,7 +4399,7 @@
           },
           "description": {
             "type": "string",
-            "description": "What the transaction was for. Your own description on credits and debits you make, otherwise the event's name."
+            "description": "What the transaction was for. Your own description on credits and debits you make, otherwise a short label for the event, like `Lead charge` or `Payment`."
           },
           "lead": {
             "type": [
@@ -4339,7 +4414,7 @@
               "string",
               "null"
             ],
-            "description": "A link to the payment's receipt. Only on `customer_payment`, `tenant_credit` and `auto_recharge`."
+            "description": "A link to the payment's receipt. Only on `customer_payment`, `manual_credit` and `auto_recharge`."
           },
           "created_at": {
             "type": "string",
@@ -4853,6 +4928,10 @@
             "items": {
               "$ref": "#/components/schemas/LeadTypeV1"
             }
+          },
+          "next_cursor": {
+            "type": "null",
+            "description": "Always `null`. Every lead type comes back in one page."
           },
           "version": {
             "type": "string",

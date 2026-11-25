@@ -15,16 +15,17 @@ No card is charged. A credit adds to the customer's balance and a debit takes fr
 
 `amount` is in dollars, with at most 2 decimal places, from 0.01 up to 99,999,999.99. It's always positive, since `type` sets the direction. `description` is required and shows on the customer's transactions in their portal, so write it for them.
 
-Archived customers can be credited and debited too. This endpoint needs the `funds:write` ability.
+Archived customers can be credited and debited too. Credits and debits for one customer run one at a time, so each request sees the balance the one before it left. This endpoint needs the `funds:write` ability.
 
 ## The Idempotency-Key header is required
 
 Because this endpoint moves money, every request must send an `Idempotency-Key` header. A request without one returns `422` with `validation_failed`, the error names the `Idempotency-Key` header, and no money moves.
 
-Use an ID from your own system, such as your payment or invoice ID, so a retry of the same payment always sends the same key.
+Use an ID from your own system, such as your payment or invoice ID, so a retry of the same payment always sends the same key. A key belongs to the customer URL it was first sent to.
 
-- **Same key, same body** within 24 hours returns the first response again, with an `Idempotent-Replayed: true` header. The funds only move once.
+- **Same key, same body, same customer** within 24 hours returns the first response again, with an `Idempotent-Replayed: true` header. The funds only move once.
 - **Same key, different body** returns `409` with `idempotency_conflict`.
+- **Same key and body for a different customer** also returns `409` with `idempotency_conflict`, and nothing moves. It's never replayed as the first customer's response.
 - **The first request is still running** returns `409` with `idempotency_in_progress` and a `Retry-After` header.
 
 See [Safe retries](/api-reference/api-keys#safe-retries) for the details.

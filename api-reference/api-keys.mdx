@@ -87,6 +87,6 @@ Creating a customer accepts an optional `Idempotency-Key` header, any string up 
 
 Idempotency keys belong to your account, not to one API key, so a retry still matches after you rotate keys.
 
-[Adding or removing funds](/api-reference/endpoint/v1/transactions-create) **requires** an `Idempotency-Key`, since it moves money. Without one, the request returns `422` with `validation_failed` and no money moves. Use an ID from your own system, such as your payment ID.
+[Adding or removing funds](/api-reference/endpoint/v1/transactions-create) **requires** an `Idempotency-Key`, since it moves money. Without one, the request returns `422` with `validation_failed` and no money moves. Use an ID from your own system, such as your payment ID. A key belongs to the customer URL it was first sent to, so the same key and body sent for a different customer returns `409` with `idempotency_conflict` instead of a replay.
 
 Bid writes don't take an `Idempotency-Key`. A customer can only have one active bid per lead type and location, so a repeated create returns `422` with the existing bid's ID in `error.bid`. See [Create a Bid](/api-reference/endpoint/v1/bids-create#retries-and-duplicates).

@@ -6,13 +6,13 @@ openapi: GET /v1/leads
 
 This lists leads that came into your account. It's a different operation from [Submit a Lead](/api-reference/endpoint/v1/leads), which shares the `/v1/leads` path. Submitting authenticates as a source, and listing authenticates with an [API key](/api-reference/api-keys) that has the `leads:read` ability.
 
-Leads come back newest first, 50 at a time. Pass `next_cursor` back as `cursor`, along with the same filters, to get the next page. When `next_cursor` is `null`, you've reached the end.
+Leads come back newest first, 50 at a time. Pass `next_cursor` back as `cursor`, along with the same filters, to get the next page. A cursor only marks a position in the list, so the filters you send decide what comes back. When `next_cursor` is `null`, you've reached the end. A malformed cursor returns `422` with `validation_failed`.
 
 ## Filters
 
 - **`customer`** returns only the leads that customer bought, including ones they returned. Archived customers work too. An ID that isn't one of your customers returns `validation_failed` on `customer`.
 - **`status`** returns only leads with that status (see below).
-- **`created_after`** and **`created_before`** limit when the lead came in. Send them in UTC, like `2026-11-01T00:00:00Z`. `created_after` includes leads at that exact time, and `created_before` stops just before it.
+- **`created_after`** and **`created_before`** limit when the lead came in. Send them as ISO 8601 with any offset, like `2026-11-01T00:00:00Z` or `2026-11-01T00:00:00-05:00`, and they're compared in UTC. `created_after` includes leads at that exact time, and `created_before` stops just before it.
 - **`include_test=true`** adds test leads, which are left out by default, just like the leads list in Juiced. Looking up a test lead by its ID always works.
 
 ## Statuses

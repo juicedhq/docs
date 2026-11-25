@@ -40,6 +40,8 @@ Send `"paused": true` to create the bid paused.
 
 Bid writes don't take an `Idempotency-Key`. A customer can only have one active bid per lead type and location, so if a create is sent twice, the second one returns `422` with `validation_failed`, and `error.bid` holds the ID of the bid that already exists. Change that bid with [Update a Bid](/api-reference/endpoint/v1/bids-update) instead.
 
+Creates for the same customer, lead type and location run one at a time, so a retry sent while the first create is still running waits for it and then gets the `422` above. If it waits more than 10 seconds, it returns `429` with `rate_limited` and a `Retry-After` header. Send it again after that many seconds.
+
 ```json
 {
   "error": {

@@ -14,6 +14,7 @@ It needs the `customers:read` ability. There's no separate ability for reading t
 - **`balance`** is the customer's balance right after that transaction, and it carries over correctly from page to page.
 - **`lead`** is the lead's ID on transactions for a lead, such as a lead charge or a refund for a returned lead.
 - **`receipt_url`** is only set on payments and credits that came with a receipt.
+- **`description`** is the description you sent on credits and debits you made. Other transactions get a short label for their event, like `Lead charge` or `Payment`.
 
 `balance` here doesn't subtract funds held for pending pings, while the customer's own `balance` from [Get a Customer](/api-reference/endpoint/v1/customers-get) does. So the newest transaction's `balance` can be higher than the customer's while a ping is waiting.
 
@@ -26,8 +27,8 @@ It needs the `customers:read` ability. There's no separate ability for reading t
 | `customer_payment` | The customer added funds in their portal, or bought lead credit on a [checkout page](/features/checkout-pages). |
 | `auto_recharge` | The customer's card was charged automatically when their balance ran low. |
 | `checkout_bonus` | Bonus credit that came with a checkout page purchase. |
-| `tenant_credit` | You added funds, in Juiced or with [Add or Remove Funds](/api-reference/endpoint/v1/transactions-create). |
-| `tenant_debit` | You removed funds, in Juiced or through the API. |
+| `manual_credit` | You added funds, in Juiced or with [Add or Remove Funds](/api-reference/endpoint/v1/transactions-create). |
+| `manual_debit` | You removed funds, in Juiced or through the API. |
 | `lead_charge` | The customer was charged for a lead. |
 | `lead_refund` | A returned lead was refunded. |
 | `buy_order_placed` | A marketplace buy order held funds. |
