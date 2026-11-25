@@ -29,7 +29,7 @@ All of these work on your subdomain (`https://<your-subdomain>.usejuiced.com`) o
 | Customer signup | `/app/register` |
 | Customer login | `/app/login` |
 
-Your base URL takes signed-out visitors to the customer login page (or your public marketplace, if you chose that in [Domains & Links](/features/domains)), so bookmark your team's login. To track signups in Google Tag Manager, use `/email/verify`, the page every new customer lands on right after creating their account.
+Your base URL takes signed-out visitors to the customer login page (or your public marketplace, if you chose that in [Domains & Links](/features/domains)), so bookmark your team's login. To track signups in Google Tag Manager, trigger on the `customer_registered` event rather than a page. The sign-up pages don't load your container. See [Tracking signups](/features/integrations#tracking-signups).
 
 ## Consent links
 

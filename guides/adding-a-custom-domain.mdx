@@ -29,17 +29,17 @@ In the **Custom domain** field, enter the full hostname, like `leads.yourcompany
 
 ## 3. Add the DNS records
 
-Juiced shows the records to add under **Domain Validation**. There are two, both **CNAME** records. One points your domain at Juiced, and the other proves you own it so Juiced can issue an SSL certificate. Each card lists the **Type**, **Name**, and **Value**.
+Juiced shows the records to add under **Domain Validation**. There are two, both **CNAME** records. One points your domain at Juiced, and the other proves you own it so Juiced can issue an SSL certificate. Each card lists the **Type**, the **Host**, and the **Value**, plus the record's **Full name** when it differs from the Host.
 
 Then head to your DNS provider.
 
 1. Open the DNS settings for your domain.
-2. Add a CNAME record for each card, copying the **Name** and **Value** exactly.
+2. Add a CNAME record for each card. Paste the **Host** into your provider's Host (or Name) field and the **Value** into its Value (or Target) field, exactly as shown.
 3. Remove any existing record on the same subdomain, like an old `A` record for a landing page. Conflicting records block validation.
 4. Save.
 
 <Note>
-DNS providers differ on the **Name** field. Some want the full name (`leads.yourcompany.com`); others want only the part before your domain (`leads`) and add the rest themselves. If yours adds the domain automatically, paste only that first part.
+The **Host** is the part before your domain, like `leads` for `leads.yourcompany.com`, because most providers (Namecheap, GoDaddy, Cloudflare, and so on) add your domain to whatever you type there. Pasting the full name into one of those ends up as `leads.yourcompany.com.yourcompany.com`. If your provider asks for the full name instead, use the **Full name**.
 </Note>
 
 <Warning>
@@ -74,8 +74,8 @@ Once the SSL certificate has been issued, the field locks. To move to a differen
 
 ## Troubleshooting
 
-**A record stays on Pending for over an hour.** The record probably hasn't propagated or doesn't match. Look up the exact **Name** with a tool like [dnschecker.org](https://dnschecker.org). If nothing comes back, the record isn't public yet, or it wasn't saved at your DNS provider.
+**A record stays on Pending for over an hour.** The record probably hasn't propagated or doesn't match. Look up the record's **Full name** with a tool like [dnschecker.org](https://dnschecker.org). If nothing comes back, the record isn't public yet, or it wasn't saved at your DNS provider.
 
-**A record shows Incomplete.** Re-copy the **Name** and **Value**, check for typos or a trailing dot your provider added, remove any conflicting record, then click **Check again**.
+**A record shows Incomplete.** Re-copy the **Host** and **Value**, check that your provider didn't add your domain twice (if it did, switch between the **Host** and the **Full name**), remove any conflicting record, then click **Check again**.
 
 **The portal loads with a certificate warning.** The SSL certificate is issued after DNS validates, so give it a few more minutes. If it persists, check that both records show **Validated**.
