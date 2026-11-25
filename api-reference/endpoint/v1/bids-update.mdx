@@ -1,0 +1,15 @@
+---
+title: Update a Bid
+description: Change a bid's amount, limits, lead type or location, or pause and unpause it.
+openapi: PATCH /v1/bids/{id}
+---
+
+Send only the fields you want to change. Anything you leave out keeps its current value. It works like editing the bid in Juiced, and the customer's activity timeline shows your API key's label. It needs the `bids:write` ability.
+
+- **`paused`** pauses the bid with `true` and turns it back on with `false`.
+- **`amount`**, caps and budgets change just those values. Caps and budgets are only accepted when that limit is turned on under **Configure → Bidding**. Send `null` to remove one.
+- **`lead_type`** and **`location`** move the bid to another market. They follow the same rules as [creating a bid](/api-reference/endpoint/v1/bids-create#location-and-scope), so bidding must be turned on for the lead type at the new scope. If another of the customer's active bids already holds that lead type and location, the change is refused and `error.bid` holds that bid's ID.
+
+A change that keeps the bid's lead type and location, like a new amount or a pause, isn't checked against the lead type's current bidding settings, just as in Juiced.
+
+An archived bid can't be changed. Create a new bid instead.

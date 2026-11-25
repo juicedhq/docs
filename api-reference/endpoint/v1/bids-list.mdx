@@ -1,0 +1,11 @@
+---
+title: List a Customer's Bids
+description: List a customer's bids, with whether each can receive leads.
+openapi: GET /v1/customers/{id}/bids
+---
+
+This lists the customer's bids, newest first, 50 at a time. Pass `next_cursor` back as `cursor`, along with the same `include_archived`, to get the next page. When `next_cursor` is `null`, you've reached the end.
+
+Archived bids are left out. Send `include_archived=true` to include them. Archived customers' bids can be listed too.
+
+Each bid carries `can_receive_leads` and `blocked_by`, so one call tells you which of a customer's bids are winning leads and which aren't. See [Get a Bid](/api-reference/endpoint/v1/bids-get#can-it-receive-leads) for what each code means. It needs the `bids:read` ability.

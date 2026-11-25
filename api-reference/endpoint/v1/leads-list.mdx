@@ -1,0 +1,32 @@
+---
+title: List Leads
+description: List the leads in your account, filtered by buyer, status or date, without contact details.
+openapi: GET /v1/leads
+---
+
+This lists leads that came into your account. It's a different operation from [Submit a Lead](/api-reference/endpoint/v1/leads), which shares the `/v1/leads` path. Submitting authenticates as a source, and listing authenticates with an [API key](/api-reference/api-keys) that has the `leads:read` ability.
+
+Leads come back newest first, 50 at a time. Pass `next_cursor` back as `cursor`, along with the same filters, to get the next page. When `next_cursor` is `null`, you've reached the end.
+
+## Filters
+
+- **`customer`** returns only the leads that customer bought, including ones they returned. Archived customers work too. An ID that isn't one of your customers returns `validation_failed` on `customer`.
+- **`status`** returns only leads with that status (see below).
+- **`created_after`** and **`created_before`** limit when the lead came in. Send them in UTC, like `2026-11-01T00:00:00Z`. `created_after` includes leads at that exact time, and `created_before` stops just before it.
+- **`include_test=true`** adds test leads, which are left out by default, just like the leads list in Juiced. Looking up a test lead by its ID always works.
+
+## Statuses
+
+`status` uses the same values on the lead and in the filter. Most match the [lead statuses](/features/leads#lead-statuses) you see in Juiced, with two renamed for the API.
+
+| `status` | In Juiced |
+|----------|-----------|
+| `pending`, `processing`, `assigned`, `posted`, `duplicate`, `unassigned`, `withheld`, `marketplace`, `audit`, `uncategorized`, `distribution_error` | The status of the same name |
+| `club` | Club |
+| `returned` | Returned |
+
+A lead sold to more than one customer has a single `status`, so read `assignments` to see each customer's side. Every customer the lead went to has an entry with what they paid, when it was assigned, and `returned_at` if they returned it. Deliveries to partners aren't listed.
+
+## What's not included
+
+Lead endpoints never return contact details or other submitted fields. To read those, use [Get Lead Details](/api-reference/endpoint/v1/leads-details), which needs its own `lead_details:read` ability.

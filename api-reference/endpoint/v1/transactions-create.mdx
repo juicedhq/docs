@@ -1,0 +1,30 @@
+---
+title: Add or Remove Funds
+description: Credit or debit a customer's balance when they pay you outside Juiced.
+openapi: POST /v1/customers/{id}/transactions
+---
+
+Use this when a customer pays you through your own billing system, like an invoice or a bank transfer, and the money belongs in their Juiced balance. It works just like adding or removing funds on the customer in Juiced. Their bids see the new balance right away, and the customer's activity timeline shows your API key's label.
+
+<Note>
+No card is charged. A credit adds to the customer's balance and a debit takes from it, and that's all that happens. Collect the payment yourself before you send the credit.
+</Note>
+
+- **A `credit`** adds `amount` to the customer's balance. Add a `receipt_url` to link the customer to your own receipt. It's only accepted on credits.
+- **A `debit`** takes `amount` from the customer's balance. It can't be more than their current balance. A larger debit is refused with `validation_failed` on `amount`, and nothing moves.
+
+`amount` is in dollars, with at most 2 decimal places, from 0.01 up to 99,999,999.99. It's always positive, since `type` sets the direction. `description` is required and shows on the customer's transactions in their portal, so write it for them.
+
+Archived customers can be credited and debited too. This endpoint needs the `funds:write` ability.
+
+## The Idempotency-Key header is required
+
+Because this endpoint moves money, every request must send an `Idempotency-Key` header. A request without one returns `422` with `validation_failed`, the error names the `Idempotency-Key` header, and no money moves.
+
+Use an ID from your own system, such as your payment or invoice ID, so a retry of the same payment always sends the same key.
+
+- **Same key, same body** within 24 hours returns the first response again, with an `Idempotent-Replayed: true` header. The funds only move once.
+- **Same key, different body** returns `409` with `idempotency_conflict`.
+- **The first request is still running** returns `409` with `idempotency_in_progress` and a `Retry-After` header.
+
+See [Safe retries](/api-reference/api-keys#safe-retries) for the details.

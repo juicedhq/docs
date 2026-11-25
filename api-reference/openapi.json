@@ -198,6 +198,264 @@
       }
     },
     "/v1/leads": {
+      "get": {
+        "operationId": "listLeadsByApiKeyV1",
+        "summary": "List leads",
+        "description": "Lists the leads in your account, newest first, 50 at a time. Filter by the customer who bought them, their status, or when they came in. Test leads are left out unless you send `include_test=true`.\n\nNo contact details are returned. Get those with [Get Lead Details](/api-reference/endpoint/v1/leads-details).\n\nAuthenticates with an API key, not a source's credentials. Requires the `leads:read` ability.",
+        "tags": [
+          "Leads"
+        ],
+        "security": [
+          {
+            "API Key": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "customer",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "pattern": "^cus_[0-9a-z]{26}$"
+            },
+            "description": "Only leads this customer bought, including ones they returned. Archived customers work too."
+          },
+          {
+            "name": "status",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "pending",
+                "processing",
+                "assigned",
+                "duplicate",
+                "returned",
+                "unassigned",
+                "withheld",
+                "marketplace",
+                "club",
+                "audit",
+                "posted",
+                "uncategorized",
+                "distribution_error"
+              ]
+            },
+            "description": "Only leads with this status."
+          },
+          {
+            "name": "created_after",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            },
+            "description": "Only leads created at or after this time, in UTC, like `2026-11-01T00:00:00Z`."
+          },
+          {
+            "name": "created_before",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            },
+            "description": "Only leads created before this time, in UTC. It must be later than `created_after`."
+          },
+          {
+            "name": "include_test",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "boolean",
+              "default": false
+            },
+            "description": "Send `true` to include test leads."
+          },
+          {
+            "name": "cursor",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            },
+            "description": "The `next_cursor` from the previous page."
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "A page of leads.",
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/XRequestId"
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/LeadRecordListResponseV1"
+                },
+                "example": {
+                  "data": [
+                    {
+                      "id": "lead_01jbx8m2d4f6g8h0j2k4m6n8pq",
+                      "status": "assigned",
+                      "lead_type": "ltyp_01jbx7q3s5v7w9y1a3c5e7g9hk",
+                      "source": "src_01hq3c5e7g9j1k3m5n7p9r1s3t",
+                      "location": {
+                        "country": "US",
+                        "state": "TX",
+                        "county": "Harris",
+                        "county_fips": "48201"
+                      },
+                      "price": 25,
+                      "test": false,
+                      "assignments": [
+                        {
+                          "customer": "cus_01jbx8p4r6t8v0x2z4b6d8f0hk",
+                          "price": 25,
+                          "assigned_at": "2026-11-20T10:00:00Z",
+                          "returned_at": null
+                        },
+                        {
+                          "customer": "cus_01jbx9a2c4e6g8j0k2m4p6r8tv",
+                          "price": 20,
+                          "assigned_at": "2026-11-20T10:00:00Z",
+                          "returned_at": "2026-11-21T09:30:00Z"
+                        }
+                      ],
+                      "created_at": "2026-11-20T09:59:58Z"
+                    }
+                  ],
+                  "next_cursor": null,
+                  "version": "v1"
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/ApiKeyUnauthenticatedV1"
+          },
+          "403": {
+            "description": "The key lacks the ability this endpoint needs, your plan doesn't include the API, or your account is locked for an unpaid subscription.",
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/XRequestId"
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorV1"
+                },
+                "examples": {
+                  "Missing ability": {
+                    "summary": "Missing ability",
+                    "value": {
+                      "error": {
+                        "code": "bad_request",
+                        "message": "This API key does not have the leads:read ability."
+                      },
+                      "version": "v1"
+                    }
+                  },
+                  "Plan without the API": {
+                    "summary": "Plan without the API",
+                    "value": {
+                      "error": {
+                        "code": "bad_request",
+                        "message": "The API is not included in your plan. Upgrade to a paid plan to use it."
+                      },
+                      "version": "v1"
+                    }
+                  },
+                  "Account locked": {
+                    "summary": "Account locked",
+                    "value": {
+                      "error": {
+                        "code": "bad_request",
+                        "message": "This workspace is locked until its subscription is paid."
+                      },
+                      "version": "v1"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "A filter or the cursor isn't valid.",
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/XRequestId"
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorV1"
+                },
+                "examples": {
+                  "Unknown customer": {
+                    "summary": "Unknown customer",
+                    "value": {
+                      "error": {
+                        "code": "validation_failed",
+                        "message": "No customer has this ID.",
+                        "errors": {
+                          "customer": [
+                            "No customer has this ID."
+                          ]
+                        }
+                      },
+                      "version": "v1"
+                    }
+                  },
+                  "Unknown status": {
+                    "summary": "Unknown status",
+                    "value": {
+                      "error": {
+                        "code": "validation_failed",
+                        "message": "The selected status is invalid.",
+                        "errors": {
+                          "status": [
+                            "The selected status is invalid."
+                          ]
+                        }
+                      },
+                      "version": "v1"
+                    }
+                  },
+                  "Invalid cursor": {
+                    "summary": "Invalid cursor",
+                    "value": {
+                      "error": {
+                        "code": "validation_failed",
+                        "message": "The cursor is not valid. Pass the next_cursor from the previous page.",
+                        "errors": {
+                          "cursor": [
+                            "The cursor is not valid. Pass the next_cursor from the previous page."
+                          ]
+                        }
+                      },
+                      "version": "v1"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "429": {
+            "$ref": "#/components/responses/RateLimitedV1"
+          },
+          "500": {
+            "$ref": "#/components/responses/ServerErrorV1"
+          }
+        }
+      },
       "post": {
         "operationId": "createLeadV1",
         "summary": "Submit a lead",
@@ -849,6 +1107,2046 @@
         }
       }
     },
+    "/v1/leads/{id}": {
+      "get": {
+        "operationId": "getLeadV1",
+        "summary": "Get a lead",
+        "description": "Gets one lead by ID, test leads included. No contact details are returned.\n\nRequires the `leads:read` ability.",
+        "tags": [
+          "Leads"
+        ],
+        "security": [
+          {
+            "API Key": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "pattern": "^lead_[0-9a-z]{26}$"
+            },
+            "description": "The lead's ID."
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "The lead.",
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/XRequestId"
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/LeadRecordResponseV1"
+                },
+                "example": {
+                  "data": {
+                    "id": "lead_01jbx8m2d4f6g8h0j2k4m6n8pq",
+                    "status": "assigned",
+                    "lead_type": "ltyp_01jbx7q3s5v7w9y1a3c5e7g9hk",
+                    "source": "src_01hq3c5e7g9j1k3m5n7p9r1s3t",
+                    "location": {
+                      "country": "US",
+                      "state": "TX",
+                      "county": "Harris",
+                      "county_fips": "48201"
+                    },
+                    "price": 25,
+                    "test": false,
+                    "assignments": [
+                      {
+                        "customer": "cus_01jbx8p4r6t8v0x2z4b6d8f0hk",
+                        "price": 25,
+                        "assigned_at": "2026-11-20T10:00:00Z",
+                        "returned_at": null
+                      },
+                      {
+                        "customer": "cus_01jbx9a2c4e6g8j0k2m4p6r8tv",
+                        "price": 20,
+                        "assigned_at": "2026-11-20T10:00:00Z",
+                        "returned_at": "2026-11-21T09:30:00Z"
+                      }
+                    ],
+                    "created_at": "2026-11-20T09:59:58Z"
+                  },
+                  "version": "v1"
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/ApiKeyUnauthenticatedV1"
+          },
+          "403": {
+            "description": "The key lacks the ability this endpoint needs, your plan doesn't include the API, or your account is locked for an unpaid subscription.",
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/XRequestId"
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorV1"
+                },
+                "examples": {
+                  "Missing ability": {
+                    "summary": "Missing ability",
+                    "value": {
+                      "error": {
+                        "code": "bad_request",
+                        "message": "This API key does not have the leads:read ability."
+                      },
+                      "version": "v1"
+                    }
+                  },
+                  "Plan without the API": {
+                    "summary": "Plan without the API",
+                    "value": {
+                      "error": {
+                        "code": "bad_request",
+                        "message": "The API is not included in your plan. Upgrade to a paid plan to use it."
+                      },
+                      "version": "v1"
+                    }
+                  },
+                  "Account locked": {
+                    "summary": "Account locked",
+                    "value": {
+                      "error": {
+                        "code": "bad_request",
+                        "message": "This workspace is locked until its subscription is paid."
+                      },
+                      "version": "v1"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "No lead in your account has this ID.",
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/XRequestId"
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorV1"
+                },
+                "example": {
+                  "error": {
+                    "code": "not_found",
+                    "message": "No lead matches this request."
+                  },
+                  "version": "v1"
+                }
+              }
+            }
+          },
+          "429": {
+            "$ref": "#/components/responses/RateLimitedV1"
+          },
+          "500": {
+            "$ref": "#/components/responses/ServerErrorV1"
+          }
+        }
+      }
+    },
+    "/v1/leads/{id}/details": {
+      "get": {
+        "operationId": "getLeadDetailsV1",
+        "summary": "Get lead details",
+        "description": "Gets a lead's deliverable fields, such as its contact details and custom fields, with the same keys and values a v1 customer webhook sends.\n\nRequires the `lead_details:read` ability. `leads:read` alone isn't enough.",
+        "tags": [
+          "Leads"
+        ],
+        "security": [
+          {
+            "API Key": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "pattern": "^lead_[0-9a-z]{26}$"
+            },
+            "description": "The lead's ID."
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "The lead's fields.",
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/XRequestId"
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/LeadDetailsResponseV1"
+                },
+                "example": {
+                  "data": {
+                    "lead": "lead_01jbx8m2d4f6g8h0j2k4m6n8pq",
+                    "fields": {
+                      "first_name": "Katy",
+                      "last_name": "Berry",
+                      "email": "katy.berry@thirstyleads.com",
+                      "phone": "555-123-4567",
+                      "zip": "77002",
+                      "state": "TX",
+                      "property_type": "Single Family"
+                    }
+                  },
+                  "version": "v1"
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/ApiKeyUnauthenticatedV1"
+          },
+          "403": {
+            "description": "The key lacks the ability this endpoint needs, your plan doesn't include the API, or your account is locked for an unpaid subscription.",
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/XRequestId"
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorV1"
+                },
+                "examples": {
+                  "Missing ability": {
+                    "summary": "Missing ability",
+                    "value": {
+                      "error": {
+                        "code": "bad_request",
+                        "message": "This API key does not have the lead_details:read ability."
+                      },
+                      "version": "v1"
+                    }
+                  },
+                  "Plan without the API": {
+                    "summary": "Plan without the API",
+                    "value": {
+                      "error": {
+                        "code": "bad_request",
+                        "message": "The API is not included in your plan. Upgrade to a paid plan to use it."
+                      },
+                      "version": "v1"
+                    }
+                  },
+                  "Account locked": {
+                    "summary": "Account locked",
+                    "value": {
+                      "error": {
+                        "code": "bad_request",
+                        "message": "This workspace is locked until its subscription is paid."
+                      },
+                      "version": "v1"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "No lead in your account has this ID.",
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/XRequestId"
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorV1"
+                },
+                "example": {
+                  "error": {
+                    "code": "not_found",
+                    "message": "No lead matches this request."
+                  },
+                  "version": "v1"
+                }
+              }
+            }
+          },
+          "429": {
+            "$ref": "#/components/responses/RateLimitedV1"
+          },
+          "500": {
+            "$ref": "#/components/responses/ServerErrorV1"
+          }
+        }
+      }
+    },
+    "/v1/customers/{id}/transactions": {
+      "get": {
+        "operationId": "listCustomerTransactionsV1",
+        "summary": "List transactions",
+        "description": "Lists a customer's transactions, newest first, 50 at a time, each with the customer's balance right after it.\n\nRequires the `customers:read` ability.",
+        "tags": [
+          "Funds"
+        ],
+        "security": [
+          {
+            "API Key": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "pattern": "^cus_[0-9a-z]{26}$"
+            },
+            "description": "The customer's ID."
+          },
+          {
+            "name": "cursor",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            },
+            "description": "The `next_cursor` from the previous page."
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "A page of transactions.",
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/XRequestId"
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TransactionListResponseV1"
+                },
+                "example": {
+                  "data": [
+                    {
+                      "id": "txn_01jbxa8c0e2g4j6k8m0p2r4t6v",
+                      "type": "debit",
+                      "event": "lead_charge",
+                      "amount": -25,
+                      "balance": 100.5,
+                      "description": "Lead Assigned",
+                      "lead": "lead_01jbx8m2d4f6g8h0j2k4m6n8pq",
+                      "receipt_url": null,
+                      "created_at": "2026-11-20T10:00:00Z"
+                    },
+                    {
+                      "id": "txn_01jbxb3d5f7h9k1m3p5r7t9v2w",
+                      "type": "credit",
+                      "event": "tenant_credit",
+                      "amount": 125.5,
+                      "balance": 125.5,
+                      "description": "Invoice 1042 paid",
+                      "lead": null,
+                      "receipt_url": "https://billing.example.com/r/1042",
+                      "created_at": "2026-11-19T16:20:00Z"
+                    }
+                  ],
+                  "next_cursor": null,
+                  "version": "v1"
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/ApiKeyUnauthenticatedV1"
+          },
+          "403": {
+            "description": "The key lacks the ability this endpoint needs, your plan doesn't include the API, or your account is locked for an unpaid subscription.",
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/XRequestId"
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorV1"
+                },
+                "examples": {
+                  "Missing ability": {
+                    "summary": "Missing ability",
+                    "value": {
+                      "error": {
+                        "code": "bad_request",
+                        "message": "This API key does not have the customers:read ability."
+                      },
+                      "version": "v1"
+                    }
+                  },
+                  "Plan without the API": {
+                    "summary": "Plan without the API",
+                    "value": {
+                      "error": {
+                        "code": "bad_request",
+                        "message": "The API is not included in your plan. Upgrade to a paid plan to use it."
+                      },
+                      "version": "v1"
+                    }
+                  },
+                  "Account locked": {
+                    "summary": "Account locked",
+                    "value": {
+                      "error": {
+                        "code": "bad_request",
+                        "message": "This workspace is locked until its subscription is paid."
+                      },
+                      "version": "v1"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "No customer in your account has this ID.",
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/XRequestId"
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorV1"
+                },
+                "example": {
+                  "error": {
+                    "code": "not_found",
+                    "message": "No customer matches this request."
+                  },
+                  "version": "v1"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "The cursor isn't valid.",
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/XRequestId"
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorV1"
+                },
+                "example": {
+                  "error": {
+                    "code": "validation_failed",
+                    "message": "The cursor is not valid. Pass the next_cursor from the previous page.",
+                    "errors": {
+                      "cursor": [
+                        "The cursor is not valid. Pass the next_cursor from the previous page."
+                      ]
+                    }
+                  },
+                  "version": "v1"
+                }
+              }
+            }
+          },
+          "429": {
+            "$ref": "#/components/responses/RateLimitedV1"
+          },
+          "500": {
+            "$ref": "#/components/responses/ServerErrorV1"
+          }
+        }
+      },
+      "post": {
+        "operationId": "createCustomerTransactionV1",
+        "summary": "Add or remove funds",
+        "description": "Credits or debits the customer's balance. No card is charged.\n\nThe `Idempotency-Key` header is required. Use an ID from your own system, such as your payment ID.\n\nRequires the `funds:write` ability.",
+        "tags": [
+          "Funds"
+        ],
+        "security": [
+          {
+            "API Key": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "pattern": "^cus_[0-9a-z]{26}$"
+            },
+            "description": "The customer's ID."
+          },
+          {
+            "name": "Idempotency-Key",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "maxLength": 255
+            },
+            "description": "Required. An ID from your own system, such as your payment ID. A retry with the same key and body within 24 hours returns the first response, and the funds move once."
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/TransactionRequestV1"
+              },
+              "examples": {
+                "Credit": {
+                  "summary": "Credit",
+                  "value": {
+                    "type": "credit",
+                    "amount": 125.5,
+                    "description": "Invoice 1042 paid",
+                    "receipt_url": "https://billing.example.com/r/1042"
+                  }
+                },
+                "Debit": {
+                  "summary": "Debit",
+                  "value": {
+                    "type": "debit",
+                    "amount": 20,
+                    "description": "Refunded to card"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Funds moved. A retry with the same `Idempotency-Key` and body returns this same response again, with an `Idempotent-Replayed: true` header.",
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/XRequestId"
+              },
+              "Idempotent-Replayed": {
+                "description": "Sent as `true` when this is a stored response to a retried request.",
+                "schema": {
+                  "type": "string",
+                  "example": "true"
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TransactionResponseV1"
+                },
+                "examples": {
+                  "Credit": {
+                    "summary": "Credit",
+                    "value": {
+                      "data": {
+                        "id": "txn_01jbxb3d5f7h9k1m3p5r7t9v2w",
+                        "type": "credit",
+                        "event": "tenant_credit",
+                        "amount": 125.5,
+                        "balance": 125.5,
+                        "description": "Invoice 1042 paid",
+                        "lead": null,
+                        "receipt_url": "https://billing.example.com/r/1042",
+                        "created_at": "2026-11-19T16:20:00Z"
+                      },
+                      "version": "v1"
+                    }
+                  },
+                  "Debit": {
+                    "summary": "Debit",
+                    "value": {
+                      "data": {
+                        "id": "txn_01jbxc5f7h9k1m3p5r7t9v1x3z",
+                        "type": "debit",
+                        "event": "tenant_debit",
+                        "amount": -20,
+                        "balance": 80.5,
+                        "description": "Refunded to card",
+                        "lead": null,
+                        "receipt_url": null,
+                        "created_at": "2026-11-21T08:15:00Z"
+                      },
+                      "version": "v1"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/ApiKeyUnauthenticatedV1"
+          },
+          "403": {
+            "description": "The key lacks the ability this endpoint needs, your plan doesn't include the API, or your account is locked for an unpaid subscription.",
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/XRequestId"
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorV1"
+                },
+                "examples": {
+                  "Missing ability": {
+                    "summary": "Missing ability",
+                    "value": {
+                      "error": {
+                        "code": "bad_request",
+                        "message": "This API key does not have the funds:write ability."
+                      },
+                      "version": "v1"
+                    }
+                  },
+                  "Plan without the API": {
+                    "summary": "Plan without the API",
+                    "value": {
+                      "error": {
+                        "code": "bad_request",
+                        "message": "The API is not included in your plan. Upgrade to a paid plan to use it."
+                      },
+                      "version": "v1"
+                    }
+                  },
+                  "Account locked": {
+                    "summary": "Account locked",
+                    "value": {
+                      "error": {
+                        "code": "bad_request",
+                        "message": "This workspace is locked until its subscription is paid."
+                      },
+                      "version": "v1"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "No customer in your account has this ID.",
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/XRequestId"
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorV1"
+                },
+                "example": {
+                  "error": {
+                    "code": "not_found",
+                    "message": "No customer matches this request."
+                  },
+                  "version": "v1"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "The `Idempotency-Key` was already used and this request can't be replayed.",
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/XRequestId"
+              },
+              "Retry-After": {
+                "description": "Sent with `idempotency_in_progress` only. Seconds to wait before retrying the same request.",
+                "schema": {
+                  "type": "integer",
+                  "example": 5
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorV1"
+                },
+                "examples": {
+                  "Same key, different body": {
+                    "summary": "Same key, different body",
+                    "value": {
+                      "error": {
+                        "code": "idempotency_conflict",
+                        "message": "This Idempotency-Key was already used with a different request body."
+                      },
+                      "version": "v1"
+                    }
+                  },
+                  "First request still running": {
+                    "summary": "First request still running",
+                    "value": {
+                      "error": {
+                        "code": "idempotency_in_progress",
+                        "message": "A request with this Idempotency-Key is still being processed. Retry after the number of seconds in the Retry-After header."
+                      },
+                      "version": "v1"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "The request failed validation, and no money moved.",
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/XRequestId"
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorV1"
+                },
+                "examples": {
+                  "No Idempotency-Key": {
+                    "summary": "No Idempotency-Key",
+                    "value": {
+                      "error": {
+                        "code": "validation_failed",
+                        "message": "This request needs an Idempotency-Key header, so a retry never runs it twice. Use an id from your own system, such as your payment id.",
+                        "errors": {
+                          "Idempotency-Key": [
+                            "This request needs an Idempotency-Key header, so a retry never runs it twice. Use an id from your own system, such as your payment id."
+                          ]
+                        }
+                      },
+                      "version": "v1"
+                    }
+                  },
+                  "Debit over the balance": {
+                    "summary": "Debit over the balance",
+                    "value": {
+                      "error": {
+                        "code": "validation_failed",
+                        "message": "The amount may not exceed the customer's balance of $30.00.",
+                        "errors": {
+                          "amount": [
+                            "The amount may not exceed the customer's balance of $30.00."
+                          ]
+                        }
+                      },
+                      "version": "v1"
+                    }
+                  },
+                  "Receipt on a debit": {
+                    "summary": "Receipt on a debit",
+                    "value": {
+                      "error": {
+                        "code": "validation_failed",
+                        "message": "A receipt URL can only be sent with a credit.",
+                        "errors": {
+                          "receipt_url": [
+                            "A receipt URL can only be sent with a credit."
+                          ]
+                        }
+                      },
+                      "version": "v1"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "429": {
+            "$ref": "#/components/responses/RateLimitedV1"
+          },
+          "500": {
+            "$ref": "#/components/responses/ServerErrorV1"
+          }
+        }
+      }
+    },
+    "/v1/customers/{id}/bids": {
+      "get": {
+        "operationId": "listCustomerBidsV1",
+        "summary": "List a customer's bids",
+        "description": "Lists a customer's bids, newest first, 50 at a time. Archived bids are left out unless you send `include_archived=true`.\n\nRequires the `bids:read` ability.",
+        "tags": [
+          "Bids"
+        ],
+        "security": [
+          {
+            "API Key": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "pattern": "^cus_[0-9a-z]{26}$"
+            },
+            "description": "The customer's ID."
+          },
+          {
+            "name": "include_archived",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "boolean",
+              "default": false
+            },
+            "description": "Send `true` to include archived bids."
+          },
+          {
+            "name": "cursor",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            },
+            "description": "The `next_cursor` from the previous page."
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "A page of bids.",
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/XRequestId"
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CustomerBidListResponseV1"
+                },
+                "example": {
+                  "data": [
+                    {
+                      "id": "bid_01h9z3c5e7g9j1k3m5n7p9r1st",
+                      "customer": "cus_01jbx8p4r6t8v0x2z4b6d8f0hk",
+                      "lead_type": "ltyp_01jbx7q3s5v7w9y1a3c5e7g9hk",
+                      "scope": "county",
+                      "location": {
+                        "country": "US",
+                        "state": "TX",
+                        "county": "Harris",
+                        "county_fips": "48201"
+                      },
+                      "amount": 25,
+                      "minimum": 10,
+                      "below_minimum": false,
+                      "daily_lead_cap": null,
+                      "weekly_lead_cap": null,
+                      "monthly_lead_cap": null,
+                      "daily_budget": null,
+                      "weekly_budget": null,
+                      "monthly_budget": null,
+                      "paused": false,
+                      "status": "active",
+                      "can_receive_leads": true,
+                      "blocked_by": [],
+                      "archived_at": null,
+                      "created_at": "2026-11-20T15:04:05Z",
+                      "updated_at": "2026-11-20T15:04:05Z"
+                    },
+                    {
+                      "id": "bid_01h9z4d6f8h0j2k4m6p8r0t2vw",
+                      "customer": "cus_01jbx8p4r6t8v0x2z4b6d8f0hk",
+                      "lead_type": "ltyp_01jbx7q3s5v7w9y1a3c5e7g9hk",
+                      "scope": "state",
+                      "location": {
+                        "country": "US",
+                        "state": "TX",
+                        "county": null,
+                        "county_fips": null
+                      },
+                      "amount": 4,
+                      "minimum": 5,
+                      "below_minimum": true,
+                      "daily_lead_cap": null,
+                      "weekly_lead_cap": null,
+                      "monthly_lead_cap": null,
+                      "daily_budget": null,
+                      "weekly_budget": null,
+                      "monthly_budget": null,
+                      "paused": false,
+                      "status": "exhausted",
+                      "can_receive_leads": false,
+                      "blocked_by": [
+                        "insufficient_funds"
+                      ],
+                      "archived_at": null,
+                      "created_at": "2026-11-19T11:30:00Z",
+                      "updated_at": "2026-11-19T11:30:00Z"
+                    }
+                  ],
+                  "next_cursor": null,
+                  "version": "v1"
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/ApiKeyUnauthenticatedV1"
+          },
+          "403": {
+            "description": "The key lacks the ability this endpoint needs, your plan doesn't include the API, or your account is locked for an unpaid subscription.",
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/XRequestId"
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorV1"
+                },
+                "examples": {
+                  "Missing ability": {
+                    "summary": "Missing ability",
+                    "value": {
+                      "error": {
+                        "code": "bad_request",
+                        "message": "This API key does not have the bids:read ability."
+                      },
+                      "version": "v1"
+                    }
+                  },
+                  "Plan without the API": {
+                    "summary": "Plan without the API",
+                    "value": {
+                      "error": {
+                        "code": "bad_request",
+                        "message": "The API is not included in your plan. Upgrade to a paid plan to use it."
+                      },
+                      "version": "v1"
+                    }
+                  },
+                  "Account locked": {
+                    "summary": "Account locked",
+                    "value": {
+                      "error": {
+                        "code": "bad_request",
+                        "message": "This workspace is locked until its subscription is paid."
+                      },
+                      "version": "v1"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "No customer in your account has this ID.",
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/XRequestId"
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorV1"
+                },
+                "example": {
+                  "error": {
+                    "code": "not_found",
+                    "message": "No customer matches this request."
+                  },
+                  "version": "v1"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "The cursor isn't valid.",
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/XRequestId"
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorV1"
+                },
+                "example": {
+                  "error": {
+                    "code": "validation_failed",
+                    "message": "The cursor is not valid. Pass the next_cursor from the previous page.",
+                    "errors": {
+                      "cursor": [
+                        "The cursor is not valid. Pass the next_cursor from the previous page."
+                      ]
+                    }
+                  },
+                  "version": "v1"
+                }
+              }
+            }
+          },
+          "429": {
+            "$ref": "#/components/responses/RateLimitedV1"
+          },
+          "500": {
+            "$ref": "#/components/responses/ServerErrorV1"
+          }
+        }
+      },
+      "post": {
+        "operationId": "createCustomerBidV1",
+        "summary": "Create a bid",
+        "description": "Places a bid for the customer on a lead type and location. The location's depth sets the scope.\n\nThis endpoint doesn't take an `Idempotency-Key`. A customer can only have one active bid per lead type and location, so a repeated create returns `422` with the existing bid's ID in `error.bid`.\n\nRequires the `bids:write` ability.",
+        "tags": [
+          "Bids"
+        ],
+        "security": [
+          {
+            "API Key": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "pattern": "^cus_[0-9a-z]{26}$"
+            },
+            "description": "The customer's ID."
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/BidCreateRequestV1"
+              },
+              "examples": {
+                "County bid": {
+                  "summary": "County bid",
+                  "value": {
+                    "lead_type": "ltyp_01jbx7q3s5v7w9y1a3c5e7g9hk",
+                    "location": {
+                      "country": "US",
+                      "state": "TX",
+                      "county_fips": "48201"
+                    },
+                    "amount": 25
+                  }
+                },
+                "State bid": {
+                  "summary": "State bid",
+                  "value": {
+                    "lead_type": "ltyp_01jbx7q3s5v7w9y1a3c5e7g9hk",
+                    "location": {
+                      "country": "US",
+                      "state": "TX"
+                    },
+                    "amount": 15
+                  }
+                },
+                "Nationwide bid, paused": {
+                  "summary": "Nationwide bid, paused",
+                  "value": {
+                    "lead_type": "ltyp_01jbx7q3s5v7w9y1a3c5e7g9hk",
+                    "location": {
+                      "country": "US"
+                    },
+                    "amount": 5,
+                    "paused": true
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Bid created.",
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/XRequestId"
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CustomerBidResponseV1"
+                },
+                "example": {
+                  "data": {
+                    "id": "bid_01h9z3c5e7g9j1k3m5n7p9r1st",
+                    "customer": "cus_01jbx8p4r6t8v0x2z4b6d8f0hk",
+                    "lead_type": "ltyp_01jbx7q3s5v7w9y1a3c5e7g9hk",
+                    "scope": "county",
+                    "location": {
+                      "country": "US",
+                      "state": "TX",
+                      "county": "Harris",
+                      "county_fips": "48201"
+                    },
+                    "amount": 25,
+                    "minimum": 10,
+                    "below_minimum": false,
+                    "daily_lead_cap": null,
+                    "weekly_lead_cap": null,
+                    "monthly_lead_cap": null,
+                    "daily_budget": null,
+                    "weekly_budget": null,
+                    "monthly_budget": null,
+                    "paused": false,
+                    "status": "active",
+                    "can_receive_leads": true,
+                    "blocked_by": [],
+                    "archived_at": null,
+                    "created_at": "2026-11-20T15:04:05Z",
+                    "updated_at": "2026-11-20T15:04:05Z"
+                  },
+                  "version": "v1"
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/ApiKeyUnauthenticatedV1"
+          },
+          "403": {
+            "description": "The key lacks the ability this endpoint needs, your plan doesn't include the API, or your account is locked for an unpaid subscription.",
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/XRequestId"
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorV1"
+                },
+                "examples": {
+                  "Missing ability": {
+                    "summary": "Missing ability",
+                    "value": {
+                      "error": {
+                        "code": "bad_request",
+                        "message": "This API key does not have the bids:write ability."
+                      },
+                      "version": "v1"
+                    }
+                  },
+                  "Plan without the API": {
+                    "summary": "Plan without the API",
+                    "value": {
+                      "error": {
+                        "code": "bad_request",
+                        "message": "The API is not included in your plan. Upgrade to a paid plan to use it."
+                      },
+                      "version": "v1"
+                    }
+                  },
+                  "Account locked": {
+                    "summary": "Account locked",
+                    "value": {
+                      "error": {
+                        "code": "bad_request",
+                        "message": "This workspace is locked until its subscription is paid."
+                      },
+                      "version": "v1"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "No customer in your account has this ID.",
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/XRequestId"
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorV1"
+                },
+                "example": {
+                  "error": {
+                    "code": "not_found",
+                    "message": "No customer matches this request."
+                  },
+                  "version": "v1"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "The bid failed validation. A bid that already exists carries its ID in `error.bid`.",
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/XRequestId"
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorV1"
+                },
+                "examples": {
+                  "Bid already exists": {
+                    "summary": "Bid already exists",
+                    "value": {
+                      "error": {
+                        "code": "validation_failed",
+                        "message": "This customer already has a bid on this lead type and location. Change that bid instead.",
+                        "errors": {
+                          "location": [
+                            "This customer already has a bid on this lead type and location. Change that bid instead."
+                          ]
+                        },
+                        "bid": "bid_01h9z3c5e7g9j1k3m5n7p9r1st"
+                      },
+                      "version": "v1"
+                    }
+                  },
+                  "Country you don't operate in": {
+                    "summary": "Country you don't operate in",
+                    "value": {
+                      "error": {
+                        "code": "validation_failed",
+                        "message": "The country must be one of your operating countries, as a 2-letter ISO code.",
+                        "errors": {
+                          "location.country": [
+                            "The country must be one of your operating countries, as a 2-letter ISO code."
+                          ]
+                        }
+                      },
+                      "version": "v1"
+                    }
+                  },
+                  "County outside the US": {
+                    "summary": "County outside the US",
+                    "value": {
+                      "error": {
+                        "code": "validation_failed",
+                        "message": "County bids are only available in the US for now. Bid on the whole state or country instead.",
+                        "errors": {
+                          "location.county_fips": [
+                            "County bids are only available in the US for now. Bid on the whole state or country instead."
+                          ]
+                        }
+                      },
+                      "version": "v1"
+                    }
+                  },
+                  "Bidding off at this scope": {
+                    "summary": "Bidding off at this scope",
+                    "value": {
+                      "error": {
+                        "code": "validation_failed",
+                        "message": "Bidding on this lead type is only open by state or nationwide.",
+                        "errors": {
+                          "location": [
+                            "Bidding on this lead type is only open by state or nationwide."
+                          ]
+                        }
+                      },
+                      "version": "v1"
+                    }
+                  },
+                  "Unknown lead type": {
+                    "summary": "Unknown lead type",
+                    "value": {
+                      "error": {
+                        "code": "validation_failed",
+                        "message": "No active lead type has this ID.",
+                        "errors": {
+                          "lead_type": [
+                            "No active lead type has this ID."
+                          ]
+                        }
+                      },
+                      "version": "v1"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "429": {
+            "$ref": "#/components/responses/RateLimitedV1"
+          },
+          "500": {
+            "$ref": "#/components/responses/ServerErrorV1"
+          }
+        }
+      }
+    },
+    "/v1/bids/{id}": {
+      "get": {
+        "operationId": "getBidV1",
+        "summary": "Get a bid",
+        "description": "Gets one bid by ID, archived ones included, with whether it can receive leads right now and why not.\n\nRequires the `bids:read` ability.",
+        "tags": [
+          "Bids"
+        ],
+        "security": [
+          {
+            "API Key": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "pattern": "^bid_[0-9a-z]{26}$"
+            },
+            "description": "The bid's ID."
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "The bid.",
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/XRequestId"
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CustomerBidResponseV1"
+                },
+                "examples": {
+                  "Receiving leads": {
+                    "summary": "Receiving leads",
+                    "value": {
+                      "data": {
+                        "id": "bid_01h9z3c5e7g9j1k3m5n7p9r1st",
+                        "customer": "cus_01jbx8p4r6t8v0x2z4b6d8f0hk",
+                        "lead_type": "ltyp_01jbx7q3s5v7w9y1a3c5e7g9hk",
+                        "scope": "county",
+                        "location": {
+                          "country": "US",
+                          "state": "TX",
+                          "county": "Harris",
+                          "county_fips": "48201"
+                        },
+                        "amount": 25,
+                        "minimum": 10,
+                        "below_minimum": false,
+                        "daily_lead_cap": null,
+                        "weekly_lead_cap": null,
+                        "monthly_lead_cap": null,
+                        "daily_budget": null,
+                        "weekly_budget": null,
+                        "monthly_budget": null,
+                        "paused": false,
+                        "status": "active",
+                        "can_receive_leads": true,
+                        "blocked_by": [],
+                        "archived_at": null,
+                        "created_at": "2026-11-20T15:04:05Z",
+                        "updated_at": "2026-11-20T15:04:05Z"
+                      },
+                      "version": "v1"
+                    }
+                  },
+                  "Blocked": {
+                    "summary": "Blocked",
+                    "value": {
+                      "data": {
+                        "id": "bid_01h9z4d6f8h0j2k4m6p8r0t2vw",
+                        "customer": "cus_01jbx8p4r6t8v0x2z4b6d8f0hk",
+                        "lead_type": "ltyp_01jbx7q3s5v7w9y1a3c5e7g9hk",
+                        "scope": "state",
+                        "location": {
+                          "country": "US",
+                          "state": "TX",
+                          "county": null,
+                          "county_fips": null
+                        },
+                        "amount": 4,
+                        "minimum": 5,
+                        "below_minimum": true,
+                        "daily_lead_cap": null,
+                        "weekly_lead_cap": null,
+                        "monthly_lead_cap": null,
+                        "daily_budget": null,
+                        "weekly_budget": null,
+                        "monthly_budget": null,
+                        "paused": false,
+                        "status": "exhausted",
+                        "can_receive_leads": false,
+                        "blocked_by": [
+                          "insufficient_funds"
+                        ],
+                        "archived_at": null,
+                        "created_at": "2026-11-19T11:30:00Z",
+                        "updated_at": "2026-11-19T11:30:00Z"
+                      },
+                      "version": "v1"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/ApiKeyUnauthenticatedV1"
+          },
+          "403": {
+            "description": "The key lacks the ability this endpoint needs, your plan doesn't include the API, or your account is locked for an unpaid subscription.",
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/XRequestId"
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorV1"
+                },
+                "examples": {
+                  "Missing ability": {
+                    "summary": "Missing ability",
+                    "value": {
+                      "error": {
+                        "code": "bad_request",
+                        "message": "This API key does not have the bids:read ability."
+                      },
+                      "version": "v1"
+                    }
+                  },
+                  "Plan without the API": {
+                    "summary": "Plan without the API",
+                    "value": {
+                      "error": {
+                        "code": "bad_request",
+                        "message": "The API is not included in your plan. Upgrade to a paid plan to use it."
+                      },
+                      "version": "v1"
+                    }
+                  },
+                  "Account locked": {
+                    "summary": "Account locked",
+                    "value": {
+                      "error": {
+                        "code": "bad_request",
+                        "message": "This workspace is locked until its subscription is paid."
+                      },
+                      "version": "v1"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "No bid in your account has this ID.",
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/XRequestId"
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorV1"
+                },
+                "example": {
+                  "error": {
+                    "code": "not_found",
+                    "message": "No bid matches this request."
+                  },
+                  "version": "v1"
+                }
+              }
+            }
+          },
+          "429": {
+            "$ref": "#/components/responses/RateLimitedV1"
+          },
+          "500": {
+            "$ref": "#/components/responses/ServerErrorV1"
+          }
+        }
+      },
+      "patch": {
+        "operationId": "updateBidV1",
+        "summary": "Update a bid",
+        "description": "Changes a bid. Send only the fields you want to change. `paused` pauses or unpauses the bid. An archived bid can't be changed.\n\nRequires the `bids:write` ability.",
+        "tags": [
+          "Bids"
+        ],
+        "security": [
+          {
+            "API Key": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "pattern": "^bid_[0-9a-z]{26}$"
+            },
+            "description": "The bid's ID."
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/BidUpdateRequestV1"
+              },
+              "examples": {
+                "Raise and pause": {
+                  "summary": "Raise and pause",
+                  "value": {
+                    "amount": 40,
+                    "paused": true
+                  }
+                },
+                "Widen to the state": {
+                  "summary": "Widen to the state",
+                  "value": {
+                    "location": {
+                      "country": "US",
+                      "state": "TX"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "The updated bid.",
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/XRequestId"
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CustomerBidResponseV1"
+                },
+                "example": {
+                  "data": {
+                    "id": "bid_01h9z3c5e7g9j1k3m5n7p9r1st",
+                    "customer": "cus_01jbx8p4r6t8v0x2z4b6d8f0hk",
+                    "lead_type": "ltyp_01jbx7q3s5v7w9y1a3c5e7g9hk",
+                    "scope": "county",
+                    "location": {
+                      "country": "US",
+                      "state": "TX",
+                      "county": "Harris",
+                      "county_fips": "48201"
+                    },
+                    "amount": 40,
+                    "minimum": 10,
+                    "below_minimum": false,
+                    "daily_lead_cap": null,
+                    "weekly_lead_cap": null,
+                    "monthly_lead_cap": null,
+                    "daily_budget": null,
+                    "weekly_budget": null,
+                    "monthly_budget": null,
+                    "paused": true,
+                    "status": "paused",
+                    "can_receive_leads": false,
+                    "blocked_by": [
+                      "bid_paused"
+                    ],
+                    "archived_at": null,
+                    "created_at": "2026-11-20T15:04:05Z",
+                    "updated_at": "2026-11-22T09:00:00Z"
+                  },
+                  "version": "v1"
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/ApiKeyUnauthenticatedV1"
+          },
+          "403": {
+            "description": "The key lacks the ability this endpoint needs, your plan doesn't include the API, or your account is locked for an unpaid subscription.",
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/XRequestId"
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorV1"
+                },
+                "examples": {
+                  "Missing ability": {
+                    "summary": "Missing ability",
+                    "value": {
+                      "error": {
+                        "code": "bad_request",
+                        "message": "This API key does not have the bids:write ability."
+                      },
+                      "version": "v1"
+                    }
+                  },
+                  "Plan without the API": {
+                    "summary": "Plan without the API",
+                    "value": {
+                      "error": {
+                        "code": "bad_request",
+                        "message": "The API is not included in your plan. Upgrade to a paid plan to use it."
+                      },
+                      "version": "v1"
+                    }
+                  },
+                  "Account locked": {
+                    "summary": "Account locked",
+                    "value": {
+                      "error": {
+                        "code": "bad_request",
+                        "message": "This workspace is locked until its subscription is paid."
+                      },
+                      "version": "v1"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "No bid in your account has this ID.",
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/XRequestId"
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorV1"
+                },
+                "example": {
+                  "error": {
+                    "code": "not_found",
+                    "message": "No bid matches this request."
+                  },
+                  "version": "v1"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "The change failed validation. Moving the bid onto a lead type and location another of the customer's bids holds carries that bid's ID in `error.bid`.",
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/XRequestId"
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorV1"
+                },
+                "examples": {
+                  "Archived bid": {
+                    "summary": "Archived bid",
+                    "value": {
+                      "error": {
+                        "code": "validation_failed",
+                        "message": "This bid is archived and can't be changed. Create a new bid instead.",
+                        "errors": {
+                          "bid": [
+                            "This bid is archived and can't be changed. Create a new bid instead."
+                          ]
+                        }
+                      },
+                      "version": "v1"
+                    }
+                  },
+                  "Bid already exists": {
+                    "summary": "Bid already exists",
+                    "value": {
+                      "error": {
+                        "code": "validation_failed",
+                        "message": "This customer already has a bid on this lead type and location. Change that bid instead.",
+                        "errors": {
+                          "location": [
+                            "This customer already has a bid on this lead type and location. Change that bid instead."
+                          ]
+                        },
+                        "bid": "bid_01h9z3c5e7g9j1k3m5n7p9r1st"
+                      },
+                      "version": "v1"
+                    }
+                  },
+                  "Country you don't operate in": {
+                    "summary": "Country you don't operate in",
+                    "value": {
+                      "error": {
+                        "code": "validation_failed",
+                        "message": "The country must be one of your operating countries, as a 2-letter ISO code.",
+                        "errors": {
+                          "location.country": [
+                            "The country must be one of your operating countries, as a 2-letter ISO code."
+                          ]
+                        }
+                      },
+                      "version": "v1"
+                    }
+                  },
+                  "County outside the US": {
+                    "summary": "County outside the US",
+                    "value": {
+                      "error": {
+                        "code": "validation_failed",
+                        "message": "County bids are only available in the US for now. Bid on the whole state or country instead.",
+                        "errors": {
+                          "location.county_fips": [
+                            "County bids are only available in the US for now. Bid on the whole state or country instead."
+                          ]
+                        }
+                      },
+                      "version": "v1"
+                    }
+                  },
+                  "Bidding off at this scope": {
+                    "summary": "Bidding off at this scope",
+                    "value": {
+                      "error": {
+                        "code": "validation_failed",
+                        "message": "Bidding on this lead type is only open by state or nationwide.",
+                        "errors": {
+                          "location": [
+                            "Bidding on this lead type is only open by state or nationwide."
+                          ]
+                        }
+                      },
+                      "version": "v1"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "429": {
+            "$ref": "#/components/responses/RateLimitedV1"
+          },
+          "500": {
+            "$ref": "#/components/responses/ServerErrorV1"
+          }
+        }
+      },
+      "delete": {
+        "operationId": "archiveBidV1",
+        "summary": "Archive a bid",
+        "description": "Archives the bid, as deleting it in Juiced does. Archiving a bid that's already archived returns it unchanged.\n\nRequires the `bids:write` ability.",
+        "tags": [
+          "Bids"
+        ],
+        "security": [
+          {
+            "API Key": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "pattern": "^bid_[0-9a-z]{26}$"
+            },
+            "description": "The bid's ID."
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "The archived bid.",
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/XRequestId"
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CustomerBidResponseV1"
+                },
+                "example": {
+                  "data": {
+                    "id": "bid_01h9z3c5e7g9j1k3m5n7p9r1st",
+                    "customer": "cus_01jbx8p4r6t8v0x2z4b6d8f0hk",
+                    "lead_type": "ltyp_01jbx7q3s5v7w9y1a3c5e7g9hk",
+                    "scope": "county",
+                    "location": {
+                      "country": "US",
+                      "state": "TX",
+                      "county": "Harris",
+                      "county_fips": "48201"
+                    },
+                    "amount": 25,
+                    "minimum": 10,
+                    "below_minimum": false,
+                    "daily_lead_cap": null,
+                    "weekly_lead_cap": null,
+                    "monthly_lead_cap": null,
+                    "daily_budget": null,
+                    "weekly_budget": null,
+                    "monthly_budget": null,
+                    "paused": false,
+                    "status": "archived",
+                    "can_receive_leads": false,
+                    "blocked_by": [
+                      "bid_archived"
+                    ],
+                    "archived_at": "2026-11-23T12:00:00Z",
+                    "created_at": "2026-11-20T15:04:05Z",
+                    "updated_at": "2026-11-23T12:00:00Z"
+                  },
+                  "version": "v1"
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/ApiKeyUnauthenticatedV1"
+          },
+          "403": {
+            "description": "The key lacks the ability this endpoint needs, your plan doesn't include the API, or your account is locked for an unpaid subscription.",
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/XRequestId"
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorV1"
+                },
+                "examples": {
+                  "Missing ability": {
+                    "summary": "Missing ability",
+                    "value": {
+                      "error": {
+                        "code": "bad_request",
+                        "message": "This API key does not have the bids:write ability."
+                      },
+                      "version": "v1"
+                    }
+                  },
+                  "Plan without the API": {
+                    "summary": "Plan without the API",
+                    "value": {
+                      "error": {
+                        "code": "bad_request",
+                        "message": "The API is not included in your plan. Upgrade to a paid plan to use it."
+                      },
+                      "version": "v1"
+                    }
+                  },
+                  "Account locked": {
+                    "summary": "Account locked",
+                    "value": {
+                      "error": {
+                        "code": "bad_request",
+                        "message": "This workspace is locked until its subscription is paid."
+                      },
+                      "version": "v1"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "No bid in your account has this ID.",
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/XRequestId"
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorV1"
+                },
+                "example": {
+                  "error": {
+                    "code": "not_found",
+                    "message": "No bid matches this request."
+                  },
+                  "version": "v1"
+                }
+              }
+            }
+          },
+          "429": {
+            "$ref": "#/components/responses/RateLimitedV1"
+          },
+          "500": {
+            "$ref": "#/components/responses/ServerErrorV1"
+          }
+        }
+      }
+    },
+    "/v1/lead-types": {
+      "get": {
+        "operationId": "listLeadTypesV1",
+        "summary": "List lead types",
+        "description": "Lists your lead types with the scopes bids can be placed at and each scope's minimum. Archived lead types are left out. The list isn't paginated.\n\nRequires the `bids:read` ability.",
+        "tags": [
+          "Bids"
+        ],
+        "security": [
+          {
+            "API Key": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Your lead types.",
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/XRequestId"
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/LeadTypeListResponseV1"
+                },
+                "example": {
+                  "data": [
+                    {
+                      "id": "ltyp_01jbx7q3s5v7w9y1a3c5e7g9hk",
+                      "name": "Motivated Seller",
+                      "description": "Homeowners ready to sell within 90 days.",
+                      "bidding": [
+                        {
+                          "scope": "county",
+                          "minimum": 10
+                        },
+                        {
+                          "scope": "state",
+                          "minimum": 5
+                        },
+                        {
+                          "scope": "nationwide",
+                          "minimum": 2.5
+                        }
+                      ]
+                    }
+                  ],
+                  "version": "v1"
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/ApiKeyUnauthenticatedV1"
+          },
+          "403": {
+            "description": "The key lacks the ability this endpoint needs, your plan doesn't include the API, or your account is locked for an unpaid subscription.",
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/XRequestId"
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorV1"
+                },
+                "examples": {
+                  "Missing ability": {
+                    "summary": "Missing ability",
+                    "value": {
+                      "error": {
+                        "code": "bad_request",
+                        "message": "This API key does not have the bids:read ability."
+                      },
+                      "version": "v1"
+                    }
+                  },
+                  "Plan without the API": {
+                    "summary": "Plan without the API",
+                    "value": {
+                      "error": {
+                        "code": "bad_request",
+                        "message": "The API is not included in your plan. Upgrade to a paid plan to use it."
+                      },
+                      "version": "v1"
+                    }
+                  },
+                  "Account locked": {
+                    "summary": "Account locked",
+                    "value": {
+                      "error": {
+                        "code": "bad_request",
+                        "message": "This workspace is locked until its subscription is paid."
+                      },
+                      "version": "v1"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "429": {
+            "$ref": "#/components/responses/RateLimitedV1"
+          },
+          "500": {
+            "$ref": "#/components/responses/ServerErrorV1"
+          }
+        }
+      }
+    },
     "/ping": {
       "post": {
         "operationId": "createPing",
@@ -1474,6 +3772,11 @@
                 "type": "string",
                 "pattern": "^lead_[0-9a-z]{26}$",
                 "description": "Only with `idempotency_version_mismatch`. The lead the `transaction_id` already created."
+              },
+              "bid": {
+                "type": "string",
+                "pattern": "^bid_[0-9a-z]{26}$",
+                "description": "Only when a customer already has an active bid on that lead type and location. That bid's ID, so you can change it instead."
               }
             }
           },
@@ -1767,6 +4070,795 @@
             "type": "boolean",
             "default": false,
             "description": "Email the customer an invite to set up their portal login."
+          }
+        }
+      },
+      "LocationV1": {
+        "title": "Location",
+        "type": "object",
+        "properties": {
+          "country": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "Two-letter country code, like `US`."
+          },
+          "state": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "State, province or region abbreviation, like `TX`."
+          },
+          "county": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "County name, like `Harris`."
+          },
+          "county_fips": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "The county's 5-digit FIPS code, like `48201`."
+          }
+        }
+      },
+      "LeadAssignmentV1": {
+        "title": "Assignment",
+        "type": "object",
+        "properties": {
+          "customer": {
+            "type": "string",
+            "pattern": "^cus_[0-9a-z]{26}$",
+            "description": "The customer the lead went to."
+          },
+          "price": {
+            "type": [
+              "number",
+              "null"
+            ],
+            "description": "What this customer was charged, in dollars."
+          },
+          "assigned_at": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "When the lead was assigned to this customer.",
+            "format": "date-time"
+          },
+          "returned_at": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "When this customer returned the lead. `null` unless they returned it.",
+            "format": "date-time"
+          }
+        }
+      },
+      "LeadRecordV1": {
+        "title": "Lead",
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "pattern": "^lead_[0-9a-z]{26}$",
+            "description": "The lead's public ID."
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "pending",
+              "processing",
+              "assigned",
+              "duplicate",
+              "returned",
+              "unassigned",
+              "withheld",
+              "marketplace",
+              "club",
+              "audit",
+              "posted",
+              "uncategorized",
+              "distribution_error"
+            ],
+            "description": "The lead's status. `club` is a lead in your Club and `returned` is a lead its buyer returned. When a lead went to more than one customer, read `assignments` for each one."
+          },
+          "lead_type": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "The lead type's ID, or `null` when the lead didn't match a lead type.",
+            "pattern": "^ltyp_[0-9a-z]{26}$"
+          },
+          "source": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "The ID of the source that sent the lead.",
+            "pattern": "^src_[0-9a-z]{26}$"
+          },
+          "location": {
+            "$ref": "#/components/schemas/LocationV1"
+          },
+          "price": {
+            "type": [
+              "number",
+              "null"
+            ],
+            "description": "What the lead's first buyer was charged, in dollars. Each customer's own price is in `assignments`."
+          },
+          "test": {
+            "type": "boolean",
+            "description": "Whether the lead is test data."
+          },
+          "assignments": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/LeadAssignmentV1"
+            },
+            "description": "One entry for each customer the lead went to, oldest first, including customers who returned it. Deliveries to partners aren't listed."
+          },
+          "created_at": {
+            "type": "string",
+            "format": "date-time",
+            "description": "When the lead came in."
+          }
+        }
+      },
+      "LeadRecordResponseV1": {
+        "type": "object",
+        "properties": {
+          "data": {
+            "$ref": "#/components/schemas/LeadRecordV1"
+          },
+          "version": {
+            "type": "string",
+            "enum": [
+              "v1"
+            ]
+          }
+        }
+      },
+      "LeadRecordListResponseV1": {
+        "type": "object",
+        "properties": {
+          "data": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/LeadRecordV1"
+            }
+          },
+          "next_cursor": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "Pass as `cursor` to get the next page. `null` on the last page."
+          },
+          "version": {
+            "type": "string",
+            "enum": [
+              "v1"
+            ]
+          }
+        }
+      },
+      "LeadDetailsV1": {
+        "title": "Lead Details",
+        "type": "object",
+        "properties": {
+          "lead": {
+            "type": "string",
+            "pattern": "^lead_[0-9a-z]{26}$",
+            "description": "The lead's public ID."
+          },
+          "fields": {
+            "type": "object",
+            "additionalProperties": true,
+            "description": "The lead's deliverable fields, keyed by field title, with the same keys and values a v1 customer webhook sends for the lead. An empty object when the lead has none."
+          }
+        }
+      },
+      "LeadDetailsResponseV1": {
+        "type": "object",
+        "properties": {
+          "data": {
+            "$ref": "#/components/schemas/LeadDetailsV1"
+          },
+          "version": {
+            "type": "string",
+            "enum": [
+              "v1"
+            ]
+          }
+        }
+      },
+      "TransactionV1": {
+        "title": "Transaction",
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "pattern": "^txn_[0-9a-z]{26}$",
+            "description": "The transaction's public ID."
+          },
+          "type": {
+            "type": "string",
+            "enum": [
+              "credit",
+              "debit"
+            ],
+            "description": "`credit` added to the balance and `debit` took from it."
+          },
+          "event": {
+            "type": "string",
+            "enum": [
+              "customer_payment",
+              "lead_charge",
+              "tenant_credit",
+              "lead_refund",
+              "tenant_debit",
+              "auto_recharge",
+              "buy_order_placed",
+              "buy_order_canceled",
+              "buy_order_released",
+              "checkout_bonus"
+            ],
+            "description": "What produced the transaction. See [List Transactions](/api-reference/endpoint/v1/transactions-list) for what each one means."
+          },
+          "amount": {
+            "type": "number",
+            "description": "In dollars. Positive for a credit, negative for a debit."
+          },
+          "balance": {
+            "type": "number",
+            "description": "The customer's balance right after this transaction, in dollars. It doesn't subtract funds held for pending pings."
+          },
+          "description": {
+            "type": "string",
+            "description": "What the transaction was for. Your own description on credits and debits you make, otherwise the event's name."
+          },
+          "lead": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "The lead's ID when the transaction is for a lead, such as a `lead_charge` or `lead_refund`.",
+            "pattern": "^lead_[0-9a-z]{26}$"
+          },
+          "receipt_url": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "A link to the payment's receipt. Only on `customer_payment`, `tenant_credit` and `auto_recharge`."
+          },
+          "created_at": {
+            "type": "string",
+            "format": "date-time"
+          }
+        }
+      },
+      "TransactionResponseV1": {
+        "type": "object",
+        "properties": {
+          "data": {
+            "$ref": "#/components/schemas/TransactionV1"
+          },
+          "version": {
+            "type": "string",
+            "enum": [
+              "v1"
+            ]
+          }
+        }
+      },
+      "TransactionListResponseV1": {
+        "type": "object",
+        "properties": {
+          "data": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/TransactionV1"
+            }
+          },
+          "next_cursor": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "Pass as `cursor` to get the next page. `null` on the last page."
+          },
+          "version": {
+            "type": "string",
+            "enum": [
+              "v1"
+            ]
+          }
+        }
+      },
+      "TransactionRequestV1": {
+        "title": "Transaction Request",
+        "type": "object",
+        "required": [
+          "type",
+          "amount",
+          "description"
+        ],
+        "properties": {
+          "type": {
+            "type": "string",
+            "enum": [
+              "credit",
+              "debit"
+            ],
+            "description": "`credit` adds to the customer's balance and `debit` takes from it."
+          },
+          "amount": {
+            "type": "number",
+            "minimum": 0.01,
+            "maximum": 99999999.99,
+            "description": "In dollars, with at most 2 decimal places. Always positive, since `type` sets the direction. A debit can't be more than the customer's balance."
+          },
+          "description": {
+            "type": "string",
+            "maxLength": 255,
+            "description": "What the funds are for, like `Invoice 1042 paid`. The customer sees it on their transactions."
+          },
+          "receipt_url": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "format": "uri",
+            "maxLength": 2048,
+            "description": "Credits only. A link to the receipt in your own billing system. Sending one with a debit is refused."
+          }
+        }
+      },
+      "CustomerBidV1": {
+        "title": "Customer Bid",
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "pattern": "^bid_[0-9a-z]{26}$",
+            "description": "The bid's public ID."
+          },
+          "customer": {
+            "type": "string",
+            "pattern": "^cus_[0-9a-z]{26}$",
+            "description": "The customer who placed the bid."
+          },
+          "lead_type": {
+            "type": "string",
+            "pattern": "^ltyp_[0-9a-z]{26}$",
+            "description": "The lead type the bid is on."
+          },
+          "scope": {
+            "type": "string",
+            "enum": [
+              "county",
+              "state",
+              "nationwide"
+            ],
+            "description": "How wide the bid reaches, set by the depth of its location."
+          },
+          "location": {
+            "$ref": "#/components/schemas/LocationV1"
+          },
+          "amount": {
+            "type": "number",
+            "description": "What the customer bids for a lead, in dollars."
+          },
+          "minimum": {
+            "type": [
+              "number",
+              "null"
+            ],
+            "description": "The lead type's minimum bid at this scope, in dollars. `null` when the lead type has no bidding set up at this scope."
+          },
+          "below_minimum": {
+            "type": "boolean",
+            "description": "Whether `amount` is under `minimum`. That's allowed, as it is in Juiced."
+          },
+          "daily_lead_cap": {
+            "type": [
+              "integer",
+              "null"
+            ],
+            "description": "Most leads this bid gets a day."
+          },
+          "weekly_lead_cap": {
+            "type": [
+              "integer",
+              "null"
+            ],
+            "description": "Most leads this bid gets a week."
+          },
+          "monthly_lead_cap": {
+            "type": [
+              "integer",
+              "null"
+            ],
+            "description": "Most leads this bid gets a month."
+          },
+          "daily_budget": {
+            "type": [
+              "number",
+              "null"
+            ],
+            "description": "Most this bid spends a day, in dollars."
+          },
+          "weekly_budget": {
+            "type": [
+              "number",
+              "null"
+            ],
+            "description": "Most this bid spends a week, in dollars."
+          },
+          "monthly_budget": {
+            "type": [
+              "number",
+              "null"
+            ],
+            "description": "Most this bid spends a month, in dollars."
+          },
+          "paused": {
+            "type": "boolean",
+            "description": "Whether the bid is paused."
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "active",
+              "limited",
+              "exhausted",
+              "paused",
+              "archived"
+            ],
+            "description": "The bid's status, as Juiced shows it. See [Display status](/features/bidding#display-status). It doesn't cover the customer's own account, so check `can_receive_leads` too."
+          },
+          "can_receive_leads": {
+            "type": "boolean",
+            "description": "Whether the bid can win leads right now. It runs the same check distribution does."
+          },
+          "blocked_by": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "enum": [
+                "bid_archived",
+                "bid_paused",
+                "insufficient_funds",
+                "bid_cap_reached",
+                "bid_budget_reached",
+                "customer_paused",
+                "customer_archived",
+                "customer_cap_reached",
+                "customer_budget_reached",
+                "bidding_not_set_up"
+              ]
+            },
+            "description": "Every reason the bid can't receive leads right now, bid-level reasons first. Empty when `can_receive_leads` is `true`. See [Get a Bid](/api-reference/endpoint/v1/bids-get) for what each code means."
+          },
+          "archived_at": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "When the bid was archived.",
+            "format": "date-time"
+          },
+          "created_at": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "updated_at": {
+            "type": "string",
+            "format": "date-time"
+          }
+        }
+      },
+      "CustomerBidResponseV1": {
+        "type": "object",
+        "properties": {
+          "data": {
+            "$ref": "#/components/schemas/CustomerBidV1"
+          },
+          "version": {
+            "type": "string",
+            "enum": [
+              "v1"
+            ]
+          }
+        }
+      },
+      "CustomerBidListResponseV1": {
+        "type": "object",
+        "properties": {
+          "data": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/CustomerBidV1"
+            }
+          },
+          "next_cursor": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "Pass as `cursor` to get the next page. `null` on the last page."
+          },
+          "version": {
+            "type": "string",
+            "enum": [
+              "v1"
+            ]
+          }
+        }
+      },
+      "BidLocationInputV1": {
+        "title": "Bid Location",
+        "type": "object",
+        "required": [
+          "country"
+        ],
+        "additionalProperties": false,
+        "description": "Where the bid applies. Its depth sets the scope. `country` alone is a nationwide bid, adding `state` makes a state bid, and adding `county_fips` makes a county bid.",
+        "properties": {
+          "country": {
+            "type": "string",
+            "minLength": 2,
+            "maxLength": 2,
+            "description": "Two-letter code of one of your operating countries, like `US`."
+          },
+          "state": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "maxLength": 8,
+            "description": "The state, province or region abbreviation, like `TX`. It must be in `country`."
+          },
+          "county_fips": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "pattern": "^\\d{5}$",
+            "description": "A US county's 5-digit FIPS code, like `48201`. County bids are US only. `state` is optional with it, but must be the county's state when you send it."
+          }
+        }
+      },
+      "BidCreateRequestV1": {
+        "title": "Bid Create Request",
+        "type": "object",
+        "required": [
+          "lead_type",
+          "location",
+          "amount"
+        ],
+        "properties": {
+          "lead_type": {
+            "type": "string",
+            "description": "The lead type's ID, from [List Lead Types](/api-reference/endpoint/v1/lead-types-list). Bidding must be turned on for it at the location's scope."
+          },
+          "location": {
+            "$ref": "#/components/schemas/BidLocationInputV1"
+          },
+          "amount": {
+            "type": "number",
+            "minimum": 0.01,
+            "maximum": 21474836,
+            "description": "What the customer bids for a lead, in dollars with at most 2 decimal places. It can be below the lead type's minimum, which `below_minimum` flags."
+          },
+          "daily_lead_cap": {
+            "type": [
+              "integer",
+              "null"
+            ],
+            "minimum": 1,
+            "maximum": 2147483647,
+            "description": "Most leads this bid gets a day. Only accepted when the bid daily lead cap is turned on in **Configure → Bidding**, and ignored otherwise. Send `null` to remove it."
+          },
+          "weekly_lead_cap": {
+            "type": [
+              "integer",
+              "null"
+            ],
+            "minimum": 1,
+            "maximum": 2147483647,
+            "description": "Most leads this bid gets a week. Only accepted when the bid weekly lead cap is turned on in **Configure → Bidding**, and ignored otherwise. Send `null` to remove it."
+          },
+          "monthly_lead_cap": {
+            "type": [
+              "integer",
+              "null"
+            ],
+            "minimum": 1,
+            "maximum": 2147483647,
+            "description": "Most leads this bid gets a month. Only accepted when the bid monthly lead cap is turned on in **Configure → Bidding**, and ignored otherwise. Send `null` to remove it."
+          },
+          "daily_budget": {
+            "type": [
+              "number",
+              "null"
+            ],
+            "minimum": 1,
+            "maximum": 21474836,
+            "description": "Most this bid spends a day, in dollars with at most 2 decimal places. Only accepted when the bid daily budget is turned on in **Configure → Bidding**, and ignored otherwise. Send `null` to remove it."
+          },
+          "weekly_budget": {
+            "type": [
+              "number",
+              "null"
+            ],
+            "minimum": 1,
+            "maximum": 21474836,
+            "description": "Most this bid spends a week, in dollars with at most 2 decimal places. Only accepted when the bid weekly budget is turned on in **Configure → Bidding**, and ignored otherwise. Send `null` to remove it."
+          },
+          "monthly_budget": {
+            "type": [
+              "number",
+              "null"
+            ],
+            "minimum": 1,
+            "maximum": 21474836,
+            "description": "Most this bid spends a month, in dollars with at most 2 decimal places. Only accepted when the bid monthly budget is turned on in **Configure → Bidding**, and ignored otherwise. Send `null` to remove it."
+          },
+          "paused": {
+            "type": "boolean",
+            "default": false,
+            "description": "Create the bid paused."
+          }
+        }
+      },
+      "BidUpdateRequestV1": {
+        "title": "Bid Update Request",
+        "type": "object",
+        "description": "Send only the fields you want to change.",
+        "properties": {
+          "lead_type": {
+            "type": "string",
+            "description": "Move the bid to another lead type. Bidding must be turned on for it at the bid's scope."
+          },
+          "location": {
+            "$ref": "#/components/schemas/BidLocationInputV1"
+          },
+          "amount": {
+            "type": "number",
+            "minimum": 0.01,
+            "maximum": 21474836,
+            "description": "What the customer bids for a lead, in dollars with at most 2 decimal places."
+          },
+          "daily_lead_cap": {
+            "type": [
+              "integer",
+              "null"
+            ],
+            "minimum": 1,
+            "maximum": 2147483647,
+            "description": "Most leads this bid gets a day. Only accepted when the bid daily lead cap is turned on in **Configure → Bidding**, and ignored otherwise. Send `null` to remove it."
+          },
+          "weekly_lead_cap": {
+            "type": [
+              "integer",
+              "null"
+            ],
+            "minimum": 1,
+            "maximum": 2147483647,
+            "description": "Most leads this bid gets a week. Only accepted when the bid weekly lead cap is turned on in **Configure → Bidding**, and ignored otherwise. Send `null` to remove it."
+          },
+          "monthly_lead_cap": {
+            "type": [
+              "integer",
+              "null"
+            ],
+            "minimum": 1,
+            "maximum": 2147483647,
+            "description": "Most leads this bid gets a month. Only accepted when the bid monthly lead cap is turned on in **Configure → Bidding**, and ignored otherwise. Send `null` to remove it."
+          },
+          "daily_budget": {
+            "type": [
+              "number",
+              "null"
+            ],
+            "minimum": 1,
+            "maximum": 21474836,
+            "description": "Most this bid spends a day, in dollars with at most 2 decimal places. Only accepted when the bid daily budget is turned on in **Configure → Bidding**, and ignored otherwise. Send `null` to remove it."
+          },
+          "weekly_budget": {
+            "type": [
+              "number",
+              "null"
+            ],
+            "minimum": 1,
+            "maximum": 21474836,
+            "description": "Most this bid spends a week, in dollars with at most 2 decimal places. Only accepted when the bid weekly budget is turned on in **Configure → Bidding**, and ignored otherwise. Send `null` to remove it."
+          },
+          "monthly_budget": {
+            "type": [
+              "number",
+              "null"
+            ],
+            "minimum": 1,
+            "maximum": 21474836,
+            "description": "Most this bid spends a month, in dollars with at most 2 decimal places. Only accepted when the bid monthly budget is turned on in **Configure → Bidding**, and ignored otherwise. Send `null` to remove it."
+          },
+          "paused": {
+            "type": "boolean",
+            "description": "`true` pauses the bid and `false` turns it back on."
+          }
+        }
+      },
+      "LeadTypeV1": {
+        "title": "Lead Type",
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "pattern": "^ltyp_[0-9a-z]{26}$",
+            "description": "The lead type's public ID. Send it as `lead_type` when you create a bid."
+          },
+          "name": {
+            "type": "string"
+          },
+          "description": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "The lead type's description."
+          },
+          "bidding": {
+            "type": "array",
+            "description": "The scopes bids can be placed at, with each one's minimum. Empty when bidding isn't turned on for the lead type.",
+            "items": {
+              "type": "object",
+              "properties": {
+                "scope": {
+                  "type": "string",
+                  "enum": [
+                    "county",
+                    "state",
+                    "nationwide"
+                  ]
+                },
+                "minimum": {
+                  "type": [
+                    "number",
+                    "null"
+                  ],
+                  "description": "The minimum bid at this scope, in dollars."
+                }
+              }
+            }
+          }
+        }
+      },
+      "LeadTypeListResponseV1": {
+        "type": "object",
+        "properties": {
+          "data": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/LeadTypeV1"
+            }
+          },
+          "version": {
+            "type": "string",
+            "enum": [
+              "v1"
+            ]
           }
         }
       },
@@ -2166,6 +5258,18 @@
     {
       "name": "Customers",
       "description": "Create and look up your customers with an API key."
+    },
+    {
+      "name": "Leads",
+      "description": "Look up your leads and their details with an API key."
+    },
+    {
+      "name": "Funds",
+      "description": "Add funds to and remove funds from a customer's balance, and list their transactions."
+    },
+    {
+      "name": "Bids",
+      "description": "Manage your customers' bids and look up your lead types."
     },
     {
       "name": "Legacy",

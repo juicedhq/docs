@@ -201,6 +201,32 @@
             ]
           },
           {
+            "group": "Leads",
+            "pages": [
+              "api-reference/endpoint/v1/leads-list",
+              "api-reference/endpoint/v1/leads-get",
+              "api-reference/endpoint/v1/leads-details"
+            ]
+          },
+          {
+            "group": "Funds",
+            "pages": [
+              "api-reference/endpoint/v1/transactions-create",
+              "api-reference/endpoint/v1/transactions-list"
+            ]
+          },
+          {
+            "group": "Bids",
+            "pages": [
+              "api-reference/endpoint/v1/bids-create",
+              "api-reference/endpoint/v1/bids-list",
+              "api-reference/endpoint/v1/bids-get",
+              "api-reference/endpoint/v1/bids-update",
+              "api-reference/endpoint/v1/bids-archive",
+              "api-reference/endpoint/v1/lead-types-list"
+            ]
+          },
+          {
             "group": "Legacy Endpoints (Deprecated)",
             "pages": ["api-reference/endpoint/ping", "api-reference/endpoint/leads"]
           }

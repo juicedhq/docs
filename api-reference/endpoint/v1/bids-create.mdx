@@ -1,0 +1,57 @@
+---
+title: Create a Bid
+description: Place a bid for a customer on a lead type and location.
+openapi: POST /v1/customers/{id}/bids
+---
+
+Creating a bid works just like adding one for the customer in Juiced. Juiced sets the bid's statuses, tells other bidders when they're outbid, and shows your API key's label on the customer's activity timeline. It needs the `bids:write` ability.
+
+## Lead type
+
+Send the lead type's ID as `lead_type`. [List Lead Types](/api-reference/endpoint/v1/lead-types-list) gives you the IDs and the scopes each one is open at. Bidding must be turned on for the lead type at the location's scope, or the bid is refused with a message naming the scopes that are open.
+
+## Location and scope
+
+`location` is `{country, state, county_fips}`, and how deep it goes sets the bid's [scope](/features/bidding#scopes).
+
+| You send | Scope |
+|----------|-------|
+| `{"country": "US"}` | `nationwide` |
+| `{"country": "US", "state": "TX"}` | `state` |
+| `{"country": "US", "state": "TX", "county_fips": "48201"}` | `county` |
+
+- **`country`** is a two-letter code and must be one of your [operating countries](/features/company-profile#operating-countries).
+- **`state`** is the state, province or region abbreviation, and must be in that country.
+- **`county_fips`** is the county's 5-digit FIPS code. County bids are US only. `state` is optional with a county, but when you send it, it must be the county's state.
+
+When something's off, the error names the field, such as `location.country`, `location.state` or `location.county_fips`.
+
+## Amount and minimum
+
+`amount` is in dollars, with at most 2 decimal places. It can be below the lead type's minimum, as it can when you bid for a customer in Juiced. The bid comes back with `minimum` and `below_minimum` so you can spot it.
+
+## Caps and budgets
+
+Lead caps and budgets are only accepted when that limit is turned on under **Configure → Bidding** (see [Budgets and caps](/features/budgets-and-caps)). Any limit that's turned off is ignored. Budgets are in dollars.
+
+Send `"paused": true` to create the bid paused.
+
+## Retries and duplicates
+
+Bid writes don't take an `Idempotency-Key`. A customer can only have one active bid per lead type and location, so if a create is sent twice, the second one returns `422` with `validation_failed`, and `error.bid` holds the ID of the bid that already exists. Change that bid with [Update a Bid](/api-reference/endpoint/v1/bids-update) instead.
+
+```json
+{
+  "error": {
+    "code": "validation_failed",
+    "message": "This customer already has a bid on this lead type and location. Change that bid instead.",
+    "errors": {
+      "location": ["This customer already has a bid on this lead type and location. Change that bid instead."]
+    },
+    "bid": "bid_01h9z3c5e7g9j1k3m5n7p9r1st"
+  },
+  "version": "v1"
+}
+```
+
+Check `can_receive_leads` and `blocked_by` on the new bid to see whether it can win leads yet. See [Get a Bid](/api-reference/endpoint/v1/bids-get#can-it-receive-leads).

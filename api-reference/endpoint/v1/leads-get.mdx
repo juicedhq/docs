@@ -1,0 +1,11 @@
+---
+title: Get a Lead
+description: Get one lead by ID, with its status, location, price and every customer it went to.
+openapi: GET /v1/leads/{id}
+---
+
+Use the lead's ID, which starts with `lead_`. It's the `id` from [Submit a Lead](/api-reference/endpoint/v1/leads), from [List Leads](/api-reference/endpoint/v1/leads-list), and from your [webhooks](/features/webhooks#public-ids). Test leads are returned too, with `test` set to `true`.
+
+`assignments` has one entry for each customer the lead went to, including any who returned it. A returned assignment has `returned_at` set, so a lead sold to two customers where one returned it reads correctly. See [List Leads](/api-reference/endpoint/v1/leads-list#statuses) for the `status` values.
+
+No contact details are returned. Get those from [Get Lead Details](/api-reference/endpoint/v1/leads-details).
