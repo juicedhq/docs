@@ -2431,12 +2431,12 @@
                       "version": "v1"
                     }
                   },
-                  "Same market still changing": {
-                    "summary": "Same market still changing",
+                  "Another change still running": {
+                    "summary": "Another change still running",
                     "value": {
                       "error": {
                         "code": "rate_limited",
-                        "message": "Another change to this customer's bid on this lead type and location is still running. Retry after the number of seconds in the Retry-After header."
+                        "message": "Another change to this bid, or to this customer's bid on this lead type and location, is still running. Retry after the number of seconds in the Retry-After header."
                       },
                       "version": "v1"
                     }
@@ -2647,7 +2647,7 @@
       "patch": {
         "operationId": "updateBidV1",
         "summary": "Update a bid",
-        "description": "Changes a bid. Send only the fields you want to change. `paused` pauses or unpauses the bid. A refused change changes nothing, and an archived bid can't be changed.\n\nRequires the `bids:write` ability.",
+        "description": "Changes a bid. Send only the fields you want to change. `paused` pauses or unpauses the bid. Sending the bid's own lead type or location back unchanged doesn't count as moving it. A refused change changes nothing, and an archived bid can't be changed.\n\nRequires the `bids:write` ability.",
         "tags": [
           "Bids"
         ],
@@ -2911,7 +2911,7 @@
             }
           },
           "429": {
-            "description": "The key sent too many requests, or another change to this customer's bid on the same lead type and location was still running after 10 seconds. Retry after `Retry-After` seconds.",
+            "description": "The key sent too many requests, another change to this bid (or to this customer's bid on the new lead type and location) was still running after 10 seconds, or another change moved or archived this bid while the request waited. Nothing was changed. Retry after `Retry-After` seconds, and a resent request is checked against the bid as it is now.",
             "headers": {
               "X-Request-Id": {
                 "$ref": "#/components/headers/XRequestId"
@@ -2936,12 +2936,22 @@
                       "version": "v1"
                     }
                   },
-                  "Same market still changing": {
-                    "summary": "Same market still changing",
+                  "Another change still running": {
+                    "summary": "Another change still running",
                     "value": {
                       "error": {
                         "code": "rate_limited",
-                        "message": "Another change to this customer's bid on this lead type and location is still running. Retry after the number of seconds in the Retry-After header."
+                        "message": "Another change to this bid, or to this customer's bid on this lead type and location, is still running. Retry after the number of seconds in the Retry-After header."
+                      },
+                      "version": "v1"
+                    }
+                  },
+                  "Bid changed while waiting": {
+                    "summary": "Bid changed while waiting",
+                    "value": {
+                      "error": {
+                        "code": "rate_limited",
+                        "message": "This bid changed while this request was waiting. Send the request again."
                       },
                       "version": "v1"
                     }
@@ -3101,7 +3111,44 @@
             }
           },
           "429": {
-            "$ref": "#/components/responses/RateLimitedV1"
+            "description": "The key sent too many requests, or another change to this bid was still running after 10 seconds. Nothing was changed. Retry after `Retry-After` seconds.",
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/XRequestId"
+              },
+              "Retry-After": {
+                "$ref": "#/components/headers/RetryAfter"
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorV1"
+                },
+                "examples": {
+                  "Too many requests": {
+                    "summary": "Too many requests",
+                    "value": {
+                      "error": {
+                        "code": "rate_limited",
+                        "message": "Too many requests. Retry after the number of seconds in the Retry-After header."
+                      },
+                      "version": "v1"
+                    }
+                  },
+                  "Another change still running": {
+                    "summary": "Another change still running",
+                    "value": {
+                      "error": {
+                        "code": "rate_limited",
+                        "message": "Another change to this bid, or to this customer's bid on this lead type and location, is still running. Retry after the number of seconds in the Retry-After header."
+                      },
+                      "version": "v1"
+                    }
+                  }
+                }
+              }
+            }
           },
           "500": {
             "$ref": "#/components/responses/ServerErrorV1"
@@ -4395,7 +4442,7 @@
           },
           "balance": {
             "type": "number",
-            "description": "The customer's balance right after this transaction, in dollars. It doesn't subtract funds held for pending pings."
+            "description": "The customer's balance right after this transaction, in dollars. In a list, it doesn't subtract funds held for pending pings. In the response to [Add or Remove Funds](/api-reference/endpoint/v1/transactions-create), it's the customer's `balance` at that moment, after funds held for pending pings, so the two can differ while a ping is waiting."
           },
           "description": {
             "type": "string",

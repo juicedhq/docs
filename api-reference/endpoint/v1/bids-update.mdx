@@ -8,12 +8,16 @@ Send only the fields you want to change. Anything you leave out keeps its curren
 
 - **`paused`** pauses the bid with `true` and turns it back on with `false`.
 - **`amount`**, caps and budgets change just those values. Caps and budgets are only accepted when that limit is turned on under **Configure → Bidding**. Send `null` to remove one.
-- **`lead_type`** and **`location`** move the bid to another market. They follow the same rules as [creating a bid](/api-reference/endpoint/v1/bids-create#location-and-scope), so bidding must be turned on for the lead type at the new scope. If another of the customer's active bids already holds that lead type and location, the change is refused and `error.bid` holds that bid's ID. The message is on `errors.lead_type` when you only changed the lead type, and on `errors.location` otherwise.
+- **`lead_type`** and **`location`** move the bid to another market. They follow the same rules as [creating a bid](/api-reference/endpoint/v1/bids-create#location-and-scope), so bidding must be turned on for the lead type at the new scope. If another of the customer's active bids already holds that lead type and location, the change is refused and `error.bid` holds that bid's ID. The message is on `errors.lead_type` when you only changed the lead type, and on `errors.location` otherwise. An empty `location` object is refused on `location.country`.
 
-A change that keeps the bid's lead type and location, like a new amount or a pause, isn't checked against the lead type's current bidding settings, just as in Juiced.
+A change that keeps the bid's lead type and location, like a new amount or a pause, isn't checked against the lead type's current bidding settings, just as in Juiced. That's also true when you send the bid's own lead type or location back unchanged, so you can send the whole bid back with just a new amount.
 
 When you send `"paused": true` with a new amount, the bid is paused first, so raising a paused bid doesn't send outbid notices. A refused change changes nothing.
 
-Changes that move a bid run one at a time for each customer, lead type and location. If one waits more than 10 seconds for another to finish, it returns `429` with `rate_limited` and a `Retry-After` header.
+## Overlapping changes
+
+Changes to one bid run one at a time, and so do changes that move bids onto the same customer, lead type and location. If a request waits more than 10 seconds for another to finish, it returns `429` with `rate_limited` and a `Retry-After` header.
+
+If another change moved this bid to a different lead type or location, or archived it, while your request was waiting, your request is refused with `429` and `rate_limited`, the message "This bid changed while this request was waiting. Send the request again." and `Retry-After: 1`. Nothing from it is applied. When you send it again, it's checked against the bid as it is now.
 
 An archived bid can't be changed. Create a new bid instead.

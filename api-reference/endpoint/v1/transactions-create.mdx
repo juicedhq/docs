@@ -15,6 +15,8 @@ No card is charged. A credit adds to the customer's balance and a debit takes fr
 
 `amount` is in dollars, with at most 2 decimal places, from 0.01 up to 99,999,999.99. It's always positive, since `type` sets the direction. `description` is required and shows on the customer's transactions in their portal, so write it for them.
 
+The response's `balance` is the customer's balance right after this credit or debit, the same figure [Get a Customer](/api-reference/endpoint/v1/customers-get) returns.
+
 Archived customers can be credited and debited too. Credits and debits for one customer run one at a time, so each request sees the balance the one before it left. This endpoint needs the `funds:write` ability.
 
 ## The Idempotency-Key header is required

@@ -16,7 +16,7 @@ It needs the `customers:read` ability. There's no separate ability for reading t
 - **`receipt_url`** is only set on payments and credits that came with a receipt.
 - **`description`** is the description you sent on credits and debits you made. Other transactions get a short label for their event, like `Lead charge` or `Payment`.
 
-`balance` here doesn't subtract funds held for pending pings, while the customer's own `balance` from [Get a Customer](/api-reference/endpoint/v1/customers-get) does. So the newest transaction's `balance` can be higher than the customer's while a ping is waiting.
+`balance` here doesn't subtract funds held for pending pings, while the customer's own `balance` from [Get a Customer](/api-reference/endpoint/v1/customers-get) does. So the newest transaction's `balance` can be higher than the customer's while a ping is waiting. The response to [Add or Remove Funds](/api-reference/endpoint/v1/transactions-create) is different. Its `balance` is the customer's own `balance` right after the credit or debit.
 
 ## Events
 
