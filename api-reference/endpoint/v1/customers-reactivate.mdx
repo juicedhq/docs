@@ -1,0 +1,11 @@
+---
+title: Reactivate a Customer
+description: Bring an archived customer back.
+openapi: POST /v1/customers/{id}/reactivate
+---
+
+Reactivating works just like reactivating a customer in Juiced. Their bids come back paused, so they won't receive leads until the bids are turned back on.
+
+If another active customer now uses the archived customer's email, reactivating is refused. Change that customer's email first.
+
+Reactivating a customer who isn't archived changes nothing and returns them, so it's safe to retry.
