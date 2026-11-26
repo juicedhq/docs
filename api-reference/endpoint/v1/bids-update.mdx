@@ -12,6 +12,8 @@ Send only the fields you want to change. Anything you leave out keeps its curren
 
 A change that keeps the bid's lead type and location, like a new amount or a pause, isn't checked against the lead type's current bidding settings, just as in Juiced. That's also true when you send the bid's own lead type or location back unchanged, so you can send the whole bid back with just a new amount.
 
+The exception is a bid whose bidding scope was deleted from its lead type. Its funding can't be worked out anymore, so any change that keeps its lead type and location returns `422` with the message on `errors.bid`, and nothing is written. Move it with `lead_type` or `location`, or [archive it](/api-reference/endpoint/v1/bids-archive).
+
 When you send `"paused": true` with a new amount, the bid is paused first, so raising a paused bid doesn't send outbid notices. A refused change changes nothing.
 
 ## Overlapping changes

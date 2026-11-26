@@ -3265,7 +3265,7 @@
             }
           },
           "422": {
-            "description": "The change failed validation. Moving the bid onto a lead type and location another of the customer's bids holds carries that bid's ID in `error.bid`. The message is on `lead_type` when only the lead type changed, and on `location` otherwise.",
+            "description": "The change failed validation. Moving the bid onto a lead type and location another of the customer's bids holds carries that bid's ID in `error.bid`. The message is on `lead_type` when only the lead type changed, and on `location` otherwise. A bid whose bidding scope was deleted from its lead type can only be moved or archived. Any other change is refused on `bid`.",
             "headers": {
               "X-Request-Id": {
                 "$ref": "#/components/headers/XRequestId"
@@ -3286,6 +3286,21 @@
                         "errors": {
                           "bid": [
                             "This bid is archived and can't be changed. Create a new bid instead."
+                          ]
+                        }
+                      },
+                      "version": "v1"
+                    }
+                  },
+                  "Bidding scope deleted": {
+                    "summary": "Bidding scope deleted",
+                    "value": {
+                      "error": {
+                        "code": "validation_failed",
+                        "message": "Bidding is no longer set up for this bid's lead type and location, so it can't be changed. Move it with lead_type or location, or archive it.",
+                        "errors": {
+                          "bid": [
+                            "Bidding is no longer set up for this bid's lead type and location, so it can't be changed. Move it with lead_type or location, or archive it."
                           ]
                         }
                       },

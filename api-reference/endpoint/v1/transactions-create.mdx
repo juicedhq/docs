@@ -29,5 +29,6 @@ Use an ID from your own system, such as your payment or invoice ID, so a retry o
 - **Same key, different body** returns `409` with `idempotency_conflict`.
 - **Same key and body for a different customer** also returns `409` with `idempotency_conflict`, and nothing moves. It's never replayed as the first customer's response.
 - **The first request is still running** returns `409` with `idempotency_in_progress` and a `Retry-After` header.
+- **A server error** (`5xx`) moves no money and isn't saved against the key, so send the same request again.
 
 See [Safe retries](/api-reference/api-keys#safe-retries) for the details.
