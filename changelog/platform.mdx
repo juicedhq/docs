@@ -8,6 +8,27 @@ Everything that changed on the tenant side of Juiced, including lead routing, di
 
 Looking for changes to the buyer experience? Those live in [Customer portal updates](/changelog/customer-portal).
 
+<Update label="November 25, 2026" description="v3.100.0" tags={["New", "Improvements"]}>
+  <Frame>
+    <img className="block dark:hidden" src="/images/changelog/v3.100.0-light.webp" alt="Juiced release card reading Your CRM can now move money and bids, next to the New API key dialog for a GoHighLevel key with all seven abilities checked, from Read customers to Manage bids" />
+    <img className="hidden dark:block" src="/images/changelog/v3.100.0-dark.webp" alt="Juiced release card reading Your CRM can now move money and bids, next to the New API key dialog for a GoHighLevel key with all seven abilities checked, from Read customers to Manage bids" />
+  </Frame>
+
+  Your CRM just got the keys to the juice bar. An invoice paid in your billing system can top up the buyer's wallet, a deal closed in GoHighLevel can place their bids, and your reporting can see who bought every lead, all without anyone logging in to Juiced.
+
+  ## API
+
+  - [API keys](/api-reference/api-keys) have five new abilities. **Add and remove funds** credits or debits a customer's [wallet](/features/customers#wallet-management), just like **Add funds** and **Remove funds** in the panel, and never charges their card. Every request needs an `Idempotency-Key`, so a retry can't add the money twice.
+  - **Read bids** and **Manage bids** look up, place, change, pause and archive a customer's [bids](/features/bidding). Bids follow the same rules as the panel, and each one says whether it can receive leads right now and, if not, what's blocking it (like a paused bid or not enough funds).
+  - **Read leads** looks up your leads with their status, lead type, location, price and every customer or partner that bought them, with no contact details. **Read lead details** adds the lead's contact and custom fields, as its buyers receive them, so give it only to keys that need them.
+  - **Read customers** now also lists a customer's [transactions](/features/transactions), with the running balance after each one.
+  - Funds and bid changes made with a key show in the customer's timeline under the key's label. Existing keys keep only the abilities they were created with, so create a new key to use the new ones.
+
+  ## Improvements
+
+  - Club memberships bought through a [checkout page](/features/checkout-pages) now carry the same customer metadata in your Stripe account as ones started in the customer portal, so you can match them to the Juiced customer even after the buyer changes their email.
+</Update>
+
 <Update label="November 25, 2026" description="v3.99.0" tags={["New", "Improvements", "Fixes", "Breaking changes"]}>
   <Frame>
     <img className="block dark:hidden" src="/images/changelog/v3.99.0-light.webp" alt="Juiced release card reading Your CRM can now pause buyers, next to a customer page marked Paused whose activity shows API key GoHighLevel updated the phone number and then paused the customer" />
