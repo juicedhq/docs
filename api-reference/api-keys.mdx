@@ -1,9 +1,9 @@
 ---
 title: API Keys
-description: Let your own systems, like a CRM workflow or Zapier, manage your customers through the Juiced API.
+description: Let your own systems, like a CRM workflow or Zapier, manage your customers, their funds and bids, and read your leads through the Juiced API.
 ---
 
-The lead endpoints authenticate as a [source](/features/sources). Everything else in the API, starting with [customers](/api-reference/endpoint/v1/customers-create), authenticates with an **API key** that belongs to your account. Use one when your CRM, Zapier, or your own code needs to create or look up customers without anyone logging in to Juiced.
+The ping and lead submission endpoints authenticate as a [source](/features/sources). Everything else in the API authenticates with an **API key** that belongs to your account. That covers [customers](/api-reference/endpoint/v1/customers-create), [funds](/api-reference/endpoint/v1/transactions-create), [bids](/api-reference/endpoint/v1/bids-create) and [looking up leads](/api-reference/endpoint/v1/leads-list). Use one when your CRM, Zapier, or your own code needs to work with Juiced without anyone logging in.
 
 <Note>
 API keys are available on paid plans. Only admins can see, create and revoke them.
@@ -35,8 +35,15 @@ Give each key only what its integration needs.
 
 | Ability | What it allows |
 |---------|----------------|
-| `customers:read` | Look up customers by ID or email, including their balance. |
+| `customers:read` | Look up customers by ID or email, including their balance, and [list their transactions](/api-reference/endpoint/v1/transactions-list). |
 | `customers:write` | Create, update, pause, archive and reactivate customers, and send them a portal invite. |
+| `funds:write` | [Add funds to or remove funds from](/api-reference/endpoint/v1/transactions-create) a customer's balance. Never charges their card. |
+| `leads:read` | [Look up leads](/api-reference/endpoint/v1/leads-list), with their status, lead type, location, price and who bought them. No contact details. |
+| `lead_details:read` | [Read a lead's contact and custom fields](/api-reference/endpoint/v1/leads-details), as its buyers receive them. |
+| `bids:read` | Look up customers' bids, whether each can receive leads, and your lead types. |
+| `bids:write` | Create, change, pause and archive customers' bids. |
+
+`customers:read` also covers a customer's transactions, so there's no separate ability for reading them. Give `lead_details:read` only to integrations that need contact details, like a CRM, and leave it off reporting keys.
 
 ## Use a key
 
@@ -49,7 +56,7 @@ curl -G https://usejuiced.com/api/v1/customers \
   -H "Authorization: Bearer jz_live_your_key_here"
 ```
 
-The key decides which account a request acts on, so every request only ever sees your own customers.
+The key decides which account a request acts on, so every request only ever sees your own customers, leads and bids. An ID from another account returns `404` with `not_found`.
 
 ## Revoke a key
 
@@ -82,3 +89,7 @@ Creating a customer accepts an optional `Idempotency-Key` header, any string up 
 Idempotency keys belong to your account, not to one API key, so a retry still matches after you rotate keys.
 
 Updating, archiving and reactivating a customer don't need an `Idempotency-Key`. Each is already safe to repeat. Sending the same update again leaves the customer as it is, and archiving an archived customer or reactivating an active one changes nothing.
+
+[Adding or removing funds](/api-reference/endpoint/v1/transactions-create) **requires** an `Idempotency-Key`, since it moves money. Without one, the request returns `422` with `validation_failed` and no money moves. Use an ID from your own system, such as your payment ID. A key belongs to the customer URL it was first sent to, so the same key and body sent for a different customer returns `409` with `idempotency_conflict` instead of a replay.
+
+Bid writes don't take an `Idempotency-Key`. A customer can only have one active bid per lead type and location, so a repeated create returns `422` with the existing bid's ID in `error.bid`. See [Create a Bid](/api-reference/endpoint/v1/bids-create#retries-and-duplicates).

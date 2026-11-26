@@ -1,9 +1,9 @@
 ---
 title: Introduction
-description: Integrate with Juiced to submit leads and manage customers programmatically.
+description: Integrate with Juiced to submit leads, manage customers and their bids, and read your leads programmatically.
 ---
 
-The Juiced API lets you submit leads programmatically, check pricing before committing, and integrate your lead sources directly with the platform. Your own systems, like a CRM workflow or Zapier, can also create and look up customers with an [API key](/api-reference/api-keys).
+The Juiced API lets you submit leads programmatically, check pricing before committing, and integrate your lead sources directly with the platform. Your own systems, like a CRM workflow or Zapier, can also manage customers, their funds and bids, and look up your leads with an [API key](/api-reference/api-keys).
 
 <Tip>Sending leads from a form builder, funnel, ad platform, CRM or another lead platform? See [Sending leads from other tools](/guides/sending-leads-from-other-tools).</Tip>
 
@@ -22,7 +22,7 @@ Build on **v1**, the endpoints under `/api/v1`. The original unversioned endpoin
 | | v1 | Legacy |
 |---|---|---|
 | Endpoints | `POST /v1/ping`, `POST /v1/leads` | `POST /ping`, `POST /leads` |
-| IDs | Public IDs only (`ping_…`, `lead_…`, `bid_…`, `cus_…`, `prt_…`) | UUIDs and numeric IDs (plus `lead_public_id` on leads) |
+| IDs | Public IDs only (`ping_…`, `lead_…`, `bid_…`, `cus_…`, `prt_…`, `src_…`, `ltyp_…`, `txn_…`) | UUIDs and numeric IDs (plus `lead_public_id` on leads) |
 | Success body | `{"data": {...}, "version": "v1"}` | Flat object |
 | Errors | One envelope with a stable `code` (see [Errors](#errors)) | Mixed shapes |
 | Request ID | `X-Request-Id` on every response | None |
@@ -50,7 +50,7 @@ The header is optional (requests without it still succeed), but including it is 
 
 ## Authentication
 
-The ping and lead endpoints authenticate as a source, using either of the two methods below. The customer endpoints use an [API key](/api-reference/api-keys) from **Configure → API Keys** instead.
+The ping and lead submission endpoints authenticate as a source, using either of the two methods below. Every other endpoint, including looking up leads, uses an [API key](/api-reference/api-keys) from **Configure → API Keys** instead.
 
 ### Basic Authentication
 
@@ -87,6 +87,17 @@ You can find your API credentials in your source settings within Juiced.
 | [`POST /v1/customers`](/api-reference/endpoint/v1/customers-create) | Create a customer and optionally invite them to their portal |
 | [`GET /v1/customers`](/api-reference/endpoint/v1/customers-list) | List customers or find one by email |
 | [`GET /v1/customers/{id}`](/api-reference/endpoint/v1/customers-get) | Get one customer, including their balance |
+| [`GET /v1/leads`](/api-reference/endpoint/v1/leads-list) | List leads, filtered by buyer, status or date |
+| [`GET /v1/leads/{id}`](/api-reference/endpoint/v1/leads-get) | Get one lead and every customer or partner it was sold to |
+| [`GET /v1/leads/{id}/details`](/api-reference/endpoint/v1/leads-details) | Get a lead's contact details and custom fields |
+| [`POST /v1/customers/{id}/transactions`](/api-reference/endpoint/v1/transactions-create) | Add funds to or remove funds from a customer's balance |
+| [`GET /v1/customers/{id}/transactions`](/api-reference/endpoint/v1/transactions-list) | List a customer's transactions |
+| [`POST /v1/customers/{id}/bids`](/api-reference/endpoint/v1/bids-create) | Place a bid for a customer |
+| [`GET /v1/customers/{id}/bids`](/api-reference/endpoint/v1/bids-list) | List a customer's bids |
+| [`GET /v1/bids/{id}`](/api-reference/endpoint/v1/bids-get) | Get one bid and whether it can receive leads |
+| [`PATCH /v1/bids/{id}`](/api-reference/endpoint/v1/bids-update) | Change, pause or unpause a bid |
+| [`DELETE /v1/bids/{id}`](/api-reference/endpoint/v1/bids-archive) | Archive a bid |
+| [`GET /v1/lead-types`](/api-reference/endpoint/v1/lead-types-list) | List your lead types and where bids can be placed |
 | [`POST /ping`](/api-reference/endpoint/ping) | Legacy ping (deprecated) |
 | [`POST /leads`](/api-reference/endpoint/leads) | Legacy lead submission (deprecated) |
 
@@ -166,11 +177,11 @@ Every v1 error uses the same envelope. Branch on `error.code`, which is stable, 
 | `401` | `unauthenticated` | Credentials are missing or invalid. |
 | `404` | `not_found` | The endpoint, or the record you asked for, doesn't exist. |
 | `405` | `method_not_allowed` | The endpoint doesn't accept that HTTP method. |
-| `409` | `idempotency_conflict` | The `transaction_id` was used with a different payload. |
+| `409` | `idempotency_conflict` | The `transaction_id` or `Idempotency-Key` was used with a different payload. |
 | `409` | `idempotency_in_progress` | The first attempt is still processing. Retry after `Retry-After` seconds. |
 | `409` | `idempotency_reserved` | The outcome couldn't be confirmed. Don't resubmit. |
 | `409` | `idempotency_version_mismatch` | The `transaction_id` was first used on the legacy API. `error.lead_id` names the lead it created. |
-| `422` | `validation_failed` | The request failed validation. `error.errors` lists the messages by field. |
+| `422` | `validation_failed` | The request failed validation. `error.errors` lists the messages by field. When a bid already exists for that customer, lead type and location, `error.bid` names it. |
 | `422` | `quota_reached` | The source has reached one of its lead quotas. Lead posts only, since a ping over quota returns `no_match`. |
 | `422` | `ping_mismatch` | The lead's data doesn't match the ping it references. |
 | `429` | `rate_limited` | Too many requests. Retry after `Retry-After` seconds. |

@@ -1,0 +1,9 @@
+---
+title: List Lead Types
+description: List your lead types with the scopes bids can be placed at and their minimums.
+openapi: GET /v1/lead-types
+---
+
+Use this to find the `lead_type` ID a new bid needs. Each lead type lists the [scopes](/features/bidding#scopes) bids can be placed at and the minimum bid for each, in dollars. A scope only shows up when bidding is turned on for it and your [deepest location layer](/features/company-profile#locations) supports it. A lead type with an empty `bidding` list can't take bids.
+
+Archived lead types are left out. Every lead type comes back in one page, so `next_cursor` is always `null`. It needs the `bids:read` ability.

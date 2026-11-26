@@ -1,0 +1,13 @@
+---
+title: Archive a Bid
+description: Archive a bid so it stops receiving leads.
+openapi: DELETE /v1/bids/{id}
+---
+
+Archiving works just like deleting a bid in Juiced. The bid stops receiving leads right away, but its history stays. It comes back with `archived_at` set. It needs the `bids:write` ability.
+
+Archiving a bid that's already archived changes nothing and returns it unchanged, so it's safe to retry.
+
+Changes to one bid run one at a time. If another change to the bid is still running after 10 seconds, archiving returns `429` with `rate_limited` and a `Retry-After` header, and nothing is changed.
+
+An archived bid can't be changed through the API. To bid on that lead type and location again, [create a new bid](/api-reference/endpoint/v1/bids-create). Archived bids are left out when you [list a customer's bids](/api-reference/endpoint/v1/bids-list) unless you send `include_archived=true`, and [Get a Bid](/api-reference/endpoint/v1/bids-get) still finds them by ID.

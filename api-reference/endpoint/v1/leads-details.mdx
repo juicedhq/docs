@@ -1,0 +1,13 @@
+---
+title: Get Lead Details
+description: Get a lead's contact details and custom fields, as its buyers receive them.
+openapi: GET /v1/leads/{id}/details
+---
+
+This returns the lead's [deliverable fields](/features/lead-categories#deliverable), the ones your customers see. That usually means contact details like name, email and phone, plus your custom fields.
+
+`fields` uses the same keys and values as the lead in a v1 [customer webhook](/features/webhooks#customer-webhooks), so a lead reads the same whether Juiced pushes it to you or you fetch it. Keys are your field titles, and `country` is sent as its two-letter code.
+
+<Note>
+This endpoint needs the `lead_details:read` ability. A key with only `leads:read` gets a `403`. Keep `lead_details:read` for integrations that actually need contact details, like a CRM, and leave it off reporting keys.
+</Note>

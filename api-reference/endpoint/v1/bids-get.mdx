@@ -1,0 +1,30 @@
+---
+title: Get a Bid
+description: Get one bid by ID, with whether it can receive leads right now and why not.
+openapi: GET /v1/bids/{id}
+---
+
+Use the bid's ID, which starts with `bid_`. Archived bids are returned too, with `archived_at` set. It needs the `bids:read` ability.
+
+## Can it receive leads?
+
+`status` is the bid's own status, as Juiced shows it on the bid. It doesn't look at the customer's account, so a bid can read `active` while its customer is paused.
+
+`can_receive_leads` answers the real question. It runs the same check distribution does when it picks a buyer, so `true` means the bid can win leads right now. When it's `false`, `blocked_by` lists every reason, bid-level reasons first.
+
+| `blocked_by` | What it means |
+|--------------|---------------|
+| `bid_archived` | The bid is archived. |
+| `bid_paused` | The bid is paused. |
+| `insufficient_funds` | The customer's balance can't cover the bid. |
+| `bid_cap_reached` | The bid has hit one of its lead caps for the period. |
+| `bid_budget_reached` | The bid has used up one of its budgets for the period. |
+| `customer_paused` | The customer is paused. |
+| `customer_archived` | The customer is archived. |
+| `customer_cap_reached` | The customer has hit one of their account lead caps for the period. |
+| `customer_budget_reached` | The customer's remaining account budget for the period can't cover the bid. |
+| `bidding_not_set_up` | The lead type has no bidding settings at the bid's scope. |
+
+`blocked_by` is empty whenever `can_receive_leads` is `true`. New codes may be added, so treat one you don't recognize as a reason the bid can't receive leads.
+
+`below_minimum` doesn't block a bid. It flags an `amount` under the lead type's `minimum`, which is allowed.
